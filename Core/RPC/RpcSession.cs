@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Core.BaseProto;
+using Core.Log;
 using Core.Net.TCP;
 using Core.Serialize;
 
@@ -9,9 +10,6 @@ namespace Core.RPC
 {
     public class RpcSession : Session
     {
-        private static readonly log4net.ILog Log =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         public readonly RpcHandlers Handlers = new RpcHandlers();
 
         private readonly Dictionary<RpcRoute, Action<bool, byte[]>> _requestPool = new Dictionary<RpcRoute, Action<bool, byte[]>>();
@@ -69,7 +67,7 @@ namespace Core.RPC
                                 cb(rp.Success, rp.Param);
                             }
                             else
-                                Log.ErrorFormat("No target for response {0}", route);
+                                Logger.Instance.ErrorFormat("No target for response {0}", route);
                         }
                         break;
 
@@ -77,18 +75,18 @@ namespace Core.RPC
                         {
                             var notify = ProtoBuf.Serializer.Deserialize<RpcNotify>(ms);
                             if (!Handlers.HandleNotify(route, notify.Param))
-                                Log.ErrorFormat("Handle notify {0} failed!", route);
+                                Logger.Instance.ErrorFormat("Handle notify {0} failed!", route);
                         }
                         break;
 
                     default:
-                        Log.ErrorFormat("Invalid rpc type : {0} of  route : {1}", type, route);
+                        Logger.Instance.ErrorFormat("Invalid rpc type : {0} of  route : {1}", type, route);
                         break;
                 }
             }
         }
 
-        public void Response(RpcRoute route, object proto, bool success)
+        private void Response(RpcRoute route, object proto, bool success)
         {
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
@@ -111,7 +109,7 @@ namespace Core.RPC
         {
             if (_requestPool.ContainsKey(route))
             {
-                Log.ErrorFormat("Previous request not response, ignore this request!");
+                Logger.Instance.Error("Previous request not response, ignore this request!");
                 return;
             }
 

@@ -27,39 +27,26 @@ namespace Core.Service
     /// pattern working queue, thus translate multiple
     /// threads model into single thread model.
     /// </summary>
-    public class StaService
+    public class StaService : IService
     {
-        private StaService() { }
-
-        private static readonly StaService _instance
-            = new StaService();
-
         private const int StopWatchDivider = 128;
         private Thread _workingThread;
         private bool _stopWorking;
-        private long _count;
+        private int _count;
         private long _writeBlockCounter;
         private long _totalWriteCounter;
         private int _periodHandled;
         private BlockingCollection<IJob> _workingQueue;
         readonly System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
 
-        public static void Perform(Action action)
+        public void Perform(Action action)
         {
-            _instance.Enqueue(action);
+            Enqueue(action);
         }
 
-        public static void Perform<T>(Action<T> action, T param)
+        public void Perform<T>(Action<T> action, T param)
         {
-            _instance.Enqueue(action, param);
-        }
-
-        /// <summary>
-        /// The singleton object instance
-        /// </summary>
-        public static StaService Instance
-        {
-            get { return _instance; }
+            Enqueue(action, param);
         }
 
         /// <summary>
@@ -114,7 +101,7 @@ namespace Core.Service
         /// <summary>
         /// Specify the work items count currently in working queue.
         /// </summary>
-        public long Count
+        public int Jobs
         {
             get { return _count; }
         }
@@ -140,7 +127,7 @@ namespace Core.Service
         /// </summary>
         /// <param name="capacity">specify the capacity of working queue</param>
         /// <param name="period">specify the working thread's working period</param>
-        public void StartWorking(int capacity, int period)
+        public void Startup(int capacity, int period)
         {
             if (_workingQueue != null
                 || _workingThread != null)
@@ -159,7 +146,7 @@ namespace Core.Service
         /// </summary>
         /// <param name="joinWorkingThread">specify whether to wait the working
         /// thread get exit or not</param>
-        public void StopWorking(bool joinWorkingThread)
+        public void Shutdown(bool joinWorkingThread)
         {
             if (_workingThread == null
                 || _workingQueue == null)

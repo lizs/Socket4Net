@@ -1,4 +1,6 @@
-﻿namespace Core.Net.TCP
+﻿using Core.Log;
+
+namespace Core.Net.TCP
 {
     /// <summary>
     /// 循环buffer
@@ -47,7 +49,7 @@
         {
             if (len > ReadableSize)
             {
-                NetLogger.Log.Error("No enough data to read!");
+                Logger.Instance.Error("No enough data to read!");
                 return false;
             }
 
@@ -72,7 +74,7 @@
         {
             if (len > WritableSize)
             {
-                NetLogger.Log.Error("No enough space to write!");
+                Logger.Instance.Error("No enough space to write!");
                 return false;
             }
 

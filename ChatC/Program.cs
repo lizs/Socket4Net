@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading;
+using Core;
+using Core.Log;
 using Core.Net.TCP;
 using Core.RPC;
 using Core.Service;
-using Core.Tool;
 
-[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace ChatC
 {
     internal class Program
@@ -14,8 +13,6 @@ namespace ChatC
         private const string DefaultIp = "127.0.0.1";
         private const ushort DefaultPort = 9527;
         public static bool AutoReplyEnabled = false;
-        private static log4net.ILog Log =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private static Chater _chater;
 
@@ -33,14 +30,15 @@ namespace ChatC
             }
 
 
-            StaService.Instance.StartWorking(5000, 1);
-            NetService.Startup();
-            ITcpClient client = new TcpClient<RpcSession>(ip, port);
-            PerformanceCounter.Run();
+            var cfg = new CoreConfig(ip, port);
+            Launcher.LaunchClient(cfg);
+            var client = Launcher.Client;
+            Core.Tool.PerformanceCounter.Run();
+
 
             if (AutoReplyEnabled)
             {
-                StaService.Perform(() =>
+                Launcher.PerformInSta(() =>
                 {
                     RobotMgr.Ip = ip;
                     RobotMgr.Port = port;
@@ -64,7 +62,7 @@ namespace ChatC
                 };
                 client.Connect();
 
-                SessionMgr.EventSessionClosed += (session, reason) => Log.Warn("Session closed by : " + reason);
+                SessionMgr.EventSessionClosed += (session, reason) => Logger.Instance.Warn("Session closed by : " + reason);
 
                 while (true)
                 {
@@ -74,7 +72,7 @@ namespace ChatC
                     }
 
                     var command = Console.ReadLine();
-                    StaService.Perform(()=> _chater.RequestGmCommand(command, false));
+                    Launcher.PerformInSta(()=> _chater.RequestGmCommand(command, false));
                 }
             }
         }

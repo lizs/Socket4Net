@@ -175,8 +175,10 @@ namespace Core.Timer
     {
         private TimerScheduler()
         {
-            StaService.Instance.Idle += RunTimer;
-            _TimerJiffies = StaService.Instance.ElapsedMilliseconds;
+            var service = Launcher.StaService as StaService;
+
+            service.Idle += RunTimer;
+            _TimerJiffies = service.ElapsedMilliseconds;
         }
 
         private static readonly TimerScheduler _Instance
@@ -232,7 +234,7 @@ namespace Core.Timer
         /// </summary>
         private void RunTimer()
         {
-            var jiffes = StaService.Instance.ElapsedMilliseconds; 
+            var jiffes = (Launcher.StaService as StaService).ElapsedMilliseconds; 
             while (jiffes - _TimerJiffies >= 0)
             {
                 int index = (int)(_TimerJiffies & TimerConstant.TVR_MASK);

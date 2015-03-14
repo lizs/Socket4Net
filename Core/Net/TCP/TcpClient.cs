@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using Core.Log;
 using Core.Service;
 
 namespace Core.Net.TCP
@@ -69,7 +70,7 @@ namespace Core.Net.TCP
             Session = _sessionFactory.Create(sock);
             Session.Start();
 
-            StaService.Perform(() =>
+            Launcher.PerformInSta(() =>
             {
                 if (EventSessionEstablished != null)
                     EventSessionEstablished(Session, this);
@@ -81,7 +82,7 @@ namespace Core.Net.TCP
             if(e.SocketError == SocketError.Success)
                 HandleConnection(_underlineSocket);
             else
-                NetLogger.Log.Error(e.SocketError);
+                Logger.Instance.Error(e.SocketError);
         }
     }
 }

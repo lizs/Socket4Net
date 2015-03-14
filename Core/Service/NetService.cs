@@ -13,47 +13,47 @@ namespace Core.Service
     /// <summary>
     /// 网络服务线程（网络数据读写）
     /// </summary>
-    public static class NetService
+    public class NetService : IService
     {
-        private static BlockingCollection<IJob> _jobs = new BlockingCollection<IJob>();
-        private static Thread _wokerThread;
-        private static bool _stopping;
+        private readonly BlockingCollection<IJob> _jobs = new BlockingCollection<IJob>();
+        private Thread _wokerThread;
+        private bool _stopping;
 
-        public static int Jobs { get { return _jobs.Count; } }
+        public int Jobs { get { return _jobs.Count; } }
 
-        public static void Startup()
+        public void Startup(int capacity, int period)
         {
             _wokerThread = new Thread(WorkingProcedure);
             _wokerThread.Start();
         }
 
-        public static void Shutdown()
+        public void Shutdown(bool joinWokerThread)
         {
             _stopping = true;
             _wokerThread.Join();
         }
 
-        public static void Perform(Action action)
+        public void Perform(Action action)
         {
             Enqueue(action);
         }
 
-        public static void Perform<T>(Action<T> action, T param)
+        public void Perform<T>(Action<T> action, T param)
         {
             Enqueue(action, param);
         }
 
-        private static void Enqueue<T>(Action<T> proc, T param)
+        private void Enqueue<T>(Action<T> proc, T param)
         {
             _jobs.Add(new Job<T>(proc, param));
         }
 
-        private static void Enqueue(Action proc)
+        private void Enqueue(Action proc)
         {
             _jobs.Add(new Job(proc));
         }
 
-        private static void WorkingProcedure()
+        private void WorkingProcedure()
         {
             while (!_stopping)
             {

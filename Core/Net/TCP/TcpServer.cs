@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using Core.Log;
 using Core.Service;
 
 #if !NET35
@@ -12,7 +13,13 @@ using Core.ConcurrentCollection;
 
 namespace Core.Net.TCP
 {
-    public class TcpServer<T> where T : Session, new()
+    public interface ITcpServer
+    {
+        void Startup();
+        void Shutdown();
+    }
+
+    public class TcpServer<T> : ITcpServer where T : Session, new()
     {
         private Socket _listener;
         private readonly ushort _port;
@@ -36,9 +43,6 @@ namespace Core.Net.TCP
 
         public void Startup()
         {
-            StaService.Instance.StartWorking(5000, 10);
-            NetService.Startup();
-
             var localAddr = IPAddress.Parse(_ip);
             var endpoint = new IPEndPoint(localAddr, _port);
 
@@ -67,9 +71,6 @@ namespace Core.Net.TCP
             _acceptEvent.Dispose();
             
             SessionMgr.Clear();
-
-            NetService.Shutdown();
-            StaService.Instance.StopWorking(true);
         }
 
         private void ProduceSessions()
@@ -111,15 +112,15 @@ namespace Core.Net.TCP
             }
             catch (ObjectDisposedException e)
             {
-                NetLogger.Log.Error(e.Message);
+                Logger.Instance.Error(e.Message);
             }
             catch (InvalidOperationException e)
             {
-                NetLogger.Log.Error(e.Message);
+                Logger.Instance.Error(e.Message);
             }
             catch (Exception e)
             {
-                NetLogger.Log.Error(e.Message);
+                Logger.Instance.Error(e.Message);
             }
             finally
             {

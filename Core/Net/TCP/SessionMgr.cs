@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Log;
 using Core.Service;
-
 #if !NET35
 using System.Collections.Concurrent;
 #else
@@ -25,14 +25,14 @@ namespace Core.Net.TCP
         {
             if (_sessions.TryAdd(session.Id, session))
             {
-                StaService.Perform(() =>
+                Launcher.PerformInSta(() =>
                 {
                     if (EventSessionEstablished != null)
                         EventSessionEstablished(session);
                 });
             }
             else
-                NetLogger.Log.Warn("Add session failed for id : " + session.Id);
+                Log.Logger.Instance.Warn("Add session failed for id : " + session.Id);
         }
 
         public static void Remove(long id, SessionCloseReason reason)
@@ -40,16 +40,16 @@ namespace Core.Net.TCP
             ISession session;
             if (_sessions.TryRemove(id, out session))
             {
-                StaService.Perform(() =>
+                Launcher.PerformInSta(() =>
                 {
                     if (EventSessionClosed != null)
                         EventSessionClosed(session, reason);
                 });
             }
             else if (_sessions.ContainsKey(id))
-                NetLogger.Log.Warn("Remove session failed for id : " + id);
+                Logger.Instance.Warn("Remove session failed for id : " + id);
             else
-                NetLogger.Log.Warn("Remove session failed for id :  cause of it doesn't exist" + id);
+                Logger.Instance.Warn("Remove session failed for id :  cause of it doesn't exist" + id);
         }
 
         public static ISession Get(long id)

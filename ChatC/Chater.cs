@@ -7,9 +7,6 @@ namespace ChatC
 {
     public class Chater : RpcHost
     {
-        protected static readonly log4net.ILog Log =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         public Chater(RpcSession session) : base(session)
         {
         }

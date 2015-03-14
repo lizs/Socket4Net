@@ -55,65 +55,61 @@ namespace Core.ConcurrentCollection
 
         public bool Add(T item)
         {
-            lock (_syncRoot)
-            {
-                if (!_queue.TryAdd(item)) return false;
+            if (!_queue.TryAdd(item)) return false;
 
-                _takeEvent.Set();
-                return true;
-            }
+            _takeEvent.Set();
+            return true;
         }
 
         public bool TryAdd(T item, int millisecondsTimeout)
         {
-            lock (_syncRoot)
+            if (_queue.TryAdd(item))
+            {
+                _takeEvent.Set();
+                return true;
+            }
+
+            if (_addEvent.WaitOne(millisecondsTimeout))
             {
                 if (_queue.TryAdd(item))
                 {
                     _takeEvent.Set();
                     return true;
                 }
-
-                if (_addEvent.WaitOne(millisecondsTimeout))
-                {
-                    if (_queue.TryAdd(item))
-                    {
-                        _takeEvent.Set();
-                        return true;
-                    }
-                }
-
-                return false;
             }
+
+            return false;
         }
 
         public bool Take(out T item)
         {
-            lock (_syncRoot)
+            if (_queue.TryTake(out item))
+            {
+                _addEvent.Set();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool TryTake(out T item, int millisecondsTimeout)
+        {
+            if (_queue.TryTake(out item))
+            {
+                _addEvent.Set();
+                return true;
+            }
+
+            if (_takeEvent.WaitOne(millisecondsTimeout))
             {
                 if (_queue.TryTake(out item))
                 {
                     _addEvent.Set();
                     return true;
                 }
-
-                return false;
             }
-        }
 
-        public bool TryTake(out T item, int millisecondsTimeout)
-        {
-            lock (_syncRoot)
-            {
-                if (_queue.TryTake(out item)) return true;
-
-                if (_takeEvent.WaitOne(millisecondsTimeout))
-                {
-                    return _queue.TryTake(out item);
-                }
-
-                return false;
-            }
+            return false;
         }
 
         public void Dispose()

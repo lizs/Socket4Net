@@ -1,11 +1,11 @@
 ﻿
 
 using System;
+using Core;
 using Core.Net.TCP;
 using Core.RPC;
 using Core.Tool;
 
-[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace ChatS
 {
     public sealed class ChatSession : RpcSession
@@ -14,11 +14,8 @@ namespace ChatS
 
     class Program
     {
-        private static TcpServer<ChatSession> _server;
         private const string DefaultIp = "0.0.0.0";
         private const ushort DefaultPort = 9527;
-        private static log4net.ILog Log =
-            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         static void Main(string[] args)
         {
@@ -31,8 +28,9 @@ namespace ChatS
                     port = ushort.Parse(args[1]);
             }
 
-            _server = new TcpServer<ChatSession>(ip, port);
-            _server.Startup();
+            var cfg = new CoreConfig(ip, port);
+            Launcher.LaunchServer(cfg);
+            var server = Launcher.Server;
 
             PerformanceCounter.Run();
 

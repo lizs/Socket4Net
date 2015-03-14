@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using Core.Log;
 using Core.Serialize;
 using Core.Service;
 
@@ -77,7 +78,7 @@ namespace Core.Net.TCP
             if (_closed) return;
             _closed = true;
             
-            NetService.Perform(() =>
+            Launcher.PerformInNet(() =>
             {
                 _sendAsyncEventArgs.Dispose();
                 _receiveAsyncEventArgs.Dispose();
@@ -105,7 +106,7 @@ namespace Core.Net.TCP
                 bw.Write((short)data.Length);
                 bw.Write(data);
 
-                NetService.Perform(SendImp, ms.ToArray());
+                Launcher.PerformInNet(SendImp, ms.ToArray());
             }
         }
 
@@ -120,14 +121,14 @@ namespace Core.Net.TCP
                 bw.Write((short)data.Length);
                 bw.Write(data);
 
-                NetService.Perform(SendImp, ms.ToArray());
+                Launcher.PerformInNet(SendImp, ms.ToArray());
             }
         }
 
         public void SendWithHeader(byte[] data)
         {
             if (_closed) return;
-            NetService.Perform(SendImp, data);
+            Launcher.PerformInNet(SendImp, data);
 
 #if DEBUG
             Interlocked.Increment(ref SendCnt);
@@ -180,7 +181,7 @@ namespace Core.Net.TCP
                 }
                 catch (ObjectDisposedException e)
                 {
-                    NetLogger.Log.Warn("Socket already closed!");
+                    Logger.Instance.Warn("Socket already closed!");
                 }
                 catch
                 {
@@ -204,7 +205,7 @@ namespace Core.Net.TCP
                 }
                 catch (ObjectDisposedException e)
                 {
-                    NetLogger.Log.Warn("Socket already closed!");
+                    Logger.Instance.Warn("Socket already closed!");
                 }
                 catch
                 {
@@ -264,7 +265,7 @@ namespace Core.Net.TCP
         private void Dispatch()
         {
             var pack = Packer.Packages.Dequeue();
-            StaService.Perform(() => Dispatch(pack));
+            Launcher.PerformInSta(() => Dispatch(pack));
 #if DEBUG
             Interlocked.Increment(ref ReceiveCnt);
 #endif
@@ -284,7 +285,7 @@ namespace Core.Net.TCP
 
         private void OnSendCompleted(object sender, SocketAsyncEventArgs e)
         {
-            NetService.Perform(() =>
+            Launcher.PerformInNet(() =>
             {
                 if (e.SocketError != SocketError.Success)
                 {
@@ -301,7 +302,7 @@ namespace Core.Net.TCP
 
         private void OnReceiveCompleted(object sender, SocketAsyncEventArgs e)
         {
-            NetService.Perform(() =>
+            Launcher.PerformInNet(() =>
             {
                 if (e.SocketError != SocketError.Success)
                 {
