@@ -12,8 +12,13 @@
 *********************************************************************/
 
 using System;
-using System.Collections.Concurrent;
 using System.Threading;
+
+#if !NET35
+using System.Collections.Concurrent;
+#else
+using Core.ConcurrentCollection;
+#endif
 
 namespace Core.Service
 {
@@ -217,7 +222,11 @@ namespace Core.Service
         /// </summary>
         private void DoStartup()
         {
+#if NET35
+            _workingQueue = new BlockingCollection<IJob>(QueueCapacity);
+#else
             _workingQueue = new BlockingCollection<IJob>(new ConcurrentQueue<IJob>(), QueueCapacity);
+#endif
             _workingThread = new Thread(WorkingProcedure) { IsBackground = true };
 
             // use background thread

@@ -3,6 +3,7 @@
 using System;
 using Core.Net.TCP;
 using Core.RPC;
+using Core.Tool;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace ChatS

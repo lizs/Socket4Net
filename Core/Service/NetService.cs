@@ -1,7 +1,12 @@
 ﻿
 using System;
-using System.Collections.Concurrent;
 using System.Threading;
+
+#if !NET35
+using System.Collections.Concurrent;
+#else
+using Core.ConcurrentCollection;
+#endif
 
 namespace Core.Service
 {

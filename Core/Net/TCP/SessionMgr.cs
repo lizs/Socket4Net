@@ -1,8 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Service;
+
+#if !NET35
+using System.Collections.Concurrent;
+#else
+using Core.ConcurrentCollection;
+#endif
 
 namespace Core.Net.TCP
 {
@@ -61,6 +66,12 @@ namespace Core.Net.TCP
             }
         }
 
-        public static IEnumerable<ISession> Sessions { get { return _sessions.Select(x => x.Value); } }
+        public static IEnumerable<ISession> Sessions
+        {
+            get
+            {
+                return _sessions.Select(x => x.Value);
+            }
+        }
     }
 }

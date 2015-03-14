@@ -57,10 +57,11 @@ namespace Core.Net.TCP
         public void Connect(byte[] info = null)
         {
             _connectEvent.RemoteEndPoint = _endpoint;
-            if(info != null)
+            if (info != null)
                 _connectEvent.SetBuffer(info, 0, info.Length);
+
             if (!_underlineSocket.ConnectAsync(_connectEvent))
-                HandleConnection(_connectEvent.ConnectSocket);
+                HandleConnection(_underlineSocket);
         }
 
         private void HandleConnection(Socket sock)
@@ -78,7 +79,7 @@ namespace Core.Net.TCP
         private void OnConnectCompleted(object sender, SocketAsyncEventArgs e)
         {
             if(e.SocketError == SocketError.Success)
-                HandleConnection(e.ConnectSocket);
+                HandleConnection(_underlineSocket);
             else
                 NetLogger.Log.Error(e.SocketError);
         }

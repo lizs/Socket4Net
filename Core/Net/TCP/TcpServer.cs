@@ -1,9 +1,14 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Core.Service;
+
+#if !NET35
+using System.Collections.Concurrent;
+#else
+using Core.ConcurrentCollection;
+#endif
 
 namespace Core.Net.TCP
 {
