@@ -44,11 +44,9 @@ public void Notify(RpcRoute route, object proto)；
 // 通知所有客户端
 public static void NotifyAll(RpcRoute route, object proto)；
 
-RpcRoute（2字节）枚举所有的路由id，是一个rpc请求的唯一标识；proto是某个ProtoBuf对象的实例；对于Request调用，还需
-传递一个回调cb。
+RpcRoute（2字节）枚举所有的路由id，是一个rpc请求的唯一标识；proto是某个ProtoBuf对象的实例；对于Request调用，还需传递一个回调cb。
 
-当RpcSession收到一个rpc之后，需要对于的RpcHandler来处理，否则该rpc失败。RpcHandler由RpcHost管理，RpcHost需要明确
-自己能够处理哪些rpc（RpcRoute），这是通过调用如下虚方法来完成的：
+当RpcSession收到一个rpc之后，需要对于的RpcHandler来处理，否则该rpc失败。RpcHandler由RpcHost管理，RpcHost需要明确自己能够处理哪些rpc（RpcRoute），这是通过调用如下虚方法来完成的：
 protected abstract void RegisterRpcHandlers();
 
 所以，需要派生类来重写RegisterRpcHandlers方法.比如在ChatS中Chater就派生自RpcHost,
@@ -65,8 +63,7 @@ public class Chater : RpcHost
     private bool HandleChatNotify(byte[] bytes){...}
 }
 
-这样Chater就能处理RpcRoute.GmCmd、RpcRoute.Chat了。注意：HandleGmRequest返回了一个ProtoBuf的实例，该实例是响应对端
-的数据。
+这样Chater就能处理RpcRoute.GmCmd、RpcRoute.Chat了。注意：HandleGmRequest返回了一个ProtoBuf的实例，该实例是响应对端的数据。
 
 StaService、NetService（进阶）
 StaService、NetService旨在提供单线程处理环境，其中StaService用在服务器逻辑处理中，而NetService用在网络数据收发处理中。
