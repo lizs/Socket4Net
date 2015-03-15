@@ -5,6 +5,7 @@ using System.Threading;
 #if NET35
 using Core.ConcurrentCollection;
 #else
+using System.Collections.Concurrent;
 #endif
 
 namespace ConcurrentCollectionTest

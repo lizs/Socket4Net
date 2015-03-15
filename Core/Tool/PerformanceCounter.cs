@@ -21,7 +21,7 @@ namespace Core.Tool
         private static void OutputPerformance(Timer.Timer timer)
         {
 #if DEBUG
-            Log.WarnFormat("Send : {0}, Receive : {1}", Session.SendCnt, Session.ReceiveCnt);
+            Logger.Instance.WarnFormat("Send : {0}, Receive : {1}", Session.SendCnt, Session.ReceiveCnt);
 #endif
 
             Logger.Instance.WarnFormat("STA Jobs : {0}, Net jobs : {1}, Sessions :  {2}", Launcher.StaService.Jobs, Launcher.NetService.Jobs, SessionMgr.Count);
