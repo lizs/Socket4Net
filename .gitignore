@@ -42,3 +42,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.suo
+
+
+# bin obj目录
+bin/
+obj/
+Publish/ChatC
+Publish/ChatS

@@ -55,8 +55,8 @@
     <Compile Include="Launcher.cs" />
     <Compile Include="Log\DefaultLogger.cs" />
     <Compile Include="Log\ILog.cs" />
-    <Compile Include="Log\NetLogger.cs" />
-    <Compile Include="Service\IStaService.cs" />
+    <Compile Include="Log\Logger.cs" />
+    <Compile Include="Service\IService.cs" />
     <Compile Include="Service\STAService4Unity.cs" />
     <Compile Include="Tool\PerformanceCounter.cs" />
     <Compile Include="Service\NetService.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="RPC\RpcSession.cs" />
     <Compile Include="Serialize\Serializer.cs" />
     <Compile Include="Service\STAService.cs" />
-    <Compile Include="Service\WorkItem.cs" />
+    <Compile Include="Service\Job.cs" />
     <Compile Include="Timer\Timer.cs" />
     <Compile Include="Timer\TimerScheduler.cs" />
   </ItemGroup>
