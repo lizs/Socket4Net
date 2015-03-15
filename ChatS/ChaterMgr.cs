@@ -3,11 +3,14 @@ using Core.RPC;
 
 namespace ChatS
 {
-    public static class ChaterMgr
+    /// <summary>
+    /// Rpc示例中的聊天者管理器
+    /// </summary>
+    public class ChaterMgr
     {
-        private static readonly Dictionary<long, Chater> Chaters = new Dictionary<long, Chater>();
+        private readonly Dictionary<long, Chater> Chaters = new Dictionary<long, Chater>();
 
-        public static Chater Create(RpcSession session)
+        public Chater Create(RpcSession session)
         {
             var chater = new Chater(session);
             chater.Boot();
@@ -16,7 +19,7 @@ namespace ChatS
             return chater;
         }
 
-        public static void Destroy(long id)
+        public void Destroy(long id)
         {
             if (Chaters.ContainsKey(id))
             {

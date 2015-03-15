@@ -15,22 +15,33 @@ namespace Core.Service
     /// </summary>
     public class NetService : IService
     {
-        private readonly BlockingCollection<IJob> _jobs = new BlockingCollection<IJob>();
+        private BlockingCollection<IJob> _jobs;
         private Thread _wokerThread;
         private bool _stopping;
 
         public int Jobs { get { return _jobs.Count; } }
+        public int Capacity { get; set; }
 
-        public void Startup(int capacity, int period)
+        private int _period = 10;
+        public int Period
         {
+            get { return _period; }
+            set { _period = value; }
+        }
+
+        public void Start()
+        {
+            _jobs = new BlockingCollection<IJob>(Capacity);
+
             _wokerThread = new Thread(WorkingProcedure);
             _wokerThread.Start();
         }
 
-        public void Shutdown(bool joinWokerThread)
+        public void Stop(bool joinWorker = true)
         {
             _stopping = true;
-            _wokerThread.Join();
+            if(joinWorker)
+                _wokerThread.Join();
         }
 
         public void Perform(Action action)
@@ -58,7 +69,7 @@ namespace Core.Service
             while (!_stopping)
             {
                 IJob job;
-                if (_jobs.TryTake(out job, 10))
+                if (_jobs.TryTake(out job, Period))
                 {
                     job.Do();
                 }

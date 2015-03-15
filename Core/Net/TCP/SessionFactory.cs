@@ -3,16 +3,16 @@ using System.Net.Sockets;
 
 namespace Core.Net.TCP
 {
-    public interface ISessionFactory
+    public interface ISessionFactory<out TSession> where TSession : ISession
     {
-        ISession Create(Socket sock);
+        TSession Create(Socket sock, IPeer hostPeer);
     }
 
-    public class SessionFactory<T> : ISessionFactory where T : Session, new()
+    public class SessionFactory<TSession> : ISessionFactory<TSession> where TSession : ISession, new()
     {
-        public ISession Create(Socket sock)
+        public TSession Create(Socket sock, IPeer hostPeer)
         {
-            return new T { Id = GenUid(), UnderlineSocket = sock, Packer = new Packer() };
+            return new TSession { Id = GenUid(), UnderlineSocket = sock, HostPeer = hostPeer };
         }
 
         private long GenUid()

@@ -10,6 +10,7 @@
  *      See Linux/Kernel/Timer.c file for details.
 *********************************************************************/
 
+using System;
 using System.Diagnostics;
 using Core.Service;
 
@@ -171,19 +172,24 @@ namespace Core.Timer
     /// <summary>
     /// A Linux style timer scheduler
     /// </summary>
-    class TimerScheduler
+    public class TimerScheduler : IDisposable
     {
-        private TimerScheduler()
-        {
-            var service = Launcher.StaService as StaService;
+        public LogicService HostService { get; private set; }
 
-            service.Idle += RunTimer;
+        public TimerScheduler(LogicService service)
+        {
+            HostService = service;
+
+            HostService.Idle += RunTimer;
             _TimerJiffies = service.ElapsedMilliseconds;
         }
 
-        private static readonly TimerScheduler _Instance
-            = new TimerScheduler();
+        public void Dispose()
+        {
+            HostService.Idle -= RunTimer;
 
+        }
+        
         /// <summary>
         /// This field used to store how many milliseconds
         /// elapsed since this scheduler been constructed.
@@ -222,19 +228,14 @@ namespace Core.Timer
         /// if the expires is grater then uint.Max, it will be truncated.
         /// </summary>
         private TVN _TV5 = new TVN();
-
-        public static TimerScheduler Instance
-        {
-            get { return _Instance; }
-        }
-
+        
         /// <summary>
         /// <c>StaService</c>'s Idle event call this method
         /// to check all expired timers.
         /// </summary>
         private void RunTimer()
         {
-            var jiffes = (Launcher.StaService as StaService).ElapsedMilliseconds; 
+            var jiffes = HostService.ElapsedMilliseconds; 
             while (jiffes - _TimerJiffies >= 0)
             {
                 int index = (int)(_TimerJiffies & TimerConstant.TVR_MASK);

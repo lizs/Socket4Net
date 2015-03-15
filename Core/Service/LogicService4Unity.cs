@@ -10,17 +10,20 @@ using Core.ConcurrentCollection;
 
 namespace Core.Service
 {
-    public class StaService4Unity : IService
+    public class LogicService4Unity : IService
     {
         private readonly ConcurrentQueue<IJob> _jobs = new ConcurrentQueue<IJob>();
-        private bool _stopping;
+        private bool _stopping = true;
         public int Jobs { get { return _jobs.Count; } }
-
-        public void Startup(int capacity, int period)
+        public int Capacity { get; set; }
+        public int Period { get; set; }
+        
+        public void Start()
         {
+            _stopping = false;
         }
 
-        public void Shutdown(bool joinWokerThread)
+        public void Stop(bool joinWorker = true)
         {
             _stopping = true;
         }

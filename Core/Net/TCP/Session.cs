@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Threading;
 using Core.Log;
 using Core.Serialize;
-using Core.Service;
 
 namespace Core.Net.TCP
 {
@@ -20,7 +19,8 @@ namespace Core.Net.TCP
 
     public interface ISession
     {
-        long Id { get; }
+        IPeer HostPeer { get; set; }
+        long Id { get; set; }
         Socket UnderlineSocket { get; set; }
         int SendingQueueCount { get; }
         void Start();
@@ -35,6 +35,7 @@ namespace Core.Net.TCP
     {
         public Socket UnderlineSocket { get; set; }
         public long Id { get; set; }
+        public IPeer HostPeer { get; set; }
 
         // 发送相关
         public int SendingQueueCount { get { return _sendingQueue.Count; } }
@@ -46,14 +47,9 @@ namespace Core.Net.TCP
         public const int BufferLen = 10 * 1024;
         private SocketAsyncEventArgs _receiveAsyncEventArgs;
         private CircularBuffer _receiveBuffer = new CircularBuffer(BufferLen);
-        public Packer Packer { get; set; }
+        private readonly Packer _packer = new Packer();
 
         private bool _closed;
-
-#if DEBUG
-        public static long SendCnt = 0;
-        public static long ReceiveCnt = 0;
-#endif
 
         protected Session()
         {
@@ -78,7 +74,7 @@ namespace Core.Net.TCP
             if (_closed) return;
             _closed = true;
             
-            Launcher.PerformInNet(() =>
+            HostPeer.PerformInNet(() =>
             {
                 _sendAsyncEventArgs.Dispose();
                 _receiveAsyncEventArgs.Dispose();
@@ -89,10 +85,12 @@ namespace Core.Net.TCP
 
                 _sendingQueue.Clear();
 
+                UnderlineSocket.Shutdown(SocketShutdown.Both);
                 UnderlineSocket.Close();
                 UnderlineSocket = null;
 
-                SessionMgr.Remove(Id, reason);
+                HostPeer.SessionMgr.Remove(Id, reason);
+                HostPeer = null;
             });
         }
 
@@ -106,7 +104,7 @@ namespace Core.Net.TCP
                 bw.Write((short)data.Length);
                 bw.Write(data);
 
-                Launcher.PerformInNet(SendImp, ms.ToArray());
+                HostPeer.PerformInNet(SendImp, ms.ToArray());
             }
         }
 
@@ -121,37 +119,37 @@ namespace Core.Net.TCP
                 bw.Write((short)data.Length);
                 bw.Write(data);
 
-                Launcher.PerformInNet(SendImp, ms.ToArray());
+                HostPeer.PerformInNet(SendImp, ms.ToArray());
             }
         }
 
         public void SendWithHeader(byte[] data)
         {
             if (_closed) return;
-            Launcher.PerformInNet(SendImp, data);
+            HostPeer.PerformInNet(SendImp, data);
 
 #if DEBUG
-            Interlocked.Increment(ref SendCnt);
+            //Interlocked.Increment(ref SendCnt);
 #endif
         }
 
-        public static void Broadcast(byte[] data)
+        public void Broadcast(byte[] data)
         {
-            foreach (var session in SessionMgr.Sessions)
+            foreach (var session in HostPeer.SessionMgr.Sessions)
             {
                 session.Send(data);
             }
         }
 
-        public static void BroadcastWithHeader(byte[] data)
+        public void BroadcastWithHeader(byte[] data)
         {
-            foreach (var session in SessionMgr.Sessions)
+            foreach (var session in HostPeer.SessionMgr.Sessions)
             {
                 session.SendWithHeader(data);
             }
         }
 
-        public static void Broadcast<T>(T proto)
+        public void Broadcast<T>(T proto)
         {
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
@@ -245,7 +243,7 @@ namespace Core.Net.TCP
             }
 
             _receiveBuffer.MoveByWrite((short)_receiveAsyncEventArgs.BytesTransferred);
-            if (Packer.Process(_receiveBuffer) == PackerError.Failed)
+            if (_packer.Process(_receiveBuffer) == PackerError.Failed)
             {
                 Close(SessionCloseReason.PackError);
                 return;
@@ -254,7 +252,7 @@ namespace Core.Net.TCP
             if (_receiveBuffer.Overload)
                 _receiveBuffer.Reset();
 
-            while (Packer.Packages.Count > 0)
+            while (_packer.Packages.Count > 0)
             {
                 Dispatch();
             }
@@ -264,10 +262,10 @@ namespace Core.Net.TCP
 
         private void Dispatch()
         {
-            var pack = Packer.Packages.Dequeue();
-            Launcher.PerformInSta(() => Dispatch(pack));
+            var pack = _packer.Packages.Dequeue();
+            HostPeer.PerformInLogic(() => Dispatch(pack));
 #if DEBUG
-            Interlocked.Increment(ref ReceiveCnt);
+            //Interlocked.Increment(ref ReceiveCnt);
 #endif
         }
 
@@ -285,7 +283,7 @@ namespace Core.Net.TCP
 
         private void OnSendCompleted(object sender, SocketAsyncEventArgs e)
         {
-            Launcher.PerformInNet(() =>
+            HostPeer.PerformInNet(() =>
             {
                 if (e.SocketError != SocketError.Success)
                 {
@@ -302,7 +300,7 @@ namespace Core.Net.TCP
 
         private void OnReceiveCompleted(object sender, SocketAsyncEventArgs e)
         {
-            Launcher.PerformInNet(() =>
+            HostPeer.PerformInNet(() =>
             {
                 if (e.SocketError != SocketError.Success)
                 {

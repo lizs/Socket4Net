@@ -13,7 +13,7 @@ namespace Core.RPC
         public readonly RpcHandlers Handlers = new RpcHandlers();
 
         private readonly Dictionary<RpcRoute, Action<bool, byte[]>> _requestPool = new Dictionary<RpcRoute, Action<bool, byte[]>>();
-
+        
         private static MemoryStream Extract(byte[] pack, out RpcType type, out RpcRoute route)
         {
             var one = pack[0];
@@ -151,7 +151,7 @@ namespace Core.RPC
             }
         }
 
-        public static void NotifyAll(RpcRoute route, object proto)
+        public void NotifyAll(RpcRoute route, object proto)
         {
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))

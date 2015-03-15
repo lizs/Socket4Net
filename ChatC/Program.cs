@@ -1,78 +1,138 @@
 ﻿using System;
 using System.Threading;
-using Core;
 using Core.Log;
 using Core.Net.TCP;
 using Core.RPC;
-using Core.Service;
 
 namespace ChatC
 {
     internal class Program
     {
-        private const string DefaultIp = "127.0.0.1";
-        private const ushort DefaultPort = 9527;
-        public static bool AutoReplyEnabled = false;
-
         private static Chater _chater;
 
         private static void Main(string[] args)
         {
-            var ip = DefaultIp;
-            var port = DefaultPort;
+            var ip = "127.0.0.1";
+            ushort port = 5000;
+
             if (args.Length > 0)
             {
                 ip = args[0];
                 if (args.Length > 1)
                     port = ushort.Parse(args[1]);
-                if (args.Length > 2)
-                    AutoReplyEnabled = bool.Parse(args[2]);
             }
 
+            // 初始Logger
+            Logger.Instance = new DefaultLogger();
 
-            var cfg = new CoreConfig(ip, port);
-            Launcher.LaunchClient(cfg);
-            var client = Launcher.Client;
-            Core.Tool.PerformanceCounter.Run();
+            ClientSample(ip, port);
+            //UnityClientSample(ip, port);
+        }
 
+        private static void ClientSample(string ip, ushort port)
+        {
+            // 客户端示例
+            Chater chater = null;
 
-            if (AutoReplyEnabled)
+            // 创建客户端
+            var client = new Client(ip, port);
+
+            // 监听事件
+            client.EventSessionClosed +=
+                (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
+            client.EventSessionEstablished +=
+                session =>
+                {
+                    Logger.Instance.InfoFormat("{0} connected", session.Id);
+                    chater = new Chater(session);
+                    chater.Boot();  // 需要Boot才能处理rpc
+                };
+
+            // 启动客户端
+            // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
+            client.Start(null, null);
+
+            // 结束服务器
+            while (true)
             {
-                Launcher.PerformInSta(() =>
+                var cmd = Console.ReadLine();
+                switch (cmd.ToUpper())
                 {
-                    RobotMgr.Ip = ip;
-                    RobotMgr.Port = port;
-                    RobotMgr.Run();
-                });
-                while (true)
-                {
-                    if (_chater == null)
-                    {
-                        Thread.Sleep(100);
-                    }
+                    case "QUIT":
+                    case "EXIT":
+                        {
+                            client.Stop();
+                        }
+                        break;
+
+                    case "REQUEST":
+                        {
+                            chater.RequestCommand(
+                                "This is a RPC response, indicate that server response your request success when you receive this message!");
+                        }
+                        continue;
+
+                    default:
+                        {
+                            chater.NotifyMessage(cmd);
+                        }
+                        continue;
                 }
             }
-            else
-            {
-                client.EventSessionEstablished += (session, tcpclient) =>
+        }
+
+        private static void UnityClientSample(string ip, ushort port)
+        {
+            // 客户端示例
+            Chater chater = null;
+
+            // 创建客户端
+            var client = new UnityClient(ip, port);
+
+            // 监听事件
+            client.EventSessionClosed +=
+                (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
+            client.EventSessionEstablished +=
+                session =>
                 {
-                    SessionMgr.Add(session);
-                    _chater = new Chater(session as RpcSession);
-                    _chater.Boot();
+                    Logger.Instance.InfoFormat("{0} connected", session.Id);
+                    chater = new Chater(session);
                 };
-                client.Connect();
 
-                SessionMgr.EventSessionClosed += (session, reason) => Logger.Instance.Warn("Session closed by : " + reason);
+            // 启动客户端
+            // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
+            // 超级警告：由于UnityClient直接使用Unity的逻辑线程作为自己的逻辑服务
+            // 线程，所以需要在某个MonoBehaviour的Update或FixedUpdate中调用
+            // client.LogicService.Update(delta)来驱动逻辑服务
+            client.Start(null, null);
 
-                while (true)
+            // 结束客户端
+            var stop = false;
+            while (!stop)
+            {
+                string cmd = Console.ReadLine();
+                switch (cmd.ToUpper())
                 {
-                    if (_chater == null)
-                    {
-                        Thread.Sleep(100);
-                    }
+                    case "QUIT":
+                    case "EXIT":
+                        {
+                            client.Stop();
+                            stop = true;
+                        }
+                        break;
 
-                    var command = Console.ReadLine();
-                    Launcher.PerformInSta(()=> _chater.RequestGmCommand(command, false));
+                    case "REQUEST":
+                        {
+                            chater.RequestCommand(
+                                "This is a rpc request, specified server response success when you receive this message!");
+                        }
+                        break;
+
+                    default:
+                        {
+                            chater.NotifyMessage(cmd);
+                        }
+                        break;
                 }
             }
         }

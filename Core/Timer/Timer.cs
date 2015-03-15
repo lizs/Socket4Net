@@ -9,6 +9,8 @@
  *      timer scheduler.
 *********************************************************************/
 
+using Core.Service;
+
 namespace Core.Timer
 {
     /// <summary>
@@ -16,6 +18,8 @@ namespace Core.Timer
     /// </summary>
     public sealed class Timer : System.IDisposable
     {
+        private TimerScheduler _scheduler;
+
         /// <summary>
         /// Construct a new timer object.
         /// </summary>
@@ -24,8 +28,8 @@ namespace Core.Timer
         /// zero means start immediately</param>
         /// <param name="period">the period of this timer, , in milliseconds.
         /// zero means the timer is schedule once only</param>
-        public Timer(string name, uint dueTime, uint period)
-            :this(name, dueTime)
+        public Timer(ILogicService service, string name,  uint dueTime, uint period)
+            :this(service, name, dueTime)
         {
             Period = period;
         }
@@ -36,10 +40,11 @@ namespace Core.Timer
         /// <param name="name">the timer's name</param>
         /// <param name="dueTime">when to begin this timer, in milliseconds.
         /// zero means start immediately</param>
-        public Timer(string name, uint dueTime)
+        public Timer(ILogicService service, string name, uint dueTime)
         {
             Name = name;
             DueTime = dueTime;
+            _scheduler = service.Scheduler;
         }
 
         /// <summary>
@@ -135,7 +140,7 @@ namespace Core.Timer
         /// </summary>
         public void Start()
         {
-            TimerScheduler.Instance.Add(this);
+            _scheduler.Add(this);
         }
 
         /// <summary>
@@ -144,8 +149,7 @@ namespace Core.Timer
         public void Stop()
         {
             State = null;
-
-            TimerScheduler.Instance.Remove(this);
+            _scheduler.Remove(this);
         }
 
         /// <summary>

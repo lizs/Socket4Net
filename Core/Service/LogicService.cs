@@ -13,7 +13,8 @@
 
 using System;
 using System.Threading;
-
+using Core.Log;
+using Core.Timer;
 #if !NET35
 using System.Collections.Concurrent;
 #else
@@ -27,7 +28,7 @@ namespace Core.Service
     /// pattern working queue, thus translate multiple
     /// threads model into single thread model.
     /// </summary>
-    public class StaService : IService
+    public class LogicService : ILogicService
     {
         private const int StopWatchDivider = 128;
         private Thread _workingThread;
@@ -38,6 +39,37 @@ namespace Core.Service
         private int _periodHandled;
         private BlockingCollection<IJob> _workingQueue;
         readonly System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
+
+        public TimerScheduler Scheduler { get; private set; }
+
+        public void Start()
+        {
+            if (_workingQueue != null
+                || _workingThread != null)
+            {
+                Logger.Instance.Fatal("STA being start more than once");
+                return;
+            }
+
+            QueueCapacity = Capacity;
+            DoStartup();
+        }
+
+        public void Stop(bool joinWorker = true)
+        {
+            if (_workingThread == null
+                || _workingQueue == null)
+            {
+                Logger.Instance.Fatal("STA not yet been started");
+                return;
+            }
+
+            _stopWorking = true;
+            if (joinWorker)
+            {
+                _workingThread.Join();
+            }
+        }
 
         public void Perform(Action action)
         {
@@ -58,7 +90,7 @@ namespace Core.Service
         /// the calling period may grater than the original period</remarks>
         /// </summary>
         public event Action Idle;
-
+        
         /// <summary>
         /// Specify the capacity of the working item queue.
         /// <remarks>when the items count in working queue reach the capacity
@@ -77,7 +109,7 @@ namespace Core.Service
         public int Period
         {
             get;
-            private set;
+            set;
         }
         /// <summary>
         /// A time counter that count the work items consume how much time
@@ -105,6 +137,14 @@ namespace Core.Service
         {
             get { return _count; }
         }
+
+        public int Capacity { get; set; }
+        int IService.Period
+        {
+            get { return Period; }
+            set { Period = value; }
+        }
+
         /// <summary>
         /// Specify how many times that the producers have been
         /// block(thread suspend) because the queue is fulled.
@@ -120,45 +160,6 @@ namespace Core.Service
         public long TotalWriteCounter
         {
             get { return _totalWriteCounter; }
-        }
-        /// <summary>
-        /// External (generally is the Main thread) call 
-        /// this method to startup the StaService component.
-        /// </summary>
-        /// <param name="capacity">specify the capacity of working queue</param>
-        /// <param name="period">specify the working thread's working period</param>
-        public void Startup(int capacity, int period)
-        {
-            if (_workingQueue != null
-                || _workingThread != null)
-            {
-                //throw new UcanBasicException("STA being start more than once");
-            }
-
-            QueueCapacity = capacity;
-            Period = period;
-
-            DoStartup();
-        }
-        /// <summary>
-        /// External(generally the Main thread) call this method to stop
-        /// the StaService component.
-        /// </summary>
-        /// <param name="joinWorkingThread">specify whether to wait the working
-        /// thread get exit or not</param>
-        public void Shutdown(bool joinWorkingThread)
-        {
-            if (_workingThread == null
-                || _workingQueue == null)
-            {
-                //throw new UcanBasicException("STA not yet been started");
-            }
-
-            _stopWorking = true;
-            if (joinWorkingThread)
-            {
-                _workingThread.Join();
-            }
         }
 
         /// <summary>
@@ -260,10 +261,10 @@ namespace Core.Service
                         else
                             break;
                     }
-                    
+
 #if DEBUG
-                    catch
-                    {   
+                    catch (Exception ex)
+                    {
                         throw;
 #else
                     catch (Exception ex)
@@ -306,14 +307,14 @@ namespace Core.Service
             try
             {
                 int pid;
-                using(var p = System.Diagnostics.Process.GetCurrentProcess())
+                using (var p = System.Diagnostics.Process.GetCurrentProcess())
                 {
                     pid = p.Id;
                 }
 
                 var time = DateTime.Now.ToString("yyyy-MM-dd_hh.mm.ss");
                 var logFileName = string.Format("STA({0})({1}.txt", pid, time);
-                using ( var ostream = new System.IO.StreamWriter(logFileName) )
+                using (var ostream = new System.IO.StreamWriter(logFileName))
                 {
                     ostream.WriteLine(ex.Message);
                     ostream.WriteLine("Stack trace:");
@@ -323,7 +324,7 @@ namespace Core.Service
             }
             catch
             {
-            	
+
             }
         }
     }
