@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Core.ConcurrentCollection
+namespace Core.Concurrent
 {
     public interface IProducerConsumerCollection<T> : IEnumerable<T>, ICollection
     {

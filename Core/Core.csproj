@@ -48,9 +48,9 @@
   <ItemGroup>
     <Compile Include="BaseProto\NetProto.cs" />
     <Compile Include="BaseProto\RpcProto.cs" />
-    <Compile Include="ConcurrentCollection\BlockingCollection.cs" />
-    <Compile Include="ConcurrentCollection\ConcurrentDictionary.cs" />
-    <Compile Include="ConcurrentCollection\ConcurrentQueue.cs" />
+    <Compile Include="Concurrent\BlockingCollection.cs" />
+    <Compile Include="Concurrent\ConcurrentDictionary.cs" />
+    <Compile Include="Concurrent\ConcurrentQueue.cs" />
     <Compile Include="Log\DefaultLogger.cs" />
     <Compile Include="Log\ILog.cs" />
     <Compile Include="Log\Logger.cs" />

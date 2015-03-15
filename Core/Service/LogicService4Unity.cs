@@ -5,7 +5,7 @@ using System.Threading;
 #if !NET35
 using System.Collections.Concurrent;
 #else
-using Core.ConcurrentCollection;
+using Core.Concurrent;
 #endif
 
 namespace Core.Service
