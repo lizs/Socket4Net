@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Core.ConcurrentCollection
+namespace Core.Concurrent
 {
     // Summary:
     //     Provides blocking and bounding capabilities for thread-safe collections that

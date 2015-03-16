@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Core.ConcurrentCollection
+namespace Core.Concurrent
 {
     /// <summary>
     /// 并发字典的实现非常简陋，只是为了兼容.net3.5
