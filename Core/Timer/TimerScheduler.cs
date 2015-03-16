@@ -187,7 +187,6 @@ namespace Core.Timer
         public void Dispose()
         {
             HostService.Idle -= RunTimer;
-
         }
         
         /// <summary>

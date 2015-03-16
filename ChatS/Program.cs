@@ -5,6 +5,7 @@ using Core.Log;
 using Core.Net.TCP;
 using Core.RPC;
 using Core.Service;
+using Core.Tool;
 
 namespace ChatS
 {
@@ -40,6 +41,9 @@ namespace ChatS
             // 创建聊天者管理器
             var mgr = new ChaterMgr();
 
+            // 创建监控（可选）
+            var moniter = new Monitor();
+
             // 监听事件
             server.EventSessionClosed +=
                 (session, reason) =>
@@ -62,11 +66,15 @@ namespace ChatS
             // 注意：该服务器拥有自己独立的网络服务和逻辑服务，故传入参数为null
             server.Start(null, null);
 
+            // 启动监控（可选）
+            moniter.Start(server);
+
             // 结束服务器
             while (true)
             {
                 if (Console.ReadKey().Key == ConsoleKey.Q)
                 {
+                    moniter.Stop();
                     server.Stop();
                     break;
                 }

@@ -7,27 +7,23 @@ using Core.Service;
 
 namespace Core.Net.TCP
 {
-    public interface IClient<TSession, out TLogicService, out TNetService> : IPeer<TSession>
+    public interface IClient<out TSession, out TLogicService, out TNetService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
         where TNetService : IService, new()
-        where TLogicService : IService, new()
+        where TLogicService : ILogicService, new()
     {
         void Send(byte[] data);
         void Send<T>(T proto);
-
-        TSession Session { get; }
-
-        TLogicService LogicService { get; }
-        TNetService NetService { get; }
     }
 
     public class Client<TSession, TLogicService, TNetService> : IClient<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
         where TNetService : class ,IService, new()
-        where TLogicService : class ,IService, new()
+        where TLogicService : class, ILogicService, new()
     {
         public event Action<TSession, SessionCloseReason> EventSessionClosed;
         public event Action<TSession> EventSessionEstablished;
+        public event Action EventPeerClosing;
 
         public string Ip { get; private set; }
         public ushort Port { get; private set; }
@@ -36,9 +32,17 @@ namespace Core.Net.TCP
         public SessionMgr SessionMgr { get; private set; }
         public bool IsLogicServiceShared { get; private set; }
         public bool IsNetServiceShared { get; private set; }
-        public TSession Session { get; private set; }
         public TLogicService LogicService { get; private set; }
         public TNetService NetService { get; private set; }
+
+        public TSession Session
+        {
+            get
+            {
+                var ret = SessionMgr.FirstOrDefault();
+                return ret != null ? ret as TSession : null;
+            }
+        }
 
         private Socket _underlineSocket;
         private SessionFactory<TSession> _sessionFactory;
@@ -80,13 +84,17 @@ namespace Core.Net.TCP
 
         public void Stop()
         {
-            Session.Close(SessionCloseReason.ClosedByMyself);
-            _connectEvent.Completed -= OnConnectCompleted;
-            
-            if (!IsLogicServiceShared) LogicService.Stop();
-            if (!IsNetServiceShared) NetService.Stop();
-
             SessionMgr.Dispose();
+            _connectEvent.Completed -= OnConnectCompleted;
+
+            LogicService.Perform(() =>
+            {
+                if (EventPeerClosing != null)
+                    EventPeerClosing();
+
+                if (!IsLogicServiceShared) LogicService.Stop();
+                if (!IsNetServiceShared) NetService.Stop();
+            });
         }
 
         public void PerformInLogic(Action action)
@@ -131,9 +139,10 @@ namespace Core.Net.TCP
 
         private void HandleConnection(Socket sock)
         {
-            Session = _sessionFactory.Create(sock, this);
+            var session = _sessionFactory.Create(sock, this);
+            SessionMgr.Add(session);
+
             Session.Start();
-            SessionMgr.Add(Session);
         }
         
         private void OnConnectCompleted(object sender, SocketAsyncEventArgs e)

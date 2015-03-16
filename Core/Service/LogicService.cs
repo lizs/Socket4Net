@@ -52,11 +52,14 @@ namespace Core.Service
             }
 
             QueueCapacity = Capacity;
+            Scheduler = new TimerScheduler(this);
             DoStartup();
         }
 
         public void Stop(bool joinWorker = true)
         {
+            Scheduler.Dispose();
+
             if (_workingThread == null
                 || _workingQueue == null)
             {

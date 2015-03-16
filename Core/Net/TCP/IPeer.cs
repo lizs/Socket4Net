@@ -30,9 +30,16 @@ namespace Core.Net.TCP
         void PerformInNet<TParam>(Action<TParam> action, TParam param);
     }
 
-    public interface IPeer<TSession> : IPeer where TSession : class, ISession, new()
+    public interface IPeer<out TSession, out TLogicService, out TNetService> : IPeer
+        where TSession : class, ISession, new()
+        where TNetService : IService, new()
+        where TLogicService : ILogicService, new()
     {
         event Action<TSession, SessionCloseReason> EventSessionClosed;
         event Action<TSession> EventSessionEstablished;
+        event Action EventPeerClosing;
+
+        TLogicService LogicService { get; }
+        TNetService NetService { get; }
     }
 }

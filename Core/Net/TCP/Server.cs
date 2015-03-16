@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Security;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Core.Log;
 using Core.RPC;
@@ -16,19 +14,10 @@ using Core.ConcurrentCollection;
 
 namespace Core.Net.TCP
 {
-    public interface IServer<TSession, out TLogicService, out TNetService> : IPeer<TSession>
-        where TSession : class, ISession, new()
-        where TNetService : IService, new()
-        where TLogicService : IService, new()
-    {
-        TLogicService LogicService { get; }
-        TNetService NetService { get; }
-    }
-
-    public class Server<TSession, TNetService, TLogicService> : IServer<TSession, TLogicService, TNetService>
+    public class Server<TSession, TNetService, TLogicService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
         where TNetService : class ,IService, new()
-        where TLogicService : class ,IService, new()
+        where TLogicService : class ,ILogicService, new()
     {
         public ushort Port { get; private set; }
         public string Ip { get; private set; }
@@ -44,6 +33,7 @@ namespace Core.Net.TCP
 
         public event Action<TSession, SessionCloseReason> EventSessionClosed;
         public event Action<TSession> EventSessionEstablished;
+        public event Action EventPeerClosing;
 
         private Socket _listener;
         private readonly SessionFactory<TSession> _sessionFactory;
@@ -107,16 +97,22 @@ namespace Core.Net.TCP
 
         public void Stop()
         {
-            SessionMgr.Dispose();
+            LogicService.Perform(() =>
+            {
+                if (EventPeerClosing != null)
+                    EventPeerClosing();
 
-            _listener.Close();
-            _acceptEvent.Dispose();
+                SessionMgr.Dispose();
 
-            _quit = true;
-            _sessionFactoryWorker.Join();
+                _listener.Close();
+                _acceptEvent.Dispose();
 
-            if (!IsLogicServiceShared) LogicService.Stop();
-            if (!IsNetServiceShared) NetService.Stop();
+                _quit = true;
+                _sessionFactoryWorker.Join();
+
+                if (!IsLogicServiceShared) LogicService.Stop();
+                if (!IsNetServiceShared) NetService.Stop();
+            });
         }
 
         public void PerformInLogic(Action action)

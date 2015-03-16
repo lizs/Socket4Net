@@ -49,3 +49,4 @@ bin/
 obj/
 Publish/ChatC
 Publish/ChatS
+*.txt

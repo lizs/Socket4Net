@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.Threading;
-
+using Core.Timer;
 #if !NET35
 using System.Collections.Concurrent;
 #else
@@ -10,7 +10,7 @@ using Core.ConcurrentCollection;
 
 namespace Core.Service
 {
-    public class LogicService4Unity : IService
+    public class LogicService4Unity : ILogicService
     {
         private readonly ConcurrentQueue<IJob> _jobs = new ConcurrentQueue<IJob>();
         private bool _stopping = true;
@@ -43,10 +43,22 @@ namespace Core.Service
             if (_stopping) return;
 
             IJob job;
-            while (_jobs.TryDequeue(out job))
+            if (_jobs.TryDequeue(out job))
             {
                 job.Do();
             }
+            else
+            {
+                if (Idle != null)
+                    Idle();
+            }
         }
+
+        public event Action Idle;
+
+        /// <summary>
+        /// not used in unity
+        /// </summary>
+        public TimerScheduler Scheduler { get; private set; }
     }
 }

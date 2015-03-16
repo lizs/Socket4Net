@@ -56,6 +56,11 @@ namespace Core.Net.TCP
             return _sessions.TryGetValue(id, out session) ? session : null;
         }
 
+        public ISession FirstOrDefault()
+        {
+            return _sessions.Select(x=>x.Value).FirstOrDefault();
+        }
+
         public void Clear()
         {
             foreach (var session in Sessions)
