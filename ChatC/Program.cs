@@ -25,8 +25,8 @@ namespace ChatC
             // 初始Logger
             Logger.Instance = new DefaultLogger();
 
-            ClientSample(ip, port);
-            //UnityClientSample(ip, port);
+            //ClientSample(ip, port);
+            UnityClientSample(ip, port);
         }
 
         private static void ClientSample(string ip, ushort port)
@@ -110,30 +110,44 @@ namespace ChatC
             var stop = false;
             while (!stop)
             {
-                string cmd = Console.ReadLine();
-                switch (cmd.ToUpper())
+                Thread.Sleep(1);
+
+                // 使用主线程来模拟unity逻辑线程
+                client.LogicService.Update(.0f);
+
+                ThreadPool.QueueUserWorkItem(state =>
                 {
-                    case "QUIT":
-                    case "EXIT":
+                    while (!stop)
+                    {
+                        string cmd = Console.ReadLine();
+                        switch (cmd.ToUpper())
                         {
-                            client.Stop();
-                            stop = true;
-                        }
-                        break;
+                            case "QUIT":
+                            case "EXIT":
+                                {
+                                    client.PerformInLogic(() =>
+                                    {
+                                        client.Stop();
+                                        stop = true;
+                                    });
+                                }
+                                break;
 
-                    case "REQUEST":
-                        {
-                            chater.RequestCommand(
-                                "This is a rpc request, specified server response success when you receive this message!");
-                        }
-                        break;
+                            case "REQUEST":
+                                {
+                                    client.PerformInLogic(() => chater.RequestCommand(
+                                        "This is a rpc request, specified server response success when you receive this message!"));
+                                }
+                                break;
 
-                    default:
-                        {
-                            chater.NotifyMessage(cmd);
+                            default:
+                                {
+                                    client.PerformInLogic(() => chater.NotifyMessage(cmd));
+                                }
+                                break;
                         }
-                        break;
-                }
+                    }
+                });
             }
         }
     }

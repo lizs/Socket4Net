@@ -42,7 +42,8 @@ namespace Core.Net.TCP
             ISession session;
             if (_sessions.TryRemove(id, out session))
             {
-                Host.PerformInLogic(() =>_closeCb(session, reason));
+                if (Host != null && _closeCb != null)
+                    Host.PerformInLogic(() =>_closeCb(session, reason));
             }
             else if (_sessions.ContainsKey(id))
                 Logger.Instance.Warn("Remove session failed for id : " + id);
@@ -63,9 +64,9 @@ namespace Core.Net.TCP
 
         public void Clear()
         {
-            foreach (var session in Sessions)
+            foreach (var session in Sessions.ToArray())
             {
-                Remove(session.Id, SessionCloseReason.ClosedByMyself);
+                session.Close(SessionCloseReason.ClosedByMyself);
             }
         }
 

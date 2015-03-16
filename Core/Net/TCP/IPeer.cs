@@ -30,7 +30,7 @@ namespace Core.Net.TCP
         void PerformInNet<TParam>(Action<TParam> action, TParam param);
     }
 
-    public interface IPeer<out TSession, out TLogicService, out TNetService> : IPeer
+    public interface IPeer<TSession, out TLogicService, out TNetService> : IPeer
         where TSession : class, ISession, new()
         where TNetService : IService, new()
         where TLogicService : ILogicService, new()

@@ -7,7 +7,7 @@ using Core.Service;
 
 namespace Core.Net.TCP
 {
-    public interface IClient<out TSession, out TLogicService, out TNetService> : IPeer<TSession, TLogicService, TNetService>
+    public interface IClient<TSession, out TLogicService, out TNetService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
         where TNetService : IService, new()
         where TLogicService : ILogicService, new()
@@ -87,14 +87,11 @@ namespace Core.Net.TCP
             SessionMgr.Dispose();
             _connectEvent.Completed -= OnConnectCompleted;
 
-            LogicService.Perform(() =>
-            {
-                if (EventPeerClosing != null)
-                    EventPeerClosing();
+            if (EventPeerClosing != null)
+                EventPeerClosing();
 
-                if (!IsLogicServiceShared) LogicService.Stop();
-                if (!IsNetServiceShared) NetService.Stop();
-            });
+            if (!IsLogicServiceShared) LogicService.Stop();
+            if (!IsNetServiceShared) NetService.Stop();
         }
 
         public void PerformInLogic(Action action)
