@@ -20,8 +20,8 @@ namespace ChatS
         /// </summary>
         protected override void RegisterRpcHandlers()
         {
-            RequestsHandlers.Add(RpcRoute.GmCmd, HandleGmRequest);
-            NotifyHandlers.Add(RpcRoute.Chat, HandleChatNotify);
+            RegisterNotifyHandler(RpcRoute.Chat, HandleChatNotify);
+            RegisterRequestHandler(RpcRoute.GmCmd, HandleGmRequest);
         }
 
         /// <summary>

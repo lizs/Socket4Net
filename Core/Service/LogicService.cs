@@ -39,6 +39,8 @@ namespace Core.Service
         private int _periodHandled;
         private BlockingCollection<IJob> _workingQueue;
         readonly System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
+        private int _excutedJobsPerSec;
+        private int _previousCalcTime;
 
         public TimerScheduler Scheduler { get; private set; }
 
@@ -141,6 +143,12 @@ namespace Core.Service
             get { return _count; }
         }
 
+        public int ExcutedJobsPerSec
+        {
+            get { return _excutedJobsPerSec; }
+            private set { _excutedJobsPerSec = value; }
+        }
+
         public int Capacity { get; set; }
         int IService.Period
         {
@@ -225,6 +233,7 @@ namespace Core.Service
 
             _workingThread.Start();
         }
+        
         /// <summary>
         /// working thread's working procedure
         /// </summary>
@@ -248,6 +257,7 @@ namespace Core.Service
                         {
                             item.Do();
                             Interlocked.Decrement(ref _count);
+                            CalcPerformance();
 
                             handled++;
                             periodCounter--;
@@ -302,6 +312,19 @@ namespace Core.Service
 
                     IdleCallbackElapsed = _watch.ElapsedMilliseconds - t2;
                 }
+            }
+        }
+
+        private void CalcPerformance()
+        {
+            var delta = (Environment.TickCount - _previousCalcTime) / 1000.0f;
+            if (delta < 1.0f)
+                ++_excutedJobsPerSec;
+            else
+            {
+                ExcutedJobsPerSec = (int)(_excutedJobsPerSec / delta);
+                _previousCalcTime = Environment.TickCount;
+                _excutedJobsPerSec = 0;
             }
         }
 

@@ -5,7 +5,6 @@ using Core.Log;
 using Core.Net.TCP;
 using Core.RPC;
 using Core.Service;
-using Core.Tool;
 
 namespace ChatS
 {
@@ -18,7 +17,7 @@ namespace ChatS
         static void Main(string[] args)
         {
             // 初始logger（可自定义日志）
-            Logger.Instance = new DefaultLogger();
+            Logger.Instance = new CustomLog.Log4Net();
 
             // 单服务器示例
             //SingleInsSample();

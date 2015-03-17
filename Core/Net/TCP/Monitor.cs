@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Text;
 using Core.Log;
-using Core.Net.TCP;
 using Core.RPC;
 using Core.Service;
 
-namespace Core.Tool
+namespace Core.Net.TCP
 {
     public class Monitor<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
-        where TNetService : class ,IService, new()
+        where TNetService : class ,INetService, new()
         where TLogicService : class ,ILogicService, new()
     {
         private Timer.Timer _timer;
@@ -32,7 +32,17 @@ namespace Core.Tool
 
         private void OutputPerformance(Timer.Timer timer)
         {
-            Logger.Instance.InfoFormat("Logic Jobs : {0}, Net jobs : {1}, Sessions :  {2}", Target.LogicService.Jobs, Target.NetService.Jobs, Target.SessionMgr.Count);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("Logic Jobs : {0}, Net jobs : {1}, Sessions :  {2}", Target.LogicService.Jobs,
+                Target.NetService.Jobs, Target.SessionMgr.Count);
+            sb.AppendLine();
+            sb.AppendFormat("Write : {0}KB/s, Read : {1}KB/s, Write : {2}/s, Read : {3}/s",
+                Target.NetService.WriteBytesPerSec / 1024.0f, Target.NetService.ReadBytesPerSec / 1024.0f,
+                Target.NetService.WritePackagesPerSec, Target.NetService.ReadPackagesPerSec);
+            sb.AppendLine();
+            sb.AppendFormat("LJob : {0}/s, NJob : {1}/s", Target.LogicService.ExcutedJobsPerSec, Target.NetService.ExcutedJobsPerSec);
+
+            Logger.Instance.Info(sb.ToString());
             GC.Collect();
         }
     }

@@ -2,7 +2,7 @@
 using System.Threading;
 using Core.Log;
 using Core.Net.TCP;
-using Core.RPC;
+using Core.Service;
 
 namespace ChatC
 {
@@ -23,10 +23,10 @@ namespace ChatC
             }
 
             // 初始Logger
-            Logger.Instance = new DefaultLogger();
+            Logger.Instance = new CustomLog.Log4Net();
 
-            //ClientSample(ip, port);
-            UnityClientSample(ip, port);
+            ClientSample(ip, port);
+            //UnityClientSample(ip, port);
         }
 
         private static void ClientSample(string ip, ushort port)
@@ -55,6 +55,9 @@ namespace ChatC
             // 结束服务器
             while (true)
             {
+                if(chater == null)
+                    Thread.Sleep(1);
+
                 var cmd = Console.ReadLine();
                 switch (cmd.ToUpper())
                 {
@@ -113,7 +116,7 @@ namespace ChatC
                 Thread.Sleep(1);
 
                 // 使用主线程来模拟unity逻辑线程
-                client.LogicService.Update(.0f);
+                (client.LogicService as LogicService4Unity).Update(.0f);
 
                 ThreadPool.QueueUserWorkItem(state =>
                 {

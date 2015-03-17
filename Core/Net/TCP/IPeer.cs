@@ -16,6 +16,9 @@ namespace Core.Net.TCP
         EndPoint EndPoint { get; }
 
         SessionMgr SessionMgr { get; }
+        
+        ILogicService LogicService { get; }
+        INetService NetService { get; }
 
         bool IsLogicServiceShared { get; }
         bool IsNetServiceShared { get; }
@@ -32,14 +35,11 @@ namespace Core.Net.TCP
 
     public interface IPeer<TSession, out TLogicService, out TNetService> : IPeer
         where TSession : class, ISession, new()
-        where TNetService : IService, new()
+        where TNetService : INetService, new()
         where TLogicService : ILogicService, new()
     {
         event Action<TSession, SessionCloseReason> EventSessionClosed;
         event Action<TSession> EventSessionEstablished;
         event Action EventPeerClosing;
-
-        TLogicService LogicService { get; }
-        TNetService NetService { get; }
     }
 }

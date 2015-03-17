@@ -13,13 +13,14 @@ namespace Core.Service
     /// <summary>
     /// 网络服务线程（网络数据读写）
     /// </summary>
-    public class NetService : IService
+    public class NetService : INetService
     {
         private BlockingCollection<IJob> _jobs;
         private Thread _wokerThread;
         private bool _stopping;
 
         public int Jobs { get { return _jobs.Count; } }
+        public int ExcutedJobsPerSec { get; private set; }
         public int Capacity { get; set; }
 
         private int _period = 10;
@@ -28,6 +29,20 @@ namespace Core.Service
             get { return _period; }
             set { _period = value; }
         }
+
+        public int ReadBytesPerSec { get; private set; }
+        public int WriteBytesPerSec { get; private set; }
+        public int ReadPackagesPerSec { get; private set; }
+        public int WritePackagesPerSec { get; private set; }
+
+        private int _previousCalcTime = 0;
+        private int _excutedJobsPerSec = 0;
+
+        private int _readBytesPerSec;
+        private int _readPackagesPerSec;
+
+        private int _writeBytesPerSec;
+        private int _writePackagesPerSec;
 
         public void Start()
         {
@@ -72,7 +87,43 @@ namespace Core.Service
                 if (_jobs.TryTake(out job, Period))
                 {
                     job.Do();
+
+                    CalcPerformance();
                 }
+            }
+        }
+
+        public void OnReadCompleted(int len, short cnt)
+        {
+            _readBytesPerSec += len;
+            ++_readPackagesPerSec;
+        }
+
+        public void OnWriteCompleted(int len)
+        {
+            _writeBytesPerSec += len;
+            ++_writePackagesPerSec;
+        }
+
+        private void CalcPerformance()
+        {
+            var delta = (Environment.TickCount - _previousCalcTime) / 1000.0f;
+            if (delta < 1.0f)
+                ++_excutedJobsPerSec;
+            else
+            {
+                ExcutedJobsPerSec = (int)(_excutedJobsPerSec / delta);
+                WriteBytesPerSec = (int)(_writeBytesPerSec / delta);
+                WritePackagesPerSec = (int)(_writePackagesPerSec / delta);
+                ReadBytesPerSec = (int)(_readBytesPerSec / delta);
+                ReadPackagesPerSec = (int)(_readPackagesPerSec / delta);
+
+                _previousCalcTime = Environment.TickCount;
+                _excutedJobsPerSec = 0;
+                _writeBytesPerSec = 0;
+                _writePackagesPerSec = 0;
+                _readBytesPerSec = 0;
+                _readPackagesPerSec = 0;
             }
         }
     }

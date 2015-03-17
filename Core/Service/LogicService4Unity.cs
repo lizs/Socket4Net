@@ -15,6 +15,7 @@ namespace Core.Service
         private readonly ConcurrentQueue<IJob> _jobs = new ConcurrentQueue<IJob>();
         private bool _stopping = true;
         public int Jobs { get { return _jobs.Count; } }
+        public int ExcutedJobsPerSec { get; private set; }
         public int Capacity { get; set; }
         public int Period { get; set; }
         

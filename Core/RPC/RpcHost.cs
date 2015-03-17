@@ -44,6 +44,16 @@ namespace Core.RPC
             Session = null;
         }
 
+        protected void RegisterRequestHandler(RpcRoute route, Func<byte[], object> handler)
+        {
+            RequestsHandlers.Add(route, handler);
+        }
+
+        protected void RegisterNotifyHandler(RpcRoute route, Func<byte[], bool> handler)
+        {
+            NotifyHandlers.Add(route, handler);
+        }
+
         protected abstract void RegisterRpcHandlers();
     }
 }

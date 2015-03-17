@@ -9,7 +9,6 @@ namespace Core.Service
     /// </summary>
     public interface IService
     {
-        int Jobs { get; }
         int Capacity { get; set; }
         int Period { get; set; }
 
@@ -18,8 +17,26 @@ namespace Core.Service
 
         void Perform(Action action);
         void Perform<T>(Action<T> action, T param);
+
+        // performance
+        int Jobs { get; }
+        int ExcutedJobsPerSec { get; }
     }
 
+    /// <summary>
+    /// 网络服务接口
+    /// </summary>
+    public interface INetService : IService
+    {
+        // performance 4 net
+        void OnReadCompleted(int len, short cnt);
+        void OnWriteCompleted(int len);
+
+        int ReadBytesPerSec { get; }
+        int WriteBytesPerSec { get; }
+        int ReadPackagesPerSec { get; }
+        int WritePackagesPerSec { get; }
+    }
 
     /// <summary>
     /// 逻辑服务接口

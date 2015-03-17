@@ -5,7 +5,9 @@ using Core.Log;
 using Core.Net.TCP;
 using Core.RPC;
 using Core.Service;
+using CustomLog;
 using Proto;
+using Monitor = Core.Net.TCP.Monitor;
 
 namespace PerformanceTest
 {
@@ -86,12 +88,14 @@ namespace PerformanceTest
                 if (args.Length > 2) count = int.Parse(args[2]);
             }
 
-            Logger.Instance = new DefaultLogger();
+            Logger.Instance = new Log4Net();
 
             var logics = new LogicService { Capacity = 10000, Period = 10 };
             var nets = new NetService { Capacity = 10000, Period = 10 };
             logics.Start();
             nets.Start();
+
+            var monitor = new Monitor();
 
             for (int i = 0; i < count; i++)
             {
@@ -101,6 +105,11 @@ namespace PerformanceTest
                 client.EventSessionEstablished += session => _mgr.Create(session.HostPeer as Client);
 
                 client.Start(nets, logics);
+
+                if (i == 0)
+                {
+                    monitor.Start(client);
+                }
             }
 
             while (true)

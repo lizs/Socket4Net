@@ -23,5 +23,12 @@ namespace Core.Log
         void WarnFormat(string format, object arg0);
         void WarnFormat(string format, object arg0, object arg1);
         void WarnFormat(string format, object arg0, object arg1, object arg2);
+
+        void Shutdown();
+    }
+    
+    public static class Logger
+    {
+        public static ILog Instance = null;
     }
 }

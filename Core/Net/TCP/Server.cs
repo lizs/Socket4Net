@@ -16,7 +16,7 @@ namespace Core.Net.TCP
 {
     public class Server<TSession, TNetService, TLogicService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
-        where TNetService : class ,IService, new()
+        where TNetService : class ,INetService, new()
         where TLogicService : class ,ILogicService, new()
     {
         public ushort Port { get; private set; }
@@ -26,8 +26,8 @@ namespace Core.Net.TCP
 
         public bool IsLogicServiceShared { get; private set; }
         public bool IsNetServiceShared { get; private set; }
-        public TLogicService LogicService { get; private set; }
-        public TNetService NetService { get; private set; }
+        public ILogicService LogicService { get; private set; }
+        public INetService NetService { get; private set; }
 
         public SessionMgr SessionMgr { get; private set; }
 
@@ -51,7 +51,10 @@ namespace Core.Net.TCP
             Ip = ip;
             Port = port;
 
-            Address = IPAddress.Parse(Ip);
+            IPAddress address;
+            if(!IPAddress.TryParse(Ip, out address)) Logger.Instance.FatalFormat("Invalid ip [{0}]", ip);
+
+            Address = address;
             EndPoint = new IPEndPoint(Address, Port);
 
             _sessionFactory = new SessionFactory<TSession>();
@@ -70,16 +73,24 @@ namespace Core.Net.TCP
         /// <param name="logic">逻辑处理服务</param>
         public void Start(IService net, IService logic)
         {
+            try
+            {
+                _listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _listener.Bind(EndPoint);
+                _listener.Listen(DefaultBacktrace);
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Fatal(e.Message);
+                return;
+            }
+
             _clients = new ConcurrentQueue<Socket>();
 
             _socketAcceptedEvent = new AutoResetEvent(false);
             _sessionFactoryWorker = new Thread(ProduceSessions);
             _sessionFactoryWorker.Start();
-
-            _listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _listener.Bind(EndPoint);
-            _listener.Listen(DefaultBacktrace);
-
+            
             _acceptEvent = new SocketAsyncEventArgs();
             _acceptEvent.Completed += OnAcceptCompleted;
 
@@ -105,13 +116,13 @@ namespace Core.Net.TCP
                 SessionMgr.Dispose();
 
                 _listener.Close();
-                _acceptEvent.Dispose();
+                if(_acceptEvent != null ) _acceptEvent.Dispose();
 
                 _quit = true;
-                _sessionFactoryWorker.Join();
+                if(_sessionFactoryWorker != null ) _sessionFactoryWorker.Join();
 
-                if (!IsLogicServiceShared) LogicService.Stop();
-                if (!IsNetServiceShared) NetService.Stop();
+                if (LogicService != null && !IsLogicServiceShared) LogicService.Stop();
+                if (NetService != null && !IsNetServiceShared) NetService.Stop();
             });
         }
 

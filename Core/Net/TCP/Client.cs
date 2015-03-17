@@ -9,7 +9,7 @@ namespace Core.Net.TCP
 {
     public interface IClient<TSession, out TLogicService, out TNetService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
-        where TNetService : IService, new()
+        where TNetService : INetService, new()
         where TLogicService : ILogicService, new()
     {
         void Send(byte[] data);
@@ -18,7 +18,7 @@ namespace Core.Net.TCP
 
     public class Client<TSession, TLogicService, TNetService> : IClient<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
-        where TNetService : class ,IService, new()
+        where TNetService : class ,INetService, new()
         where TLogicService : class, ILogicService, new()
     {
         public event Action<TSession, SessionCloseReason> EventSessionClosed;
@@ -32,8 +32,8 @@ namespace Core.Net.TCP
         public SessionMgr SessionMgr { get; private set; }
         public bool IsLogicServiceShared { get; private set; }
         public bool IsNetServiceShared { get; private set; }
-        public TLogicService LogicService { get; private set; }
-        public TNetService NetService { get; private set; }
+        public ILogicService LogicService { get; private set; }
+        public INetService NetService { get; private set; }
 
         public TSession Session
         {
@@ -53,8 +53,15 @@ namespace Core.Net.TCP
             Ip = ip;
             Port = port;
 
-            Address = IPAddress.Parse(Ip);
-            EndPoint = new IPEndPoint(Address, Port);
+            try
+            {
+                Address = IPAddress.Parse(Ip);
+                EndPoint = new IPEndPoint(Address, Port);
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Fatal(e.Message);
+            }
         }
 
         public void Start(IService net, IService logic)
@@ -130,8 +137,15 @@ namespace Core.Net.TCP
             if (info != null)
                 _connectEvent.SetBuffer(info, 0, info.Length);
 
-            if (!_underlineSocket.ConnectAsync(_connectEvent))
-                HandleConnection(_underlineSocket);
+            try
+            {
+                if (!_underlineSocket.ConnectAsync(_connectEvent))
+                    HandleConnection(_underlineSocket);
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error(e.Message);
+            }
         }
 
         private void HandleConnection(Socket sock)

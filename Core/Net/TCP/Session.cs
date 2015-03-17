@@ -21,7 +21,7 @@ namespace Core.Net.TCP
         IPeer HostPeer { get; set; }
         long Id { get; set; }
         Socket UnderlineSocket { get; set; }
-        int SendingQueueCount { get; }
+        
         void Start();
         void Close(SessionCloseReason reason);
         void SendWithHeader(byte[] data);
@@ -32,12 +32,11 @@ namespace Core.Net.TCP
 
     public abstract class Session : ISession
     {
-        public Socket UnderlineSocket { get; set; }
         public long Id { get; set; }
+        public Socket UnderlineSocket { get; set; }
         public IPeer HostPeer { get; set; }
-
+        
         // 发送相关
-        public int SendingQueueCount { get { return _sendingQueue.Count; } }
         private bool _isSending;
         private readonly Queue<byte[]> _sendingQueue;
         private SocketAsyncEventArgs _sendAsyncEventArgs;
@@ -126,10 +125,6 @@ namespace Core.Net.TCP
         {
             if (_closed) return;
             HostPeer.PerformInNet(SendImp, data);
-
-#if DEBUG
-            //Interlocked.Increment(ref SendCnt);
-#endif
         }
 
         public void Broadcast(byte[] data)
@@ -171,19 +166,7 @@ namespace Core.Net.TCP
             }
             else
             {
-                try
-                {
-                    _sendAsyncEventArgs.SetBuffer(data, 0, data.Length);
-                    _isSending = UnderlineSocket.SendAsync(_sendAsyncEventArgs);
-                }
-                catch (ObjectDisposedException e)
-                {
-                    Logger.Instance.Warn("Socket already closed!");
-                }
-                catch
-                {
-                    Close(SessionCloseReason.WriteError);
-                }
+                SendAsync(data);
             }
         }
 
@@ -194,24 +177,50 @@ namespace Core.Net.TCP
             if (_sendingQueue.Count > 0)
             {
                 var data = _sendingQueue.Dequeue();
+                SendAsync(data);
+            }
+        }
 
-                try
-                {
-                    _sendAsyncEventArgs.SetBuffer(data, 0, data.Length);
-                    _isSending = UnderlineSocket.SendAsync(_sendAsyncEventArgs);
-                }
-                catch (ObjectDisposedException e)
-                {
-                    Logger.Instance.Warn("Socket already closed!");
-                }
-                catch
+        private void SendAsync(byte[] data)
+        {
+            try
+            {
+                _sendAsyncEventArgs.SetBuffer(data, 0, data.Length);
+                _isSending = UnderlineSocket.SendAsync(_sendAsyncEventArgs);
+            }
+            catch (ObjectDisposedException e)
+            {
+                Logger.Instance.Warn("Socket already closed!");
+            }
+            catch
+            {
+                Close(SessionCloseReason.WriteError);
+            }
+
+            if (!_isSending)
+            {
+                HostPeer.NetService.OnWriteCompleted(data.Length);
+                SendNext();
+            }
+        }
+
+        private void OnSendCompleted(object sender, SocketAsyncEventArgs e)
+        {
+            HostPeer.PerformInNet(() =>
+            {
+                if (e.SocketError != SocketError.Success)
                 {
                     Close(SessionCloseReason.WriteError);
+                    return;
                 }
 
-                if (!_isSending)
+                HostPeer.NetService.OnWriteCompleted(e.BytesTransferred);
+
+                if (_sendingQueue.Count > 0)
                     SendNext();
-            }
+                else
+                    _isSending = false;
+            });
         }
 
         private void WakeupReceive()
@@ -242,7 +251,8 @@ namespace Core.Net.TCP
             }
 
             _receiveBuffer.MoveByWrite((short)_receiveAsyncEventArgs.BytesTransferred);
-            if (_packer.Process(_receiveBuffer) == PackerError.Failed)
+            short packagesCnt = 0;
+            if (_packer.Process(_receiveBuffer, ref packagesCnt) == PackerError.Failed)
             {
                 Close(SessionCloseReason.PackError);
                 return;
@@ -250,6 +260,8 @@ namespace Core.Net.TCP
 
             if (_receiveBuffer.Overload)
                 _receiveBuffer.Reset();
+
+            HostPeer.NetService.OnReadCompleted(_receiveAsyncEventArgs.BytesTransferred, packagesCnt);
 
             while (_packer.Packages.Count > 0)
             {
@@ -263,9 +275,6 @@ namespace Core.Net.TCP
         {
             var pack = _packer.Packages.Dequeue();
             HostPeer.PerformInLogic(() => Dispatch(pack));
-#if DEBUG
-            //Interlocked.Increment(ref ReceiveCnt);
-#endif
         }
 
         private void ReceiveNext()
@@ -279,24 +288,7 @@ namespace Core.Net.TCP
                 ProcessReceive();
             }
         }
-
-        private void OnSendCompleted(object sender, SocketAsyncEventArgs e)
-        {
-            HostPeer.PerformInNet(() =>
-            {
-                if (e.SocketError != SocketError.Success)
-                {
-                    Close(SessionCloseReason.WriteError);
-                    return;
-                }
-
-                if (_sendingQueue.Count > 0)
-                    SendNext();
-                else
-                    _isSending = false;
-            });
-        }
-
+        
         private void OnReceiveCompleted(object sender, SocketAsyncEventArgs e)
         {
             HostPeer.PerformInNet(() =>

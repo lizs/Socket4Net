@@ -25,7 +25,7 @@ namespace Core.Net.TCP
 
         public Queue<byte[]> Packages = new Queue<byte[]>();
 
-        public PackerError Process(CircularBuffer buffer)
+        public PackerError Process(CircularBuffer buffer, ref short packagesCnt)
         {
             PackerError error;
             if (!_headerExtracted)
@@ -44,10 +44,11 @@ namespace Core.Net.TCP
             {
                 case PackerError.Success:
                     {
+                        packagesCnt++;
                         Packages.Enqueue(_body);
                         Reset();
 
-                        return Process(buffer);
+                        return Process(buffer, ref packagesCnt);
                     }
 
                 default:
