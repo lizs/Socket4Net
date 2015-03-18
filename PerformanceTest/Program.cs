@@ -22,6 +22,7 @@ namespace PerformanceTest
 
             var ret = new Tester(client);
             ret.Boot();
+            ret.Request();
 
             _testers.Add(id, ret);
 
@@ -54,20 +55,21 @@ namespace PerformanceTest
         {
             _client = client;
             Id = _client.Session.Id;
-            Request();
         }
 
-        private void Request()
+        public async void Request()
         {
-            _client.Session.Request(RpcRoute.GmCmd, new Message2Server { Message = "Tester request" }, (success, bytes) =>
+            while (true)
             {
-                if (success)
+                var ret = await _client.Session.Request(RpcRoute.GmCmd, new Message2Server { Message = "Tester request" });
+
+                if (ret.Item1)
                 {
-                    Request();
+                    continue;
                 }
-                else
-                    Logger.Instance.Error("Server response false");
-            } );
+
+                Logger.Instance.Error("Server response false");
+            }
         }
     }
 

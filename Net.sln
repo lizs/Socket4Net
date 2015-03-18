@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTest", "Performa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{88A3AC04-0DD9-401D-96A8-72AE7EDDC275}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{9DBF46BD-14E8-49D1-8406-FEA9F4E55F01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,5 +107,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4B495FE1-5C6A-4BFC-9D20-A42BD5CCD798} = {9DBF46BD-14E8-49D1-8406-FEA9F4E55F01}
+		{8CD83E90-1D75-44C9-86D6-26915619243E} = {9DBF46BD-14E8-49D1-8406-FEA9F4E55F01}
+		{1E8C5BBC-E8A6-4B99-8075-F8B7352BEFE3} = {9DBF46BD-14E8-49D1-8406-FEA9F4E55F01}
 	EndGlobalSection
 EndGlobal

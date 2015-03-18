@@ -43,26 +43,22 @@ namespace ChatC
         /// </summary>
         /// <param name="command"></param>
         /// <param name="autorq"></param>
-        public void RequestCommand(string command)
+        public async void RequestCommand(string command)
         {
             _rqTime = DateTime.Now;
 
             // 请求服务器
-            Session.Request(RpcRoute.GmCmd, new Message2Server { Message = command },
-                // 处理服务器响应（异步回调）
-                (success, bytes) =>
-                {
-                    if (success)
-                    {
-                        var delay = (DateTime.Now - _rqTime).Ticks / TimeSpan.TicksPerMillisecond;
+            var ret = await Session.Request(RpcRoute.GmCmd, new Message2Server { Message = command });
 
-                        var responseMsg = Serializer.Deserialize<Broadcast2Clients>(bytes);
-
-                        Logger.Instance.InfoFormat("responseMsg.From +  : {0} with delay {1}ms", responseMsg.Message, delay);
-                    }
-                    else
-                        Logger.Instance.Info("Server response : false!");
-                });
+            // 处理服务器响应（异步回调）
+            if (ret.Item1)
+            {
+                var delay = (DateTime.Now - _rqTime).Ticks / TimeSpan.TicksPerMillisecond;
+                var responseMsg = Serializer.Deserialize<Broadcast2Clients>(ret.Item2);
+                Logger.Instance.InfoFormat("responseMsg.From +  : {0} with delay {1}ms", responseMsg.Message, delay);
+            }
+            else
+                Logger.Instance.Info("Server response : false!");
         }
 
         /// <summary>
