@@ -10,7 +10,7 @@ using System.Collections.Concurrent;
 namespace Core.Net.TCP
 {
     public class Server<TSession, TNetService, TLogicService> : IPeer<TSession, TLogicService, TNetService>
-        where TSession : class, ISession, new()
+        where TSession : class, ISession, new() 
         where TNetService : class ,INetService, new()
         where TLogicService : class ,ILogicService, new()
     {
@@ -204,7 +204,7 @@ namespace Core.Net.TCP
         }
     }
 
-    public class Server : Server<RpcSession, NetService, LogicService>
+    public class Server<TSession> : Server<TSession, NetService, LogicService> where TSession : class, ISession, new()
     {
         public Server(string ip, ushort port) : base(ip, port)
         {

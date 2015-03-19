@@ -47,7 +47,7 @@ namespace Core.Net.TCP
         }
     }
 
-    public class Monitor : Monitor<RpcSession, LogicService, NetService>
+    public class Monitor<TSesion> : Monitor<TSesion, LogicService, NetService> where TSesion : class, ISession, new()
     {
     }
 }

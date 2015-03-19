@@ -3,81 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using Core.Log;
 using Core.Net.TCP;
-using Core.RPC;
 using Core.Service;
 using CustomLog;
-using Proto;
-using Monitor = Core.Net.TCP.Monitor;
 
 namespace PerformanceTest
 {
-    internal class TesterMgr
-    {
-        private readonly Dictionary<long, Tester> _testers = new Dictionary<long, Tester>();
-
-        public Tester Create(Client client)
-        {
-            var id = client.Session.Id;
-            if (_testers.ContainsKey(id)) throw new Exception();
-
-            var ret = new Tester(client);
-            ret.Boot();
-            ret.Request();
-
-            _testers.Add(id, ret);
-
-            return ret;
-        }
-
-        public void Destroy(long id)
-        {
-            if (_testers.ContainsKey(id))
-            {
-                var tester = _testers[id];
-                tester.Dispose();
-
-                _testers.Remove(id);
-            }
-        }
-    }
-
-    internal class Tester : RpcHost
-    {
-        protected override void RegisterRpcHandlers()
-        {
-        }
-
-        public long Id { get; private set; }
-        private readonly Client _client;
-
-        public Tester(Client client)
-            : base(client.Session)
-        {
-            _client = client;
-            Id = _client.Session.Id;
-        }
-
-        public async void Request()
-        {
-            while (true)
-            {
-                var ret = await _client.Session.Request(RpcRoute.GmCmd, new Message2Server { Message = "Tester request" });
-
-                if (ret.Item1)
-                {
-                    continue;
-                }
-
-                Logger.Instance.Error("Server response false");
-            }
-        }
-    }
-
-
     class Program
     {
-        static TesterMgr _mgr = new TesterMgr();
-
         static void Main(string[] args)
         {
             var ip = "127.0.0.1";
@@ -97,19 +29,20 @@ namespace PerformanceTest
             logics.Start();
             nets.Start();
 
-            var monitor = new Monitor();
+            var monitor = new Monitor<TestSession>();
 
             for (int i = 0; i < count; i++)
             {
                 Thread.Sleep(1);
-                var client = new Client(ip, port);
-                client.EventSessionClosed += (session, reason) => _mgr.Destroy(session.Id);
-                client.EventSessionEstablished += session => _mgr.Create(session.HostPeer as Client);
+                var client = new Client<TestSession>(ip, port);
+                client.EventSessionEstablished += session => session.DoTest();
 
                 client.Start(nets, logics);
 
                 if (i == 0)
                 {
+                    // 监视第一个客户端即可
+                    // 因为所有客户端都共享网络和逻辑服务
                     monitor.Start(client);
                 }
             }

@@ -2,6 +2,12 @@ using ProtoBuf;
 
 namespace Proto
 {
+    public enum RpcRoute : short
+    {
+        GmCmd,
+        Chat
+    }
+
     [ProtoContract]
     public class Broadcast2Clients
     {

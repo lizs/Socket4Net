@@ -61,10 +61,7 @@
     <Compile Include="Net\TCP\Client.cs" />
     <Compile Include="Net\TCP\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RPC\Rpc.cs" />
-    <Compile Include="RPC\RpcHandlers.cs" />
-    <Compile Include="RPC\RpcHost.cs" />
-    <Compile Include="RPC\RpcRoute.cs" />
+    <Compile Include="RPC\RpcType.cs" />
     <Compile Include="RPC\RpcSession.cs" />
     <Compile Include="Serialize\Serializer.cs" />
     <Compile Include="Service\LogicService.cs" />

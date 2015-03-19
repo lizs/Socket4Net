@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using Core.Log;
-using Core.RPC;
 using Core.Service;
 
 namespace Core.Net.TCP
@@ -14,6 +13,7 @@ namespace Core.Net.TCP
     {
         void Send(byte[] data);
         void Send<T>(T proto);
+        bool Connected { get; }
     }
 
     public class Client<TSession, TLogicService, TNetService> : IClient<TSession, TLogicService, TNetService>
@@ -34,6 +34,7 @@ namespace Core.Net.TCP
         public bool IsNetServiceShared { get; private set; }
         public ILogicService LogicService { get; private set; }
         public INetService NetService { get; private set; }
+        public bool Connected { get; private set; }
 
         public TSession Session
         {
@@ -154,6 +155,7 @@ namespace Core.Net.TCP
             SessionMgr.Add(session);
 
             Session.Start();
+            Connected = true;
         }
         
         private void OnConnectCompleted(object sender, SocketAsyncEventArgs e)
@@ -166,14 +168,14 @@ namespace Core.Net.TCP
     }
 
 
-    public class Client : Client<RpcSession, LogicService, NetService>
+    public class Client<TSession> : Client<TSession, LogicService, NetService> where TSession : class, ISession, new()
     {
         public Client(string ip, ushort port) : base(ip, port)
         {
         }
     }
 
-    public class UnityClient : Client<RpcSession, LogicService4Unity, NetService>
+    public class UnityClient<TSession> : Client<TSession, LogicService4Unity, NetService> where TSession : class, ISession, new()
     {
         public UnityClient(string ip, ushort port) : base(ip, port)
         {

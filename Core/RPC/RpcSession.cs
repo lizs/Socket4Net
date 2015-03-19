@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Core.BaseProto;
@@ -10,41 +9,44 @@ using Core.Serialize;
 
 namespace Core.RPC
 {
-    public class RpcSession : Session
+    public interface IRpcSession : ISession
     {
-        public readonly RpcHandlers Handlers = new RpcHandlers();
+        object HandleRequest(short route, byte[] param);
+        bool HandleNotify(short route, byte[] param);
+    }
 
-        private readonly ConcurrentDictionary<RpcRoute, Action<bool, byte[]>> _requestPool = new ConcurrentDictionary<RpcRoute, Action<bool, byte[]>>();
+    public abstract class RpcSession : Session, IRpcSession
+    {
+        private readonly ConcurrentDictionary<short, Action<bool, byte[]>> _requestPool = new ConcurrentDictionary<short, Action<bool, byte[]>>();
         
-        private static MemoryStream Extract(byte[] pack, out RpcType type, out RpcRoute route)
+        public override void Close(SessionCloseReason reason)
+        {
+            base.Close(reason);
+
+            _requestPool.Clear();
+        }
+
+        private static MemoryStream Extract(byte[] pack, out RpcType type, out short route)
         {
             var one = pack[0];
             var two = pack[1];
 
             var header = (short)(two << 8 | one);
             type = (RpcType)((header & 0xC000) >> 14);
-            route = (RpcRoute)(header & 0x3FFF);
+            route = (short)(header & 0x3FFF);
 
             return new MemoryStream(pack, 2, pack.Length - 2);
         }
 
-        public override void Close(SessionCloseReason reason)
+        private static short CreateHeader(RpcType type, short route)
         {
-            base.Close(reason);
-
-            Handlers.Dispose();
-            _requestPool.Clear();
-        }
-
-        private static short CreateHeader(RpcType type, RpcRoute route)
-        {
-            return (short)((short)type << 14 | (short)route);
+            return (short)((short)type << 14 | route);
         }
 
         public override void Dispatch(byte[] pack)
         {
             RpcType type;
-            RpcRoute route;
+            short route;
             using (var ms = Extract(pack, out type, out route))
             {
                 switch (type)
@@ -52,7 +54,8 @@ namespace Core.RPC
                     case RpcType.Request:
                         {
                             var rq = ProtoBuf.Serializer.Deserialize<RpcReqeust>(ms);
-                            var rp = Handlers.HandleRequest(route, rq.Param);
+                            //var rp = Handlers.HandleRequest(route, rq.Param);
+                            var rp = HandleRequest(route, rq.Param);
                             Response(route, rp, rp != null);
                         }
                         break;
@@ -78,7 +81,8 @@ namespace Core.RPC
                     case RpcType.Notify:
                         {
                             var notify = ProtoBuf.Serializer.Deserialize<RpcNotify>(ms);
-                            if (!Handlers.HandleNotify(route, notify.Param))
+                            //if (!Handlers.HandleNotify(route, notify.Param))
+                            if(!HandleNotify(route, notify.Param))
                                 Logger.Instance.ErrorFormat("Handle notify {0} failed!", route);
                         }
                         break;
@@ -90,17 +94,17 @@ namespace Core.RPC
             }
         }
 
-        private void Response(RpcRoute route, object proto, bool success)
+        private void Response(short route, object proto, bool success)
         {
             SendWithHeader(PackRpc(RpcType.Response, route, proto, success));
         }
 
-        public async Task<Tuple<bool, byte[]>> Request(RpcRoute route, object proto)
+        public async Task<Tuple<bool, byte[]>> Request(short route, object proto)
         {
             return await _Request(route, proto);
         }
 
-        private Task<Tuple<bool, byte[]>> _Request(RpcRoute route, object proto)
+        private Task<Tuple<bool, byte[]>> _Request(short route, object proto)
         {
             var tcs = new TaskCompletionSource<Tuple<bool, byte[]>>();
 
@@ -113,17 +117,17 @@ namespace Core.RPC
             return tcs.Task;
         }
 
-        public void Notify(RpcRoute route, object proto)
+        public void Notify(short route, object proto)
         {
             SendWithHeader(PackRpc(RpcType.Notify, route, proto));
         }
 
-        public void NotifyAll(RpcRoute route, object proto)
+        public void NotifyAll(short route, object proto)
         {
             BroadcastWithHeader(PackRpc(RpcType.Notify, route, proto));
         }
 
-        private byte[] PackRpc(RpcType type, RpcRoute route, object proto, bool success = true)
+        private byte[] PackRpc(RpcType type, short route, object proto, bool success = true)
         {
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
@@ -158,5 +162,8 @@ namespace Core.RPC
                 return ms.ToArray();
             }
         }
+
+        public abstract object HandleRequest(short route, byte[] param);
+        public abstract bool HandleNotify(short route, byte[] param);
     }
 }

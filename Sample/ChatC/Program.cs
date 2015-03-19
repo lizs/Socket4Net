@@ -2,7 +2,6 @@
 using System.Threading;
 using Core.Log;
 using Core.Net.TCP;
-using Core.RPC;
 using Core.Service;
 
 namespace ChatC
@@ -30,22 +29,14 @@ namespace ChatC
 
         private static void ClientSample(string ip, ushort port)
         {
-            // 客户端示例
-            Chater chater = null;
-
             // 创建客户端
-            var client = new Client(ip, port);
+            var client = new Client<ChatSession>(ip, port);
 
             // 监听事件
             client.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
             client.EventSessionEstablished +=
-                session =>
-                {
-                    Logger.Instance.InfoFormat("{0} connected", session.Id);
-                    chater = new Chater(session);
-                    chater.Boot();  // 需要Boot才能处理rpc
-                };
+                session => Logger.Instance.InfoFormat("{0} connected", session.Id);
 
             // 启动客户端
             // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
@@ -54,7 +45,7 @@ namespace ChatC
             // 结束服务器
             while (true)
             {
-                if(chater == null)
+                if (!client.Connected)
                     Thread.Sleep(1);
 
                 var cmd = Console.ReadLine();
@@ -69,14 +60,14 @@ namespace ChatC
 
                     case "REQUEST":
                         {
-                            chater.RequestCommand(
+                            client.Session.RequestCommand(
                                 "This is a RPC response, indicate that server response your request success when you receive this message!");
                         }
                         continue;
 
                     default:
                         {
-                            chater.NotifyMessage(cmd);
+                            client.Session.NotifyMessage(cmd);
                         }
                         continue;
                 }
@@ -85,21 +76,14 @@ namespace ChatC
 
         private static void UnityClientSample(string ip, ushort port)
         {
-            // 客户端示例
-            Chater chater = null;
-
             // 创建客户端
-            var client = new UnityClient(ip, port);
+            var client = new UnityClient<ChatSession>(ip, port);
 
             // 监听事件
             client.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
             client.EventSessionEstablished +=
-                session =>
-                {
-                    Logger.Instance.InfoFormat("{0} connected", session.Id);
-                    chater = new Chater(session);
-                };
+                session => Logger.Instance.InfoFormat("{0} connected", session.Id);
 
             // 启动客户端
             // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
@@ -137,14 +121,14 @@ namespace ChatC
 
                             case "REQUEST":
                                 {
-                                    client.PerformInLogic(() => chater.RequestCommand(
+                                    client.PerformInLogic(() => client.Session.RequestCommand(
                                         "This is a rpc request, specified server response success when you receive this message!"));
                                 }
                                 break;
 
                             default:
                                 {
-                                    client.PerformInLogic(() => chater.NotifyMessage(cmd));
+                                    client.PerformInLogic(() => client.Session.NotifyMessage(cmd));
                                 }
                                 break;
                         }

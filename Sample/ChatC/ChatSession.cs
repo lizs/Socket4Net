@@ -9,33 +9,8 @@ namespace ChatC
     /// <summary>
     /// 聊天者客户端实现
     /// </summary>
-    public class Chater : RpcHost
+    public class ChatSession : RpcSession
     {
-        public Chater(RpcSession session)
-            : base(session)
-        {
-        }
-
-        /// <summary>
-        /// 明确自己能够处理的包
-        /// </summary>
-        protected override void RegisterRpcHandlers()
-        {
-            NotifyHandlers.Add(RpcRoute.Chat, HandleNotifyChat);
-        }
-
-        /// <summary>
-        /// 处理聊天消息通知
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        private bool HandleNotifyChat(byte[] bytes)
-        {
-            var msg = Serializer.Deserialize<Broadcast2Clients>(bytes);
-            Logger.Instance.Info(msg.From + " : " + msg.Message);
-            return true;
-        }
-
         private DateTime _rqTime;
         
         /// <summary>
@@ -48,7 +23,7 @@ namespace ChatC
             _rqTime = DateTime.Now;
 
             // 请求服务器
-            var ret = await Session.Request(RpcRoute.GmCmd, new Message2Server { Message = command });
+            var ret = await Request((short)RpcRoute.GmCmd, new Message2Server { Message = command });
 
             // 处理服务器响应（异步回调）
             if (ret.Item1)
@@ -67,7 +42,32 @@ namespace ChatC
         /// <param name="msg"></param>
         public void NotifyMessage(string msg)
         {
-            Session.Notify(RpcRoute.Chat, new Message2Server() { Message = msg });
+            Notify((short)RpcRoute.Chat, new Message2Server() { Message = msg });
+        }
+
+        public override object HandleRequest(short route, byte[] param)
+        {
+            switch ((RpcRoute)route)
+            {
+                default:
+                    return null;
+            }
+        }
+
+        public override bool HandleNotify(short route, byte[] param)
+        {
+            switch ((RpcRoute)route)
+            {
+                case RpcRoute.Chat:
+                {
+                    var msg = Serializer.Deserialize<Broadcast2Clients>(param);
+                    Logger.Instance.Info(msg.From + " : " + msg.Message);
+                    return true;
+                }
+
+                default:
+                    return false;
+            }
         }
     }
 }

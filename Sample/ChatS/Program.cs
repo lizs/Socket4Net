@@ -3,25 +3,17 @@
 using System;
 using Core.Log;
 using Core.Net.TCP;
-using Core.RPC;
 using Core.Service;
 
 namespace ChatS
 {
-    public sealed class ChatSession : RpcSession
-    {
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
             // 初始logger（可自定义日志）
             Logger.Instance = new CustomLog.Log4Net();
-
-            // 单服务器示例
-            //SingleInsSample();
-
+            
             // 多服务器示例
             //MultiInsSample();
 
@@ -35,31 +27,16 @@ namespace ChatS
         private static void RpcSample()
         {
             // 创建服务器
-            var server = new Server("0.0.0.0", 5000);
-
-            // 创建聊天者管理器
-            var mgr = new ChaterMgr();
-
+            var server = new Server<ChatSession>("0.0.0.0", 5000);
+            
             // 创建监控（可选）
-            var moniter = new Monitor();
+            var moniter = new Monitor<ChatSession>();
 
             // 监听事件
             server.EventSessionClosed +=
-                (session, reason) =>
-                {
-                    Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
+                (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
 
-                    // 从管理器删除
-                    mgr.Destroy(session.Id);
-                };
-
-            server.EventSessionEstablished += session =>
-            {
-                Logger.Instance.InfoFormat("{0} connected", session.Id);
-
-                // 创建一个聊天者
-                mgr.Create(session);
-            };
+            server.EventSessionEstablished += session => Logger.Instance.InfoFormat("{0} connected", session.Id);
 
             // 启动服务器
             // 注意：该服务器拥有自己独立的网络服务和逻辑服务，故传入参数为null
@@ -86,9 +63,9 @@ namespace ChatS
         private static void MultiInsSample()
         {
             // 创建服务器
-            var serverA = new Server("0.0.0.0", 5000);
-            var serverB = new Server("0.0.0.0", 5001);
-            var serverC = new Server("0.0.0.0", 5002);
+            var serverA = new Server<ChatSession>("0.0.0.0", 5000);
+            var serverB = new Server<ChatSession>("0.0.0.0", 5001);
+            var serverC = new Server<ChatSession>("0.0.0.0", 5002);
 
             // 监听事件
             serverA.EventSessionClosed +=
@@ -128,34 +105,6 @@ namespace ChatS
                     netService.Stop();
                     logicService.Stop();
 
-                    break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 单服务器示例
-        /// </summary>
-        private static void SingleInsSample()
-        {
-            // 创建服务器
-            var server = new Server("0.0.0.0", 5000);
-
-            // 监听事件
-            server.EventSessionClosed +=
-                (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
-            server.EventSessionEstablished += session => Logger.Instance.InfoFormat("{0} connected", session.Id);
-
-            // 启动服务器
-            // 注意：该服务器拥有自己独立的网络服务和逻辑服务，故传入参数为null
-            server.Start(null, null);
-
-            // 结束服务器
-            while (true)
-            {
-                if (Console.ReadKey().Key == ConsoleKey.Q)
-                {
-                    server.Stop();
                     break;
                 }
             }
