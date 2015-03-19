@@ -56,14 +56,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="protobuf-net">
-      <HintPath>..\Depedencies\protobuf-net.dll</HintPath>
+      <HintPath>..\..\Depedencies\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chater.cs" />
@@ -74,23 +70,24 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.csproj">
+    <ProjectReference Include="..\..\Core\Core4.5.csproj">
       <Project>{09c6fa0c-e112-4358-aeb8-26a1a064241c}</Project>
-      <Name>Core</Name>
+      <Name>Core4.5</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Logger\Logger.csproj">
       <Project>{88a3ac04-0dd9-401d-96a8-72ae7eddc275}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Proto\Proto.csproj">
+    <ProjectReference Include="..\ChatProto\SampleProto.csproj">
       <Project>{b4af3b64-7884-4864-b007-dd3b59a084d5}</Project>
-      <Name>Proto</Name>
+      <Name>SampleProto</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish\$(ProjectName)"
-copy "$(ProjectDir)$(OutDir)*.exe" "$(SolutionDir)Publish\$(ProjectName)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"
+copy "$(ProjectDir)$(OutDir)*.exe" "$(SolutionDir)Publish"
+copy "$(ProjectDir)$(OutDir)*.exe.config" "$(SolutionDir)Publish"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

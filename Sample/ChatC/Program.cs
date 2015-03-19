@@ -2,14 +2,13 @@
 using System.Threading;
 using Core.Log;
 using Core.Net.TCP;
+using Core.RPC;
 using Core.Service;
 
 namespace ChatC
 {
     internal class Program
     {
-        private static Chater _chater;
-
         private static void Main(string[] args)
         {
             var ip = "127.0.0.1";
@@ -122,7 +121,7 @@ namespace ChatC
                 {
                     while (!stop)
                     {
-                        string cmd = Console.ReadLine();
+                        var cmd = Console.ReadLine();
                         switch (cmd.ToUpper())
                         {
                             case "QUIT":

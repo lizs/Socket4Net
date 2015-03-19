@@ -5,12 +5,7 @@ using System.Threading;
 using Core.Log;
 using Core.RPC;
 using Core.Service;
-
-#if !NET35
 using System.Collections.Concurrent;
-#else
-using Core.Concurrent;
-#endif
 
 namespace Core.Net.TCP
 {

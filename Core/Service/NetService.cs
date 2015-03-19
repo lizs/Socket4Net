@@ -1,12 +1,7 @@
 ﻿
 using System;
 using System.Threading;
-
-#if !NET35
 using System.Collections.Concurrent;
-#else
-using Core.Concurrent;
-#endif
 
 namespace Core.Service
 {
@@ -35,8 +30,8 @@ namespace Core.Service
         public int ReadPackagesPerSec { get; private set; }
         public int WritePackagesPerSec { get; private set; }
 
-        private int _previousCalcTime = 0;
-        private int _excutedJobsPerSec = 0;
+        private int _previousCalcTime;
+        private int _excutedJobsPerSec;
 
         private int _readBytesPerSec;
         private int _readPackagesPerSec;
