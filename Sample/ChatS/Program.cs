@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Text;
 using Core.Log;
 using Core.Net.TCP;
 using Core.Service;
@@ -36,11 +37,11 @@ namespace ChatS
             server.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
 
-            server.EventSessionEstablished += session => Logger.Instance.InfoFormat("{0} connected", session.Id);
+            server.EventSessionEstablished += (session, data) => Logger.Instance.InfoFormat("{0} connected with msg : {1}", session.Id, Encoding.Default.GetString(data));
 
             // 启动服务器
             // 注意：该服务器拥有自己独立的网络服务和逻辑服务，故传入参数为null
-            server.Start(null, null);
+            server.Start(null, null, null);
 
             // 启动监控（可选）
             moniter.Start(server);
@@ -70,19 +71,19 @@ namespace ChatS
             // 监听事件
             serverA.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected from serverA by {1}", session.Id, reason);
-            serverA.EventSessionEstablished += session => Logger.Instance.InfoFormat("{0} connected in ServerA", session.Id);
+            serverA.EventSessionEstablished += (session, data) => Logger.Instance.InfoFormat("{0} connected in ServerA", session.Id);
 
             serverB.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected from serverB by {1}", session.Id, reason);
-            serverB.EventSessionEstablished += session => Logger.Instance.InfoFormat("{0} connected in ServerB", session.Id);
+            serverB.EventSessionEstablished += (session, data) => Logger.Instance.InfoFormat("{0} connected in ServerB", session.Id);
 
             serverC.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected from serverC by {1}", session.Id, reason);
-            serverC.EventSessionEstablished += session => Logger.Instance.InfoFormat("{0} connected in ServerC", session.Id);
+            serverC.EventSessionEstablished += (session, data) => Logger.Instance.InfoFormat("{0} connected in ServerC", session.Id);
 
             // 启动服务器
             // 让serverA拥有自己独立的网络服务和逻辑服务，故传入参数为null
-            serverA.Start(null, null);
+            serverA.Start(null, null, null);
 
             // 创建独立服务
             var logicService = new LogicService { Capacity = 10000, Period = 10 };
@@ -91,8 +92,8 @@ namespace ChatS
             netService.Start();
 
             // serverB和serverC共享服务
-            serverB.Start(netService, logicService);
-            serverC.Start(netService, logicService);
+            serverB.Start(netService, logicService, null);
+            serverC.Start(netService, logicService, null);
 
             // 结束服务器
             while (true)

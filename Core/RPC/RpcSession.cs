@@ -13,6 +13,8 @@ namespace Core.RPC
     {
         object HandleRequest(short route, byte[] param);
         bool HandleNotify(short route, byte[] param);
+        Task<Tuple<bool, byte[]>> Request(short route, object proto);
+        void Notify(short route, object proto);
     }
 
     public abstract class RpcSession : Session, IRpcSession

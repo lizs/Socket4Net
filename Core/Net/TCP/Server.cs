@@ -27,16 +27,21 @@ namespace Core.Net.TCP
         public SessionMgr SessionMgr { get; private set; }
 
         public event Action<TSession, SessionCloseReason> EventSessionClosed;
-        public event Action<TSession> EventSessionEstablished;
+        public event Action<TSession, byte[]> EventSessionEstablished;
         public event Action EventPeerClosing;
 
         private Socket _listener;
         private readonly SessionFactory<TSession> _sessionFactory;
 
         private const int DefaultBacktrace = 10;
-        private SocketAsyncEventArgs _acceptEvent;
+        private const int AcceptBufLen = 1024;
+        private const int DefaultServiceCapacity = 10000;
+        private const int DefaultServicePeriod = 10;
 
-        private ConcurrentQueue<Socket> _clients;
+        private SocketAsyncEventArgs _acceptEvent;
+        private CircularBuffer _acceptBuffer;
+
+        private ConcurrentQueue<Tuple<Socket, byte[]>> _clients;
         private AutoResetEvent _socketAcceptedEvent;
         private Thread _sessionFactoryWorker;
         private bool _quit;
@@ -55,7 +60,7 @@ namespace Core.Net.TCP
             _sessionFactory = new SessionFactory<TSession>();
 
             SessionMgr = new SessionMgr(this,
-                session => { if (EventSessionEstablished != null)EventSessionEstablished(session as TSession); },
+                (session, data) => { if (EventSessionEstablished != null)EventSessionEstablished(session as TSession, data); },
                 (session, reason) => { if (EventSessionClosed != null)EventSessionClosed(session as TSession, reason); });
         }
 
@@ -66,7 +71,7 @@ namespace Core.Net.TCP
         /// </summary>
         /// <param name="net">网络收发服务</param>
         /// <param name="logic">逻辑处理服务</param>
-        public void Start(IService net, IService logic)
+        public void Start(IService net, IService logic, byte[] data)
         {
             try
             {
@@ -80,22 +85,23 @@ namespace Core.Net.TCP
                 return;
             }
 
-            _clients = new ConcurrentQueue<Socket>();
+            _clients = new ConcurrentQueue<Tuple<Socket, byte[]>>();
 
             _socketAcceptedEvent = new AutoResetEvent(false);
             _sessionFactoryWorker = new Thread(ProduceSessions);
             _sessionFactoryWorker.Start();
-            
+
+            _acceptBuffer = new CircularBuffer(AcceptBufLen);
             _acceptEvent = new SocketAsyncEventArgs();
             _acceptEvent.Completed += OnAcceptCompleted;
 
             IsLogicServiceShared = (logic != null);
             IsNetServiceShared = (net != null);
 
-            LogicService = (logic as TLogicService) ?? new TLogicService { Capacity = 10000, Period = 10 };
+            LogicService = (logic as TLogicService) ?? new TLogicService { Capacity = DefaultServiceCapacity, Period = DefaultServicePeriod };
             if (!IsLogicServiceShared) LogicService.Start();
 
-            NetService = (net as TNetService) ?? new TNetService { Capacity = 10000, Period = 10 };
+            NetService = (net as TNetService) ?? new TNetService { Capacity = DefaultServiceCapacity, Period = DefaultServicePeriod };
             if (!IsNetServiceShared) NetService.Start();
 
             AcceptNext();
@@ -147,12 +153,12 @@ namespace Core.Net.TCP
             {
                 if (_socketAcceptedEvent.WaitOne())
                 {
-                    Socket sock;
-                    while (_clients.TryDequeue(out sock))
+                    Tuple<Socket, byte[]> client;
+                    while (_clients.TryDequeue(out client))
                     {
-                        var session = _sessionFactory.Create(sock, this);
+                        var session = _sessionFactory.Create(client.Item1, this);
                         session.Start();
-                        SessionMgr.Add(session);
+                        SessionMgr.Add(session, client.Item2);
                     }
                 }
             }
@@ -162,7 +168,10 @@ namespace Core.Net.TCP
         {
             if (e.SocketError == SocketError.Success)
             {
-                _clients.Enqueue(e.AcceptSocket);
+                byte[] data = new byte[e.BytesTransferred];
+                Buffer.BlockCopy(e.Buffer, 0, data, 0, e.BytesTransferred);
+
+                _clients.Enqueue(new Tuple<Socket, byte[]>(e.AcceptSocket, data));
                 _socketAcceptedEvent.Set();
             }
 
@@ -177,6 +186,7 @@ namespace Core.Net.TCP
             try
             {
                 // _listener在服务器stop时会抛出异常
+                _acceptEvent.SetBuffer(_acceptBuffer.Buffer, 0, AcceptBufLen);
                 result = _listener.AcceptAsync(_acceptEvent);
             }
             catch (ObjectDisposedException e)

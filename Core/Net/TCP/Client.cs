@@ -11,8 +11,6 @@ namespace Core.Net.TCP
         where TNetService : INetService, new()
         where TLogicService : ILogicService, new()
     {
-        void Send(byte[] data);
-        void Send<T>(T proto);
         bool Connected { get; }
     }
 
@@ -22,7 +20,7 @@ namespace Core.Net.TCP
         where TLogicService : class, ILogicService, new()
     {
         public event Action<TSession, SessionCloseReason> EventSessionClosed;
-        public event Action<TSession> EventSessionEstablished;
+        public event Action<TSession, byte[]> EventSessionEstablished;
         public event Action EventPeerClosing;
 
         public string Ip { get; private set; }
@@ -65,12 +63,12 @@ namespace Core.Net.TCP
             }
         }
 
-        public void Start(IService net, IService logic)
+        public void Start(IService net, IService logic, byte[] connectData)
         {
             _sessionFactory = new SessionFactory<TSession>();
 
             SessionMgr = new SessionMgr(this,
-                session => { if (EventSessionEstablished != null) EventSessionEstablished(session as TSession); },
+                (session, data)=> { if (EventSessionEstablished != null) EventSessionEstablished(session as TSession, data); },
                 (session, reason) => { if (EventSessionClosed != null) EventSessionClosed(session as TSession, reason); });
 
             _connectEvent = new SocketAsyncEventArgs();
@@ -87,7 +85,7 @@ namespace Core.Net.TCP
             NetService = (net as TNetService) ?? new TNetService { Capacity = 10000, Period = 10 };
             if (!IsNetServiceShared) NetService.Start();
 
-            Connect();
+            Connect(connectData);
         }
 
         public void Stop()
