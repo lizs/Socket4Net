@@ -23,7 +23,7 @@ namespace Core.BaseProto
     }
 
     [ProtoContract]
-    public class RpcNotify
+    public class RpcPush
     {
         [ProtoMember(1)]
         public byte[] Param { get; set; }

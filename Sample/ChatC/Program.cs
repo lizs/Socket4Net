@@ -68,7 +68,7 @@ namespace ChatC
 
                     default:
                         {
-                            client.Session.NotifyMessage(cmd);
+                            client.Session.PushMessage(cmd);
                         }
                         continue;
                 }
@@ -129,7 +129,7 @@ namespace ChatC
 
                             default:
                                 {
-                                    client.PerformInLogic(() => client.Session.NotifyMessage(cmd));
+                                    client.PerformInLogic(() => client.Session.PushMessage(cmd));
                                 }
                                 break;
                         }

@@ -40,9 +40,9 @@ namespace ChatC
         /// 发起RpcRoute.Chat通知
         /// </summary>
         /// <param name="msg"></param>
-        public void NotifyMessage(string msg)
+        public void PushMessage(string msg)
         {
-            Notify((short)RpcRoute.Chat, new Message2Server() { Message = msg });
+            Push((short)RpcRoute.Chat, new Message2Server() { Message = msg });
         }
 
         public override object HandleRequest(short route, byte[] param)
@@ -54,7 +54,7 @@ namespace ChatC
             }
         }
 
-        public override bool HandleNotify(short route, byte[] param)
+        public override bool HandlePush(short route, byte[] param)
         {
             switch ((RpcRoute)route)
             {

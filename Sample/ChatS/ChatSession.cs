@@ -28,7 +28,7 @@ namespace ChatS
             }
         }
 
-        public override bool HandleNotify(short route, byte[] param)
+        public override bool HandlePush(short route, byte[] param)
         {
 
             switch ((RpcRoute)route)
@@ -43,10 +43,10 @@ namespace ChatS
                         };
 
                         // 广播给其他参与聊天者
-                        NotifyAll((short)RpcRoute.Chat, proto);
+                        PushAll((short)RpcRoute.Chat, proto);
 
                         // 或者只通知自己
-                        //Session.Notify(RpcRoute.Chat, proto);
+                        //Session.Push(RpcRoute.Chat, proto);
 
                         return true;
                     }

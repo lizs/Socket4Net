@@ -27,7 +27,7 @@ namespace PerformanceTest
             return null;
         }
 
-        public override bool HandleNotify(short route, byte[] param)
+        public override bool HandlePush(short route, byte[] param)
         {
             // 该客户端无视任何通知
             return true;

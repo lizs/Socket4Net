@@ -12,9 +12,9 @@ namespace Core.RPC
     public interface IRpcSession : ISession
     {
         object HandleRequest(short route, byte[] param);
-        bool HandleNotify(short route, byte[] param);
+        bool HandlePush(short route, byte[] param);
         Task<Tuple<bool, byte[]>> Request(short route, object proto);
-        void Notify(short route, object proto);
+        void Push(short route, object proto);
     }
 
     public abstract class RpcSession : Session, IRpcSession
@@ -80,11 +80,11 @@ namespace Core.RPC
                         }
                         break;
 
-                    case RpcType.Notify:
+                    case RpcType.Push:
                         {
-                            var notify = ProtoBuf.Serializer.Deserialize<RpcNotify>(ms);
-                            //if (!Handlers.HandleNotify(route, notify.Param))
-                            if(!HandleNotify(route, notify.Param))
+                            var notify = ProtoBuf.Serializer.Deserialize<RpcPush>(ms);
+                            //if (!Handlers.HandlePush(route, notify.Param))
+                            if(!HandlePush(route, notify.Param))
                                 Logger.Instance.ErrorFormat("Handle notify {0} failed!", route);
                         }
                         break;
@@ -119,14 +119,14 @@ namespace Core.RPC
             return tcs.Task;
         }
 
-        public void Notify(short route, object proto)
+        public void Push(short route, object proto)
         {
-            SendWithHeader(PackRpc(RpcType.Notify, route, proto));
+            SendWithHeader(PackRpc(RpcType.Push, route, proto));
         }
 
-        public void NotifyAll(short route, object proto)
+        public void PushAll(short route, object proto)
         {
-            BroadcastWithHeader(PackRpc(RpcType.Notify, route, proto));
+            BroadcastWithHeader(PackRpc(RpcType.Push, route, proto));
         }
 
         private byte[] PackRpc(RpcType type, short route, object proto, bool success = true)
@@ -140,8 +140,8 @@ namespace Core.RPC
                 byte[] param;
                 switch (type)
                 {
-                    case RpcType.Notify:
-                        param = Serializer.Serialize(new RpcNotify() { Param = Serializer.Serialize(proto) });
+                    case RpcType.Push:
+                        param = Serializer.Serialize(new RpcPush() { Param = Serializer.Serialize(proto) });
                         break;
 
                     case RpcType.Request:
@@ -166,6 +166,6 @@ namespace Core.RPC
         }
 
         public abstract object HandleRequest(short route, byte[] param);
-        public abstract bool HandleNotify(short route, byte[] param);
+        public abstract bool HandlePush(short route, byte[] param);
     }
 }
