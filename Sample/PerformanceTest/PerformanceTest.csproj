@@ -51,15 +51,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\..\Core\Core.csproj">
       <Project>{09c6fa0c-e112-4358-aeb8-26a1a064241c}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logger\Logger.csproj">
+    <ProjectReference Include="..\..\Logger\Logger.csproj">
       <Project>{88a3ac04-0dd9-401d-96a8-72ae7eddc275}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Proto\Proto.csproj">
+    <ProjectReference Include="..\..\Proto\Proto.csproj">
       <Project>{b4af3b64-7884-4864-b007-dd3b59a084d5}</Project>
       <Name>Proto</Name>
     </ProjectReference>
