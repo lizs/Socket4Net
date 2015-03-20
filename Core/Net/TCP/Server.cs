@@ -168,10 +168,10 @@ namespace Core.Net.TCP
         {
             if (e.SocketError == SocketError.Success)
             {
-                byte[] data = new byte[e.BytesTransferred];
-                Buffer.BlockCopy(e.Buffer, 0, data, 0, e.BytesTransferred);
+//                 byte[] data = new byte[e.BytesTransferred];
+//                 Buffer.BlockCopy(e.Buffer, 0, data, 0, e.BytesTransferred);
 
-                _clients.Enqueue(new Tuple<Socket, byte[]>(e.AcceptSocket, data));
+                _clients.Enqueue(new Tuple<Socket, byte[]>(e.AcceptSocket, null));
                 _socketAcceptedEvent.Set();
             }
 
@@ -186,7 +186,7 @@ namespace Core.Net.TCP
             try
             {
                 // _listener在服务器stop时会抛出异常
-                _acceptEvent.SetBuffer(_acceptBuffer.Buffer, 0, AcceptBufLen);
+                //_acceptEvent.SetBuffer(_acceptBuffer.Buffer, 0, AcceptBufLen);
                 result = _listener.AcceptAsync(_acceptEvent);
             }
             catch (ObjectDisposedException e)

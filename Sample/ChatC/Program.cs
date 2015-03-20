@@ -41,7 +41,7 @@ namespace ChatC
 
             // 启动客户端
             // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
-            client.Start(null, null, Encoding.Default.GetBytes("Hello Socket4Net!"));
+            client.Start(null, null, null/*Encoding.Default.GetBytes("Hello Socket4Net!")*/);
 
             // 结束服务器
             while (true)

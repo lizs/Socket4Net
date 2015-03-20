@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Core.RPC;
 using Core.Serialize;
 using Proto;
@@ -6,7 +8,7 @@ namespace ChatS
 {
     public class ChatSession : RpcSession
     {
-        public override object HandleRequest(short route, byte[] param)
+        public async override Task<Tuple<bool, byte[]>> HandleRequest(short route, byte[] param)
         {
             switch ((RpcRoute)route)
             {
@@ -14,13 +16,14 @@ namespace ChatS
                     {
                         var msg = Serializer.Deserialize<Message2Server>(param);
 
-                        // 对于Request请求，回以ProtoBuf实例
-                        // 该实例最终被对端请求者接收
-                        return new Broadcast2Clients
+                        // 响应该请求
+                        var proto  = new Broadcast2Clients
                         {
                             From = Id.ToString(),
                             Message = "Gm command [" + msg.Message + "] Responsed"
                         };
+
+                        return new Tuple<bool, byte[]>(true, Serializer.Serialize(proto));
                     }
 
                 default:
@@ -28,9 +31,8 @@ namespace ChatS
             }
         }
 
-        public override bool HandlePush(short route, byte[] param)
+        public async override Task<bool> HandlePush(short route, byte[] param)
         {
-
             switch ((RpcRoute)route)
             {
                 case RpcRoute.Chat:

@@ -1,4 +1,6 @@
-﻿using Core.Log;
+﻿using System;
+using System.Threading.Tasks;
+using Core.Log;
 using Core.RPC;
 using Proto;
 
@@ -10,7 +12,7 @@ namespace PerformanceTest
         {
             while (true)
             {
-                var ret = await Request((short)RpcRoute.GmCmd, new Message2Server { Message = "Tester request" });
+                var ret = await RequestAsync((short)RpcRoute.GmCmd, new Message2Server { Message = "Tester request" });
 
                 if (ret.Item1)
                 {
@@ -21,13 +23,13 @@ namespace PerformanceTest
             }
         }
 
-        public override object HandleRequest(short route, byte[] param)
+        public async override Task<Tuple<bool, byte[]>> HandleRequest(short route, byte[] param)
         {
             // 该客户端无视任何请求
             return null;
         }
 
-        public override bool HandlePush(short route, byte[] param)
+        public async override Task<bool> HandlePush(short route, byte[] param)
         {
             // 该客户端无视任何通知
             return true;

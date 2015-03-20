@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Core.Log;
 using Core.Serialize;
 
@@ -27,7 +28,8 @@ namespace Core.Net.TCP
         void SendWithHeader(byte[] data);
         void Send(byte[] data);
         void Send<T>(T proto);
-        void Dispatch(byte[] pack);
+
+        Task Dispatch(byte[] pack);
     }
 
     public abstract class Session : ISession
@@ -65,7 +67,7 @@ namespace Core.Net.TCP
         /// 在STA线程分发
         /// </summary>
         /// <param name="pack"></param>
-        public abstract void Dispatch(byte[] pack);
+        public abstract Task Dispatch(byte[] pack);
         
         public virtual void Close(SessionCloseReason reason)
         {
@@ -206,6 +208,8 @@ namespace Core.Net.TCP
 
         private void OnSendCompleted(object sender, SocketAsyncEventArgs e)
         {
+            if(_closed) return;
+
             HostPeer.PerformInNet(() =>
             {
                 if (e.SocketError != SocketError.Success)

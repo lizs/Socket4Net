@@ -11,23 +11,74 @@ namespace Core.RPC
 {
     public interface IRpcSession : ISession
     {
-        object HandleRequest(short route, byte[] param);
-        bool HandlePush(short route, byte[] param);
-        Task<Tuple<bool, byte[]>> Request(short route, object proto);
-        void Push(short route, object proto);
+        Task<Tuple<bool, byte[]>> HandleRequest(short route, byte[] param);
+        Task<bool> HandlePush(short route, byte[] param);
+
+        Task<Tuple<bool, byte[]>> RequestAsync<T>(short route, T proto);
+        Task<Tuple<bool, byte[]>> RequestAsync(short route, byte[] protoBytes);
+
+        void Push<T>(short route, T proto);
+        void Push(short route, byte[] protoBytes);
+
+        void PushAll<T>(short route, T proto);
+        void PushAll(short route, byte[] protoBytes);
     }
 
     public abstract class RpcSession : Session, IRpcSession
     {
-        private readonly ConcurrentDictionary<short, Action<bool, byte[]>> _requestPool = new ConcurrentDictionary<short, Action<bool, byte[]>>();
+        private readonly ConcurrentDictionary<short, Action<bool, byte[]>> _requestPool
+            = new ConcurrentDictionary<short, Action<bool, byte[]>>();
         
         public override void Close(SessionCloseReason reason)
         {
             base.Close(reason);
-
             _requestPool.Clear();
         }
 
+        public abstract Task<Tuple<bool, byte[]>> HandleRequest(short route, byte[] param);
+        public abstract Task<bool> HandlePush(short route, byte[] param);
+
+        public void Push<T>(short route, T proto)
+        {
+            var protoBytes = Serializer.Serialize(new RpcPush { Param = Serializer.Serialize(proto) });
+            Push(route, protoBytes);
+        }
+        
+        public void Push(short route, byte[] protoBytes)
+        {
+            SendWithHeader(PackRpc(RpcType.Push, route, protoBytes));
+        }
+
+        public void PushAll(short route, byte[] protoBytes)
+        {
+            BroadcastWithHeader(PackRpc(RpcType.Push, route, protoBytes));
+        }
+
+        public void PushAll<T>(short route, T proto)
+        {
+            var protoBytes = Serializer.Serialize(new RpcPush { Param = Serializer.Serialize(proto) });
+            PushAll(route, protoBytes);
+        }
+
+        public async Task<Tuple<bool, byte[]>> RequestAsync(short route, byte[] protoBytes)
+        {
+            var tcs = new TaskCompletionSource<Tuple<bool, byte[]>>();
+
+            Action<bool, byte[]> cb = (b, bytes) => tcs.TrySetResult(new Tuple<bool, byte[]>(b, bytes));
+            if (!_requestPool.TryAdd(route, cb))
+                tcs.TrySetException(new ArgumentOutOfRangeException("Route already exists!"));
+
+            SendWithHeader(PackRpc(RpcType.Request, route, protoBytes));
+
+            return await tcs.Task;
+        }
+
+        public async Task<Tuple<bool, byte[]>> RequestAsync<T>(short route, T proto)
+        {
+            var protoBytes = Serializer.Serialize(new RpcReqeust() { Param = Serializer.Serialize(proto) });
+            return await RequestAsync(route, protoBytes);
+        }
+        
         private static MemoryStream Extract(byte[] pack, out RpcType type, out short route)
         {
             var one = pack[0];
@@ -45,7 +96,7 @@ namespace Core.RPC
             return (short)((short)type << 14 | route);
         }
 
-        public override void Dispatch(byte[] pack)
+        public async override Task Dispatch(byte[] pack)
         {
             RpcType type;
             short route;
@@ -56,9 +107,11 @@ namespace Core.RPC
                     case RpcType.Request:
                         {
                             var rq = ProtoBuf.Serializer.Deserialize<RpcReqeust>(ms);
-                            //var rp = Handlers.HandleRequest(route, rq.Param);
-                            var rp = HandleRequest(route, rq.Param);
-                            Response(route, rp, rp != null);
+                            var rp = await HandleRequest(route, rq.Param);
+                            if(rp == null)
+                                Response(route, null, false);
+                            else
+                                Response(route, rp.Item2, rp.Item1);
                         }
                         break;
 
@@ -83,8 +136,9 @@ namespace Core.RPC
                     case RpcType.Push:
                         {
                             var notify = ProtoBuf.Serializer.Deserialize<RpcPush>(ms);
-                            //if (!Handlers.HandlePush(route, notify.Param))
-                            if(!HandlePush(route, notify.Param))
+
+                            var success = await HandlePush(route, notify.Param);
+                            if (!success)
                                 Logger.Instance.ErrorFormat("Handle notify {0} failed!", route);
                         }
                         break;
@@ -96,41 +150,13 @@ namespace Core.RPC
             }
         }
 
-        private void Response(short route, object proto, bool success)
+        private void Response(short route, byte[] protoBytes, bool success)
         {
-            SendWithHeader(PackRpc(RpcType.Response, route, proto, success));
+            SendWithHeader(PackRpc(RpcType.Response, route, protoBytes, success));
         }
 
-        public async Task<Tuple<bool, byte[]>> Request(short route, object proto)
-        {
-            return await _Request(route, proto);
-        }
-
-        private Task<Tuple<bool, byte[]>> _Request(short route, object proto)
-        {
-            var tcs = new TaskCompletionSource<Tuple<bool, byte[]>>();
-
-            Action<bool, byte[]> cb = (b, bytes) => tcs.TrySetResult(new Tuple<bool, byte[]>(b, bytes));
-            if (!_requestPool.TryAdd(route, cb))
-                tcs.TrySetException(new ArgumentOutOfRangeException("Route already exists!"));
-
-            SendWithHeader(PackRpc(RpcType.Request, route, proto));
-            
-            return tcs.Task;
-        }
-
-        public void Push(short route, object proto)
-        {
-            SendWithHeader(PackRpc(RpcType.Push, route, proto));
-        }
-
-        public void PushAll(short route, object proto)
-        {
-            BroadcastWithHeader(PackRpc(RpcType.Push, route, proto));
-        }
-
-        private byte[] PackRpc(RpcType type, short route, object proto, bool success = true)
-        {
+        private byte[] PackRpc(RpcType type, short route, byte[] data, bool success = true)
+        {  
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
@@ -141,15 +167,17 @@ namespace Core.RPC
                 switch (type)
                 {
                     case RpcType.Push:
-                        param = Serializer.Serialize(new RpcPush() { Param = Serializer.Serialize(proto) });
-                        break;
-
                     case RpcType.Request:
-                        param = Serializer.Serialize(new RpcReqeust() { Param = Serializer.Serialize(proto) });
+                        param = data;
                         break;
 
                     case RpcType.Response:
-                        param = Serializer.Serialize(new RpcResponse() { Param = Serializer.Serialize(proto), Success = success});
+                        param =
+                            Serializer.Serialize(new RpcResponse()
+                            {
+                                Param = data,
+                                Success = success
+                            });
                         break;
 
                     default:
@@ -159,13 +187,10 @@ namespace Core.RPC
                 bw.Write(param);
 
                 bw.Seek(0, SeekOrigin.Begin);
-                bw.Write((short)(2 + param.Length));
+                bw.Write((short) (2 + param.Length));
 
                 return ms.ToArray();
             }
         }
-
-        public abstract object HandleRequest(short route, byte[] param);
-        public abstract bool HandlePush(short route, byte[] param);
     }
 }
