@@ -12,31 +12,26 @@ namespace Core.Net.TCP
         public IPeer Host { get; private set; }
 
         private readonly ConcurrentDictionary<long, ISession> _sessions = new ConcurrentDictionary<long, ISession>();
-        private Action<ISession, byte[]> _openCb;
+        private Action<ISession> _openCb;
         private Action<ISession, SessionCloseReason> _closeCb;
 
-        public SessionMgr(IPeer host, Action<ISession, byte[]> openCb, Action<ISession, SessionCloseReason> closeCb)
+        public SessionMgr(IPeer host, Action<ISession> openCb, Action<ISession, SessionCloseReason> closeCb)
         {
             Host = host;
             _openCb = openCb;
             _closeCb = closeCb;
         }
 
-        public void Add(ISession session, byte[] data)
+        public void Add(ISession session)
         {
             if (_sessions.TryAdd(session.Id, session))
             {
-                Host.PerformInLogic(()=>_openCb(session, data));
+                Host.PerformInLogic(()=>_openCb(session));
             }
             else
                 Logger.Instance.Warn("Add session failed for id : " + session.Id);
         }
-
-        public void Add(ISession session)
-        {
-            Add(session, null);
-        }
-
+        
         public void Remove(long id, SessionCloseReason reason)
         {
             ISession session;

@@ -23,7 +23,7 @@ namespace Core.Net.TCP
         bool IsLogicServiceShared { get; }
         bool IsNetServiceShared { get; }
 
-        void Start(IService net, IService logic, byte[] data);
+        void Start(IService net, IService logic);
         void Stop();
 
         void PerformInLogic(Action action);
@@ -39,7 +39,7 @@ namespace Core.Net.TCP
         where TLogicService : ILogicService, new()
     {
         event Action<TSession, SessionCloseReason> EventSessionClosed;
-        event Action<TSession, byte[]> EventSessionEstablished;
+        event Action<TSession> EventSessionEstablished;
         event Action EventPeerClosing;
     }
 }

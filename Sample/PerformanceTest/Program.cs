@@ -35,9 +35,9 @@ namespace PerformanceTest
             {
                 Thread.Sleep(1);
                 var client = new Client<TestSession>(ip, port);
-                client.EventSessionEstablished += (session, data) => session.DoTest();
+                client.EventSessionEstablished += session => session.DoTest();
 
-                client.Start(nets, logics, null);
+                client.Start(nets, logics);
 
                 if (i == 0)
                 {

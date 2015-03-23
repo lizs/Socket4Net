@@ -70,6 +70,7 @@ namespace Core.Net.TCP
 
             _packageLen = (short)(buffer.Buffer[buffer.Head] + buffer.Buffer[buffer.Head + 1] * 256);
             if (_packageLen > PackageMaxLength) return PackerError.Failed;
+            if (_packageLen < 0) return PackerError.Failed;
 
             _body = new byte[_packageLen];
 

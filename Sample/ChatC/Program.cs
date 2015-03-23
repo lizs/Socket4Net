@@ -37,11 +37,11 @@ namespace ChatC
             client.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
             client.EventSessionEstablished +=
-                (session, data) => Logger.Instance.InfoFormat("{0} connected", session.Id);
+                session => Logger.Instance.InfoFormat("{0} connected", session.Id);
 
             // 启动客户端
             // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
-            client.Start(null, null, null/*Encoding.Default.GetBytes("Hello Socket4Net!")*/);
+            client.Start(null, null);
 
             // 结束服务器
             while (true)
@@ -84,14 +84,14 @@ namespace ChatC
             client.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
             client.EventSessionEstablished +=
-                (session, data) => Logger.Instance.InfoFormat("{0} connected", session.Id);
+                session => Logger.Instance.InfoFormat("{0} connected", session.Id);
 
             // 启动客户端
             // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
             // 超级警告：由于UnityClient直接使用Unity的逻辑线程作为自己的逻辑服务
             // 线程，所以需要在某个MonoBehaviour的Update或FixedUpdate中调用
             // client.LogicService.Update(delta)来驱动逻辑服务
-            client.Start(null, null, null);
+            client.Start(null, null);
 
             // 结束客户端
             var stop = false;

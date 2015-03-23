@@ -20,7 +20,7 @@ namespace Core.Net.TCP
         where TLogicService : class, ILogicService, new()
     {
         public event Action<TSession, SessionCloseReason> EventSessionClosed;
-        public event Action<TSession, byte[]> EventSessionEstablished;
+        public event Action<TSession> EventSessionEstablished;
         public event Action EventPeerClosing;
 
         public string Ip { get; private set; }
@@ -63,12 +63,12 @@ namespace Core.Net.TCP
             }
         }
 
-        public void Start(IService net, IService logic, byte[] connectData)
+        public void Start(IService net, IService logic)
         {
             _sessionFactory = new SessionFactory<TSession>();
 
             SessionMgr = new SessionMgr(this,
-                (session, data)=> { if (EventSessionEstablished != null) EventSessionEstablished(session as TSession, data); },
+                session=> { if (EventSessionEstablished != null) EventSessionEstablished(session as TSession); },
                 (session, reason) => { if (EventSessionClosed != null) EventSessionClosed(session as TSession, reason); });
 
             _connectEvent = new SocketAsyncEventArgs();
@@ -85,7 +85,7 @@ namespace Core.Net.TCP
             NetService = (net as TNetService) ?? new TNetService { Capacity = 10000, Period = 10 };
             if (!IsNetServiceShared) NetService.Start();
 
-            Connect(connectData);
+            Connect();
         }
 
         public void Stop()
@@ -130,12 +130,9 @@ namespace Core.Net.TCP
             if (Session != null) Session.Send(data);
         }
 
-        public void Connect(byte[] info = null)
+        public void Connect()
         {
             _connectEvent.RemoteEndPoint = EndPoint;
-            if (info != null)
-                _connectEvent.SetBuffer(info, 0, info.Length);
-
             try
             {
                 if (!_underlineSocket.ConnectAsync(_connectEvent))
