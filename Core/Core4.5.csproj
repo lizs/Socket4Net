@@ -57,7 +57,6 @@
     <Compile Include="Net\TCP\Session.cs" />
     <Compile Include="Net\TCP\SessionFactory.cs" />
     <Compile Include="Net\TCP\SessionMgr.cs" />
-    <Compile Include="Net\TCP\SocketAysncEventArgsPool.cs" />
     <Compile Include="Net\TCP\Client.cs" />
     <Compile Include="Net\TCP\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

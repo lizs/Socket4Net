@@ -52,7 +52,7 @@ namespace Core.Net.TCP
             Port = port;
 
             IPAddress address;
-            if(!IPAddress.TryParse(Ip, out address)) Logger.Instance.FatalFormat("Invalid ip [{0}]", ip);
+            if(!IPAddress.TryParse(Ip, out address)) Logger.Instance.FatalFormat("Invalid ip {0}", ip);
 
             Address = address;
             EndPoint = new IPEndPoint(Address, Port);

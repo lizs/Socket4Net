@@ -15,6 +15,11 @@ namespace Core.Net.TCP
         ReadError,
         WriteError,
         PackError,
+
+        /// <summary>
+        /// 比如同一账号使用不同会话时，会顶掉之前会话
+        /// </summary>
+        Replaced,
     }
 
     public interface ISession
@@ -295,6 +300,8 @@ namespace Core.Net.TCP
         
         private void OnReceiveCompleted(object sender, SocketAsyncEventArgs e)
         {
+            if (_closed) return;
+
             HostPeer.PerformInNet(() =>
             {
                 if (e.SocketError != SocketError.Success)
