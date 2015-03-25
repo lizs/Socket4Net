@@ -91,7 +91,8 @@ namespace Core.Net.TCP
         public void Stop()
         {
             SessionMgr.Dispose();
-            _connectEvent.Completed -= OnConnectCompleted;
+            _connectEvent.Dispose();
+            _underlineSocket.Close();
 
             if (EventPeerClosing != null)
                 EventPeerClosing();
