@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Core.RPC;
-using Core.Serialize;
+using socket4net.RPC;
+using socket4net.Serialize;
 using Proto;
 
 namespace ChatS

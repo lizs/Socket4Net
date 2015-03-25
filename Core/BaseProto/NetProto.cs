@@ -1,5 +1,5 @@
 ﻿
-namespace Core.BaseProto
+namespace socket4net.BaseProto
 {
     /// <summary>
     /// 网络包协议

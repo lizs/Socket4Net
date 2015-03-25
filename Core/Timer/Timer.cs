@@ -9,9 +9,9 @@
  *      timer scheduler.
 *********************************************************************/
 
-using Core.Service;
+using socket4net.Service;
 
-namespace Core.Timer
+namespace socket4net.Timer
 {
     /// <summary>
     /// A timer class base on Linux style timer scheduler.

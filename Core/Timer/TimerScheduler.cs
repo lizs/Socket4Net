@@ -12,9 +12,9 @@
 
 using System;
 using System.Diagnostics;
-using Core.Service;
+using socket4net.Service;
 
-namespace Core.Timer
+namespace socket4net.Timer
 {
     /// <summary>
     /// Queue entry class

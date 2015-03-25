@@ -2,12 +2,12 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
-using Core.BaseProto;
-using Core.Log;
-using Core.Net.TCP;
-using Core.Serialize;
+using socket4net.BaseProto;
+using socket4net.Log;
+using socket4net.Net.TCP;
+using socket4net.Serialize;
 
-namespace Core.RPC
+namespace socket4net.RPC
 {
     public interface IRpcSession : ISession
     {

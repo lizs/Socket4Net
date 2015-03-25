@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core4.5.csproj">
+    <ProjectReference Include="..\Core\socket4net.csproj">
       <Project>{09c6fa0c-e112-4358-aeb8-26a1a064241c}</Project>
-      <Name>Core4.5</Name>
+      <Name>socket4net</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

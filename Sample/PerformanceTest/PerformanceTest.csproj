@@ -48,9 +48,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core4.5.csproj">
+    <ProjectReference Include="..\..\Core\socket4net.csproj">
       <Project>{09c6fa0c-e112-4358-aeb8-26a1a064241c}</Project>
-      <Name>Core4.5</Name>
+      <Name>socket4net</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Logger\Logger.csproj">
       <Project>{88a3ac04-0dd9-401d-96a8-72ae7eddc275}</Project>

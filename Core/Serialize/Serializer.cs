@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Core.Serialize
+namespace socket4net.Serialize
 {
     public class Serializer
     {

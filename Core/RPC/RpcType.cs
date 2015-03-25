@@ -1,4 +1,4 @@
-﻿namespace Core.RPC
+﻿namespace socket4net.RPC
 {  
     /// <summary>
     /// Rpc类型

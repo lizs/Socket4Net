@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public interface ISessionFactory<out TSession> where TSession : ISession
     {

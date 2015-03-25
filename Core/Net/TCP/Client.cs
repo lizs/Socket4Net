@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using Core.Log;
-using Core.Service;
+using socket4net.Log;
+using socket4net.Service;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public interface IClient<TSession, out TLogicService, out TNetService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()

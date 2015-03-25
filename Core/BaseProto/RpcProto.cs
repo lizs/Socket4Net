@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace Core.BaseProto
+namespace socket4net.BaseProto
 {
     /// <summary>
     /// RpcHeader 协议说明

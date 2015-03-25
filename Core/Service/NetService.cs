@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Collections.Concurrent;
 
-namespace Core.Service
+namespace socket4net.Service
 {
     /// <summary>
     /// 网络服务线程（网络数据读写）

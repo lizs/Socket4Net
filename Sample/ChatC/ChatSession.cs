@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Core.Log;
-using Core.RPC;
-using Core.Serialize;
+using socket4net.Log;
+using socket4net.RPC;
+using socket4net.Serialize;
 using Proto;
 
 namespace ChatC

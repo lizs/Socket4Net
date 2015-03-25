@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Log;
+using socket4net.Log;
 using System.Collections.Concurrent;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public class SessionMgr : IDisposable
     {

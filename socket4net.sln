@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core4.5", "Core\Core4.5.csproj", "{09C6FA0C-E112-4358-AEB8-26A1A064241C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "socket4net", "Core\socket4net.csproj", "{09C6FA0C-E112-4358-AEB8-26A1A064241C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{88A3AC04-0DD9-401D-96A8-72AE7EDDC275}"
 EndProject

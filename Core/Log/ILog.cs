@@ -1,5 +1,5 @@
 ﻿
-namespace Core.Log
+namespace socket4net.Log
 {
     public interface ILog
     {

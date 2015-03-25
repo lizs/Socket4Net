@@ -2,7 +2,7 @@
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace CustomLog
 {
-    public class Log4Net : Core.Log.ILog
+    public class Log4Net : socket4net.Log.ILog
     {
         private readonly log4net.ILog _log;
         public Log4Net()

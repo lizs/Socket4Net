@@ -1,6 +1,6 @@
-﻿using Core.Log;
+﻿using socket4net.Log;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     /// <summary>
     /// 循环buffer

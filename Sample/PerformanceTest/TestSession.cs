@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Core.Log;
-using Core.RPC;
+using socket4net.Log;
+using socket4net.RPC;
 using Proto;
 
 namespace PerformanceTest

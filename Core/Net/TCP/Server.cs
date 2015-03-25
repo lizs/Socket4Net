@@ -2,12 +2,12 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Core.Log;
-using Core.RPC;
-using Core.Service;
+using socket4net.Log;
+using socket4net.RPC;
+using socket4net.Service;
 using System.Collections.Concurrent;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public class Server<TSession, TNetService, TLogicService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new() 

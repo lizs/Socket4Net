@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Core.Log;
-using Core.Serialize;
+using socket4net.Log;
+using socket4net.Serialize;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public enum SessionCloseReason
     {

@@ -1,8 +1,8 @@
 ﻿
 using System;
-using Core.Timer;
+using socket4net.Timer;
 
-namespace Core.Service
+namespace socket4net.Service
 {
     /// <summary>
     /// 提供单线程服务

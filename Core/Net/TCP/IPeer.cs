@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
-using Core.Service;
+using socket4net.Service;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     /// <summary>
     /// 终端

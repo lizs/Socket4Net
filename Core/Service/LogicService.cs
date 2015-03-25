@@ -13,11 +13,11 @@
 
 using System;
 using System.Threading;
-using Core.Log;
-using Core.Timer;
+using socket4net.Log;
+using socket4net.Timer;
 using System.Collections.Concurrent;
 
-namespace Core.Service
+namespace socket4net.Service
 {
     /// <summary>
     /// StaService is a component provides a producer/consumer

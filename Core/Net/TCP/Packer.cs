@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public enum PackerError
     {

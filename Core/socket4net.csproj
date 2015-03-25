@@ -7,8 +7,8 @@
     <ProjectGuid>{09C6FA0C-E112-4358-AEB8-26A1A064241C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Core</RootNamespace>
-    <AssemblyName>Core4.5</AssemblyName>
+    <RootNamespace>socket4net</RootNamespace>
+    <AssemblyName>socket4net_4.5</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>

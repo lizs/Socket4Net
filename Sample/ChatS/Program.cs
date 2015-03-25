@@ -2,9 +2,9 @@
 
 using System;
 using System.Text;
-using Core.Log;
-using Core.Net.TCP;
-using Core.Service;
+using socket4net.Log;
+using socket4net.Net.TCP;
+using socket4net.Service;
 
 namespace ChatS
 {
