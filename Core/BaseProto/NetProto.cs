@@ -10,6 +10,6 @@ namespace socket4net.BaseProto
     /// </summary>
     public class NetProto
     {
-        public short Length { get; set; }
+        public ushort Length { get; set; }
     }
 }

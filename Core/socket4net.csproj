@@ -67,10 +67,9 @@
     <Compile Include="Service\Job.cs" />
     <Compile Include="Timer\Timer.cs" />
     <Compile Include="Timer\TimerScheduler.cs" />
+    <Compile Include="Util\TaskHelper.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tool\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"

@@ -27,6 +27,8 @@ namespace socket4net.Net.TCP
         IPeer HostPeer { get; set; }
         long Id { get; set; }
         Socket UnderlineSocket { get; set; }
+        ushort ReceiveBufSize { get; }
+        ushort PackageMaxSize { get; }
         
         void Start();
         void Close(SessionCloseReason reason);
@@ -39,22 +41,43 @@ namespace socket4net.Net.TCP
 
     public abstract class Session : ISession
     {
+        public const ushort DefaultPackageMaxSize = 4 * 1024;
+        public const ushort DefaultReceiveBufferSize = 4 * 1024;
         public long Id { get; set; }
         public Socket UnderlineSocket { get; set; }
         public IPeer HostPeer { get; set; }
-        
+
+        /// <summary>
+        /// 指定接收buffer长度
+        /// </summary>
+        public ushort ReceiveBufSize
+        {
+            get { return _receiveBufferSize; }
+            protected set { _receiveBufferSize = value; }
+        }
+
+        /// <summary>
+        /// 限制包大小
+        /// </summary>
+        public ushort PackageMaxSize
+        {
+            get { return _packageMaxSize; }
+            protected set { _packageMaxSize = value; }
+        }
+
         // 发送相关
         private bool _isSending;
         private readonly Queue<byte[]> _sendingQueue;
         private SocketAsyncEventArgs _sendAsyncEventArgs;
 
         // 接收相关
-        public const int BufferLen = 10 * 1024;
         private SocketAsyncEventArgs _receiveAsyncEventArgs;
-        private CircularBuffer _receiveBuffer = new CircularBuffer(BufferLen);
-        private readonly Packer _packer = new Packer();
+        private CircularBuffer _receiveBuffer;
+        private Packer _packer;
 
         private bool _closed;
+        private ushort _receiveBufferSize = DefaultReceiveBufferSize;
+        private ushort _packageMaxSize = DefaultPackageMaxSize;
 
         protected Session()
         {
@@ -87,6 +110,7 @@ namespace socket4net.Net.TCP
                 _sendAsyncEventArgs = null;
                 _receiveAsyncEventArgs = null;
                 _receiveBuffer = null;
+                _packer = null;
 
                 _sendingQueue.Clear();
 
@@ -106,7 +130,7 @@ namespace socket4net.Net.TCP
             using (var ms = new MemoryStream())
             using (var bw = new BinaryWriter(ms))
             {
-                bw.Write((short)data.Length);
+                bw.Write((ushort)data.Length);
                 bw.Write(data);
 
                 HostPeer.PerformInNet(SendImp, ms.ToArray());
@@ -121,7 +145,7 @@ namespace socket4net.Net.TCP
             using (var bw = new BinaryWriter(ms))
             {
                 var data = Serializer.Serialize(proto);
-                bw.Write((short)data.Length);
+                bw.Write((ushort)data.Length);
                 bw.Write(data);
 
                 HostPeer.PerformInNet(SendImp, ms.ToArray());
@@ -156,7 +180,7 @@ namespace socket4net.Net.TCP
             using (var bw = new BinaryWriter(ms))
             {
                 var data = Serializer.Serialize(proto);
-                bw.Write((short)data.Length);
+                bw.Write((ushort)data.Length);
                 bw.Write(data);
 
                 BroadcastWithHeader(ms.ToArray());
@@ -239,6 +263,9 @@ namespace socket4net.Net.TCP
 
         public void Start()
         {
+            _receiveBuffer = new CircularBuffer(ReceiveBufSize);
+            _packer = new Packer(PackageMaxSize);
+
             // 投递首次接受请求
             WakeupReceive();
         }
@@ -259,8 +286,8 @@ namespace socket4net.Net.TCP
                 return;
             }
 
-            _receiveBuffer.MoveByWrite((short)_receiveAsyncEventArgs.BytesTransferred);
-            short packagesCnt = 0;
+            _receiveBuffer.MoveByWrite((ushort)_receiveAsyncEventArgs.BytesTransferred);
+            ushort packagesCnt = 0;
             if (_packer.Process(_receiveBuffer, ref packagesCnt) == PackerError.Failed)
             {
                 Close(SessionCloseReason.PackError);

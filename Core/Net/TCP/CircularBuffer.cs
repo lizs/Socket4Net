@@ -7,7 +7,7 @@ namespace socket4net.Net.TCP
     /// </summary>
     public class CircularBuffer
     {
-        public CircularBuffer(short capacity)
+        public CircularBuffer(ushort capacity)
         {
             Capacity = capacity;
             Buffer = new byte[capacity];
@@ -20,23 +20,23 @@ namespace socket4net.Net.TCP
         /// <summary>
         /// 容量
         /// </summary>
-        public short Capacity { get; private set; }
+        public ushort Capacity { get; private set; }
         /// <summary>
         /// 头
         /// </summary>
-        public short Head { get; private set; }
+        public ushort Head { get; private set; }
         /// <summary>
         /// 尾
         /// </summary>
-        public short Tail { get; private set; }
+        public ushort Tail { get; private set; }
         /// <summary>
         /// 可读大小
         /// </summary>
-        public short ReadableSize { get { return (short)(Tail - Head); } }
+        public ushort ReadableSize { get { return (ushort)(Tail - Head); } }
         /// <summary>
         /// 可写大小
         /// </summary>
-        public short WritableSize { get { return (short)(Capacity - Tail); } }
+        public ushort WritableSize { get { return (ushort)(Capacity - Tail); } }
 
         /// <summary>
         /// 头部读取
@@ -45,7 +45,7 @@ namespace socket4net.Net.TCP
         /// <param name="len"></param>
         /// <param name="buf"></param>
         /// <returns></returns>
-        public bool Read(ref byte[] buf, short offset, short len)
+        public bool Read(ref byte[] buf, ushort offset, ushort len)
         {
             if (len > ReadableSize)
             {
@@ -59,7 +59,7 @@ namespace socket4net.Net.TCP
             return true;
         }
 
-        public bool MoveByRead(short len)
+        public bool MoveByRead(ushort len)
         {
             if (ReadableSize < len) return false;
             Head += len;
@@ -70,7 +70,7 @@ namespace socket4net.Net.TCP
         /// 写入数据至缓存之后须移动Tail（尾部写入）
         /// </summary>
         /// <param name="len"></param>
-        public bool MoveByWrite(short len)
+        public bool MoveByWrite(ushort len)
         {
             if (len > WritableSize)
             {

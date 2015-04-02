@@ -29,7 +29,7 @@ namespace socket4net.Service
     public interface INetService : IService
     {
         // performance 4 net
-        void OnReadCompleted(int len, short cnt);
+        void OnReadCompleted(int len, ushort cnt);
         void OnWriteCompleted(int len);
 
         int ReadBytesPerSec { get; }

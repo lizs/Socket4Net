@@ -8,7 +8,13 @@ namespace ChatS
 {
     public class ChatSession : RpcSession
     {
-        public async override Task<Tuple<bool, byte[]>> HandleRequest(short route, byte[] param)
+        public ChatSession()
+        {
+            ReceiveBufSize = 10 * 1024;
+            PackageMaxSize = 40 * 1024;
+        }
+
+        public async override Task<Tuple<bool, byte[]>> HandleRequest(ushort route, byte[] param)
         {
             switch ((RpcRoute)route)
             {
@@ -31,7 +37,7 @@ namespace ChatS
             }
         }
 
-        public async override Task<bool> HandlePush(short route, byte[] param)
+        public async override Task<bool> HandlePush(ushort route, byte[] param)
         {
             switch ((RpcRoute)route)
             {
@@ -45,7 +51,7 @@ namespace ChatS
                         };
 
                         // 广播给其他参与聊天者
-                        PushAll((short)RpcRoute.Chat, proto);
+                        PushAll((ushort)RpcRoute.Chat, proto);
 
                         // 或者只通知自己
                         //Session.Push(RpcRoute.Chat, proto);

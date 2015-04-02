@@ -88,7 +88,7 @@ namespace socket4net.Service
             }
         }
 
-        public void OnReadCompleted(int len, short cnt)
+        public void OnReadCompleted(int len, ushort cnt)
         {
             _readBytesPerSec += len;
             ++_readPackagesPerSec;
