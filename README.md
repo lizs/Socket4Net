@@ -28,46 +28,46 @@ Rpc会话
 	
 服务器示例
 
-   // 创建服务器
+   创建服务器
    var server = new Server<ExampleSession>("0.0.0.0", 5000);
-   // 监听事件
+   监听事件
    server.EventSessionClosed += (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
    server.EventSessionEstablished += session => Logger.Instance.InfoFormat("{0} connected", session.Id);
-   // 启动服务器
-   // 注意：该服务器独享自己的网络服务和逻辑服务，故传入参数为null
+   启动服务器
+   注意：该服务器独享自己的网络服务和逻辑服务，故传入参数为null
    server.Start(null, null);
-   // 结束服务器
+   结束服务器
    server.Stop();
 	
-    在命令行输入：telnet 127.0.0.1 5000 来测试服务器是否已运行。
+   在命令行输入：telnet 127.0.0.1 5000 来测试服务器是否已运行。
 	
 多服务器示例	
     
     每个服务器实例都能自由选择共享或独享逻辑服务或网络服务。若需共享某服务，则需要单独创建并启动该服务，并在服务器实例结束自己的生命周期之后主动停止该服务。Socket4Net内核提供了两种内置的服务：NetService和LogicService，使用这两个服务可以满足绝大多数业务需求。	
 	
-   // 创建服务器
+   创建服务器
    var serverA = new Server<ExampleSession>("0.0.0.0", 5000);
    var serverB = new Server<ExampleSession>("0.0.0.0", 5001);
    var serverC = new Server<ExampleSession>("0.0.0.0", 5002);
 
-   // 监听事件
-   // ...
+   监听事件
+   ...
 
-   // 启动服务器
-   // 让serverA拥有自己独立的网络服务和逻辑服务，故传入参数为null
+   启动服务器
+   让serverA拥有自己独立的网络服务和逻辑服务，故传入参数为null
    serverA.Start(null, null);
 
-   // 创建独立服务
+   创建独立服务
    var logicService = new LogicService { Capacity = 10000, Period = 10 };
    var netService = new NetService { Capacity = 10000, Period = 10 };
    logicService.Start();
    netService.Start();
 
-   // serverB和serverC共享服务
+   serverB和serverC共享服务
    serverB.Start(netService, logicService);
    serverC.Start(netService, logicService);
 
-   // 结束服务器
+   结束服务器
    serverA.Stop();
    serverB.Stop();
    serverC.Stop();
