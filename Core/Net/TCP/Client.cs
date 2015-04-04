@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using Core.Log;
-using Core.RPC;
-using Core.Service;
+using socket4net.Log;
+using socket4net.Service;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public interface IClient<TSession, out TLogicService, out TNetService> : IPeer<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
         where TNetService : INetService, new()
         where TLogicService : ILogicService, new()
     {
-        void Send(byte[] data);
-        void Send<T>(T proto);
+        bool Connected { get; }
     }
 
     public class Client<TSession, TLogicService, TNetService> : IClient<TSession, TLogicService, TNetService>
@@ -34,6 +32,7 @@ namespace Core.Net.TCP
         public bool IsNetServiceShared { get; private set; }
         public ILogicService LogicService { get; private set; }
         public INetService NetService { get; private set; }
+        public bool Connected { get; private set; }
 
         public TSession Session
         {
@@ -69,7 +68,7 @@ namespace Core.Net.TCP
             _sessionFactory = new SessionFactory<TSession>();
 
             SessionMgr = new SessionMgr(this,
-                session => { if (EventSessionEstablished != null) EventSessionEstablished(session as TSession); },
+                session=> { if (EventSessionEstablished != null) EventSessionEstablished(session as TSession); },
                 (session, reason) => { if (EventSessionClosed != null) EventSessionClosed(session as TSession, reason); });
 
             _connectEvent = new SocketAsyncEventArgs();
@@ -92,7 +91,8 @@ namespace Core.Net.TCP
         public void Stop()
         {
             SessionMgr.Dispose();
-            _connectEvent.Completed -= OnConnectCompleted;
+            _connectEvent.Dispose();
+            _underlineSocket.Close();
 
             if (EventPeerClosing != null)
                 EventPeerClosing();
@@ -131,12 +131,9 @@ namespace Core.Net.TCP
             if (Session != null) Session.Send(data);
         }
 
-        public void Connect(byte[] info = null)
+        public void Connect()
         {
             _connectEvent.RemoteEndPoint = EndPoint;
-            if (info != null)
-                _connectEvent.SetBuffer(info, 0, info.Length);
-
             try
             {
                 if (!_underlineSocket.ConnectAsync(_connectEvent))
@@ -154,6 +151,7 @@ namespace Core.Net.TCP
             SessionMgr.Add(session);
 
             Session.Start();
+            Connected = true;
         }
         
         private void OnConnectCompleted(object sender, SocketAsyncEventArgs e)
@@ -166,14 +164,14 @@ namespace Core.Net.TCP
     }
 
 
-    public class Client : Client<RpcSession, LogicService, NetService>
+    public class Client<TSession> : Client<TSession, LogicService, NetService> where TSession : class, ISession, new()
     {
         public Client(string ip, ushort port) : base(ip, port)
         {
         }
     }
 
-    public class UnityClient : Client<RpcSession, LogicService4Unity, NetService>
+    public class UnityClient<TSession> : Client<TSession, LogicService4Unity, NetService> where TSession : class, ISession, new()
     {
         public UnityClient(string ip, ushort port) : base(ip, port)
         {

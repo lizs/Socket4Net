@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Core.Log
+namespace socket4net.Log
 {
     public class DefaultLogger : ILog
     {

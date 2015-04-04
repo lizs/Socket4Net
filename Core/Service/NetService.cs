@@ -1,14 +1,9 @@
 ﻿
 using System;
 using System.Threading;
-
-#if !NET35
 using System.Collections.Concurrent;
-#else
-using Core.Concurrent;
-#endif
 
-namespace Core.Service
+namespace socket4net.Service
 {
     /// <summary>
     /// 网络服务线程（网络数据读写）
@@ -35,8 +30,8 @@ namespace Core.Service
         public int ReadPackagesPerSec { get; private set; }
         public int WritePackagesPerSec { get; private set; }
 
-        private int _previousCalcTime = 0;
-        private int _excutedJobsPerSec = 0;
+        private int _previousCalcTime;
+        private int _excutedJobsPerSec;
 
         private int _readBytesPerSec;
         private int _readPackagesPerSec;
@@ -93,7 +88,7 @@ namespace Core.Service
             }
         }
 
-        public void OnReadCompleted(int len, short cnt)
+        public void OnReadCompleted(int len, ushort cnt)
         {
             _readBytesPerSec += len;
             ++_readPackagesPerSec;

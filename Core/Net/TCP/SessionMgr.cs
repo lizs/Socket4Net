@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Log;
-
-#if !NET35
+using socket4net.Log;
 using System.Collections.Concurrent;
-#else
-using Core.Concurrent;
-#endif
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public class SessionMgr : IDisposable
     {
@@ -36,7 +31,7 @@ namespace Core.Net.TCP
             else
                 Logger.Instance.Warn("Add session failed for id : " + session.Id);
         }
-
+        
         public void Remove(long id, SessionCloseReason reason)
         {
             ISession session;

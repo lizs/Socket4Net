@@ -1,5 +1,5 @@
 ﻿
-namespace Core.BaseProto
+namespace socket4net.BaseProto
 {
     /// <summary>
     /// 网络包协议
@@ -10,6 +10,6 @@ namespace Core.BaseProto
     /// </summary>
     public class NetProto
     {
-        public short Length { get; set; }
+        public ushort Length { get; set; }
     }
 }

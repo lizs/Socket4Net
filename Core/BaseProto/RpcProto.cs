@@ -1,10 +1,10 @@
 ﻿using ProtoBuf;
 
-namespace Core.BaseProto
+namespace socket4net.BaseProto
 {
     /// <summary>
     /// RpcHeader 协议说明
-    /// RpcType(3 bit) + RpcRoute(15 bit) = Short(18 bit)
+    /// RpcType(2 bit) + RpcRoute(14 bit) = short(16 bit)
     /// </summary>
     [ProtoContract]
     public class RpcResponse
@@ -23,7 +23,7 @@ namespace Core.BaseProto
     }
 
     [ProtoContract]
-    public class RpcNotify
+    public class RpcPush
     {
         [ProtoMember(1)]
         public byte[] Param { get; set; }

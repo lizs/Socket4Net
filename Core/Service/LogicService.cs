@@ -13,15 +13,11 @@
 
 using System;
 using System.Threading;
-using Core.Log;
-using Core.Timer;
-#if !NET35
+using socket4net.Log;
+using socket4net.Timer;
 using System.Collections.Concurrent;
-#else
-using Core.Concurrent;
-#endif
 
-namespace Core.Service
+namespace socket4net.Service
 {
     /// <summary>
     /// StaService is a component provides a producer/consumer
@@ -33,10 +29,6 @@ namespace Core.Service
         private const int StopWatchDivider = 128;
         private Thread _workingThread;
         private bool _stopWorking;
-        private int _count;
-        private long _writeBlockCounter;
-        private long _totalWriteCounter;
-        private int _periodHandled;
         private BlockingCollection<IJob> _workingQueue;
         readonly System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
         private int _excutedJobsPerSec;
@@ -140,7 +132,7 @@ namespace Core.Service
         /// </summary>
         public int Jobs
         {
-            get { return _count; }
+            get { return _workingQueue.Count; }
         }
 
         public int ExcutedJobsPerSec
@@ -155,24 +147,7 @@ namespace Core.Service
             get { return Period; }
             set { Period = value; }
         }
-
-        /// <summary>
-        /// Specify how many times that the producers have been
-        /// block(thread suspend) because the queue is fulled.
-        /// </summary>
-        public long WriteBlockCounter
-        {
-            get { return _writeBlockCounter; }
-        }
-        /// <summary>
-        /// Specify how many items have been push into working queue
-        /// since the component startup.
-        /// </summary>
-        public long TotalWriteCounter
-        {
-            get { return _totalWriteCounter; }
-        }
-
+        
         /// <summary>
         /// Get the elapsed milliseconds since the instance been constructed
         /// </summary>
@@ -191,12 +166,8 @@ namespace Core.Service
         {
             if (!_workingQueue.TryAdd(w, 0))
             {
-                Interlocked.Increment(ref _writeBlockCounter);
                 _workingQueue.Add(w);
             }
-
-            Interlocked.Increment(ref _count);
-            Interlocked.Increment(ref _totalWriteCounter);
         }
         /// <summary>
         /// External(e.g. the TCP socket thread) call this method to push
@@ -221,11 +192,7 @@ namespace Core.Service
         /// </summary>
         private void DoStartup()
         {
-#if NET35
-            _workingQueue = new BlockingCollection<IJob>(QueueCapacity);
-#else
             _workingQueue = new BlockingCollection<IJob>(new ConcurrentQueue<IJob>(), QueueCapacity);
-#endif
             _workingThread = new Thread(WorkingProcedure) { IsBackground = true };
 
             // use background thread
@@ -240,11 +207,15 @@ namespace Core.Service
         private void WorkingProcedure()
         {
             _watch.Start();
+
+            int periodCounter;
+            int handled;
+            int tick;
             while (!_stopWorking)
             {
-                int periodCounter = StopWatchDivider;
-                int handled = 0;
-                int tick = Environment.TickCount;
+                periodCounter = StopWatchDivider;
+                handled = 0;
+                tick = Environment.TickCount;
 
                 var t1 = _watch.ElapsedMilliseconds;
 
@@ -256,7 +227,6 @@ namespace Core.Service
                         if (_workingQueue.TryTake(out item, Period))
                         {
                             item.Do();
-                            Interlocked.Decrement(ref _count);
                             CalcPerformance();
 
                             handled++;
@@ -289,7 +259,6 @@ namespace Core.Service
                 }
                 while ((Environment.TickCount - tick) < Period);
 
-                _periodHandled = handled;
                 WiElapsed = _watch.ElapsedMilliseconds - t1;
 
                 if (Idle != null)

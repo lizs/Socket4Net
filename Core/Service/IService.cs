@@ -1,8 +1,8 @@
 ﻿
 using System;
-using Core.Timer;
+using socket4net.Timer;
 
-namespace Core.Service
+namespace socket4net.Service
 {
     /// <summary>
     /// 提供单线程服务
@@ -29,7 +29,7 @@ namespace Core.Service
     public interface INetService : IService
     {
         // performance 4 net
-        void OnReadCompleted(int len, short cnt);
+        void OnReadCompleted(int len, ushort cnt);
         void OnWriteCompleted(int len);
 
         int ReadBytesPerSec { get; }

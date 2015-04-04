@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 namespace Core.RPC
 {
-    public interface IRpcHost : IDisposable
-    {
-        RpcSession Session { get; }
-    }
-
     public abstract class RpcHost : IRpcHost
     {
         protected RpcHost(RpcSession session)
@@ -17,8 +12,8 @@ namespace Core.RPC
 
         public RpcSession Session { get; private set; }
 
-        protected Dictionary<RpcRoute, Func<byte[], object>> RequestsHandlers = new Dictionary<RpcRoute, Func<byte[], object>>();
-        protected Dictionary<RpcRoute, Func<byte[], bool>> NotifyHandlers = new Dictionary<RpcRoute, Func<byte[], bool>>();
+        protected Dictionary<short, Func<byte[], object>> RequestsHandlers = new Dictionary<short, Func<byte[], object>>();
+        protected Dictionary<short, Func<byte[], bool>> NotifyHandlers = new Dictionary<short, Func<byte[], bool>>();
 
         public virtual void Boot()
         {
@@ -44,12 +39,12 @@ namespace Core.RPC
             Session = null;
         }
 
-        protected void RegisterRequestHandler(RpcRoute route, Func<byte[], object> handler)
+        protected void RegisterRequestHandler(short route, Func<byte[], object> handler)
         {
             RequestsHandlers.Add(route, handler);
         }
 
-        protected void RegisterNotifyHandler(RpcRoute route, Func<byte[], bool> handler)
+        protected void RegisterNotifyHandler(short route, Func<byte[], bool> handler)
         {
             NotifyHandlers.Add(route, handler);
         }

@@ -1,14 +1,9 @@
 ﻿
 using System;
-using System.Threading;
-using Core.Timer;
-#if !NET35
+using socket4net.Timer;
 using System.Collections.Concurrent;
-#else
-using Core.Concurrent;
-#endif
 
-namespace Core.Service
+namespace socket4net.Service
 {
     public class LogicService4Unity : ILogicService
     {

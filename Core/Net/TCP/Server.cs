@@ -2,20 +2,15 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Core.Log;
-using Core.RPC;
-using Core.Service;
-
-#if !NET35
+using socket4net.Log;
+using socket4net.RPC;
+using socket4net.Service;
 using System.Collections.Concurrent;
-#else
-using Core.Concurrent;
-#endif
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public class Server<TSession, TNetService, TLogicService> : IPeer<TSession, TLogicService, TNetService>
-        where TSession : class, ISession, new()
+        where TSession : class, ISession, new() 
         where TNetService : class ,INetService, new()
         where TLogicService : class ,ILogicService, new()
     {
@@ -39,7 +34,12 @@ namespace Core.Net.TCP
         private readonly SessionFactory<TSession> _sessionFactory;
 
         private const int DefaultBacktrace = 10;
+        private const int AcceptBufLen = 1024;
+        private const int DefaultServiceCapacity = 10000;
+        private const int DefaultServicePeriod = 10;
+
         private SocketAsyncEventArgs _acceptEvent;
+        private CircularBuffer _acceptBuffer;
 
         private ConcurrentQueue<Socket> _clients;
         private AutoResetEvent _socketAcceptedEvent;
@@ -52,7 +52,7 @@ namespace Core.Net.TCP
             Port = port;
 
             IPAddress address;
-            if(!IPAddress.TryParse(Ip, out address)) Logger.Instance.FatalFormat("Invalid ip [{0}]", ip);
+            if(!IPAddress.TryParse(Ip, out address)) Logger.Instance.FatalFormat("Invalid ip {0}", ip);
 
             Address = address;
             EndPoint = new IPEndPoint(Address, Port);
@@ -90,17 +90,18 @@ namespace Core.Net.TCP
             _socketAcceptedEvent = new AutoResetEvent(false);
             _sessionFactoryWorker = new Thread(ProduceSessions);
             _sessionFactoryWorker.Start();
-            
+
+            _acceptBuffer = new CircularBuffer(AcceptBufLen);
             _acceptEvent = new SocketAsyncEventArgs();
             _acceptEvent.Completed += OnAcceptCompleted;
 
             IsLogicServiceShared = (logic != null);
             IsNetServiceShared = (net != null);
 
-            LogicService = (logic as TLogicService) ?? new TLogicService { Capacity = 10000, Period = 10 };
+            LogicService = (logic as TLogicService) ?? new TLogicService { Capacity = DefaultServiceCapacity, Period = DefaultServicePeriod };
             if (!IsLogicServiceShared) LogicService.Start();
 
-            NetService = (net as TNetService) ?? new TNetService { Capacity = 10000, Period = 10 };
+            NetService = (net as TNetService) ?? new TNetService { Capacity = DefaultServiceCapacity, Period = DefaultServicePeriod };
             if (!IsNetServiceShared) NetService.Start();
 
             AcceptNext();
@@ -152,10 +153,10 @@ namespace Core.Net.TCP
             {
                 if (_socketAcceptedEvent.WaitOne())
                 {
-                    Socket sock;
-                    while (_clients.TryDequeue(out sock))
+                    Socket client;
+                    while (_clients.TryDequeue(out client))
                     {
-                        var session = _sessionFactory.Create(sock, this);
+                        var session = _sessionFactory.Create(client, this);
                         session.Start();
                         SessionMgr.Add(session);
                     }
@@ -209,7 +210,7 @@ namespace Core.Net.TCP
         }
     }
 
-    public class Server : Server<RpcSession, NetService, LogicService>
+    public class Server<TSession> : Server<TSession, NetService, LogicService> where TSession : class, ISession, new()
     {
         public Server(string ip, ushort port) : base(ip, port)
         {

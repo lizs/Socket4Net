@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
-using Core.Log;
-using Core.RPC;
-using Core.Service;
+using socket4net.Log;
+using socket4net.RPC;
+using socket4net.Service;
 
-namespace Core.Net.TCP
+namespace socket4net.Net.TCP
 {
     public class Monitor<TSession, TLogicService, TNetService>
         where TSession : class, ISession, new()
@@ -47,7 +47,7 @@ namespace Core.Net.TCP
         }
     }
 
-    public class Monitor : Monitor<RpcSession, LogicService, NetService>
+    public class Monitor<TSesion> : Monitor<TSesion, LogicService, NetService> where TSesion : class, ISession, new()
     {
     }
 }

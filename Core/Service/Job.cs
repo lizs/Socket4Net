@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Service
+namespace socket4net.Service
 {
     public interface IJob
     {
