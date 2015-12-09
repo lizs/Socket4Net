@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\socket4net.csproj">
-      <Project>{09c6fa0c-e112-4358-aeb8-26a1a064241c}</Project>
+      <Project>{ed0bb4a5-50c0-410f-a55f-94c842c744ac}</Project>
       <Name>socket4net</Name>
     </ProjectReference>
   </ItemGroup>

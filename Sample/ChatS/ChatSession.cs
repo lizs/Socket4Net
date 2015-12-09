@@ -1,7 +1,6 @@
-using System;
+using System.Linq;
 using System.Threading.Tasks;
-using socket4net.RPC;
-using socket4net.Serialize;
+using socket4net;
 using Proto;
 
 namespace ChatS
@@ -14,22 +13,17 @@ namespace ChatS
             PackageMaxSize = 40 * 1024;
         }
 
-        public async override Task<Tuple<bool, byte[]>> HandleRequest(ushort route, byte[] param)
+        public override Task<RpcResult> HandleRequest(RpcRequest rq)
         {
-            switch ((RpcRoute)route)
+            switch ((ECommand)rq.Ops)
             {
-                case RpcRoute.GmCmd:
+                case ECommand.Request:
                     {
-                        var msg = Serializer.Deserialize<Message2Server>(param);
+                        var request = PiSerializer.Deserialize<RequestMsgProto>(rq.Data);
 
-                        // 响应该请求
-                        var proto  = new Broadcast2Clients
-                        {
-                            From = Id.ToString(),
-                            Message = "Gm command [" + msg.Message + "] Responsed"
-                        };
-
-                        return new Tuple<bool, byte[]>(true, Serializer.Serialize(proto));
+                        return
+                            Task.FromResult(
+                                RpcResult.MakeSuccess(new ResponseMsgProto {Message = "Response : " + request.Message}));
                     }
 
                 default:
@@ -37,30 +31,36 @@ namespace ChatS
             }
         }
 
-        public async override Task<bool> HandlePush(ushort route, byte[] param)
+        private void Broadcast(string msg)
         {
-            switch ((RpcRoute)route)
+            var proto = new PushMsgProto()
             {
-                case RpcRoute.Chat:
+                From = Id.ToString(),
+                Message = msg,
+            };
+
+            var responseData = PiSerializer.Serialize(proto);
+
+            // 广播
+            foreach (var session in Server.Instance.SessionMgr.OfType<IRpcSession>())
+            {
+                session.Push(0, 0, (short) ECommand.Push, responseData, 0, 0);
+            }
+        }
+
+        public override Task<bool> HandlePush(RpcPush rp)
+        {
+            switch ((ECommand)rp.Ops)
+            {
+                case ECommand.Push:
                     {
-                        var msg = Serializer.Deserialize<Message2Server>(param);
-                        var proto = new Broadcast2Clients
-                        {
-                            From = Id.ToString(),
-                            Message = msg.Message
-                        };
-
-                        // 广播给其他参与聊天者
-                        PushAll((ushort)RpcRoute.Chat, proto);
-
-                        // 或者只通知自己
-                        //Session.Push(RpcRoute.Chat, proto);
-
-                        return true;
+                        var msg = PiSerializer.Deserialize<PushMsgProto>(rp.Data);
+                        Broadcast(msg.Message);
+                        return Task.FromResult(true);
                     }
 
                 default:
-                    return false;
+                    return null;
             }
         }
     }

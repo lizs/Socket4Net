@@ -1,26 +1,34 @@
 using ProtoBuf;
+using socket4net;
 
 namespace Proto
 {
-    public enum RpcRoute : short
+    public enum ECommand
     {
-        GmCmd,
-        Chat
+        Request,
+        Push,
     }
 
     [ProtoContract]
-    public class Broadcast2Clients
+    public class RequestMsgProto : IProtobufInstance
+    {
+        [ProtoMember(1)]
+        public string Message { get; set; }
+    }
+
+    [ProtoContract]
+    public class ResponseMsgProto : IProtobufInstance
+    {
+        [ProtoMember(1)]
+        public string Message { get; set; }
+    }
+
+    [ProtoContract]
+    public class PushMsgProto : IProtobufInstance
     {
         [ProtoMember(1)]
         public string Message { get; set; }
         [ProtoMember(2)]
         public string From { get; set; }
-    }
-
-    [ProtoContract]
-    public class Message2Server
-    {
-        [ProtoMember(1)]
-        public string Message { get; set; }
     }
 }

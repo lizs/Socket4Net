@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Text;
-using System.Threading;
-using socket4net.Log;
-using socket4net.Net.TCP;
-using socket4net.Service;
+using Proto;
+using socket4net;
 
 namespace ChatC
 {
@@ -22,119 +19,65 @@ namespace ChatC
             }
 
             // 初始Logger
-            Logger.Instance = new CustomLog.Log4Net();
+            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new CustomLog.Log4Net());
 
-            ClientSample(ip, port);
-            //UnityClientSample(ip, port);
+            // 启动客户端
+            RunClient(ip, port);
         }
 
-        private static void ClientSample(string ip, ushort port)
+        private static void RunClient(string ip, ushort port)
         {
             // 创建客户端
-            var client = new Client<ChatSession>(ip, port);
+            var client = ObjFactory.Create<Client>(new ClientArg(null, ip, port){ AutoReconnectEnabled = true});
+            client.Init();
+            client.Start();
 
             // 监听事件
             client.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
             client.EventSessionEstablished +=
                 session => Logger.Instance.InfoFormat("{0} connected", session.Id);
-
-            // 启动客户端
-            // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
-            client.Start(null, null);
-
+            
             // 结束服务器
             while (true)
             {
-                if (!client.Connected)
-                    Thread.Sleep(1);
+                var msg = Console.ReadLine();
+                if (string.IsNullOrEmpty(msg)) continue;
 
-                var cmd = Console.ReadLine();
-                switch (cmd.ToUpper())
+                switch (msg.ToUpper())
                 {
                     case "QUIT":
                     case "EXIT":
                         {
-                            client.Stop();
+                            client.Destroy();
                         }
                         break;
 
-                    case "REQUEST":
-                        {
-                            client.Session.RequestCommand(
-                                "This is a RPC response, indicate that server response your request success when you receive this message!");
-                        }
-                        continue;
+                    case "REQ":
+                    {
+                        //  请求服务器
+                        client.RequestAsync(0, 0, (short) ECommand.Request, new RequestMsgProto {Message = msg}, 0, 0,
+                            (b, bytes) =>
+                            {
+                                if (!b)
+                                    Logger.Instance.Error("请求失败");
+                                else
+                                {
+                                    var proto = PiSerializer.Deserialize<ResponseMsgProto>(bytes);
+                                    Logger.Instance.Info(proto.Message);
+                                }
+                            });
+
+                        break;
+                    }
 
                     default:
-                        {
-                            client.Session.PushMessage(cmd);
-                        }
-                        continue;
-                }
-            }
-        }
-
-        private static void UnityClientSample(string ip, ushort port)
-        {
-            // 创建客户端
-            var client = new UnityClient<ChatSession>(ip, port);
-
-            // 监听事件
-            client.EventSessionClosed +=
-                (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
-            client.EventSessionEstablished +=
-                session => Logger.Instance.InfoFormat("{0} connected", session.Id);
-
-            // 启动客户端
-            // 注意：该客户端拥有自己独立的网络服务和逻辑服务，故传入参数为null
-            // 超级警告：由于UnityClient直接使用Unity的逻辑线程作为自己的逻辑服务
-            // 线程，所以需要在某个MonoBehaviour的Update或FixedUpdate中调用
-            // client.LogicService.Update(delta)来驱动逻辑服务
-            client.Start(null, null);
-
-            // 结束客户端
-            var stop = false;
-            while (!stop)
-            {
-                Thread.Sleep(1);
-
-                // 使用主线程来模拟unity逻辑线程
-                (client.LogicService as LogicService4Unity).Update(.0f);
-
-                ThreadPool.QueueUserWorkItem(state =>
-                {
-                    while (!stop)
                     {
-                        var cmd = Console.ReadLine();
-                        switch (cmd.ToUpper())
-                        {
-                            case "QUIT":
-                            case "EXIT":
-                                {
-                                    client.PerformInLogic(() =>
-                                    {
-                                        client.Stop();
-                                        stop = true;
-                                    });
-                                }
-                                break;
-
-                            case "REQUEST":
-                                {
-                                    client.PerformInLogic(() => client.Session.RequestCommand(
-                                        "This is a rpc request, specified server response success when you receive this message!"));
-                                }
-                                break;
-
-                            default:
-                                {
-                                    client.PerformInLogic(() => client.Session.PushMessage(cmd));
-                                }
-                                break;
-                        }
+                        //  请求服务器
+                        client.Push(0, 0, (short) ECommand.Push, new PushMsgProto {Message = msg}, 0, 0);
+                        break;
                     }
-                });
+                }
             }
         }
     }

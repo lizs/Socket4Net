@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{09C6FA0C-E112-4358-AEB8-26A1A064241C}</ProjectGuid>
+    <ProjectGuid>{ED0BB4A5-50C0-410F-A55F-94C842C744AC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>socket4net</RootNamespace>
-    <AssemblyName>socket4net_4.5</AssemblyName>
+    <AssemblyName>socket4net</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -19,10 +19,9 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -34,46 +33,160 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET45</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NET45</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET45</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NET45</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="protobuf-net">
       <HintPath>..\Depedencies\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseProto\NetProto.cs" />
-    <Compile Include="BaseProto\RpcProto.cs" />
-    <Compile Include="Log\DefaultLogger.cs" />
-    <Compile Include="Log\ILog.cs" />
-    <Compile Include="Net\TCP\IPeer.cs" />
-    <Compile Include="Service\IService.cs" />
-    <Compile Include="Service\LogicService4Unity.cs" />
-    <Compile Include="Net\TCP\Monitor.cs" />
-    <Compile Include="Service\NetService.cs" />
-    <Compile Include="Net\TCP\CircularBuffer.cs" />
-    <Compile Include="Net\TCP\Packer.cs" />
-    <Compile Include="Net\TCP\Session.cs" />
-    <Compile Include="Net\TCP\SessionFactory.cs" />
-    <Compile Include="Net\TCP\SessionMgr.cs" />
-    <Compile Include="Net\TCP\Client.cs" />
-    <Compile Include="Net\TCP\Server.cs" />
+    <Compile Include="Base\BatchLocker.cs" />
+    <Compile Include="Base\Command.cs" />
+    <Compile Include="Base\Component.cs" />
+    <Compile Include="Base\ComponentsMgr.cs" />
+    <Compile Include="Base\Config\ConfigMgr.cs" />
+    <Compile Include="Base\Config\IConfig.cs" />
+    <Compile Include="Base\Config\IFileLoader.cs" />
+    <Compile Include="Base\Config\OrderAttribute.cs" />
+    <Compile Include="Base\Config\Parser\CsvParser.cs" />
+    <Compile Include="Base\Config\Parser\KeyValueParser.cs" />
+    <Compile Include="Base\Config\Parser\RichCsvParser.cs" />
+    <Compile Include="Base\Config\Parser\StructParser.cs" />
+    <Compile Include="Base\Config\Summary.cs" />
+    <Compile Include="Base\Interface\IBase.cs" />
+    <Compile Include="Base\Interface\IBlock.cs" />
+    <Compile Include="Base\Interface\ILog.cs" />
+    <Compile Include="Base\Locker.cs" />
+    <Compile Include="Base\Logger.cs" />
+    <Compile Include="Base\Mgr.cs" />
+    <Compile Include="Base\Objects\ComponentedObj.cs" />
+    <Compile Include="Base\Objects\FuzzyObj.cs" />
+    <Compile Include="Base\Objects\Obj.cs" />
+    <Compile Include="Base\Objects\ObjFactory.cs" />
+    <Compile Include="Base\Objects\PropertiedObj.cs" />
+    <Compile Include="Base\Objects\RootedObj.cs" />
+    <Compile Include="Base\Objects\ScheduledObj.cs" />
+    <Compile Include="Base\Objects\UniqueObj.cs" />
+    <Compile Include="Base\Property\Block.cs" />
+    <Compile Include="Base\Property\EBlockType.cs" />
+    <Compile Include="Base\Property\EPropertyOps.cs" />
+    <Compile Include="Base\Property\IBlockOps.cs" />
+    <Compile Include="Base\Property\IncreasableBlock.cs" />
+    <Compile Include="Base\Property\ListItemRepresentation.cs" />
+    <Compile Include="Base\Property\ListBlock.cs" />
+    <Compile Include="Base\Property\ListOpsProto.cs" />
+    <Compile Include="Base\Property\ListOpsRepresentation.cs" />
+    <Compile Include="Base\Property\PropertyBody.cs" />
+    <Compile Include="Base\PropertyPublisher.cs" />
+    <Compile Include="Base\Property\SettableBlock.cs" />
+    <Compile Include="Base\Scheduler.cs" />
+    <Compile Include="Base\StateMachine\Stateless\Custom\Initialization.cs" />
+    <Compile Include="Base\StateMachine\Stateless\DynamicTriggerBehaviour.cs" />
+    <Compile Include="Base\StateMachine\Stateless\Enforce.cs" />
+    <Compile Include="Base\StateMachine\Stateless\IgnoredTriggerBehaviour.cs" />
+    <Compile Include="Base\StateMachine\Stateless\ParameterConversion.cs" />
+    <Compile Include="Base\StateMachine\Stateless\StateConfiguration.cs" />
+    <Compile Include="Base\StateMachine\Stateless\StateMachine.cs" />
+    <Compile Include="Base\StateMachine\Stateless\StateReference.cs" />
+    <Compile Include="Base\StateMachine\Stateless\StateRepresentation.cs" />
+    <Compile Include="Base\StateMachine\Stateless\Transition.cs" />
+    <Compile Include="Base\StateMachine\Stateless\TransitioningTriggerBehaviour.cs" />
+    <Compile Include="Base\StateMachine\Stateless\TriggerBehaviour.cs" />
+    <Compile Include="Base\StateMachine\Stateless\TriggerWithParameters.cs" />
+    <Compile Include="Base\Task.cs" />
+    <Compile Include="Base\Util\AutoWatch.cs" />
+    <Compile Include="Base\Util\DefaultTraitor.cs" />
+    <Compile Include="Base\Util\Ext\Array.cs" />
+    <Compile Include="Base\Util\Ext\List.cs" />
+    <Compile Include="Base\Util\Numeric\Add.cs" />
+    <Compile Include="Base\Util\Numeric\Compare.cs" />
+    <Compile Include="Base\Util\Numeric\Equals.cs" />
+    <Compile Include="Base\Util\Numeric\GreaterThan.cs" />
+    <Compile Include="Base\Util\Numeric\LessThan.cs" />
+    <Compile Include="Base\Util\Numeric\Subtract.cs" />
+    <Compile Include="Base\Util\Pair.cs" />
+    <Compile Include="Base\Util\PiSerializer.cs" />
+    <Compile Include="Base\Util\StringParser.cs" />
+    <Compile Include="socket4net\Net\TCP\PeerArg.cs" />
+    <Compile Include="socket4net\Schedule\Timer.cs" />
+    <Compile Include="Base\UniqueMgr.cs" />
+    <Compile Include="GlobalVarPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RPC\RpcType.cs" />
-    <Compile Include="RPC\RpcSession.cs" />
-    <Compile Include="Serialize\Serializer.cs" />
-    <Compile Include="Service\LogicService.cs" />
-    <Compile Include="Service\Job.cs" />
-    <Compile Include="Timer\Timer.cs" />
-    <Compile Include="Timer\TimerScheduler.cs" />
-    <Compile Include="Util\TaskHelper.cs" />
+    <Compile Include="Base\RpcComponent.cs" />
+    <Compile Include="Base\Property\PropertyPublishableExt.cs" />
+    <Compile Include="socket4net\Net\TCP\RpcClient.cs" />
+    <Compile Include="socket4net\Net\TCP\SocketExt.cs" />
+    <Compile Include="socket4net\Proto\NetProto.cs" />
+    <Compile Include="socket4net\Proto\RpcProto.cs" />
+    <Compile Include="socket4net\Concurrent\BlockingCollection.cs" />
+    <Compile Include="socket4net\Concurrent\ConcurrentDictionary.cs" />
+    <Compile Include="socket4net\Concurrent\ConcurrentQueue.cs" />
+    <Compile Include="socket4net\Net\TCP\CircularBuffer.cs" />
+    <Compile Include="socket4net\Net\TCP\Client.cs" />
+    <Compile Include="socket4net\Net\TCP\IPeer.cs" />
+    <Compile Include="socket4net\Net\TCP\Monitor.cs" />
+    <Compile Include="socket4net\Net\TCP\Packer.cs" />
+    <Compile Include="socket4net\Net\TCP\Server.cs" />
+    <Compile Include="socket4net\Net\TCP\Session.cs" />
+    <Compile Include="socket4net\Net\TCP\SessionFactory.cs" />
+    <Compile Include="socket4net\Net\TCP\SessionMgr.cs" />
+    <Compile Include="socket4net\RPC\RpcResult.cs" />
+    <Compile Include="socket4net\RPC\RpcSession.cs" />
+    <Compile Include="socket4net\Service\IService.cs" />
+    <Compile Include="socket4net\Service\Job.cs" />
+    <Compile Include="socket4net\Service\AutoLogicService.cs" />
+    <Compile Include="socket4net\Service\PassiveLogicService.cs" />
+    <Compile Include="socket4net\Service\LogicServiceBase.cs" />
+    <Compile Include="socket4net\Service\NetService.cs" />
+    <Compile Include="socket4net\Schedule\TimerWrapper.cs" />
+    <Compile Include="socket4net\Schedule\TimerScheduler.cs" />
+    <Compile Include="Base\WatchableObj.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Base\StateMachine\Stateless\Readme.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"
-echo copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

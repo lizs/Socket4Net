@@ -1,9 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using socket4net.Log;
-using socket4net.RPC;
-using socket4net.Serialize;
+﻿using System.Threading.Tasks;
+using socket4net;
 using Proto;
 
 namespace ChatC
@@ -19,61 +15,24 @@ namespace ChatC
             PackageMaxSize = 40 * 1024;
         }
 
-        /// <summary>
-        /// 发起RpcRoute.GmCmd请求
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="autorq"></param>
-        public async void RequestCommand(string command)
+        public override Task<RpcResult> HandleRequest(RpcRequest rq)
         {
-            var watch = new Stopwatch();
-
-            watch.Start();
-            // 请求服务器
-            var ret = await RequestAsync((ushort)RpcRoute.GmCmd, new Message2Server { Message = command });
-
-            // 处理服务器响应（异步回调）
-            if (ret.Item1)
-            {
-                watch.Stop();
-                var responseMsg = Serializer.Deserialize<Broadcast2Clients>(ret.Item2);
-                Logger.Instance.InfoFormat("responseMsg.From +  : {0} with delay {1}ms", responseMsg.Message, watch.ElapsedMilliseconds);
-            }
-            else
-                Logger.Instance.Info("Server response : false!");
+            return Task.FromResult(RpcResult.Failure);
         }
 
-        /// <summary>
-        /// 发起RpcRoute.Chat通知
-        /// </summary>
-        /// <param name="msg"></param>
-        public void PushMessage(string msg)
+        public override Task<bool> HandlePush(RpcPush rp)
         {
-            Push((ushort)RpcRoute.Chat, new Message2Server() { Message = msg });
-        }
-
-        public async override Task<Tuple<bool, byte[]>> HandleRequest(ushort route, byte[] param)
-        {
-            switch ((RpcRoute)route)
+            switch ((ECommand)rp.Ops)
             {
-                default:
-                    return null;
-            }
-        }
-
-        public async override Task<bool> HandlePush(ushort route, byte[] param)
-        {
-            switch ((RpcRoute)route)
-            {
-                case RpcRoute.Chat:
-                {
-                    var msg = Serializer.Deserialize<Broadcast2Clients>(param);
-                    Logger.Instance.Info(msg.From + " : " + msg.Message);
-                    return true;
-                }
+                case ECommand.Push:
+                    {
+                        var msg = PiSerializer.Deserialize<PushMsgProto>(rp.Data);
+                        Logger.Instance.Info(msg.From + " : " + msg.Message);
+                        return Task.FromResult(true);
+                    }
 
                 default:
-                    return false;
+                    return Task.FromResult(false);
             }
         }
     }

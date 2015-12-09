@@ -55,23 +55,20 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\Depedencies\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatSession.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\socket4net.csproj">
-      <Project>{09c6fa0c-e112-4358-aeb8-26a1a064241c}</Project>
+      <Project>{ED0BB4A5-50C0-410F-A55F-94C842C744AC}</Project>
       <Name>socket4net</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Logger\Logger.csproj">
