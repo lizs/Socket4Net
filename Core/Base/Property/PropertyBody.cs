@@ -8,28 +8,16 @@ namespace socket4net
 {
     public class PropertyBodyArg : ObjArg
     {
-        public string RedisFeild { get; private set; }
-        public PropertyBodyArg(string redisFeild)
+        public PropertyBodyArg(IObj owner) : base(owner)
         {
-            RedisFeild = redisFeild;
         }
     }
 
     public class PropertyBody<TKey> : Obj, IEnumerable<IBlock<TKey>>
     {
-        public string RedisFeild { get; private set; }
-
-        public override void SetArgument(ObjArg arg)
+        protected override void OnInit(ObjArg objArg)
         {
-            base.SetArgument(arg);
-
-            var more = arg as PropertyBodyArg;
-            RedisFeild = more.RedisFeild;
-        }
-
-        protected override void OnInit()
-        {
-            base.OnInit();
+            base.OnInit(objArg);
             Blocks = new Dictionary<TKey, IBlock<TKey>>();
         }
 
@@ -301,7 +289,7 @@ namespace socket4net
         {
             if (Blocks.ContainsKey(block.Id))
             {
-                Logger.Instance.WarnFormat("Block already exist for {0} of {1}", block.Id, RedisFeild);
+                Logger.Instance.WarnFormat("Block already exist for {0} of {1}", block.Id, OwnerDescription);
                 return false;
             }
 
@@ -313,7 +301,7 @@ namespace socket4net
         {
             var block = Blocks.ContainsKey(pid) ? Blocks[pid] : null;
             if(block == null)
-                Logger.Instance.ErrorFormat("Block not exist for {0} of {1}", pid, RedisFeild);
+                Logger.Instance.WarnFormat("Block not exist for {0} of {1}", pid, OwnerDescription);
 
             return block;
         }
@@ -338,13 +326,5 @@ namespace socket4net
 
             return sb.ToString();
         }
-    }
-
-    /// <summary>
-    ///     提供redis字段名
-    /// </summary>
-    public interface IRedisFeildProvider
-    {
-        string RedisFeild { get; }
     }
 }

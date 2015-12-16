@@ -1,6 +1,6 @@
 namespace socket4net
 {
-    public class PeerArg : RootedObjArg
+    public class PeerArg : ObjArg
     {
         public PeerArg(IObj parent, string ip, ushort port, ILogicService logicService, INetService netService)
             : base(parent)

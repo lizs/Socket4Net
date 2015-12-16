@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace socket4net
 {
-    public class UniqueMgrArg : RootedObjArg
+    public class UniqueMgrArg : ObjArg
     {
         public UniqueMgrArg(IObj parent) : base(parent)
         {
@@ -25,7 +25,7 @@ namespace socket4net
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class UniqueMgr<TKey, TValue> : RootedObj, IEnumerable<TValue> where TValue : class ,IUniqueObj<TKey>
+    public class UniqueMgr<TKey, TValue> : Obj, IEnumerable<TValue> where TValue : class ,IUniqueObj<TKey>
     {
         public event Action<TValue, EContainerOps> EventContainerChanged;
         protected readonly Dictionary<TKey, TValue> Items = new Dictionary<TKey, TValue>();
@@ -50,13 +50,6 @@ namespace socket4net
             }
         }
 
-        protected override void OnInit()
-        {
-            base.OnInit();
-            foreach (var item in OrderedValues)
-                item.Init();
-        }
-
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -75,13 +68,6 @@ namespace socket4net
             base.OnStart();
             foreach (var item in OrderedValues)
                 item.Start();
-        }
-
-        public override void AfterStart()
-        {
-            base.AfterStart();
-            foreach (var item in OrderedValues)
-                item.AfterStart();
         }
 
         protected override void OnReset()
@@ -107,28 +93,18 @@ namespace socket4net
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
-        /// <param name="init"></param>
         /// <param name="start"></param>
+        /// <param name="notify"></param>
         /// <returns></returns>
-        public T Create<T>(UniqueObjArg<TKey> arg, bool init, bool start, bool notify = true) where T : TValue, new()
+        public T Create<T>(UniqueObjArg<TKey> arg, bool start, bool notify = true) where T : TValue, new()
         {
             if (Exist(arg.Key)) return default(T);
 
-            var ret = ObjFactory.Create<T>(arg);
+            var ret = Create<T>(arg);
             if (start)
-            {
-                // 需要Start的对象必须初始先
-                ret.Init();
                 ret.Start();
-                ret.AfterStart();
-            }
-            else if (init)
-            {
-                ret.Init();
-            }
 
             Add(ret, notify);
-
             return ret;
         }
 
@@ -237,7 +213,7 @@ namespace socket4net
 
         public List<TKey> Destroy<T>(Predicate<T> condition, bool notify = true) where T : TValue
         {
-            var victims = Remove<T>(condition, notify);
+            var victims = Remove(condition, notify);
             var keys = victims.Select(x => x.Id).ToList();
             foreach (var victim in victims)
                 victim.Destroy();
@@ -313,7 +289,7 @@ namespace socket4net
 
         protected List<T> Remove<T>(Predicate<T> condition, bool notify = true) where T : TValue
         {
-            var victims = Get<T>(condition);
+            var victims = Get(condition);
             victims.ForEach(x =>
             {
                 Items.Remove(x.Id);

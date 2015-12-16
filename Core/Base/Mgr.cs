@@ -28,13 +28,6 @@ namespace socket4net
             foreach (var item in this)
                 item.Start();
         }
-        
-        public override void AfterStart()
-        {
-            base.AfterStart();
-            foreach (var item in this)
-                item.AfterStart();
-        }
 
         protected override void OnReset()
         {
@@ -91,17 +84,11 @@ namespace socket4net
 
         public T Create<T>(ObjArg arg, bool init, bool start) where T : class, TValue, new()
         {
-            var ret = ObjFactory.Create<T>(arg);
+            var ret = Create<T>(arg);
             if (start)
-            {
-                ret.Init();
                 ret.Start();
-            }
-            else if(init)
-                ret.Init();
 
             _items.Add(ret);
-
             return ret;
         }
     }

@@ -16,8 +16,8 @@ namespace socket4net
             return ++_uidSeed;
         }
 
-        public ListBlock(PropertyBody<TKey> host, TKey id, List<TItem> value, EBlockMode mode)
-            : base(host, id, null, mode)
+        public ListBlock(TKey id, List<TItem> value, EBlockMode mode)
+            : base(id, null, mode)
         {
             Value = new List<ListItemRepresentation<TItem>>();
 

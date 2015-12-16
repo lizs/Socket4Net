@@ -57,9 +57,7 @@ namespace socket4net
 
             StopWorking = true;
             if (joinWorker)
-            {
                 _workingThread.Join();
-            }
 
             Logger.Instance.Debug("Logic service stopped!");
         }
@@ -94,7 +92,7 @@ namespace socket4net
         private void DoStartup()
         {
             _workingQueue = new BlockingCollection<IJob>(QueueCapacity);
-            _workingThread = new Thread(WorkingProcedure) { Name = "AutoLogicService", IsBackground = true };
+            _workingThread = new Thread(WorkingProcedure) { Name = "AutoLogicService" };
 
             // use background thread
             // see http://msdn.microsoft.com/en-us/library/h339syd0.aspx

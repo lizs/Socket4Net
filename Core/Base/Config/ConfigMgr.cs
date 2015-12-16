@@ -28,7 +28,7 @@ namespace socket4net
     {
         public IFileLoader FileLoader { get; private set; }
         public string NameSpace { get; private set; }
-        public ConfigMgrArg(IFileLoader loader, string ns = null)
+        public ConfigMgrArg(IObj owner, IFileLoader loader, string ns = null) : base(owner)
         {
             FileLoader = loader;
             NameSpace = ns;
@@ -81,11 +81,11 @@ namespace socket4net
         ///     执行初始化
         /// </summary>
         /// <param name="arg"></param>
-        protected override void OnInit()
+        protected override void OnInit(ObjArg objArg)
         {
-            base.OnInit();
+            base.OnInit(objArg);
 
-            var more = Argument as ConfigMgrArg;
+            var more = objArg as ConfigMgrArg;
             if (more == null || more.FileLoader == null) throw new ArgumentException();
 
             _loader = more.FileLoader;

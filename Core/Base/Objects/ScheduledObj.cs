@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 #if NET45
 using System.Threading.Tasks;
@@ -7,31 +6,33 @@ using System.Threading.Tasks;
 
 namespace socket4net
 {
-    public class ScheduledObjArg : RootedObjArg
+    public class ScheduledObjArg : ObjArg
     {
-        public ScheduledObjArg(IObj parent)
-            : base(parent)
+        public ScheduledObjArg(IObj owner) : base(owner)
         {
         }
+    }
+
+    public interface IScheduledObj : IObj, IScheduled
+    {
     }
 
     /// <summary>
     ///     可定时调度的对象
     /// </summary>
-    public class ScheduledObj : RootedObj
+    public class ScheduledObj : Obj, IScheduledObj
     {
         public const uint MillisecondsPerDay = 24 * 60 * 60 * 1000;
 
         private Scheduler _scheduler;
-        private Dictionary<Action, bool> _asynTimers = new Dictionary<Action, bool>(); 
 
-        protected override void OnInit()
+        protected override void OnInit(ObjArg objArg)
         {
-            base.OnInit();
+            base.OnInit(objArg);
             
-            var ancestor = GetAncestor<IBatched>();
-            _scheduler = ancestor != null ?
-                new BatchedScheduler(ancestor, Name) :
+            var batchedOwner = Owner as IBatched;
+            _scheduler = batchedOwner != null ?
+                new BatchedScheduler(batchedOwner, Name) :
                 new Scheduler(Name);
         }
 

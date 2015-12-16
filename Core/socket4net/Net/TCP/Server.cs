@@ -13,7 +13,7 @@ namespace socket4net
         }
     }
 
-    public class Server<TSession, TNetService, TLogicService> : RootedObj, IPeer
+    public class Server<TSession, TNetService, TLogicService> : Obj, IPeer
         where TSession : class, ISession, new() 
         where TNetService : class ,INetService, new()
         where TLogicService : class ,ILogicService, new()
@@ -56,9 +56,9 @@ namespace socket4net
         private Thread _sessionFactoryWorker;
         private bool _quit;
 
-        public override void SetArgument(ObjArg arg)
+        protected override void OnInit(ObjArg arg)
         {
-            base.SetArgument(arg);
+            base.OnInit(arg);
 
             var more = arg as PeerArg;
 
@@ -66,11 +66,7 @@ namespace socket4net
             Port = more.Port;
             LogicService = more.LogicService;
             NetService = more.NetService;
-        }
 
-        protected override void OnInit()
-        {
-            base.OnInit();
             IPAddress address;
             if (!IPAddress.TryParse(Ip, out address)) Logger.Instance.FatalFormat("Invalid ip {0}", Ip);
 
@@ -171,10 +167,12 @@ namespace socket4net
                 if(_acceptEvent != null ) _acceptEvent.Dispose();
 
                 _quit = true;
-                if(_sessionFactoryWorker != null ) _sessionFactoryWorker.Join();
+                _socketAcceptedEvent.Set();
+                _socketAcceptedEvent.Dispose();
+                if (_sessionFactoryWorker != null) _sessionFactoryWorker.Join();
 
-                if (LogicService != null && !IsLogicServiceShared) LogicService.Stop();
                 if (NetService != null && !IsNetServiceShared) NetService.Stop();
+                if (LogicService != null && !IsLogicServiceShared) LogicService.Stop(false);
             });
         }
 
@@ -221,9 +219,9 @@ namespace socket4net
             {
                 _clients.Enqueue(e.AcceptSocket);
                 _socketAcceptedEvent.Set();
-            }
 
-            AcceptNext();
+                AcceptNext();
+            }
         }
 
         private void AcceptNext()

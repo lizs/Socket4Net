@@ -7,8 +7,8 @@ namespace socket4net
 {
     public class ComponentedObjArg<TPKey> : PropertiedObjArg<TPKey>
     {
-        public ComponentedObjArg(IObj parent, long key, IEnumerable<Pair<TPKey, byte[]>> properties,
-            Func<PropertyBody<TPKey>, TPKey, IBlock<TPKey>> blockMaker) : base(parent, key, properties, blockMaker)
+        public ComponentedObjArg(IObj parent, long key, IEnumerable<Pair<TPKey, IBlock<TPKey>>> properties)
+            : base(parent, key, properties)
         {
         }
     }
@@ -32,49 +32,18 @@ namespace socket4net
         {
         }
         
-        protected virtual void OnSubscribe()
-        {
-        }
-
-        protected virtual void OnUnsubscribe()
-        {
-        }
-
-        protected virtual void OnInjectProperties()
-        {
-        }
-
         #region 初始化、卸载
-
-        protected override void BeforeInit()
-        {
-            base.BeforeInit();
-            
-            // 添加组件
-            SpawnComponents();
-
-            // 初始化组件管理器
-            Components.Init();
-
-            // 属性注入
-            OnInjectProperties();
-        }
 
         /// <summary>
         ///     初始化
         /// </summary>
-        /// <param name="arg"></param>
-        protected override void OnInit()
+        /// <param name="objArg"></param>
+        protected override void OnInit(ObjArg objArg)
         {
-            base.OnInit();
-            
-            // 事件订阅
-            OnSubscribe();
+            base.OnInit(objArg);
 
-            // 组件事件订阅
-            // 注意：为何组件的事件订阅不是组件自行处理？
-            // 因为：组件有可能订阅其它组件的事件，而该订阅目标组件有可能尚未创建！
-            Components.Subscribe();
+            // 添加组件
+            SpawnComponents();
         }
 
         /// <summary>
@@ -86,12 +55,6 @@ namespace socket4net
 
             // 组件开始
             Components.Start();
-        }
-
-        public override void AfterStart()
-        {
-            base.AfterStart();
-            Components.AfterStart();
         }
 
         /// <summary>
@@ -111,9 +74,6 @@ namespace socket4net
         protected sealed override void OnDestroy()
         {
             base.OnDestroy();
-            
-            // 反订阅
-            OnUnsubscribe();
 
             // 销毁组件
             Components.Destroy();
@@ -145,7 +105,7 @@ namespace socket4net
             {
                 return _components ??
                        (_components =
-                           ObjFactory.Create<ComponentsMgr<TPKey>>(new UniqueMgrArg(this)));
+                           Create<ComponentsMgr<TPKey>>(new UniqueMgrArg(this)));
             }
         }
 

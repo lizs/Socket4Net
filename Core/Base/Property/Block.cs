@@ -7,8 +7,13 @@ namespace socket4net
     public abstract class Block<TKey> : IBlock<TKey>
     {
         public const int InvalidIndex = -1;
+        protected Block(string feild)
+        {
+            RedisFeild = string.Format("{0}:{1}", feild, Id);
+        } 
 
-        private string _redisFeild;
+        public string RedisFeild { get; set; }
+
         private IBlockOps _ops;
         public virtual bool Dirty { get; set; }
         public TKey Id { get; set; }
@@ -17,11 +22,11 @@ namespace socket4net
         public Type Type { get; protected set; }
 
         /// <summary>
-        ///     是否需即时持久
+        ///     是否需即时存储
         /// </summary>
         public bool Persistable
         {
-            get { return Mode >= EBlockMode.RealtimePersistable; }
+            get { return Mode >= EBlockMode.Persistable; }
         }
 
         /// <summary>
@@ -44,21 +49,13 @@ namespace socket4net
         }
 
         public abstract EBlockType EBlockType { get; }
-        public PropertyBody<TKey> Host { get; private set; }
-
         public void SetMode(EBlockMode mode)
         {
             Mode = mode;
         }
-
-        public string RedisFeild
+        
+        protected Block(TKey id, object value, Type type, EBlockMode mode)
         {
-            get { return _redisFeild ?? (_redisFeild = string.Format("{0}:{1}", Host.RedisFeild, Id)); }
-        }
-
-        protected Block(PropertyBody<TKey> host, TKey id, object value, Type type, EBlockMode mode)
-        {
-            Host = host;
             Id = id;
             Value = value;
             Mode = mode;
@@ -107,8 +104,8 @@ namespace socket4net
 
     public abstract class Block<TKey, TItem> : Block<TKey>
     {
-        protected Block(PropertyBody<TKey> host, TKey id, TItem value, EBlockMode mode)
-            : base(host, id, value, typeof(TItem), mode)
+        protected Block(TKey id, TItem value, EBlockMode mode)
+            : base(id, value, typeof(TItem), mode)
         {
         }
 

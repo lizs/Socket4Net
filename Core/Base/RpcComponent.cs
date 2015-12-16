@@ -20,11 +20,11 @@ namespace socket4net
 
     public abstract class RpcComponent<TPKey> : Component<TPKey>, IRpc
     {
-        public override void SetArgument(ObjArg arg)
+        protected override void OnInit(ObjArg arg)
         {
-            base.SetArgument(arg);
+            base.OnInit(arg);
 
-            var more = Argument as RpcComponentArg;
+            var more = arg as RpcComponentArg;
             SessionGetter = more.SessionGetter;
         }
 

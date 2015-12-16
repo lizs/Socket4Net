@@ -8,7 +8,7 @@ namespace socket4net
     {
         public Type Root { get; private set; }
 
-        public PropertyPublisherArg(Type root)
+        public PropertyPublisherArg(IObj owner, Type root) : base(owner)
         {
             Root = root;
         }
@@ -46,11 +46,11 @@ namespace socket4net
         ///     初始化
         /// </summary>
         /// <param name="objArg"></param>
-        protected override void OnInit()
+        protected override void OnInit(ObjArg objArg)
         {
-            base.OnInit();
+            base.OnInit(objArg);
 
-            var more = Argument as PropertyPublisherArg;
+            var more = objArg as PropertyPublisherArg;
             Root = more.Root;
         }
 
@@ -280,9 +280,9 @@ namespace socket4net
             }
         }
 
-        protected override void AfterDestroy()
+        protected override void OnDestroy()
         {
-            base.AfterDestroy();
+            base.OnDestroy();
             _globalListenrs.Clear();
             _typeListeners.Clear();
         }

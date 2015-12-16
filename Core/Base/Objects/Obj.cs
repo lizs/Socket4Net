@@ -26,16 +26,27 @@ namespace socket4net
         /// <returns></returns>
         int CompareTo(IObj other);
 
-        void Init();
+        void Init(ObjArg arg);
         void Reset();
         void Start();
-        void AfterStart();
         void Destroy();
-        void SetArgument(ObjArg arg);
+
+        /// <summary>
+        ///     获取根
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T GetAncestor<T>() where T : class ,IObj;
     }
 
     public abstract class ObjArg
     {
+        public IObj Owner { get; private set; }
+        protected ObjArg(IObj owner)
+        {
+            Owner = owner;
+        }
+
         public static ObjArg Empty
         {
             get { return new EmptyArg(); }
@@ -47,42 +58,13 @@ namespace socket4net
     /// </summary>
     public class EmptyArg : ObjArg
     {
+        public EmptyArg() : base(null)
+        {
+        }
     }
 
     public abstract class Obj : IObj
     {
-        public enum Flag
-        {
-            Empty,
-
-            BeforeReset = 1 << 0,
-            OnReset = 1 << 1,
-            AfterReset = 1 << 2,
-
-            BeforeInit = 1 << 3,
-            OnInit = 1 << 4,
-            AfterInit = 1 << 5,
-
-            BeforeStart = 1 << 6,
-            OnStart = 1 << 7,
-            AfterStart = 1 << 8,
-
-            BeforeDestroy = 1 << 9,
-            OnDestroy = 1 << 10,
-            AfterDestroy = 1 << 11,
-        }
-
-        public Flag InvokeFlag { get; private set; }
-
-        /// <summary>
-        ///     参数
-        /// </summary>
-        public ObjArg Argument { get; private set; }
-        public virtual void SetArgument(ObjArg arg)
-        {
-            Argument = arg;
-        }
-
         /// <summary>
         ///     实例动态id
         ///     仅运行时唯一
@@ -132,9 +114,22 @@ namespace socket4net
         }
 
         /// <summary>
+        ///     拥有者
+        /// </summary>
+        public IObj Owner { get; private set; }
+
+        /// <summary>
+        ///     拥有者描述
+        /// </summary>
+        public string OwnerDescription
+        {
+            get { return Owner != null ? Owner.Name : "null"; }
+        }
+
+        /// <summary>
         ///     是否已初始化
         /// </summary>
-        public bool Initialized { get; protected set; }
+        public bool Initialized { get; private set; }
 
         /// <summary>
         ///     是否已启动
@@ -170,113 +165,70 @@ namespace socket4net
             return Name;
         }
 
-
         /// <summary>
-        ///     设置标记
+        ///     创建对象
         /// </summary>
-        /// <param name="flag"></param>
-        private void SetFlag(Flag flag)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        public static T Create<T>(ObjArg arg) where T : IObj, new()
         {
-            if (InvokeFlag != Flag.Empty && (InvokeFlag & ~flag) == Flag.Empty)
-                throw new Exception(string.Format("{0} already invoked!", flag));
-
-            InvokeFlag |= flag;
+            var ret = new T();
+            ret.Init(arg);
+            return ret;
         }
 
         /// <summary>
         ///     初始
         /// </summary>
-        public void Init()
+        public void Init(ObjArg arg)
         {
-            BeforeInit();
+            if(Initialized)
+                throw new Exception("Already initialized");
 
             // 执行初始化
-            OnInit();
-
-            // 标识初始完毕
+            OnInit(arg);
             Initialized = true;
-
-            // 初始完毕
-            AfterInit();
         }
 
-        protected virtual void BeforeInit()
+        protected virtual void OnInit(ObjArg arg)
         {
-            SetFlag(Flag.BeforeInit);
+            Owner = arg.Owner;
         }
-
-        protected virtual void OnInit()
-        {
-            SetFlag(Flag.OnInit);
-        }
-
-        protected virtual void AfterInit()
-        {
-            SetFlag(Flag.AfterInit);
-        }
-
+        
         /// <summary>
         ///     启动
         /// </summary>
         public void Start()
         {
             if(!Initialized)
-                throw new Exception(string.Format("{0} Not initialized yet!", Name));
+                throw new Exception("Not initialized yet!");
 
-            BeforeStart();
+            if (Started)
+                throw new Exception("Already started");
+
             OnStart();
             Started = true;
-            //AfterStart();
         }
 
-        /// <summary>
-        ///     在启动之前调用
-        /// </summary>
-        protected virtual void BeforeStart()
-        {
-            SetFlag(Flag.BeforeStart);
-        }
-
-        /// <summary>
-        ///     执行启动
-        /// </summary>
         protected virtual void OnStart()
         {
-            SetFlag(Flag.OnStart);
         }
-
-        /// <summary>
-        ///     在对象启动之后调用
-        /// </summary>
-        public virtual void AfterStart()
-        {
-            SetFlag(Flag.AfterStart);
-        }
-
+        
         /// <summary>
         ///     销毁
         /// </summary>
         public void Destroy()
         {
-            BeforeDestroy();
+            if (Destroyed)
+                return;
+
             OnDestroy();
             Destroyed = true;
-            AfterDestroy();
-        }
-
-        protected virtual void BeforeDestroy()
-        {
-            SetFlag(Flag.BeforeDestroy);
-        }
-
-        protected virtual void AfterDestroy()
-        {
-            SetFlag(Flag.AfterDestroy);
         }
 
         protected virtual void OnDestroy()
         {
-            SetFlag(Flag.OnDestroy);
         }
 
         /// <summary>
@@ -284,31 +236,35 @@ namespace socket4net
         /// </summary>
         public void Reset()
         {
-            BeforeReset();
+            if (Reseted)
+                throw new Exception("Already rested");
+
             OnReset();
             Reseted = true;
-            AfterReset();
-        }
-
-        protected virtual void BeforeReset()
-        {
-            SetFlag(Flag.BeforeReset);
         }
 
         protected virtual void OnReset()
         {
-            SetFlag(Flag.OnReset);
         }
 
-        protected virtual void AfterReset()
+        /// <summary>
+        ///     获取指定类型的根（递归获取）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetAncestor<T>() where T : class, IObj
         {
-            SetFlag(Flag.AfterReset);
+            if (this is T) return (this as T);
+            if (Owner == null) return null;
+            if (Owner is T) return (Owner as T);
+            return Owner.GetAncestor<T>();
         }
 
         /// <summary>
         ///     实例id种子
         /// </summary>
         private static int _seed;
+
         protected static int GenInstanceId()
         {
             return ++_seed;

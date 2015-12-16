@@ -38,9 +38,9 @@ namespace socket4net
             }
         }
 
-        protected override void AfterDestroy()
+        protected override void OnDestroy()
         {
-            base.AfterDestroy();
+            base.OnDestroy();
 
             // 清理事件
             EventCompleted = null;
@@ -71,9 +71,9 @@ namespace socket4net
     {
         public event Action<int, int> EventProgressChanged;
 
-        protected override void AfterDestroy()
+        protected override void OnDestroy()
         {
-            base.AfterDestroy();
+            base.OnDestroy();
             EventProgressChanged = null;
         }
 

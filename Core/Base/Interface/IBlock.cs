@@ -11,7 +11,7 @@ namespace socket4net
         // 可同步
         Synchronizable,
         // 即时存储
-        RealtimePersistable,
+        Persistable,
     }
 
     public interface IBlock : ISerializable
@@ -72,7 +72,7 @@ namespace socket4net
         /// <summary>
         ///     Redis字段名
         /// </summary>
-        string RedisFeild { get; }
+        string RedisFeild { get; set; }
 
         /// <summary>
         ///     模式
@@ -92,17 +92,12 @@ namespace socket4net
     /// <summary>
     ///     属性块
     /// </summary>
-    public interface IBlock<TKey> : IBlock
+    public interface IBlock<out TKey> : IBlock
     {      
         /// <summary>
         ///     属性Id
         /// </summary>
         TKey Id { get; }
-
-        /// <summary>
-        ///     所在Property
-        /// </summary>
-        PropertyBody<TKey> Host { get; }
     }
 
     /// <summary>

@@ -98,11 +98,8 @@
     <Compile Include="Base\Logger.cs" />
     <Compile Include="Base\Mgr.cs" />
     <Compile Include="Base\Objects\ComponentedObj.cs" />
-    <Compile Include="Base\Objects\FuzzyObj.cs" />
     <Compile Include="Base\Objects\Obj.cs" />
-    <Compile Include="Base\Objects\ObjFactory.cs" />
     <Compile Include="Base\Objects\PropertiedObj.cs" />
-    <Compile Include="Base\Objects\RootedObj.cs" />
     <Compile Include="Base\Objects\ScheduledObj.cs" />
     <Compile Include="Base\Objects\UniqueObj.cs" />
     <Compile Include="Base\Property\Block.cs" />

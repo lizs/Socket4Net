@@ -39,9 +39,9 @@
         ///     执行初始化
         /// </summary>
         /// <param name="arg"></param>
-        protected override void OnInit()
+        protected override void OnInit(ObjArg objArg)
         {
-            base.OnInit();
+            base.OnInit(objArg);
             OnInjectProperties();
         }
 

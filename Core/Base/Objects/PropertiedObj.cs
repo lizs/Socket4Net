@@ -7,15 +7,12 @@ namespace socket4net
 {
     public class PropertiedObjArg<TKey> : UniqueObjArg<long>
     {
-        public IEnumerable<Pair<TKey, byte[]>> Properties { get; private set; }
-        public Func<PropertyBody<TKey>, TKey, IBlock<TKey>> BlockGenerator { get; private set; }
+        public IEnumerable<Pair<TKey, IBlock<TKey>>> Properties { get; private set; }
 
-        public PropertiedObjArg(IObj parent, long key, IEnumerable<Pair<TKey, byte[]>> properties,
-            Func<PropertyBody<TKey>, TKey, IBlock<TKey>> blockMaker)
+        public PropertiedObjArg(IObj parent, long key, IEnumerable<Pair<TKey, IBlock<TKey>>> properties)
             : base(parent, key)
         {
             Properties = properties;
-            BlockGenerator = blockMaker;
         }
     }
 
@@ -38,9 +35,9 @@ namespace socket4net
         bool Get<T>(TPKey id, out T value);
         List<T> GetList<T>(TPKey id);
         bool Inject(IBlock<TPKey> block);
-        bool Inject(TPKey pid);
-        bool Inject(TPKey pid, EBlockMode mode);
-        bool MultiInject(params TPKey[] pids);
+        //bool Inject(TPKey pid);
+        //bool Inject(TPKey pid, EBlockMode mode);
+        //bool MultiInject(params TPKey[] pids);
         void NotifyPropertyChanged(TPKey pid);
         void NotifyPropertyChanged();
 
@@ -92,21 +89,16 @@ namespace socket4net
     /// </summary>
     public abstract class PropertiedObj<TPKey> : UniqueObj<long>, IPropertiedObj<TPKey>
     {
-        protected Func<PropertyBody<TPKey>, TPKey, IBlock<TPKey>> BlockGenerator;
-
         /// <summary>
         ///     属性体
         /// </summary>
         private PropertyBody<TPKey> _propertyBody;
         public PropertyBody<TPKey> PropertyBody
         {
-            get 
+            get
             {
                 if (_propertyBody != null) return _propertyBody;
-
-                _propertyBody = ObjFactory.Create<PropertyBody<TPKey>>(new PropertyBodyArg(RedisFeild));
-                _propertyBody.Init();
-
+                _propertyBody = Create<PropertyBody<TPKey>>(new PropertyBodyArg(this));
                 return _propertyBody;
             }
         }
@@ -127,55 +119,31 @@ namespace socket4net
         }
 
         public abstract string RedisFeild { get;  }
-        
-        public override void SetArgument(ObjArg arg)
-        {
-            base.SetArgument(arg);
-            var more = arg as PropertiedObjArg<TPKey>;
-            BlockGenerator = more.BlockGenerator;
-        }
 
         /// <summary>
         ///     执行初始化
         /// </summary>
-        /// <param name="arg"></param>
-        protected override void OnInit()
+        protected override void OnInit(ObjArg objArg)
         {
-            base.OnInit();
+            base.OnInit(objArg);
             
             // 应用属性
-            var more = Argument as PropertiedObjArg<TPKey>;
+            var more = objArg as PropertiedObjArg<TPKey>;
             if (more != null)
-            {
-                BlockGenerator = more.BlockGenerator;
                 ApplyProperties(more.Properties);
-            }
         }
 
         /// <summary>
         ///     应用属性
         /// </summary>
-        /// <param name="properties"></param>
-        private void ApplyProperties(IEnumerable<Pair<TPKey, byte[]>> properties)
+        /// <param name="blocks"></param>
+        private void ApplyProperties(IEnumerable<Pair<TPKey, IBlock<TPKey>>> blocks)
         {
-            if(properties == null) return;
+            if(blocks == null) return;
 
-            foreach (var kv in properties.Where(kv => kv.Value != null))
+            foreach (var block in blocks)
             {
-                var block = PropertyBody.GetBlock(kv.Key);
-                if (block != null)
-                {
-#if NET35
-                    if (block is IDifferentialSerializable)
-                        (block as IDifferentialSerializable).DeserializeDifference(kv.Value);
-                    else
-                        block.Deserialize(kv.Value);
-#else
-                    block.Deserialize(kv.Value);
-#endif
-                }
-                else
-                    Logger.Instance.ErrorFormat("Block of {0} not injected for {1}", kv.Key, Name);
+                PropertyBody.Inject(block.Value);
             }
         }
 
@@ -293,7 +261,7 @@ namespace socket4net
         {
             if (PropertyBody.Get(id, out value)) return true;
 
-            Logger.Instance.ErrorFormat("Pid : {0} of {1} not exist!", id, Name);
+            Logger.Instance.WarnFormat("Pid : {0} of {1} not exist!", id, Name);
             return false;
         }
 
@@ -308,26 +276,26 @@ namespace socket4net
             return PropertyBody.Inject(block);
         }
 
-        public bool Inject(TPKey pid)
-        {
-            var block = BlockGenerator(PropertyBody, pid);
-            return block != null && PropertyBody.Inject(block);
-        }
+        //public bool Inject(TPKey pid)
+        //{
+        //    var block = BlockGenerator(PropertyBody, pid);
+        //    return block != null && PropertyBody.Inject(block);
+        //}
 
-        public bool Inject(TPKey pid, EBlockMode mode)
-        {
-            var block = BlockGenerator(PropertyBody, pid);
-            if (block == null) return false;
+        //public bool Inject(TPKey pid, EBlockMode mode)
+        //{
+        //    var block = BlockGenerator(PropertyBody, pid);
+        //    if (block == null) return false;
 
-            block.SetMode(mode);
-            return PropertyBody.Inject(block);
-        }
+        //    block.SetMode(mode);
+        //    return PropertyBody.Inject(block);
+        //}
 
-        public bool MultiInject(params TPKey[] pids)
-        {
-            return pids.Select(pid => BlockGenerator(PropertyBody, pid))
-                .Aggregate(true, (current, block) => current & PropertyBody.Inject(block));
-        }
+        //public bool MultiInject(params TPKey[] pids)
+        //{
+        //    return pids.Select(pid => BlockGenerator(PropertyBody, pid))
+        //        .Aggregate(true, (current, block) => current & PropertyBody.Inject(block));
+        //}
 
         public void NotifyPropertyChanged(TPKey pid)
         {

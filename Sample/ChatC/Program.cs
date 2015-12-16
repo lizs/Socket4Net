@@ -28,8 +28,7 @@ namespace ChatC
         private static void RunClient(string ip, ushort port)
         {
             // 创建客户端
-            var client = ObjFactory.Create<Client>(new ClientArg(null, ip, port){ AutoReconnectEnabled = true});
-            client.Init();
+            var client = Obj.Create<Client>(new ClientArg(null, ip, port){ AutoReconnectEnabled = true});
             client.Start();
 
             // 监听事件

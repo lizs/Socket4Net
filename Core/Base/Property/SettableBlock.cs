@@ -2,8 +2,8 @@
 {
     public class SettableBlock<TKey, TItem> : Block<TKey, TItem>, ISettableBlock<TKey, TItem>
     {
-        public SettableBlock(PropertyBody<TKey> host, TKey id, TItem value, EBlockMode mode)
-            : base(host, id, value, mode)
+        public SettableBlock(TKey id, TItem value, EBlockMode mode)
+            : base(id, value, mode)
         {
             PreviousValue = value;
         }

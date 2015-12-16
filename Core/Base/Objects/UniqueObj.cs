@@ -4,14 +4,14 @@
     {
         public TKey Key { get; private set; }
 
-        protected UniqueObjArg(IObj parent, TKey key)
-            : base(parent)
+        protected UniqueObjArg(IObj owner, TKey key)
+            : base(owner)
         {
             Key = key;
         }
     }
-    
-    public interface IUniqueObj<out TKey> : IRootedObj
+
+    public interface IUniqueObj<out TKey> : IScheduledObj
     {
         TKey Id { get; }
     }
@@ -22,11 +22,11 @@
     /// <typeparam name="TKey"></typeparam>
     public abstract class UniqueObj<TKey> : ScheduledObj, IUniqueObj<TKey>
     {
-        public override void SetArgument(ObjArg arg)
+        protected override void OnInit(ObjArg objArg)
         {
-            base.SetArgument(arg);
+            base.OnInit(objArg);
 
-            var more = Argument as UniqueObjArg<TKey>;
+            var more = objArg as UniqueObjArg<TKey>;
             Id = more.Key;
         }
 

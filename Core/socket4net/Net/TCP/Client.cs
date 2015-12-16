@@ -94,9 +94,9 @@ namespace socket4net
         private bool _connected;
         private uint _reconnectRetryDelay = ReconnectDefaultDelay;
 
-        public override void SetArgument(ObjArg arg)
+        protected override void OnInit(ObjArg arg)
         {
-            base.SetArgument(arg);
+            base.OnInit(arg);
 
             var more = arg as ClientArg;
             LogicService = more.LogicService;
@@ -107,6 +107,23 @@ namespace socket4net
                 Logger.Instance.Warn("Ip or Port is invalid!");
             else if (!SetAddress(more.Ip, more.Port))
                 throw new Exception("Ip or Port is invalid!");
+
+            _sessionFactory = new SessionFactory<TSession>();
+            SessionMgr = new SessionMgr(this,
+                session =>
+                {
+                    OnConnected(session);
+
+                    if (EventSessionEstablished != null)
+                        EventSessionEstablished(session as TSession);
+                },
+                (session, reason) =>
+                {
+                    OnDisconnected(session, reason);
+
+                    if (EventSessionClosed != null)
+                        EventSessionClosed(session as TSession, reason);
+                });
         }
 
         protected virtual void OnConnected(ISession session)
@@ -161,28 +178,6 @@ namespace socket4net
             }
 
             return true;
-        }
-
-        protected override void OnInit()
-        {
-            base.OnInit();
-
-            _sessionFactory = new SessionFactory<TSession>();
-            SessionMgr = new SessionMgr(this,
-                session =>
-                {
-                    OnConnected(session);
-
-                    if (EventSessionEstablished != null)
-                        EventSessionEstablished(session as TSession);
-                },
-                (session, reason) =>
-                {
-                    OnDisconnected(session, reason);
-
-                    if (EventSessionClosed != null)
-                        EventSessionClosed(session as TSession, reason);
-                });
         }
 
         protected override void OnStart()

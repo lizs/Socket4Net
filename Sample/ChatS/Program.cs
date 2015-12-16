@@ -22,8 +22,7 @@ namespace ChatS
         private static void RunServer()
         {
             // 创建服务器
-            var server = ObjFactory.Create<Server>(new ServerArg(null, "0.0.0.0", 5000));
-            server.Init();
+            var server = Obj.Create<Server>(new ServerArg(null, "0.0.0.0", 5000));
             server.Start();
             
             // 监听事件

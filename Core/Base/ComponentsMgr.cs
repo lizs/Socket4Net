@@ -6,7 +6,7 @@ namespace socket4net
     {
         /// <summary>
         ///     订阅
-        ///     订阅为何这么特殊，请参照：ComponentedObj.OnInit 中相关说明
+        ///     订阅为何这么特殊，请参照：ComponentedObj.Init 中相关说明
         /// </summary>
         public void Subscribe()
         {

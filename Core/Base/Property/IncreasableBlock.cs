@@ -2,9 +2,9 @@
 {
     public class IncreasableBlock<TKey, TItem> : Block<TKey, TItem>, IIncreasableBlock<TKey, TItem>
     {
-        public IncreasableBlock(PropertyBody<TKey> host, TKey id, TItem value, EBlockMode mode,
+        public IncreasableBlock(TKey id, TItem value, EBlockMode mode,
             TItem upperBound, TItem lowerBound)
-            : base(host, id, value, mode)
+            : base(id, value, mode)
         {
             UpperBound = upperBound;
             LowerBound = lowerBound;
