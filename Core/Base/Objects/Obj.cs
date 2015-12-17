@@ -264,7 +264,6 @@ namespace socket4net
         ///     实例id种子
         /// </summary>
         private static int _seed;
-
         protected static int GenInstanceId()
         {
             return ++_seed;

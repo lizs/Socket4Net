@@ -23,11 +23,6 @@ namespace socket4net
 
         public Dictionary<TKey, IBlock<TKey>> Blocks { get; private set; }
 
-        public int PropertyCount
-        {
-            get { return Blocks.Count; }
-        }
-
         public bool Contains(TKey pid)
         {
             return Blocks.ContainsKey(pid);

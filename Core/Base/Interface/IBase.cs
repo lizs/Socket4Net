@@ -62,8 +62,6 @@ namespace socket4net
     {
         T SerializeDifference();
         bool DeserializeDifference(T data);
-        //T SerializeRepresentation();
-        //void DeserializeRepresentation(T data);
     }
     
     /// <summary>

@@ -2,7 +2,7 @@
 {
     public class ComponentArg : UniqueObjArg<short>
     {
-        public ComponentArg(Obj parent, short key)
+        public ComponentArg(IObj parent, short key)
             : base(parent, key)
         {
         }

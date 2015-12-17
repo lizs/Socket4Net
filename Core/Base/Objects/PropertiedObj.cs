@@ -371,12 +371,12 @@ namespace socket4net
 
         public int IndexOf<T>(TPKey pid, T item)
         {
-            return PropertyBody.IndexOf<T>(pid, item);
+            return PropertyBody.IndexOf(pid, item);
         }
 
         public int IndexOf<T>(TPKey pid, Predicate<T> condition)
         {
-            return PropertyBody.IndexOf<T>(pid, condition);
+            return PropertyBody.IndexOf(pid, condition);
         }
 
         public T GetByIndex<T>(TPKey pid, int idx)
@@ -390,24 +390,28 @@ namespace socket4net
             NotifyPropertyChanged(id);
             return true;
         }
+
         public bool Add(TPKey id, object value)
         {
             if (!PropertyBody.Add(id, value)) return false;
             NotifyPropertyChanged(id);
             return true;
         }
+
         public bool AddRange<T>(TPKey id, List<T> items)
         {
             if (!PropertyBody.MultiAdd(id, items)) return false;
             NotifyPropertyChanged(id);
             return true;
         }
+
         public bool Remove<T>(TPKey id, T item)
         {
             if (!PropertyBody.Remove(id, item)) return false;
             NotifyPropertyChanged(id);
             return true;
         }
+
         public bool Remove(TPKey id, object item)
         {
             if (!PropertyBody.Remove(id, item)) return false;

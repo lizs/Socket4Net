@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using socket4net.Util;
@@ -134,9 +133,9 @@ namespace socket4net
             return Components.Get<T>();
         }
 
-        public T AddComponent<T>(short id) where T : Component<TPKey>, new()
+        public T AddComponent<T>() where T : Component<TPKey>, new()
         {
-            return Components.AddComponent<T>(id);
+            return Components.AddComponent<T>();
         }
 
         public List<short> RemoveComponent<T>() where T : Component<TPKey>

@@ -5,10 +5,10 @@ namespace socket4net
     /// <summary>
     /// 计数锁
     /// </summary>
-    public class Locker : IDisposable
+    public class Locker
     {
         private int _count;
-        private Action _action;
+        private readonly Action _action;
         public Locker(Action action)
         {
             _action = action;
@@ -29,11 +29,6 @@ namespace socket4net
 
             if (_count == 0 && _action != null)
                 _action();
-        }
-
-        public void Dispose()
-        {
-            _action = null;
         }
     }
 
