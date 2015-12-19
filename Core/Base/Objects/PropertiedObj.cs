@@ -19,7 +19,7 @@ namespace socket4net
     public interface IPropertiedObj<TPKey> : IUniqueObj<long>
     {
         IBlock<TPKey> GetBlock(TPKey key);
-        IEnumerable<string> GetFeilds();
+        IEnumerable<string> Feilds{get;}
         IEnumerable<IBlock<TPKey>> Blocks { get; }
 
         #region 属性订阅
@@ -108,17 +108,15 @@ namespace socket4net
             return PropertyBody.GetBlock(key);
         }
 
-        public IEnumerable<string> GetFeilds()
+        public IEnumerable<string> Feilds
         {
-            return PropertyBody.Where(x => x.Synchronizable).Select(x => x.RedisFeild);
+            get { return PropertyBody.Where(x => x.Synchronizable).Select(x => x.RedisFeild); }
         }
 
         public IEnumerable<IBlock<TPKey>> Blocks
         {
             get { return PropertyBody; }
         }
-
-        public abstract string RedisFeild { get;  }
 
         /// <summary>
         ///     执行初始化
@@ -128,9 +126,8 @@ namespace socket4net
             base.OnInit(objArg);
             
             // 应用属性
-            var more = objArg as PropertiedObjArg<TPKey>;
-            if (more != null)
-                ApplyProperties(more.Properties);
+            var more = objArg.As<PropertiedObjArg<TPKey>>();
+            ApplyProperties(more.Properties);
         }
 
         /// <summary>

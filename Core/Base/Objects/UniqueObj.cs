@@ -26,7 +26,7 @@
         {
             base.OnInit(objArg);
 
-            var more = objArg as UniqueObjArg<TKey>;
+            var more = objArg.As<UniqueObjArg<TKey>>();
             Id = more.Key;
         }
 

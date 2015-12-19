@@ -3,7 +3,7 @@
     public class IncreasableBlock<TKey, TItem> : Block<TKey, TItem>, IIncreasableBlock<TKey, TItem>
     {
         public IncreasableBlock(TKey id, TItem value, EBlockMode mode,
-            TItem upperBound, TItem lowerBound)
+            TItem lowerBound, TItem upperBound)
             : base(id, value, mode)
         {
             UpperBound = upperBound;

@@ -85,8 +85,8 @@ namespace socket4net
         {
             base.OnInit(objArg);
 
-            var more = objArg as ConfigMgrArg;
-            if (more == null || more.FileLoader == null) throw new ArgumentException();
+            var more = objArg.As<ConfigMgrArg>();
+            if ( more.FileLoader == null) throw new ArgumentException();
 
             _loader = more.FileLoader;
             if (!string.IsNullOrEmpty(more.NameSpace))

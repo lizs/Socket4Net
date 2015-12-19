@@ -79,7 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\BatchLocker.cs" />
-    <Compile Include="Base\Command.cs" />
     <Compile Include="Base\Component.cs" />
     <Compile Include="Base\ComponentsMgr.cs" />
     <Compile Include="Base\Config\ConfigMgr.cs" />
@@ -180,7 +179,9 @@
   <ItemGroup>
     <Content Include="Base\StateMachine\Stateless\Readme.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"</PostBuildEvent>

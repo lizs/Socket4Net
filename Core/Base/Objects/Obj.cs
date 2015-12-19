@@ -51,6 +51,14 @@ namespace socket4net
         {
             get { return new EmptyArg(); }
         }
+
+        public T As<T>() where T : ObjArg
+        {
+            if (!(this is T))
+                throw new ArgumentException("ObjArg 类型非" + typeof(T).Name);
+
+            return (T) this;
+        }
     }
 
     /// <summary>
@@ -256,8 +264,8 @@ namespace socket4net
         {
             if (this is T) return (this as T);
             if (Owner == null) return null;
-            if (Owner is T) return (Owner as T);
-            return Owner.GetAncestor<T>();
+            var owner = Owner as T;
+            return owner ?? Owner.GetAncestor<T>();
         }
 
         /// <summary>

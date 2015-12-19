@@ -50,7 +50,7 @@ namespace socket4net
         {
             base.OnInit(objArg);
 
-            var more = objArg as PropertyPublisherArg;
+            var more = objArg.As<PropertyPublisherArg>();
             Root = more.Root;
         }
 

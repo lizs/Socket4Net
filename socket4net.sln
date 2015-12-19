@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleProto", "Sample\ChatP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "socket4net", "Core\socket4net.csproj", "{ED0BB4A5-50C0-410F-A55F-94C842C744AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "socket4net.tests", "socket4net.tests\socket4net.tests.csproj", "{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,18 @@ Global
 		{ED0BB4A5-50C0-410F-A55F-94C842C744AC}.Release|x64.Build.0 = Release|x64
 		{ED0BB4A5-50C0-410F-A55F-94C842C744AC}.Release|x86.ActiveCfg = Release|x86
 		{ED0BB4A5-50C0-410F-A55F-94C842C744AC}.Release|x86.Build.0 = Release|x86
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Release|x64.ActiveCfg = Release|Any CPU
+		{4C41B18B-04A9-4B9B-93B8-8C727EDDA272}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
