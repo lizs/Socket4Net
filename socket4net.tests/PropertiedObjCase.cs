@@ -1,48 +1,49 @@
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
+using NUnit.Framework;
 
 namespace socket4net.tests
 {
+    [TestFixture]
     internal class PropertiedObjCase : Case
     {
-        [Fact]
+        [Test]
         internal override void Do()
         {
             var obj = Obj.Create<MyPropertiedObj>(new PropertiedObjArg<EProperty>(null, 1, null));
-            Assert.Empty(obj.Blocks);
+            Assert.IsEmpty(obj.Blocks);
 
             obj.Reset();
             Assert.True(obj.Reseted);
             Assert.True(obj.Blocks.Count() == 3);
-            Assert.Equal(obj.Get<int>(EProperty.One), 1);
-            Assert.Equal(obj.GetList<int>(EProperty.Two), new List<int>(){1, 2, 3});
-            Assert.Equal(obj.Get<float>(EProperty.Three), 3.0f);
+            Assert.AreEqual(obj.Get<int>(EProperty.One), 1);
+            Assert.AreEqual(obj.GetList<int>(EProperty.Two), new List<int>() { 1, 2, 3 });
+            Assert.AreEqual(obj.Get<float>(EProperty.Three), 3.0f);
 
             obj.Set(EProperty.One, 2);
-            Assert.Equal(obj.Get<int>(EProperty.One), 2);
+            Assert.AreEqual(obj.Get<int>(EProperty.One), 2);
 
             obj.Add(EProperty.Two, 4);
-            Assert.Equal(obj.GetList<int>(EProperty.Two), new List<int>(){1, 2, 3, 4});
+            Assert.AreEqual(obj.GetList<int>(EProperty.Two), new List<int>(){1, 2, 3, 4});
             obj.Insert(EProperty.Two, 3, 5);
-            Assert.Equal(obj.GetList<int>(EProperty.Two), new List<int>() { 1, 2, 3, 5, 4 });
+            Assert.AreEqual(obj.GetList<int>(EProperty.Two), new List<int>() { 1, 2, 3, 5, 4 });
             obj.Swap<int>(EProperty.Two, 3, 4);
-            Assert.Equal(obj.GetList<int>(EProperty.Two), new List<int>() { 1, 2, 3, 4, 5 });
+            Assert.AreEqual(obj.GetList<int>(EProperty.Two), new List<int>() { 1, 2, 3, 4, 5 });
             obj.AddRange(EProperty.Two, new List<int> {6, 7});
-            Assert.Equal(obj.GetList<int>(EProperty.Two), new List<int> {1, 2, 3, 4, 5, 6, 7});
+            Assert.AreEqual(obj.GetList<int>(EProperty.Two), new List<int> {1, 2, 3, 4, 5, 6, 7});
             obj.Replace(EProperty.Two, 0, 0);
-            Assert.Equal(obj.GetList<int>(EProperty.Two), new List<int> { 0, 2, 3, 4, 5, 6, 7 });
+            Assert.AreEqual(obj.GetList<int>(EProperty.Two), new List<int> { 0, 2, 3, 4, 5, 6, 7 });
             obj.Remove(EProperty.Two, 0);
-            Assert.Equal(obj.GetList<int>(EProperty.Two), new List<int> { 2, 3, 4, 5, 6, 7 });
+            Assert.AreEqual(obj.GetList<int>(EProperty.Two), new List<int> { 2, 3, 4, 5, 6, 7 });
 
             obj.Inc(EProperty.Three, 1.0f);
-            Assert.Equal(obj.Get<float>(EProperty.Three), 4.0f);
+            Assert.AreEqual(obj.Get<float>(EProperty.Three), 4.0f);
             obj.IncTo(EProperty.Three, 5.0f);
-            Assert.Equal(obj.Get<float>(EProperty.Three), 5.0f);
+            Assert.AreEqual(obj.Get<float>(EProperty.Three), 5.0f);
             obj.IncTo(EProperty.Three, -1.0f);
-            Assert.Equal(obj.Get<float>(EProperty.Three), 0.0f);
+            Assert.AreEqual(obj.Get<float>(EProperty.Three), 0.0f);
             obj.IncTo(EProperty.Three, 11.0f);
-            Assert.Equal(obj.Get<float>(EProperty.Three), 10.0f);
+            Assert.AreEqual(obj.Get<float>(EProperty.Three), 10.0f);
         }
     }
 }

@@ -1,10 +1,11 @@
-using Xunit;
+using NUnit.Framework;
 
 namespace socket4net.tests
 {
+    [TestFixture]
     internal class ObjCase : Case
     {
-        [Fact]
+        [Test]
         internal override void Do()
         {
             var obj = Obj.Create<MyObj>(ObjArg.Empty);

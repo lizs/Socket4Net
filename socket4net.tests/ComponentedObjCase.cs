@@ -1,10 +1,11 @@
-using Xunit;
+using NUnit.Framework;
 
 namespace socket4net.tests
 {
+    [TestFixture]
     internal class ComponentedObjCase : Case
     {
-        [Fact]
+        [Test]
         internal override void Do()
         {
             var obj = Obj.Create<MyComponentedObj>(new ComponentedObjArg<EProperty>(null, 1, null));

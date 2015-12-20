@@ -1,4 +1,4 @@
-using Xunit;
+using NUnit.Framework;
 
 namespace socket4net.tests
 {
@@ -7,6 +7,7 @@ namespace socket4net.tests
         MyComponent,
     }
 
+    [TestFixture]
     [ComponentId((short)EComponentId.MyComponent)]
     internal class MyComponent : Component<EProperty>
     {
@@ -21,7 +22,7 @@ namespace socket4net.tests
             Host.Inject(new SettableBlock<EProperty, float>(EProperty.One, 1.0f, EBlockMode.Temporary));
         }
 
-        [Fact]
+        [Test]
         public override void OnPropertyChanged(IBlock<EProperty> block)
         {
             base.OnPropertyChanged(block);
@@ -29,20 +30,20 @@ namespace socket4net.tests
             {
                 case EProperty.One:
                 {
-                    Assert.Equal(Host.Get<float>(EProperty.One), 2.0f);
+                    Assert.AreEqual(Host.Get<float>(EProperty.One), 2.0f);
                     break;
                 }
             }
         }
 
-        [Fact]
+        [Test]
         protected override void OnStart()
         {
             base.OnStart();
-            Assert.Equal(Host.Get<float>(EProperty.One), 1.0f);
+            Assert.AreEqual(Host.Get<float>(EProperty.One), 1.0f);
 
             Host.Set(EProperty.One, 2.0f);
-            Assert.Equal(Host.Get<float>(EProperty.One), 2.0f);
+            Assert.AreEqual(Host.Get<float>(EProperty.One), 2.0f);
         }
     }
 
@@ -63,7 +64,7 @@ namespace socket4net.tests
             Assert.True(cp.Initialized);
         }
 
-        [Fact]
+        [Test]
         protected override void OnStart()
         {
             base.OnStart();
