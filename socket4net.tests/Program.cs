@@ -11,6 +11,7 @@ namespace socket4net.tests
 
             new ObjCase().Do();
             new PropertiedObjCase().Do();
+            new ComponentedObjCase().Do();
 
             Console.ReadLine();
         }

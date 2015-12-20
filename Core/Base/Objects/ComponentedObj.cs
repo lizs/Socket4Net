@@ -59,7 +59,7 @@ namespace socket4net
         /// <summary>
         /// ÷ÿ÷√
         /// </summary>
-        protected sealed override void OnReset()
+        protected override void OnReset()
         {
             base.OnReset();
 
@@ -70,7 +70,7 @@ namespace socket4net
         /// <summary>
         ///     –∂‘ÿ
         /// </summary>
-        protected sealed override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
 

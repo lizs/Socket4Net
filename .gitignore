@@ -47,14 +47,11 @@ Temporary Items
 # bin obj目录
 bin/
 obj/
+packages/
 Publish/ChatC
 Publish/ChatS
 *.txt
 *.vsp
 *.psess
-Publish/ChatC.vshost.exe
-Publish/ChatC.vshost.exe.config
-Publish/ChatS.vshost.exe
-Publish/ChatS.vshost.exe.config
-Publish/PerformanceTest.vshost.exe
-Publish/PerformanceTest.vshost.exe.config
+Publish/*.vshost.exe
+Publish/*.vshost.exe.config
