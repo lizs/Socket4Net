@@ -6,7 +6,7 @@ namespace socket4net.tests
     internal class ObjCase : Case
     {
         [Test]
-        internal override void Do()
+        public void Do()
         {
             var obj = Obj.Create<MyObj>(ObjArg.Empty);
             Assert.True(obj.Initialized);

@@ -4,11 +4,10 @@ using NUnit.Framework;
 
 namespace socket4net.tests
 {
-    [TestFixture]
     internal class PropertiedObjCase : Case
     {
         [Test]
-        internal override void Do()
+        public void Do()
         {
             var obj = Obj.Create<MyPropertiedObj>(new PropertiedObjArg<EProperty>(null, 1, null));
             Assert.IsEmpty(obj.Blocks);

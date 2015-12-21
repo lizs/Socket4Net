@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using socket4net.Util;
@@ -27,8 +28,15 @@ namespace socket4net
         /// <summary>
         ///     创建组件
         /// </summary>
-        protected virtual void SpawnComponents()
+        private void SpawnComponents()
         {
+            var cps = ComponentsCache.Instance.Get(GetType());
+            if (cps.IsNullOrEmpty()) return;
+
+            foreach (var type in cps)
+            {
+                AddComponent(type);
+            }
         }
         
         #region 初始化、卸载
@@ -136,6 +144,11 @@ namespace socket4net
         public T AddComponent<T>() where T : Component<TPKey>, new()
         {
             return Components.AddComponent<T>();
+        }
+
+        public Component<TPKey> AddComponent(Type cpType)
+        {
+            return Components.AddComponent(cpType);
         }
 
         public List<short> RemoveComponent<T>() where T : Component<TPKey>

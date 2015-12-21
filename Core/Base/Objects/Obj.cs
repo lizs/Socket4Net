@@ -187,6 +187,17 @@ namespace socket4net
         }
 
         /// <summary>
+        ///     非泛型创建
+        /// </summary>
+        /// <param name="objType"></param>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        public static Obj Create(Type objType, ObjArg arg)
+        {
+            return ObjFactory.Create(objType, arg);
+        }
+
+        /// <summary>
         ///     初始
         /// </summary>
         public void Init(ObjArg arg)
