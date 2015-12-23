@@ -1,13 +1,23 @@
 ﻿
+using System.Diagnostics;
+using System.IO;
+using log4net;
+using log4net.Config;
+
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace CustomLog
 {
     public class Log4Net : socket4net.ILog
     {
-        private readonly log4net.ILog _log;
-        public Log4Net()
+        private readonly ILog _log;
+        public Log4Net(string cfgPath, string logName)
         {
-            _log = log4net.LogManager.GetLogger(typeof(Log4Net));
+            GlobalContext.Properties["LogName"] = logName;
+            GlobalContext.Properties["ProcessId"] = Process.GetCurrentProcess().Id;
+
+            var fi = new FileInfo(cfgPath);
+            XmlConfigurator.Configure(fi);
+            _log = LogManager.GetLogger(typeof(Log4Net));
         }
 
         public void Debug(object message)

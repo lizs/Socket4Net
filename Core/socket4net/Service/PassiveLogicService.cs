@@ -36,7 +36,8 @@ namespace socket4net
 
         public override void Enqueue(IJob w)
         {
-            _jobs.TryAdd(w);
+            if(!_jobs.TryAdd(w))
+                Logger.Instance.Error("逻辑服务队列溢出");
         }
 
         public void UpdateTimer()

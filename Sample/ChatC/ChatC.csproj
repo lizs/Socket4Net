@@ -55,6 +55,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\Depedencies\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
@@ -62,9 +65,6 @@
     <Compile Include="Client.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\socket4net.csproj">
@@ -80,6 +80,9 @@
       <Name>SampleProto</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"
@@ -93,4 +96,5 @@ copy "$(ProjectDir)$(OutDir)*.exe.config" "$(SolutionDir)Publish"</PostBuildEven
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="$(SolutionDir)common_for_exe.props" />
 </Project>

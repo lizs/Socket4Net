@@ -9,7 +9,7 @@ namespace socket4net.tests
         [SetUp]
         public virtual void Init()
         {
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new Log4Net());
+            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new Log4Net("log4net.config", "socket4net.tests"));
         }
         [TearDown]
         public virtual void Destroy() { }

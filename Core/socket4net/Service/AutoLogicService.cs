@@ -80,7 +80,8 @@ namespace socket4net
         {
             if (!_workingQueue.TryAdd(w, 0))
             {
-                _workingQueue.Add(w);
+                if(!_workingQueue.Add(w));
+                    Logger.Instance.Error("逻辑服务队列溢出");
             }
         }
    

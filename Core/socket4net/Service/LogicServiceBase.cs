@@ -95,7 +95,7 @@ namespace socket4net
         /// Job队列容量
         /// 由上层指定
         /// </summary>
-        public int Capacity { get; set; }
+        public int Capacity { get; private set; }
         
         /// <summary>
         ///     Get the elapsed milliseconds since the instance been constructed
@@ -149,6 +149,14 @@ namespace socket4net
                 _previousCalcTime = Environment.TickCount;
                 ExcutedJobsPerSec = 0;
             }
+        }
+
+        protected override void OnInit(ObjArg arg)
+        {
+            base.OnInit(arg);
+
+            Capacity = arg.As<ServiceArg>().Capacity;
+            Period = arg.As<ServiceArg>().Period;
         }
 
         protected override void OnStart()

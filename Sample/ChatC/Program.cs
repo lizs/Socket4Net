@@ -19,7 +19,7 @@ namespace ChatC
             }
 
             // 初始Logger
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new CustomLog.Log4Net());
+            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new CustomLog.Log4Net("log4net.config", "ChatC"));
 
             // 启动客户端
             RunClient(ip, port);
@@ -29,15 +29,17 @@ namespace ChatC
         {
             // 创建客户端
             var client = Obj.Create<Client>(new ClientArg(null, ip, port){ AutoReconnectEnabled = true});
-            client.Start();
-
+            
             // 监听事件
             client.EventSessionClosed +=
                 (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
             client.EventSessionEstablished +=
                 session => Logger.Instance.InfoFormat("{0} connected", session.Id);
             
-            // 结束服务器
+            // 启动
+            client.Start();
+
+            // 结束
             while (true)
             {
                 var msg = Console.ReadLine();

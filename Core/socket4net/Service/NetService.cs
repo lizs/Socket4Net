@@ -37,6 +37,14 @@ namespace socket4net
         private int _writeBytesPerSec;
         private int _writePackagesPerSec;
 
+        protected override void OnInit(ObjArg arg)
+        {
+            base.OnInit(arg);
+
+            Capacity = arg.As<ServiceArg>().Capacity;
+            Period = arg.As<ServiceArg>().Period;
+        }
+
         protected override void OnStart()
         {
             base.OnStart();
@@ -71,12 +79,14 @@ namespace socket4net
 
         private void Enqueue<T>(Action<T> proc, T param)
         {
-            _jobs.Add(new Job<T>(proc, param));
+            if(!_jobs.Add(new Job<T>(proc, param)))
+                Logger.Instance.Error("网络服务队列溢出");
         }
 
         private void Enqueue(Action proc)
         {
-            _jobs.Add(new Job(proc));
+            if(!_jobs.Add(new Job(proc)))
+                Logger.Instance.Error("网络服务队列溢出");
         }
 
         private void WorkingProcedure()

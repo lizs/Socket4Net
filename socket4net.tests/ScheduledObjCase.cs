@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using CustomLog;
-using NUnit.Framework;
 using NUnit.Framework.Compatibility;
 
 namespace socket4net.tests
@@ -50,8 +49,6 @@ namespace socket4net.tests
 
             _service = Obj.Create<AutoLogicService>(new ServiceArg(null, 100000, 10));
             _service.Start();
-
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new Log4Net());
             GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogicService, _service);
 
             _obj = Obj.Create<MyScheduledObj>(new ScheduledObjArg(null));

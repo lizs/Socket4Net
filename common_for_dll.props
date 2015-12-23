@@ -1,0 +1,21 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DefineConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('4.5'))))   == 0">$(DefineConstants);NET45</DefineConstants>
+    <DefineConstants Condition="$([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('3.5'))))   == 0">$(DefineConstants);NET35</DefineConstants>
+
+    <Framework Condition=" $([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('4.5'))))   == 0">NET45</Framework>
+    <Framework Condition=" $([System.Version]::Parse('$(TargetFrameworkVersion.Substring(1))').CompareTo($([System.Version]::Parse('3.5'))))   == 0">NET35</Framework>
+
+    <PublishDir>$(SolutionDir)Publish\$(Framework)\</PublishDir>
+
+    <PostBuildEvent>
+      copy "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(PublishDir)"
+      copy "$(ProjectDir)$(OutDir)$(TargetName).pdb" "$(PublishDir)"
+      echo "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(PublishDir)"
+      echo "$(ProjectDir)$(OutDir)$(TargetName).pdb" "$(PublishDir)"
+    </PostBuildEvent>
+  </PropertyGroup>  
+  
+  <Import Project="$(SolutionDir)refrences.props" />
+
+</Project>

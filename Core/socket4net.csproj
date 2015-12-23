@@ -199,4 +199,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="$(SolutionDir)common_for_dll.props" />
 </Project>
