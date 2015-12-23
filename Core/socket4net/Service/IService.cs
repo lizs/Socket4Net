@@ -54,9 +54,7 @@ namespace socket4net
     {
         event Action Idle;
         TimerScheduler Scheduler { get; }
-        long ElapsedMilliseconds { get; }
-
-        // coroutine
         CoroutineScheduler CoroutineScheduler { get; }
+        long ElapsedMilliseconds { get; }
     }
 }

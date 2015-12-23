@@ -34,15 +34,14 @@ namespace socket4net
         /// </summary>
         /// <param name="ms"></param>
         /// <returns></returns>
-        public static IEnumerator WaitFor(long ms)
+        public IEnumerator WaitFor(uint ms)
         {
-            var watch = new Stopwatch();
-            watch.Start();
+            var meet = false;
+            Invoke(() => { meet = true; }, ms);
 
-            while (watch.ElapsedMilliseconds < ms)
+            while (!meet)
                 yield return true;
 
-            watch.Stop();
             yield return false;
         }
 

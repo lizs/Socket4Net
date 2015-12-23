@@ -7,7 +7,7 @@
  *
  *  purpose:    Implements a Linux style timer scheduler.
  *      The code are partial migrate from Linux core.
- *      See Linux/Kernel/TimerWrapper.c file for details.
+ *      See Linux/Kernel/Timer.c file for details.
 *********************************************************************/
 
 using System;
@@ -24,7 +24,7 @@ namespace socket4net
         /// Construct a new entry object with a timer object.
         /// </summary>
         /// <param name="t">a non-null timer object</param>
-        public QueueEntry(TimerWrapper t)
+        public QueueEntry(Timer t)
         {
             // bind timer object t to this entry
             Timer = t;
@@ -59,7 +59,7 @@ namespace socket4net
         /// <summary>
         /// The timer object
         /// </summary>
-        public TimerWrapper Timer
+        public Timer Timer
         {
             get;
             private set;
@@ -115,33 +115,33 @@ namespace socket4net
     }
 
     /// <summary>
-    /// TimerWrapper vector class.
+    /// Timer vector class.
     /// </summary>
     class TVN
     {
         public TVN()
         {
-            for (int i = 0; i < TimerConstant.TVN_SIZE; ++i)
+            for (var i = 0; i < TimerConstant.TVN_SIZE; ++i)
             {
-                _Vector[i] = new QueueEntry();
+                _vector[i] = new QueueEntry();
             }
         }
 
-        private QueueEntry[] _Vector
+        private readonly QueueEntry[] _vector
             = new QueueEntry[TimerConstant.TVN_SIZE];
         public QueueEntry this[int index]
         {
-            get { return _Vector[index]; }
+            get { return _vector[index]; }
         }
 
         public QueueEntry[] TV
         {
-            get { return _Vector; }
+            get { return _vector; }
         }
     }
 
     /// <summary>
-    /// TimerWrapper vector class.
+    /// Timer vector class.
     /// It's a specific type of <c>TVN</c>, it's vector size
     /// is different from <c>TVN</c>.
     /// </summary>
@@ -149,22 +149,22 @@ namespace socket4net
     {
         public TVR()
         {
-            for (int i = 0; i < TimerConstant.TVR_SIZE; ++i)
+            for (var i = 0; i < TimerConstant.TVR_SIZE; ++i)
             {
-                _Vector[i] = new QueueEntry();
+                _vector[i] = new QueueEntry();
             }
         }
-        private QueueEntry[] _Vector
+        private readonly QueueEntry[] _vector
             = new QueueEntry[TimerConstant.TVR_SIZE];
 
         public QueueEntry this[int index]
         {
-            get { return _Vector[index]; }
+            get { return _vector[index]; }
         }
 
         public QueueEntry[] TV
         {
-            get { return _Vector; }
+            get { return _vector; }
         }
     }
 
@@ -180,7 +180,7 @@ namespace socket4net
             HostService = service;
 
             HostService.Idle += RunTimer;
-            _TimerJiffies = service.ElapsedMilliseconds;
+            _timerJiffies = service.ElapsedMilliseconds;
         }
 
         public void Dispose()
@@ -193,13 +193,13 @@ namespace socket4net
         /// elapsed since this scheduler been constructed.
         /// All timer's expire time is calculated base on this field.
         /// </summary>
-        private long _TimerJiffies;
+        private long _timerJiffies;
 
         /// <summary>
         /// When scheduler is trigger a timer, this field store the timer object.
         /// </summary>
-        private TimerWrapper _RunningTimer;
-        private bool _DeletedRunningTimer;
+        private Timer _runningTimer;
+        private bool _deletedRunningTimer;
 
         /// <summary>
         /// The first class of timers vector, their expire time will less than 256 milliseconds.
@@ -234,15 +234,15 @@ namespace socket4net
         private void RunTimer()
         {
             var jiffes = HostService.ElapsedMilliseconds; 
-            while (jiffes - _TimerJiffies >= 0)
+            while (jiffes - _timerJiffies >= 0)
             {
-                int index = (int)(_TimerJiffies & TimerConstant.TVR_MASK);
+                var index = (int)(_timerJiffies & TimerConstant.TVR_MASK);
                 if (index == 0)
                 {
                     Cascade();
                 }
 
-                ++_TimerJiffies;
+                ++_timerJiffies;
 
                 var h = _TV1[index];
                 while (h.Next != h)
@@ -250,14 +250,14 @@ namespace socket4net
                     var e = h.Next;
                     e.DeQueue();
 
-                    _DeletedRunningTimer = false;
+                    _deletedRunningTimer = false;
 
-                    _RunningTimer = e.Timer;
-                    _RunningTimer.Trigger();
+                    _runningTimer = e.Timer;
+                    _runningTimer.Trigger();
 
-                    if (!_DeletedRunningTimer && _RunningTimer.Period > 0)
+                    if (!_deletedRunningTimer && _runningTimer.Period > 0)
                     {
-                        _RunningTimer.Expires = _TimerJiffies + _RunningTimer.Period;
+                        _runningTimer.Expires = _timerJiffies + _runningTimer.Period;
                         InternalAdd(e);
                     }
                     else
@@ -267,37 +267,37 @@ namespace socket4net
                 }
             }
 
-            _RunningTimer = null;
-            _DeletedRunningTimer = false;
+            _runningTimer = null;
+            _deletedRunningTimer = false;
         }
         /// <summary>
         /// Put a timer object in scheduler's queue.
         /// </summary>
         /// <param name="t">the timer object</param>
-        public void Add(TimerWrapper t)
+        public void Add(Timer t)
         {
             if (t.IsStarted)
             {
                 return;
             }
 
-            t.Expires = t.DueTime + _TimerJiffies;
+            t.Expires = t.DueTime + _timerJiffies;
             InternalAdd(new QueueEntry(t));
         }
         /// <summary>
         /// remove a timer object from scheduler's queue.
         /// </summary>
         /// <param name="t">the timer object</param>
-        public void Remove(TimerWrapper t)
+        public void Remove(Timer t)
         {
             if (!t.IsStarted)
             {
                 return;
             }
 
-            if (t == _RunningTimer)
+            if (t == _runningTimer)
             {
-                _DeletedRunningTimer = true;
+                _deletedRunningTimer = true;
                 return;
             }
 
@@ -330,13 +330,13 @@ namespace socket4net
         /// </summary>
         private void Cascade()
         {
-            if (Cascade(_TV2, (int)((_TimerJiffies >> (TimerConstant.TVR_BITS)) & TimerConstant.TVN_MASK)) == 0)
+            if (Cascade(_TV2, (int)((_timerJiffies >> (TimerConstant.TVR_BITS)) & TimerConstant.TVN_MASK)) == 0)
             {
-                if (Cascade(_TV3, (int)((_TimerJiffies >> (TimerConstant.TVR_BITS + TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK)) == 0)
+                if (Cascade(_TV3, (int)((_timerJiffies >> (TimerConstant.TVR_BITS + TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK)) == 0)
                 {
-                    if (Cascade(_TV4, (int)((_TimerJiffies >> (TimerConstant.TVR_BITS + 2 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK)) == 0)
+                    if (Cascade(_TV4, (int)((_timerJiffies >> (TimerConstant.TVR_BITS + 2 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK)) == 0)
                     {
-                        Cascade(_TV5, (int)((_TimerJiffies >> (TimerConstant.TVR_BITS + 3 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK));
+                        Cascade(_TV5, (int)((_timerJiffies >> (TimerConstant.TVR_BITS + 3 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK));
                     }
                 }
             }
@@ -347,14 +347,14 @@ namespace socket4net
         /// <param name="e">the entry object</param>
         private void InternalAdd(QueueEntry e)
         {
-            long expires = e.Timer.Expires;
-            long idx = expires - _TimerJiffies;
+            var expires = e.Timer.Expires;
+            var idx = expires - _timerJiffies;
 
             int ti;
             QueueEntry[] tv;
             if (idx < 0)
             {
-                ti = (int)(_TimerJiffies & TimerConstant.TVR_MASK);
+                ti = (int)(_timerJiffies & TimerConstant.TVR_MASK);
                 tv = _TV1.TV;
             }
             else if (idx < TimerConstant.TVR_SIZE)

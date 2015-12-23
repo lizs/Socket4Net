@@ -12,7 +12,7 @@ namespace socket4net
             Name = name;
         }
 
-        protected readonly Dictionary<Action, Timer> Timers = new Dictionary<Action, Timer>();
+        protected readonly Dictionary<Action, TimerWrapper> Timers = new Dictionary<Action, TimerWrapper>();
 
         public void Destroy()
         {
@@ -30,7 +30,7 @@ namespace socket4net
         {
             CancelInvoke(action);
 
-            var timer = Timer.New(Name, action, delay, period);
+            var timer = TimerWrapper.New(Name, action, delay, period);
             Timers.Add(action, timer);
             timer.Start();
         }
@@ -39,7 +39,7 @@ namespace socket4net
         {
             CancelInvoke(action);
 
-            var timer = Timer.New(Name, action, delay);
+            var timer = TimerWrapper.New(Name, action, delay);
             Timers.Add(action, timer);
             timer.Start();
         }
@@ -67,7 +67,7 @@ namespace socket4net
         {
             CancelInvoke(action);
 
-            var timer = Timer.New(Name, () =>
+            var timer = TimerWrapper.New(Name, () =>
             {
                 using (new BatchLocker(_batched))
                 {
@@ -83,7 +83,7 @@ namespace socket4net
         {
             CancelInvoke(action);
 
-            var timer = Timer.New(Name, () =>
+            var timer = TimerWrapper.New(Name, () =>
             {
                 using (new BatchLocker(_batched))
                 {

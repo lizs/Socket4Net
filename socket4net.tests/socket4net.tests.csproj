@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Case.cs" />
     <Compile Include="ComponentedObjCase.cs" />
-    <Compile Include="CoroutineCase.cs" />
+    <Compile Include="ScheduledObjCase.cs" />
     <Compile Include="MyComponentedObj.cs" />
     <Compile Include="MyObj.cs" />
     <Compile Include="MyPropertiedObj.cs" />

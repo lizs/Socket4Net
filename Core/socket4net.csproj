@@ -147,7 +147,7 @@
     <Compile Include="Base\Util\StringParser.cs" />
     <Compile Include="socket4net\Coroutine\CoroutineScheduler.cs" />
     <Compile Include="socket4net\Net\TCP\PeerArg.cs" />
-    <Compile Include="socket4net\Schedule\Timer.cs" />
+    <Compile Include="socket4net\Schedule\TimerWrapper.cs" />
     <Compile Include="Base\UniqueMgr.cs" />
     <Compile Include="GlobalVarPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -177,7 +177,7 @@
     <Compile Include="socket4net\Service\PassiveLogicService.cs" />
     <Compile Include="socket4net\Service\LogicServiceBase.cs" />
     <Compile Include="socket4net\Service\NetService.cs" />
-    <Compile Include="socket4net\Schedule\TimerWrapper.cs" />
+    <Compile Include="socket4net\Schedule\Timer.cs" />
     <Compile Include="socket4net\Schedule\TimerScheduler.cs" />
     <Compile Include="Base\WatchableObj.cs" />
   </ItemGroup>
