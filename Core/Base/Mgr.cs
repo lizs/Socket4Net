@@ -11,7 +11,7 @@ namespace socket4net
     /// <typeparam name="TValue"></typeparam>
     public class Mgr<TValue> : Obj, IEnumerable<TValue> where TValue : Obj
     {
-        private readonly List<TValue> _items = new List<TValue>(); 
+        private readonly List<TValue> _items = new List<TValue>();
 
         protected override void OnDestroy()
         {

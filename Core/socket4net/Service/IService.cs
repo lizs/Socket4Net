@@ -3,16 +3,25 @@ using System;
 
 namespace socket4net
 {
+    public class ServiceArg : ObjArg
+    {
+        public ServiceArg(IObj owner, int capacity, int period) : base(owner)
+        {
+            Capacity = capacity;
+            Period = period;
+        }
+
+        public int Capacity { get; private set; }
+        public int Period { get; private set; }
+    }
+
     /// <summary>
     /// 提供单线程服务
     /// </summary>
-    public interface IService
+    public interface IService : IObj
     {
-        int Capacity { get; set; }
-        int Period { get; set; }
-
-        void Start();
-        void Stop(bool joinWorker = true);
+        int Capacity { get; }
+        int Period { get; }
 
         void Perform(Action action);
         void Perform<T>(Action<T> action, T param);
@@ -46,5 +55,8 @@ namespace socket4net
         event Action Idle;
         TimerScheduler Scheduler { get; }
         long ElapsedMilliseconds { get; }
+
+        // coroutine
+        CoroutineScheduler CoroutineScheduler { get; }
     }
 }

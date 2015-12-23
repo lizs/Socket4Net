@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
+using System.Diagnostics;
 #if NET45
 using System.Threading.Tasks;
 #endif
@@ -25,6 +27,40 @@ namespace socket4net
         public const uint MillisecondsPerDay = 24 * 60 * 60 * 1000;
 
         private Scheduler _scheduler;
+
+        /// <summary>
+        ///     产生一个在当前线程等待ms毫秒的枚举器
+        ///     用在协程中
+        /// </summary>
+        /// <param name="ms"></param>
+        /// <returns></returns>
+        public static IEnumerator WaitFor(long ms)
+        {
+            var watch = new Stopwatch();
+            watch.Start();
+
+            while (watch.ElapsedMilliseconds < ms)
+                yield return true;
+
+            watch.Stop();
+            yield return false;
+        }
+
+        #region 协程
+
+        public void StartCoroutine(Func<IEnumerator> fun)
+        {
+            var scheduler = GlobalVarPool.Instance.LogicService.CoroutineScheduler;
+            scheduler.StartCoroutine(fun);
+        }
+
+        public void StartCoroutine(Func<object[], IEnumerator> fun, params object[] args)
+        {
+            var scheduler = GlobalVarPool.Instance.LogicService.CoroutineScheduler;
+            scheduler.StartCoroutine(fun, args);
+        }
+
+        #endregion
 
         protected override void OnInit(ObjArg objArg)
         {

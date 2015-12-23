@@ -28,8 +28,10 @@ namespace socket4net
         private Thread _workingThread;
         private BlockingCollection<IJob> _workingQueue;
 
-        public override void Start()
+        protected override void OnStart()
         {
+            base.OnStart();
+
             if (_workingQueue != null
                 || _workingThread != null)
             {
@@ -37,16 +39,13 @@ namespace socket4net
                 return;
             }
 
-            QueueCapacity = Capacity;
-            Scheduler = new TimerScheduler(this);
             DoStartup();
-
             Logger.Instance.Debug("Auto logic service started!");
         }
 
-        public override void Stop(bool joinWorker = true)
+        protected override void OnDestroy()
         {
-            Scheduler.Dispose();
+            base.OnDestroy();
 
             if (_workingThread == null
                 || _workingQueue == null)
@@ -56,8 +55,7 @@ namespace socket4net
             }
 
             StopWorking = true;
-            if (joinWorker)
-                _workingThread.Join();
+            _workingThread.Join();
 
             Logger.Instance.Debug("Logic service stopped!");
         }
@@ -107,7 +105,6 @@ namespace socket4net
         {
             Watch.Start();
 
-            var handled = 0;
             while (!StopWorking)
             {
                 var periodCounter = StopWatchDivider;
@@ -125,7 +122,6 @@ namespace socket4net
                             item.Do();
                             CalcPerformance();
 
-                            handled++;
                             periodCounter--;
 
                             if (periodCounter < 1)
@@ -149,21 +145,19 @@ namespace socket4net
                 while ((Environment.TickCount - tick) < Period);
 
                 WiElapsed = Watch.ElapsedMilliseconds - t1;
+                if (Idle == null) continue;
 
-                if (Idle != null)
+                var t2 = Watch.ElapsedMilliseconds;
+                try
                 {
-                    var t2 = Watch.ElapsedMilliseconds;
-                    try
-                    {
-                        Idle();
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Instance.Fatal(string.Format("{0} : {1}", ex.Message, ex.StackTrace));
-                    }
-
-                    IdleCallbackElapsed = Watch.ElapsedMilliseconds - t2;
+                    Idle();
                 }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Fatal(string.Format("{0} : {1}", ex.Message, ex.StackTrace));
+                }
+
+                IdleCallbackElapsed = Watch.ElapsedMilliseconds - t2;
             }
 
             

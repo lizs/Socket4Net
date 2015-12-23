@@ -6,7 +6,7 @@ namespace socket4net
     /// <summary>
     /// 网络服务线程（网络数据读写）
     /// </summary>
-    public class NetService : INetService
+    public class NetService : Obj, INetService
     {
         private BlockingCollection<IJob> _jobs;
         private Thread _wokerThread;
@@ -37,21 +37,22 @@ namespace socket4net
         private int _writeBytesPerSec;
         private int _writePackagesPerSec;
 
-        public void Start()
+        protected override void OnStart()
         {
-            _jobs = new BlockingCollection<IJob>(Capacity);
+            base.OnStart();
 
+            _jobs = new BlockingCollection<IJob>(Capacity);
             _wokerThread = new Thread(WorkingProcedure) {Name = "NetService"};
             _wokerThread.Start();
-
             Logger.Instance.Debug("Net service started!");
         }
 
-        public void Stop(bool joinWorker = true)
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             _stopping = true;
-            if(joinWorker)
-                _wokerThread.Join();
+            _wokerThread.Join();
 
             Logger.Instance.Debug("Net service stopped!");
         }
@@ -65,6 +66,8 @@ namespace socket4net
         {
             Enqueue(action, param);
         }
+
+        public CoroutineScheduler CoroutineScheduler { get; private set; }
 
         private void Enqueue<T>(Action<T> proc, T param)
         {

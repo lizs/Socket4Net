@@ -38,7 +38,7 @@
         /// <summary>
         ///     执行初始化
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="objArg"></param>
         protected override void OnInit(ObjArg objArg)
         {
             base.OnInit(objArg);

@@ -10,21 +10,22 @@ namespace socket4net
     {
         private readonly ConcurrentQueue<IJob> _jobs = new ConcurrentQueue<IJob>();
         
-        public override void Start()
+        protected override void OnStart()
         {
+            base.OnStart();
+
             StopWorking = false;
-            QueueCapacity = Capacity;
-            Scheduler = new TimerScheduler(this);
             Watch.Start();
 
             Logger.Instance.Debug("Passive logic service started!");
         }
 
-        public override void Stop(bool joinWorker = true)
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
+
             StopWorking = true;
             Watch.Stop();
-            Scheduler.Dispose();
             Logger.Instance.Debug("Logic service stopped!");
         }
 

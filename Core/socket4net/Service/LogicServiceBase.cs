@@ -3,18 +3,18 @@ using System.Diagnostics;
 
 namespace socket4net
 {
-    public abstract class LogicServiceBase : ILogicService
+    public abstract class LogicServiceBase : Obj, ILogicService
     {
         protected const int StopWatchDivider = 128;
         protected bool StopWorking;
         protected readonly Stopwatch Watch = new Stopwatch();
         private int _previousCalcTime;
 
+        /// <summary>
+        ///     定时器调度器
+        /// </summary>
         public TimerScheduler Scheduler { get; protected set; }
-
-        public abstract void Start();
-        public abstract void Stop(bool joinWorker = true);
-
+        
         /// <summary>
         /// 在本服务执行该Action
         /// </summary>
@@ -33,6 +33,11 @@ namespace socket4net
         {
             Enqueue(action, param);
         }
+
+        /// <summary>
+        ///     协程调度器
+        /// </summary>
+        public CoroutineScheduler CoroutineScheduler { get; protected set; }
 
         /// <summary>
         ///     Idle event, call by working thread
@@ -144,6 +149,22 @@ namespace socket4net
                 _previousCalcTime = Environment.TickCount;
                 ExcutedJobsPerSec = 0;
             }
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            QueueCapacity = Capacity;
+            Scheduler = new TimerScheduler(this);
+            CoroutineScheduler = Create<CoroutineScheduler>(new ObjArg(this));
+            CoroutineScheduler.Start();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Scheduler.Dispose();
+            CoroutineScheduler.Destroy();
         }
     }
 }

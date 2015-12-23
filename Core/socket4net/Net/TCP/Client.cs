@@ -195,10 +195,10 @@ namespace socket4net
             IsLogicServiceShared = (LogicService != null);
             IsNetServiceShared = (NetService != null);
 
-            LogicService = (LogicService as TLogicService) ?? new TLogicService { Capacity = 10000, Period = 10 };
+            LogicService = (LogicService as TLogicService) ?? Create<TLogicService>(new ServiceArg(this, 10000, 10));
             if (!IsLogicServiceShared) LogicService.Start();
 
-            NetService = (NetService as TNetService) ?? new TNetService { Capacity = 10000, Period = 10 };
+            NetService = (NetService as TNetService) ?? Create<TNetService>(new ServiceArg(this, 10000, 10));
             if (!IsNetServiceShared) NetService.Start();
 
             GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogicService, LogicService);
@@ -222,8 +222,8 @@ namespace socket4net
             if (EventPeerClosing != null)
                 EventPeerClosing();
 
-            if (!IsLogicServiceShared) LogicService.Stop();
-            if (!IsNetServiceShared) NetService.Stop();
+            if (!IsLogicServiceShared) LogicService.Destroy();
+            if (!IsNetServiceShared) NetService.Destroy();
 
             Logger.Instance.Debug("Client stopped!");
         }

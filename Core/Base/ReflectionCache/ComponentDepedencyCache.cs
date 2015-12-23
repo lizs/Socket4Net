@@ -8,7 +8,7 @@ namespace socket4net
     public class DependOnAttribute : Attribute
     {
         public Type[] Targets { get; private set; }
-        public DependOnAttribute(IEnumerable<Type> targets)
+        public DependOnAttribute(params Type[]targets)
         {
             Targets = targets.ToArray();
         }
@@ -16,7 +16,7 @@ namespace socket4net
 
     public class ComponentDepedencyCache : AttributesCache<Type[], DependOnAttribute>
     {
-        public static ComponentDepedencyCache _instance;
+        private static ComponentDepedencyCache _instance;
         public static ComponentDepedencyCache Instance
         {
             get { return _instance ?? (_instance = new ComponentDepedencyCache()); }

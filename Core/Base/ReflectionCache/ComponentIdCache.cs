@@ -15,7 +15,7 @@ namespace socket4net
 
     public class ComponentIdCache : AttributesCache<short, ComponentIdAttribute>
     {
-        public static ComponentIdCache _instance;
+        private static ComponentIdCache _instance;
         public static ComponentIdCache Instance
         {
             get { return _instance ?? (_instance = new ComponentIdCache()); }

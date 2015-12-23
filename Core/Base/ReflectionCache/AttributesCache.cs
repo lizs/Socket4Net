@@ -20,9 +20,8 @@ namespace socket4net
             var allowMultiple = usage == null || usage.AllowMultiple;
             var inherited = usage == null || usage.Inherited;
 
-            var attributes =
-                type.GetCustomAttributes(typeof(TAttribute), inherited)
-                    .Cast<TAttribute>();
+            var attributes = type.GetCustomAttributes(typeof(TAttribute), inherited)
+                .Cast<TAttribute>();
 
             var ret = allowMultiple ? Handle(attributes) : Handle(attributes.FirstOrDefault());
             _cache[type] = ret;

@@ -46,12 +46,12 @@ namespace socket4net.tests
     }
 
     [ComponentId((short)EComponentId.MyDerivedComponent)]
+    [DependOn(typeof(MyComponent))]
     internal class MyDerivedComponent : MyComponent
     {
     }
 
-    [ConsistsOf(typeof (MyComponent),
-        typeof (MyDerivedComponent))]
+    [ConsistsOf(typeof (MyComponent), typeof (MyDerivedComponent))]
     internal class MyComponentedObj : ComponentedObj<EProperty>
     {
         protected override void OnInit(ObjArg objArg)

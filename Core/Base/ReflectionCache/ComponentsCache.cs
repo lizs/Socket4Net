@@ -16,7 +16,7 @@ namespace socket4net
 
     public class ComponentsCache : AttributesCache<Type[], ConsistsOfAttribute>
     {
-        public static ComponentsCache _instance;
+        private static ComponentsCache _instance;
         public static ComponentsCache Instance
         {
             get { return _instance ?? (_instance = new ComponentsCache()); }

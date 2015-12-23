@@ -49,7 +49,6 @@ namespace socket4net
         private const int DefaultServicePeriod = 10;
 
         private SocketAsyncEventArgs _acceptEvent;
-        private CircularBuffer _acceptBuffer;
 
         private ConcurrentQueue<Socket> _clients;
         private AutoResetEvent _socketAcceptedEvent;
@@ -128,7 +127,6 @@ namespace socket4net
             _sessionFactoryWorker = new Thread(ProduceSessions) {Name = "SessionFactory"};
             _sessionFactoryWorker.Start();
 
-            _acceptBuffer = new CircularBuffer(AcceptBufLen);
             _acceptEvent = new SocketAsyncEventArgs();
             _acceptEvent.Completed += OnAcceptCompleted;
 
@@ -136,11 +134,11 @@ namespace socket4net
             IsNetServiceShared = (NetService != null);
 
             LogicService = (LogicService as TLogicService) ??
-                           new TLogicService {Capacity = DefaultServiceCapacity, Period = DefaultServicePeriod};
+                           Create<TLogicService>(new ServiceArg(null, DefaultServiceCapacity, DefaultServicePeriod));
             if (!IsLogicServiceShared) LogicService.Start();
 
             NetService = (NetService as TNetService) ??
-                         new TNetService {Capacity = DefaultServiceCapacity, Period = DefaultServicePeriod};
+                         Create<TNetService>(new ServiceArg(null, DefaultServiceCapacity, DefaultServicePeriod));
             if (!IsNetServiceShared) NetService.Start();
 
             GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogicService, LogicService);
@@ -171,8 +169,8 @@ namespace socket4net
                 _socketAcceptedEvent.Dispose();
                 if (_sessionFactoryWorker != null) _sessionFactoryWorker.Join();
 
-                if (NetService != null && !IsNetServiceShared) NetService.Stop();
-                if (LogicService != null && !IsLogicServiceShared) LogicService.Stop(false);
+                if (NetService != null && !IsNetServiceShared) NetService.Destroy();
+                if (LogicService != null && !IsLogicServiceShared) LogicService.Destroy();
             });
         }
 

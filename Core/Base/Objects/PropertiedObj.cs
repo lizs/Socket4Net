@@ -311,22 +311,26 @@ namespace socket4net
         }
 
         #region increasable
+
         public bool Inc<T>(TPKey id, T delta)
         {
             T overflow;
             return Inc(id, delta, out overflow);
         }
+
         public bool Inc(TPKey id, object delta)
         {
             object overflow;
             return Inc(id, delta, out overflow);
         }
+
         public bool Inc<T>(TPKey id, T delta, out T overflow)
         {
             if (!PropertyBody.Inc(id, delta, out overflow)) return false;
             NotifyPropertyChanged(id);
             return true;
         }
+
         public bool Inc(TPKey id, object delta, out object overflow)
         {
             if (!PropertyBody.Inc(id, delta, out overflow)) return false;
@@ -347,21 +351,25 @@ namespace socket4net
             NotifyPropertyChanged(id);
             return true;
         }
+
         #endregion increasable
 
         #region settable
+
         public bool Set<T>(TPKey id, T value)
         {
             if (!PropertyBody.Set(id, value)) return false;
             NotifyPropertyChanged(id);
             return true;
         }
+
         public bool Set(TPKey id, object value)
         {
             if (!PropertyBody.Set(id, value)) return false;
             NotifyPropertyChanged(id);
             return true;
         }
+
         #endregion settable
 
         #region list
@@ -419,7 +427,7 @@ namespace socket4net
         public bool RemoveAll<T>(TPKey id, Predicate<T> predicate)
         {
             int cnt;
-            return RemoveAll<T>(id, predicate, out cnt);
+            return RemoveAll(id, predicate, out cnt);
         }
 
         public bool RemoveAll<T>(TPKey id, Predicate<T> predicate, out int count)
@@ -476,7 +484,9 @@ namespace socket4net
             NotifyPropertyChanged(id);
             return true;
         }
+
         #endregion list
+
         #endregion
     }   
 }

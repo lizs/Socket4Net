@@ -39,10 +39,10 @@ namespace socket4net
         T GetAncestor<T>() where T : class ,IObj;
     }
 
-    public abstract class ObjArg
+    public class ObjArg
     {
         public IObj Owner { get; private set; }
-        protected ObjArg(IObj owner)
+        public ObjArg(IObj owner)
         {
             Owner = owner;
         }
