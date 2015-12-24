@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace socket4net
 {
-    public abstract class Block<TKey> : IBlock<TKey>
+    public abstract class Block : IBlock
     {
         public const int InvalidIndex = -1;
         protected Block(string feild)
@@ -16,7 +16,7 @@ namespace socket4net
 
         private IBlockOps _ops;
         public virtual bool Dirty { get; set; }
-        public TKey Id { get; set; }
+        public short Id { get; set; }
         public object Value { get; protected set; }
         public EBlockMode Mode { get; protected set; }
         public Type Type { get; protected set; }
@@ -54,7 +54,7 @@ namespace socket4net
             Mode = mode;
         }
         
-        protected Block(TKey id, object value, Type type, EBlockMode mode)
+        protected Block(short id, object value, Type type, EBlockMode mode)
         {
             Id = id;
             Value = value;
@@ -79,7 +79,7 @@ namespace socket4net
 
         public List<TItem> AsList<TItem>()
         {
-            if (!(this is IListBlock<TKey,TItem>))
+            if (!(this is IListBlock<TItem>))
             {
                 Logger.Instance.ErrorFormat("尝试Cast一个非List，Id : {0}", Id);
                 return null;
@@ -102,9 +102,9 @@ namespace socket4net
         public abstract void Deserialize(byte[] proto);
     }
 
-    public abstract class Block<TKey, TItem> : Block<TKey>
+    public abstract class Block<TItem> : Block
     {
-        protected Block(TKey id, TItem value, EBlockMode mode)
+        protected Block(short id, TItem value, EBlockMode mode)
             : base(id, value, typeof(TItem), mode)
         {
         }

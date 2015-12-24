@@ -158,18 +158,18 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.ComponentedObjArg&lt;TPKey&gt;" Collapsed="true">
+  <Class Name="socket4net.EntityArg&lt;TPKey&gt;" Collapsed="true">
     <Position X="15" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\ComponentedObj.cs</FileName>
+      <FileName>Base\Objects\Entity.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.ComponentedObj&lt;TPKey&gt;" Collapsed="true">
+  <Class Name="socket4net.Entity&lt;TPKey&gt;" Collapsed="true">
     <Position X="12.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAIIJBAEAAABAAgAAAACAQEAAAAAAAggAA=</HashCode>
-      <FileName>Base\Objects\ComponentedObj.cs</FileName>
+      <FileName>Base\Objects\Entity.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -1140,11 +1140,11 @@
       <FileName>Base\Interface\ILog.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IComponentedObj&lt;TPKey&gt;" Collapsed="true">
+  <Interface Name="socket4net.IEntity&lt;TPKey&gt;" Collapsed="true">
     <Position X="19.25" Y="20.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\ComponentedObj.cs</FileName>
+      <FileName>Base\Objects\Entity.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IObj" Collapsed="true">

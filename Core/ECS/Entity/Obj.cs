@@ -7,12 +7,15 @@ namespace socket4net
     /// </summary>
     public interface IObj
     {
+        /// <summary>
+        ///     实例动态Id
+        /// </summary>
         int InstanceId { get; }
 
         /// <summary>
         ///     名字
         /// </summary>
-       string Name { get; }
+        string Name { get; }
 
         /// <summary>
         ///     调度优先级（类似Unity中的Layer）
@@ -84,7 +87,7 @@ namespace socket4net
         /// </summary>
         public virtual string Name
         {
-            get { return string.Format("{0}:{1}", GetType().FullName, InstanceId); }
+            get { return GetType().FullName; }
         }
 
         /// <summary>

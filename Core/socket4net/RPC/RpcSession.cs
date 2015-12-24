@@ -1,6 +1,7 @@
 ﻿using System;
 #if NET45
 using System.Threading.Tasks;
+
 #endif
 
 namespace socket4net
@@ -11,8 +12,12 @@ namespace socket4net
         Task<RpcResult> HandleRequest(RpcRequest rq);
         Task<bool> HandlePush(RpcPush rp);
 
-        Task<RpcResult> RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId) where T : IProtobufInstance;
-        Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short componentId);
+        Task<RpcResult> RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId,
+            short componentId);
+
+        Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId,
+            short componentId);
+
         Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, long objId, short componentId);
 #else
         RpcResult HandleRequest(RpcRequest rq);
@@ -20,8 +25,7 @@ namespace socket4net
 #endif
 
         void RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId,
-            Action<bool, byte[]> cb)
-            where T : IProtobufInstance;
+            Action<bool, byte[]> cb);
 
         void RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short componentId,
             Action<bool, byte[]> cb);
@@ -29,18 +33,17 @@ namespace socket4net
         void RequestAsync(byte targetServer, long playerId, short ops, long objId, short componentId,
             Action<bool, byte[]> cb);
 
-        void Push<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId)
-            where T : IProtobufInstance;
+        void Push<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId);
 
         void Push(byte targetServer, long playerId, short ops, byte[] proto, long objId, short componentId);
 
-        void Push<T>(long playerId, short ops, T proto, long objId, short componentId) where T : IProtobufInstance;
+        void Push<T>(long playerId, short ops, T proto, long objId, short componentId);
         void Push(long playerId, short ops, byte[] data, long objId, short componentId);
     }
 
     public abstract class RpcSession : Session, IRpcSession
     {
-        private ushort _serial = 0;
+        private ushort _serial;
         public const ushort RpcHeaderSize = sizeof (int);
 
         private readonly ConcurrentDictionary<ushort, Action<bool, byte[]>> _requestPool
@@ -69,7 +72,8 @@ namespace socket4net
 
 #if NET45
 
-        public async Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, long objId, short componentId)
+        public async Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, long objId,
+            short componentId)
         {
             var rq = new RpcPack
             {
@@ -81,18 +85,18 @@ namespace socket4net
                 ComponentId = componentId,
                 Serial = _serial++,
             };
-            
+
             return await RequestAsync(rq.Serial, PiSerializer.Serialize(rq));
         }
 
         public async Task<RpcResult> RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId,
             short componentId)
-            where T : IProtobufInstance
         {
             return await RequestAsync(targetServer, playerId, ops, PiSerializer.Serialize(proto), objId, componentId);
         }
 
-        public async Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short componentId)
+        public async Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId,
+            short componentId)
         {
             var rq = new RpcPack
             {
@@ -109,7 +113,7 @@ namespace socket4net
             return await RequestAsync(rq.Serial, PiSerializer.Serialize(rq));
         }
 
-         /// <summary>
+        /// <summary>
         ///     异步请求（按请求序列号回调结果）
         /// </summary>
         /// <param name="serial"></param>
@@ -137,13 +141,14 @@ namespace socket4net
         }
 #endif
 
-        public void RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId, Action<bool, byte[]> cb)
-            where T : IProtobufInstance
+        public void RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId,
+            Action<bool, byte[]> cb)
         {
             RequestAsync(targetServer, playerId, ops, PiSerializer.Serialize(proto), objId, componentId, cb);
         }
 
-        public void RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short componentId, Action<bool, byte[]> cb)
+        public void RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short componentId,
+            Action<bool, byte[]> cb)
         {
             var rq = new RpcPack
             {
@@ -167,7 +172,8 @@ namespace socket4net
             Send(rq);
         }
 
-        public void RequestAsync(byte targetServer, long playerId, short ops, long objId, short componentId, Action<bool, byte[]> cb)
+        public void RequestAsync(byte targetServer, long playerId, short ops, long objId, short componentId,
+            Action<bool, byte[]> cb)
         {
             var rq = new RpcPack
             {
@@ -191,7 +197,6 @@ namespace socket4net
         }
 
         public void Push<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId)
-            where T : IProtobufInstance
         {
             Push(targetServer, playerId, ops, PiSerializer.Serialize(proto), objId, componentId);
         }
@@ -213,11 +218,10 @@ namespace socket4net
         }
 
         public void Push<T>(long playerId, short ops, T proto, long objId, short componentId)
-            where T : IProtobufInstance
         {
             Push(playerId, ops, PiSerializer.Serialize(proto), objId, componentId);
         }
-        
+
         public void Push(long playerId, short ops, byte[] data, long objId, short componentId)
         {
             var ps = new RpcPack

@@ -2,9 +2,9 @@
 
 namespace socket4net
 {
-    public class ComponentsMgr<TPKey> : UniqueMgr<short, Component<TPKey>>
+    public class ComponentsMgr : UniqueMgr<short, Component>
     {
-        private void AddDependencies<T>() where T : Component<TPKey>, new()
+        private void AddDependencies<T>() where T : Component, new()
         {
             AddDependencies(typeof(T));
         }
@@ -20,23 +20,23 @@ namespace socket4net
             }
         }
 
-        private Component<TPKey> CreateComponent(Type cpType)
+        private Component CreateComponent(Type cpType)
         {
             var id = ComponentIdCache.Instance.Get(cpType);
             if(Exist(id)) return Get(id);
 
-            var cp = (Component<TPKey>) ObjFactory.Create(cpType, new ComponentArg(this, id));
+            var cp = (Component) ObjFactory.Create(cpType, new ComponentArg(this, id));
             Add(cp, false);
             return cp;
         }
 
-        private T CreateComponent<T>() where T : Component<TPKey>, new ()
+        private T CreateComponent<T>() where T : Component, new ()
         {
             var id = ComponentIdCache.Instance.Get(typeof(T));
             return Exist(id) ? Get<T>(id) : Create<T>(new ComponentArg(this, id), false, false);
         } 
 
-        public T AddComponent<T>() where T : Component<TPKey>, new()
+        public T AddComponent<T>() where T : Component, new()
         {
             var id = ComponentIdCache.Instance.Get(typeof(T));
             if (Exist(id)) return Get<T>(id);
@@ -45,7 +45,7 @@ namespace socket4net
             return CreateComponent<T>();
         }
 
-        public Component<TPKey> AddComponent(Type cpType)
+        public Component AddComponent(Type cpType)
         {
             var id = ComponentIdCache.Instance.Get(cpType);
             if (Exist(id)) return Get(id);
@@ -54,7 +54,7 @@ namespace socket4net
             return CreateComponent(cpType);
         }
 
-        public bool ExistComponent<T>() where T : Component<TPKey>
+        public bool ExistComponent<T>() where T : Component
         {
             return ExistComponent(typeof (T));
         }

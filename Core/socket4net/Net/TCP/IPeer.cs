@@ -19,9 +19,6 @@ namespace socket4net
         ILogicService LogicService { get; }
         INetService NetService { get; }
 
-        bool IsLogicServiceShared { get; }
-        bool IsNetServiceShared { get; }
-
         event Action<ISession, SessionCloseReason> EventSessionClosed;
         event Action<ISession> EventSessionEstablished;
         event Action<string> EventErrorCatched;

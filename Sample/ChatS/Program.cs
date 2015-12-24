@@ -9,11 +9,13 @@ namespace ChatS
     {
         static void Main(string[] args)
         {
-            // 初始logger（可自定义日志）
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new CustomLog.Log4Net("log4net.config", "ChatS"));
+            Obj.Create<Launcher>(new LauncherArg(null, new CustomLog.Log4Net("log4net.config", "ChatS")));
+            Launcher.Instance.Start();
             
             // Rpc示例
             RunServer();
+
+            Launcher.Instance.Destroy();
         }
 
         /// <summary>
@@ -36,10 +38,15 @@ namespace ChatS
             // 结束服务器
             while (true)
             {
-                if (Console.ReadKey().Key == ConsoleKey.Q)
+                var msg = Console.ReadLine();
+                if (msg.IsNullOrEmpty()) continue;
+
+                switch (msg.ToUpper())
                 {
-                    server.Destroy();
-                    break;
+                    case "QUIT":
+                    case "EXIT":
+                        server.LogicService.Perform(server.Destroy);
+                        break;
                 }
             }
         }

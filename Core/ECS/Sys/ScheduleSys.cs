@@ -1,43 +1,28 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using System.Diagnostics;
+﻿namespace socket4net
+{
+    using System;
+    using System.Collections;
+    using System.Linq;
 #if NET45
-using System.Threading.Tasks;
+    using System.Threading.Tasks;
 #endif
 
-namespace socket4net
-{
-    public class ScheduledObjArg : ObjArg
-    {
-        public ScheduledObjArg(IObj owner) : base(owner)
-        {
-        }
-    }
-
-    public interface IScheduledObj : IObj, IScheduled
-    {
-    }
-
-    /// <summary>
-    ///     可定时调度的对象
-    /// </summary>
-    public class ScheduledObj : Obj, IScheduledObj
+    public class ScheduleSys : Obj
     {
         public const uint MillisecondsPerDay = 24 * 60 * 60 * 1000;
-
+        public static ScheduleSys Instance { get; private set; }
         private Scheduler _scheduler;
-
+        
         /// <summary>
-        ///     产生一个在当前线程等待ms毫秒的枚举器
+        ///     产生一个在逻辑线程等待n毫秒的枚举器
         ///     用在协程中
         /// </summary>
-        /// <param name="ms"></param>
+        /// <param name="n"></param>
         /// <returns></returns>
-        public IEnumerator WaitFor(uint ms)
+        public static IEnumerator WaitFor(uint n)
         {
             var meet = false;
-            Invoke(() => { meet = true; }, ms);
+            Instance.Invoke(() => { meet = true; }, n);
 
             while (!meet)
                 yield return true;
@@ -64,7 +49,11 @@ namespace socket4net
         protected override void OnInit(ObjArg objArg)
         {
             base.OnInit(objArg);
-            
+
+            if (Instance != null)
+                throw new Exception("ScheduleSys already instantiated!");
+            Instance = this;
+
             var batchedOwner = Owner as IBatched;
             _scheduler = batchedOwner != null ?
                 new BatchedScheduler(batchedOwner, Name) :
@@ -87,7 +76,7 @@ namespace socket4net
         /// </summary>
         public void ClearTimers()
         {
-            if(_scheduler != null)
+            if (_scheduler != null)
                 _scheduler.Clear();
         }
 
@@ -249,7 +238,7 @@ namespace socket4net
             var sorted = whens.ToList();
             sorted.RemoveAll(x => x < DateTime.Now);
             sorted.Sort();
-            
+
             foreach (var t in sorted)
             {
                 await InvokeAsync(action, t);
@@ -274,7 +263,7 @@ namespace socket4net
             var now = DateTime.Now;
             if (when < now) return false;
 
-            var delay = (uint) ((when - now).TotalMilliseconds);
+            var delay = (uint)((when - now).TotalMilliseconds);
             return await InvokeAsync(action, delay);
         }
 
@@ -303,5 +292,6 @@ namespace socket4net
 
         #endregion
 #endif
+
     }
 }

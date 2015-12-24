@@ -1,30 +1,40 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using socket4net.Util;
 
 namespace socket4net
 {
-    public class ComponentedObjArg<TPKey> : PropertiedObjArg<TPKey>
+    public class EntityArg : UniqueObjArg<long>
     {
-        public ComponentedObjArg(IObj parent, long key, IEnumerable<Pair<TPKey, IBlock<TPKey>>> properties)
-            : base(parent, key, properties)
+        public EntityArg(IObj parent, long key, short group)
+            : base(parent, key)
         {
+            Group = group;
         }
+
+        public short Group { get; private set; }
     }
 
-    public interface IComponentedObj<TPKey> : IPropertiedObj<TPKey>
+    public interface IEntity : IUniqueObj<long>, IData, IScheduler
     {
-        T GetComponent<T>() where T : Component<TPKey>;
-        T GetComponent<T>(short cpId) where T : Component<TPKey>;
+        short Group { get; }
+        T GetComponent<T>() where T : Component;
+        T GetComponent<T>(short cpId) where T : Component;
+        void Listen(Action<IEntity, IBlock> handler, params short[] pids);
+        void Unlisten(Action<IEntity, IBlock> handler, params short[] pids);
+        void SendMessage(object msg);
     }
 
     /// <summary>
-    ///    组件化对象
+    ///    E(ECS)
     /// </summary>
-    public abstract class ComponentedObj<TPKey> : PropertiedObj<TPKey>,IComponentedObj<TPKey>,
-        IEnumerable<Component<TPKey>>
+    public sealed partial class Entity : UniqueObj<long>, IEntity, IEnumerable<Component>
     {
+        /// <summary>
+        ///     组
+        /// </summary>
+        public short Group { get; private set; }
+
         /// <summary>
         ///     创建组件
         /// </summary>
@@ -49,8 +59,14 @@ namespace socket4net
         {
             base.OnInit(objArg);
 
+            // 组
+            Group = objArg.As<EntityArg>().Group;
+
             // 添加组件
             SpawnComponents();
+
+            // 缓存内置组件（可能为空）
+            _data = GetComponent<DataComponent>();
         }
 
         /// <summary>
@@ -86,37 +102,30 @@ namespace socket4net
             Components.Destroy();
         }
 
-        /// <summary>
-        ///     执行属性修改通知
-        /// </summary>
-        /// <param name="block"></param>
-        protected override void DoPropertyChangedNotification(IBlock<TPKey> block)
-        {
-            base.DoPropertyChangedNotification(block);
+        #endregion
 
-            // 通知组件
+        public void SendMessage(object msg)
+        {
             foreach (var component in Components)
             {
-                component.OnPropertyChanged(block);
+                component.OnMessage(msg);
             }
         }
 
-        #endregion
-
         #region 组件化实现
 
-        private ComponentsMgr<TPKey> _components;
-        public ComponentsMgr<TPKey> Components
+        private ComponentsMgr _components;
+        public ComponentsMgr Components
         {
             get
             {
                 return _components ??
                        (_components =
-                           Create<ComponentsMgr<TPKey>>(new UniqueMgrArg(this)));
+                           Create<ComponentsMgr>(new UniqueMgrArg(this)));
             }
         }
 
-        public Component<TPKey> GetComponent(short key)
+        public Component GetComponent(short key)
         {
             return Components.Get(key);
         }
@@ -126,32 +135,32 @@ namespace socket4net
             return Components.Destroy(key);
         }
 
-        public T GetComponent<T>() where T : Component<TPKey>
+        public T GetComponent<T>() where T : Component
         {
             return Components.GetFirst<T>();
         }
 
-        public T GetComponent<T>(short cpId) where T : Component<TPKey>
+        public T GetComponent<T>(short cpId) where T : Component
         {
             return Components.Get(cpId) as T;
         }
 
-        public List<T> GetComponents<T>() where T : Component<TPKey>
+        public List<T> GetComponents<T>() where T : Component
         {
             return Components.Get<T>();
         }
 
-        public T AddComponent<T>() where T : Component<TPKey>, new()
+        public T AddComponent<T>() where T : Component, new()
         {
             return Components.AddComponent<T>();
         }
 
-        public Component<TPKey> AddComponent(Type cpType)
+        public Component AddComponent(Type cpType)
         {
             return Components.AddComponent(cpType);
         }
 
-        public List<short> RemoveComponent<T>() where T : Component<TPKey>
+        public List<short> RemoveComponent<T>() where T : Component
         {
             return Components.Destroy<T>();
         }
@@ -161,9 +170,22 @@ namespace socket4net
             return Components.GetEnumerator();
         }
 
-        IEnumerator<Component<TPKey>> IEnumerable<Component<TPKey>>.GetEnumerator()
+        IEnumerator<Component> IEnumerable<Component>.GetEnumerator()
         {
-            return (IEnumerator<Component<TPKey>>) GetEnumerator();
+            return (IEnumerator<Component>) GetEnumerator();
+        }
+
+        #endregion
+
+        #region 订阅
+        public void Listen(Action<IEntity, IBlock> handler, params short[] pids)
+        {
+            _data.Listen(handler, pids);
+        }
+
+        public void Unlisten(Action<IEntity, IBlock> handler, params short[] pids)
+        {
+            _data.Unlisten(handler, pids);
         }
 
         #endregion

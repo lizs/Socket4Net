@@ -16,6 +16,10 @@ namespace socket4net
 
     public interface IBlock : ISerializable
     {
+        /// <summary>
+        ///     属性Id
+        /// </summary>
+        short Id { get; }
 
         /// <summary>
         ///     当前值
@@ -90,30 +94,19 @@ namespace socket4net
     }
 
     /// <summary>
-    ///     属性块
-    /// </summary>
-    public interface IBlock<out TKey> : IBlock
-    {      
-        /// <summary>
-        ///     属性Id
-        /// </summary>
-        TKey Id { get; }
-    }
-
-    /// <summary>
     /// 可重新设值的属性块
     /// </summary>
-    public interface ISettableBlock<TKey> : IBlock<TKey>
+    public interface ISettableBlock : IBlock
     {
         void Set(object value);
     }
 
-    public interface ISettableBlock<TKey, in TItem> : ITrackableBlock<TKey>
+    public interface ISettableBlock<in TItem> : ITrackableBlock
     {
         void Set(TItem value);
     }
 
-    public interface ITrackableBlock<TKey> : IBlock<TKey>
+    public interface ITrackableBlock : IBlock
     {
         /// <summary>
         ///     旧值
@@ -131,18 +124,18 @@ namespace socket4net
     /// <summary>
     /// 可增减值的属性块
     /// </summary>
-    public interface IIncreasableBlock<TKey> : ITrackableBlock<TKey>
+    public interface IIncreasableBlock : ITrackableBlock
     {
         void Inc(object delta, out object overflow);
         void IncTo(object target);
     }
-    public interface IIncreasableBlock<TKey, TItem> : IIncreasableBlock<TKey>
+    public interface IIncreasableBlock<TItem> : IIncreasableBlock
     {
         void Inc(TItem delta, out TItem overflow);
         void IncTo(TItem taget);
     }
 
-    public interface IListBlock<TKey> : IBlock<TKey>, IDifferentialSerializable
+    public interface IListBlock : IBlock, IDifferentialSerializable
     {
         Type ItemType { get; }
         void Add(object item);
@@ -154,7 +147,7 @@ namespace socket4net
         int RemoveAll();
     }
 
-    public interface IListBlock<TKey, TItem> : IListBlock<TKey>
+    public interface IListBlock<TItem> : IListBlock
     {
         int IndexOf(TItem item);
         int IndexOf(Predicate<TItem> condition);

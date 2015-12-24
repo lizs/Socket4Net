@@ -12,14 +12,6 @@ namespace socket4net
     {
         Locker BatchLocker { get; }
     }
-
-    /// <summary>
-    ///     可以发布属性修改的
-    /// </summary>
-    public interface IPropertyPublishable<TKey> : IObj
-    {
-        PropertyPublisher<TKey> Publisher { get; }
-    }
     
     /// <summary>
     /// 订阅、反订阅
@@ -103,16 +95,6 @@ namespace socket4net
         /// <returns></returns>
         Task<bool> HandlePush(short ops, byte[] data);
 #endif
-    }
-
-    /// <summary>
-    ///     定时调度
-    /// </summary>
-    public interface IScheduled
-    {
-        void InvokeRepeating(Action action, uint delay, uint period);
-        void Invoke(Action action, uint delay);
-        void CancelInvoke(Action action);
     }
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace socket4net
 {
-    public abstract class UniqueObjArg<TKey> : ScheduledObjArg
+    public abstract class UniqueObjArg<TKey> : ObjArg
     {
         public TKey Key { get; private set; }
 
@@ -11,7 +11,7 @@
         }
     }
 
-    public interface IUniqueObj<out TKey> : IScheduledObj
+    public interface IUniqueObj<out TKey> : IObj
     {
         TKey Id { get; }
     }
@@ -20,7 +20,7 @@
     ///     拥有唯一Id（容器内唯一，不一定是Guid）
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public abstract class UniqueObj<TKey> : ScheduledObj, IUniqueObj<TKey>
+    public abstract class UniqueObj<TKey> : Obj, IUniqueObj<TKey>
     {
         protected override void OnInit(ObjArg objArg)
         {

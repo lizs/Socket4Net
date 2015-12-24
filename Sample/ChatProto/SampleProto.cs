@@ -1,5 +1,4 @@
 using ProtoBuf;
-using socket4net;
 
 namespace Proto
 {
@@ -10,21 +9,21 @@ namespace Proto
     }
 
     [ProtoContract]
-    public class RequestMsgProto : IProtobufInstance
+    public class RequestMsgProto
     {
         [ProtoMember(1)]
         public string Message { get; set; }
     }
 
     [ProtoContract]
-    public class ResponseMsgProto : IProtobufInstance
+    public class ResponseMsgProto
     {
         [ProtoMember(1)]
         public string Message { get; set; }
     }
 
     [ProtoContract]
-    public class PushMsgProto : IProtobufInstance
+    public class PushMsgProto
     {
         [ProtoMember(1)]
         public string Message { get; set; }

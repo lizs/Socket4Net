@@ -18,17 +18,16 @@ namespace socket4net
     public class ClientArg : PeerArg
     {
         public ClientArg(IObj parent, string ip, ushort port)
-            : base(parent, ip, port, GlobalVarPool.Instance.LogicService, GlobalVarPool.Instance.NetService)
+            : base(parent, ip, port)
         {
         }
 
         public bool AutoReconnectEnabled { get; set; }
     }
 
-    public class Client<TSession, TLogicService, TNetService> : ScheduledObj, IClient
+    [ConsistsOf(typeof(ScheduleComponent))]
+    public class Client<TSession> : Obj, IClient
         where TSession : class, ISession, new()
-        where TNetService : class ,INetService, new()
-        where TLogicService : class, ILogicService, new()
     {
         public const uint ReconnectDefaultDelay = 1000;
         public const uint ReconnectMaxDelay = 32 * 1000;
@@ -47,10 +46,16 @@ namespace socket4net
         public IPAddress Address { get; private set; }
         public EndPoint EndPoint { get; private set; }
         public SessionMgr SessionMgr { get; private set; }
-        public bool IsLogicServiceShared { get; private set; }
-        public bool IsNetServiceShared { get; private set; }
-        public ILogicService LogicService { get; private set; }
-        public INetService NetService { get; private set; }
+
+        public ILogicService LogicService
+        {
+            get { return Launcher.Instance.LogicService; }
+        }
+
+        public INetService NetService
+        {
+            get { return Launcher.Instance.NetService; }
+        }
 
 
         public bool Connected
@@ -98,9 +103,7 @@ namespace socket4net
         {
             base.OnInit(arg);
 
-            var more = arg as ClientArg;
-            LogicService = more.LogicService;
-            NetService = more.NetService;
+            var more = arg.As<ClientArg>();
             AutoReconnectEnabled = more.AutoReconnectEnabled;
 
             if(string.IsNullOrEmpty(more.Ip) || more.Port == 0)
@@ -139,7 +142,7 @@ namespace socket4net
 
             if (AutoReconnectEnabled)
             {
-                Invoke(Reconnect, ReconnectRetryDelay);
+                ScheduleSys.Instance.Invoke(Reconnect, ReconnectRetryDelay);
             }
         }
 
@@ -150,7 +153,7 @@ namespace socket4net
 
             if (AutoReconnectEnabled)
             {
-                Invoke(Reconnect, ReconnectRetryDelay);
+                ScheduleSys.Instance.Invoke(Reconnect, ReconnectRetryDelay);
             }
         }
 
@@ -192,18 +195,6 @@ namespace socket4net
 
             _underlineSocket = SocketExt.CreateTcpSocket();
 
-            IsLogicServiceShared = (LogicService != null);
-            IsNetServiceShared = (NetService != null);
-
-            LogicService = (LogicService as TLogicService) ?? Create<TLogicService>(new ServiceArg(this, 10000, 10));
-            if (!IsLogicServiceShared) LogicService.Start();
-
-            NetService = (NetService as TNetService) ?? Create<TNetService>(new ServiceArg(this, 10000, 10));
-            if (!IsNetServiceShared) NetService.Start();
-
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogicService, LogicService);
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfNetService, NetService);
-
             Connect();
         }
 
@@ -221,9 +212,6 @@ namespace socket4net
 
             if (EventPeerClosing != null)
                 EventPeerClosing();
-
-            if (!IsLogicServiceShared) LogicService.Destroy();
-            if (!IsNetServiceShared) NetService.Destroy();
 
             Logger.Instance.Debug("Client stopped!");
         }
@@ -248,7 +236,7 @@ namespace socket4net
             NetService.Perform(action, param);
         }
 
-        public void Send<T>(T proto) where T : IProtobufInstance
+        public void Send<T>(T proto)
         {
             if (Session != null) Session.Send(proto);
         }

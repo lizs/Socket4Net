@@ -8,16 +8,15 @@ namespace socket4net
     public class ServerArg : PeerArg
     {
         public ServerArg(IObj parent, string ip, ushort port)
-            : base(parent, ip, port, GlobalVarPool.Instance.LogicService, GlobalVarPool.Instance.NetService)
+            : base(parent, ip, port)
         {
         }
     }
 
-    public class Server<TSession, TNetService, TLogicService> : Obj, IPeer
-        where TSession : class, ISession, new() 
-        where TNetService : class ,INetService, new()
-        where TLogicService : class ,ILogicService, new()
+    public class Server<TSession> : Obj, IPeer
+        where TSession : class, ISession, new()
     {
+        private const int DefaultBacktrace = 10;
         public ushort Port { get; private set; }
         public string Ip { get; private set; }
         public IPAddress Address { get; private set; }
@@ -25,13 +24,18 @@ namespace socket4net
 
         public override string Name
         {
-            get { return string.Format("{0}:{1}:{2}", typeof(TSession).Name, Ip, Port); }
+            get { return string.Format("{0}:{1}:{2}", typeof (TSession).Name, Ip, Port); }
         }
 
-        public bool IsLogicServiceShared { get; private set; }
-        public bool IsNetServiceShared { get; private set; }
-        public ILogicService LogicService { get; private set; }
-        public INetService NetService { get; private set; }
+        public ILogicService LogicService
+        {
+            get { return Launcher.Instance.LogicService; }
+        }
+
+        public INetService NetService
+        {
+            get { return Launcher.Instance.NetService; }
+        }
 
         public SessionMgr SessionMgr { get; private set; }
 
@@ -43,10 +47,6 @@ namespace socket4net
         private Socket _listener;
         private SessionFactory<TSession> _sessionFactory;
 
-        private const int DefaultBacktrace = 10;
-        private const int AcceptBufLen = 1024;
-        private const int DefaultServiceCapacity = 10000;
-        private const int DefaultServicePeriod = 10;
 
         private SocketAsyncEventArgs _acceptEvent;
 
@@ -59,15 +59,14 @@ namespace socket4net
         {
             base.OnInit(arg);
 
-            var more = arg as PeerArg;
+            var more = arg.As<PeerArg>();
 
             Ip = more.Ip;
             Port = more.Port;
-            LogicService = more.LogicService;
-            NetService = more.NetService;
 
             IPAddress address;
-            if (!IPAddress.TryParse(Ip, out address)) Logger.Instance.FatalFormat("Invalid ip {0}", Ip);
+            if (!IPAddress.TryParse(Ip, out address)) 
+                Logger.Instance.FatalFormat("Invalid ip {0}", Ip);
 
             Address = address;
             EndPoint = new IPEndPoint(Address, Port);
@@ -77,11 +76,10 @@ namespace socket4net
             SessionMgr = new SessionMgr(this,
                 session =>
                 {
-                    if (EventSessionEstablished != null)
-                    {
-                        EventSessionEstablished(session as TSession);
-                        OnConnected(session);
-                    }
+                    if (EventSessionEstablished == null) return;
+
+                    EventSessionEstablished(session as TSession);
+                    OnConnected(session);
                 },
                 (session, reason) =>
                 {
@@ -130,48 +128,33 @@ namespace socket4net
             _acceptEvent = new SocketAsyncEventArgs();
             _acceptEvent.Completed += OnAcceptCompleted;
 
-            IsLogicServiceShared = (LogicService != null);
-            IsNetServiceShared = (NetService != null);
-
-            LogicService = (LogicService as TLogicService) ??
-                           Create<TLogicService>(new ServiceArg(null, DefaultServiceCapacity, DefaultServicePeriod));
-            if (!IsLogicServiceShared) LogicService.Start();
-
-            NetService = (NetService as TNetService) ??
-                         Create<TNetService>(new ServiceArg(null, DefaultServiceCapacity, DefaultServicePeriod));
-            if (!IsNetServiceShared) NetService.Start();
-
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogicService, LogicService);
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfNetService, NetService);
-
             AcceptNext();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            LogicService.Perform(() =>
-            {
-                EventPeerClosing = null;
-                EventSessionClosed = null;
-                EventSessionEstablished = null;
 
-                if (EventPeerClosing != null)
-                    EventPeerClosing();
+            EventPeerClosing = null;
+            EventSessionClosed = null;
+            EventSessionEstablished = null;
 
-                SessionMgr.Destroy();
+            if (EventPeerClosing != null)
+                EventPeerClosing();
 
-                _listener.Close();
-                if(_acceptEvent != null ) _acceptEvent.Dispose();
+            SessionMgr.Destroy();
 
-                _quit = true;
-                _socketAcceptedEvent.Set();
-                _socketAcceptedEvent.Dispose();
-                if (_sessionFactoryWorker != null) _sessionFactoryWorker.Join();
+            _listener.Close();
+            if (_acceptEvent != null)
+                _acceptEvent.Dispose();
 
-                if (NetService != null && !IsNetServiceShared) NetService.Destroy();
-                if (LogicService != null && !IsLogicServiceShared) LogicService.Destroy();
-            });
+            _quit = true;
+            _socketAcceptedEvent.Set();
+#if NET45
+            _socketAcceptedEvent.Dispose();
+#endif
+            if (_sessionFactoryWorker != null)
+                _sessionFactoryWorker.Join();
         }
 
         public void PerformInLogic(Action action)
@@ -198,15 +181,14 @@ namespace socket4net
         {
             while (!_quit)
             {
-                if (_socketAcceptedEvent.WaitOne())
+                if (!_socketAcceptedEvent.WaitOne()) continue;
+
+                Socket client;
+                while (_clients.TryDequeue(out client))
                 {
-                    Socket client;
-                    while (_clients.TryDequeue(out client))
-                    {
-                        var session = _sessionFactory.Create(client, this);
-                        session.Start();
-                        SessionMgr.Add(session);
-                    }
+                    var session = _sessionFactory.Create(client, this);
+                    session.Start();
+                    SessionMgr.Add(session);
                 }
             }
         }
@@ -251,9 +233,5 @@ namespace socket4net
         {
             _listener.Close();
         }
-    }
-
-    public class Server<TSession> : Server<TSession, NetService, AutoLogicService> where TSession : class, ISession, new()
-    {
     }
 }

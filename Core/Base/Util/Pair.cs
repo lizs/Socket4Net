@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace socket4net.Util
+namespace socket4net
 {
     [ProtoContract]
     public class Pair<TFirst, TSecond>

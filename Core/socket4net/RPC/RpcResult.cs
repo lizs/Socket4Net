@@ -1,6 +1,4 @@
-﻿using socket4net.Util;
-
-namespace socket4net
+﻿namespace socket4net
 {
     /// <summary>
     /// Rpc类型
@@ -62,18 +60,18 @@ namespace socket4net
             return new RpcResult(true, data);
         }
 
-        public static RpcResult MakeSuccess<T>(T proto) where T : IProtobufInstance
+        public static RpcResult MakeSuccess<T>(T proto)
         {
             return new RpcResult(true, PiSerializer.Serialize(proto));
         }
 
-        public static RpcResult MakeFailure<T>(T proto) where T : IProtobufInstance
+        public static RpcResult MakeFailure<T>(T proto)
         {
             return new RpcResult(false, PiSerializer.Serialize(proto));
         }
     }
 
-    public class RpcResult<T> : RpcResult where T : IProtobufInstance
+    public class RpcResult<T> : RpcResult
     {
         public RpcResult(bool item1, byte[] item2) : base(item1, item2) { }
         public RpcResult(bool item1, T proto) : base(item1, PiSerializer.Serialize(proto)) { }

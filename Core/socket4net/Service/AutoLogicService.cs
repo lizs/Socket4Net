@@ -55,7 +55,7 @@ namespace socket4net
             }
 
             StopWorking = true;
-            _workingThread.Join();
+            //_workingThread.Join();
 
             Logger.Instance.Debug("Logic service stopped!");
         }
@@ -78,11 +78,10 @@ namespace socket4net
         /// <param name="w">the work item object, must not be null</param>
         public override void Enqueue(IJob w)
         {
-            if (!_workingQueue.TryAdd(w, 0))
-            {
-                if(!_workingQueue.Add(w));
-                    Logger.Instance.Error("逻辑服务队列溢出");
-            }
+            if (_workingQueue.TryAdd(w, 0)) return;
+
+            if(!_workingQueue.Add(w))
+                Logger.Instance.Error("逻辑服务队列溢出");
         }
    
         /// <summary>
@@ -91,8 +90,7 @@ namespace socket4net
         private void DoStartup()
         {
             _workingQueue = new BlockingCollection<IJob>(QueueCapacity);
-            _workingThread = new Thread(WorkingProcedure) { Name = "AutoLogicService" };
-
+            _workingThread = new Thread(WorkingProcedure) { Name = "AutoLogicService", IsBackground = true};
             // use background thread
             // see http://msdn.microsoft.com/en-us/library/h339syd0.aspx
 

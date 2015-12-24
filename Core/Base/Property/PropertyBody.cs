@@ -13,32 +13,32 @@ namespace socket4net
         }
     }
 
-    public class PropertyBody<TKey> : Obj, IEnumerable<IBlock<TKey>>
+    public class PropertyBody : Obj, IEnumerable<IBlock>
     {
         protected override void OnInit(ObjArg objArg)
         {
             base.OnInit(objArg);
-            Blocks = new Dictionary<TKey, IBlock<TKey>>();
+            Blocks = new Dictionary<short, IBlock>();
         }
 
-        public Dictionary<TKey, IBlock<TKey>> Blocks { get; private set; }
+        public Dictionary<short, IBlock> Blocks { get; private set; }
 
-        public bool Contains(TKey pid)
+        public bool Contains(short pid)
         {
             return Blocks.ContainsKey(pid);
         }
 
-        public bool Contains<TItem>(TKey pid)
+        public bool Contains<TItem>(short pid)
         {
             return Blocks.ContainsKey(pid) && Blocks[pid].Is<TItem>();
         }
 
-        public bool Contains(TKey pid, Type type)
+        public bool Contains(short pid, Type type)
         {
             return Blocks.ContainsKey(pid) && Blocks[pid].Is(type);
         }
 
-        public bool Get<TItem>(TKey pid, out TItem value)
+        public bool Get<TItem>(short pid, out TItem value)
         {
             value = default(TItem);
             if (!Contains<TItem>(pid)) return false;
@@ -46,68 +46,68 @@ namespace socket4net
             return true;
         }
 
-        public virtual bool Inc<TItem>(TKey pid, TItem delta, out TItem overflow)
+        public virtual bool Inc<TItem>(short pid, TItem delta, out TItem overflow)
         {
             overflow = default(TItem);
             if (!Contains<TItem>(pid)) return false;
 
-            var incBlock = Blocks[pid] as IIncreasableBlock<TKey, TItem>;
+            var incBlock = Blocks[pid] as IIncreasableBlock<TItem>;
             if(incBlock == null) return false;
             
             incBlock.Inc(delta, out overflow);
             return true;
         }
 
-        public virtual bool Inc(TKey pid, object delta, out object overflow)
+        public virtual bool Inc(short pid, object delta, out object overflow)
         {
             overflow = null;
             if (!Contains(pid, delta.GetType())) return false;
 
-            var incBlock = Blocks[pid] as IIncreasableBlock<TKey>;
+            var incBlock = Blocks[pid] as IIncreasableBlock<short>;
             if (incBlock == null) return false;
 
             incBlock.Inc(delta, out overflow);
             return true;
         }
 
-        public bool IncTo(TKey pid, object target)
+        public bool IncTo(short pid, object target)
         {
             if (!Contains(pid, target.GetType())) return false;
 
-            var incBlock = Blocks[pid] as IIncreasableBlock<TKey>;
+            var incBlock = Blocks[pid] as IIncreasableBlock<short>;
             if(incBlock == null) return false;
 
             incBlock.IncTo(target);
             return true;
         }
 
-        public bool IncTo<T>(TKey pid, T target)
+        public bool IncTo<T>(short pid, T target)
         {
             if (!Contains<T>(pid)) return false;
 
-            var incBlock = Blocks[pid] as IIncreasableBlock<TKey, T>;
+            var incBlock = Blocks[pid] as IIncreasableBlock<T>;
             if(incBlock == null) return false;
             
             incBlock.IncTo(target);
             return true;
         }
 
-        public virtual bool Set(TKey pid, object value)
+        public virtual bool Set(short pid, object value)
         {
             if (value != null && !Contains(pid, value.GetType())) return false;
 
-            var settableBlock = Blocks[pid] as ISettableBlock<TKey>;
+            var settableBlock = Blocks[pid] as ISettableBlock;
             if (settableBlock == null) return false;
             
             settableBlock.Set(value);
             return true;
         }
 
-        public virtual bool Set<T>(TKey pid, T value)
+        public virtual bool Set<T>(short pid, T value)
         {
             if (!Contains(pid, typeof(T))) return false;
 
-            var settableBlock = Blocks[pid] as ISettableBlock<TKey,T>;
+            var settableBlock = Blocks[pid] as ISettableBlock<T>;
             if (settableBlock == null) return false;
             if (Equals<T>.Function(settableBlock.As<T>(), value)) return false;
 
@@ -117,67 +117,67 @@ namespace socket4net
 
         #region 列表
 
-        public int IndexOf<TItem>(TKey pid, Predicate<TItem> condition)
+        public int IndexOf<TItem>(short pid, Predicate<TItem> condition)
         {
-            if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return Block<TKey>.InvalidIndex;
-            var lst = Blocks[pid] as IListBlock<TKey, TItem>;
-            if (lst == null) return Block<TKey>.InvalidIndex;
+            if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return Block.InvalidIndex;
+            var lst = Blocks[pid] as IListBlock<TItem>;
+            if (lst == null) return Block.InvalidIndex;
 
             return lst.IndexOf(condition);
         }
 
-        public int IndexOf<TItem>(TKey pid, TItem item)
+        public int IndexOf<TItem>(short pid, TItem item)
         {
-            if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return Block<TKey>.InvalidIndex;
-            var lst = Blocks[pid] as IListBlock<TKey, TItem>;
-            if (lst == null) return Block<TKey>.InvalidIndex;
+            if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return Block.InvalidIndex;
+            var lst = Blocks[pid] as IListBlock<TItem>;
+            if (lst == null) return Block.InvalidIndex;
 
             return lst.IndexOf(item);
         }
 
-        public TItem GetByIndex<TItem>(TKey pid, int idx)
+        public TItem GetByIndex<TItem>(short pid, int idx)
         {
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return default(TItem);
-            var lst = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lst = Blocks[pid] as IListBlock<TItem>;
             if (lst == null) return default(TItem);
 
             return lst.GetByIndex(idx);
         }
 
-        public virtual bool Add<TItem>(TKey pid, TItem item)
+        public virtual bool Add<TItem>(short pid, TItem item)
         {
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
             if (lstBlock == null) return false;
 
             lstBlock.Add(item);
             return true;
         }
 
-        public virtual bool Add(TKey pid, object item)
+        public virtual bool Add(short pid, object item)
         {
-            var lstBlock = Blocks[pid] as IListBlock<TKey>;
+            var lstBlock = Blocks[pid] as IListBlock<short>;
             if (lstBlock == null || lstBlock.ItemType != item.GetType()) return false;
 
             lstBlock.Add(item);
             return true;
         }
 
-        public virtual bool MultiAdd<TItem>(TKey pid, List<TItem> items)
+        public virtual bool MultiAdd<TItem>(short pid, List<TItem> items)
         {
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
             if (lstBlock == null) return false;
 
             lstBlock.MultiAdd(items);
             return true;
         }
 
-        public virtual bool MultiAdd(TKey pid, IList items)
+        public virtual bool MultiAdd(short pid, IList items)
         {
-            var lstBlock = Blocks[pid] as IListBlock<TKey>;
+            var lstBlock = Blocks[pid] as IListBlock<short>;
             if (lstBlock == null) return false;
 
             if (items.GetType() != typeof (List<>).MakeGenericType(new[] {lstBlock.ItemType})) return false;
@@ -186,93 +186,93 @@ namespace socket4net
             return true;
         }
 
-        public bool Insert<T>(TKey pid, int idx, T item)
+        public bool Insert<T>(short pid, int idx, T item)
         {
-            var lstBlock = Blocks[pid] as IListBlock<TKey, T>;
+            var lstBlock = Blocks[pid] as IListBlock<T>;
             return lstBlock != null && lstBlock.Insert(idx, item);
         }
 
-        public bool Insert(TKey pid, int idx, object item)
+        public bool Insert(short pid, int idx, object item)
         {
-            var lstBlock = Blocks[pid] as IListBlock<TKey>;
+            var lstBlock = Blocks[pid] as IListBlock<short>;
             return lstBlock != null && lstBlock.Insert(idx, item);
         }
         
-        public bool Update(TKey pid, int idx)
+        public bool Update(short pid, int idx)
         {
-            var lstBlock = Blocks[pid] as IListBlock<TKey>;
+            var lstBlock = Blocks[pid] as IListBlock<short>;
             return lstBlock != null && lstBlock.Update(idx);
         }
 
-        public bool Swap<TItem>(TKey pid, int idxA, int idxB)
+        public bool Swap<TItem>(short pid, int idxA, int idxB)
         {
-            var lstBlock = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
             return lstBlock != null && lstBlock.Swap(idxA, idxB);
         }
 
-        public bool Replace<TItem>(TKey pid, int idx, TItem item)
+        public bool Replace<TItem>(short pid, int idx, TItem item)
         {
-            var lstBlock = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
             return lstBlock != null && lstBlock.Replace(idx, item);
         }
 
-        public virtual bool Remove<TItem>(TKey pid, TItem item)
+        public virtual bool Remove<TItem>(short pid, TItem item)
         {
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
             return lstBlock != null && lstBlock.Remove(item);
         }
 
-        public virtual bool Remove(TKey pid, object item)
+        public virtual bool Remove(short pid, object item)
         {
             if (!Contains(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey>;
+            var lstBlock = Blocks[pid] as IListBlock<short>;
             if (lstBlock == null || lstBlock.ItemType != item.GetType()) return false;
             return lstBlock.Remove(item);
         }
 
-        public virtual bool MultiRemove<TItem>(TKey pid, List<TItem> items)
+        public virtual bool MultiRemove<TItem>(short pid, List<TItem> items)
         {
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
             if (lstBlock == null) return false;
 
             lstBlock.MultiRemove(items);
             return true;
         }
 
-        public virtual bool MultiRemove(TKey pid, List<object> items)
+        public virtual bool MultiRemove(short pid, List<object> items)
         {
             if (!Contains(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey>;
+            var lstBlock = Blocks[pid] as IListBlock<short>;
             if (lstBlock == null) return false;
 
             lstBlock.MultiRemove(items);
             return true;
         }
 
-        public virtual bool RemoveAll(TKey pid, out int count)
+        public virtual bool RemoveAll(short pid, out int count)
         {
             count = 0;
             if (!Contains(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey>;
+            var lstBlock = Blocks[pid] as IListBlock<short>;
             if (lstBlock == null) return false;
 
             count = lstBlock.RemoveAll();
             return true;
         }
 
-        public virtual bool RemoveAll<TItem>(TKey pid, Predicate<TItem> predicate, out int count)
+        public virtual bool RemoveAll<TItem>(short pid, Predicate<TItem> predicate, out int count)
         {
             count = 0;
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<TKey, TItem>;
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
             if (lstBlock == null) return false;
 
             count = lstBlock.RemoveAll(predicate);
@@ -280,7 +280,7 @@ namespace socket4net
         }
 #endregion
 
-        public bool Inject(IBlock<TKey> block)
+        public bool Inject(IBlock block)
         {
             if (Blocks.ContainsKey(block.Id))
             {
@@ -292,7 +292,7 @@ namespace socket4net
             return true;
         }
 
-        public IBlock<TKey> GetBlock(TKey pid)
+        public IBlock GetBlock(short pid)
         {
             var block = Blocks.ContainsKey(pid) ? Blocks[pid] : null;
             if(block == null)
@@ -301,7 +301,7 @@ namespace socket4net
             return block;
         }
 
-        public IEnumerator<IBlock<TKey>> GetEnumerator()
+        public IEnumerator<IBlock> GetEnumerator()
         {
             return Blocks.Select(x => x.Value).GetEnumerator();
         }

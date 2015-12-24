@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace socket4net
 {
     [ProtoContract]
-    public class RpcPack : IProtobufInstance
+    public class RpcPack
     {
         [ProtoMember(1)]
         public ERpc Type { get; set; }

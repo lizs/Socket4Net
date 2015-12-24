@@ -1,8 +1,6 @@
 ﻿using System;
 #if NET45
 using System.Threading.Tasks;
-#else
-using System;
 #endif
 
 namespace socket4net
@@ -18,7 +16,7 @@ namespace socket4net
         public Func<IRpcSession> SessionGetter { get; private set; }
     }
 
-    public abstract class RpcComponent<TPKey> : Component<TPKey>, IRpc
+    public abstract class RpcComponent : Component, IRpc
     {
         protected override void OnInit(ObjArg arg)
         {
@@ -66,25 +64,27 @@ namespace socket4net
 
         #region 请求对端指定对象、指定组件
 #if NET45
-        public Task<RpcResult> RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short cpId)
-            where T : IProtobufInstance
+        public Task<RpcResult> RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId,
+            short cpId)
         {
             return Session.RequestAsync(targetServer, playerId, ops, proto, objId, cpId);
         }
 
-        public Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short cpId)
+        public Task<RpcResult> RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId,
+            short cpId)
         {
             return Session.RequestAsync(targetServer, playerId, ops, data, objId, cpId);
         }
 #endif
 
-        public void RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short cpId, Action<bool, byte[]> cb)
-            where T : IProtobufInstance
+        public void RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short cpId,
+            Action<bool, byte[]> cb)
         {
             Session.RequestAsync(targetServer, playerId, ops, proto, objId, cpId, cb);
         }
 
-        public void RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short cpId, Action<bool, byte[]> cb)
+        public void RequestAsync(byte targetServer, long playerId, short ops, byte[] data, long objId, short cpId,
+            Action<bool, byte[]> cb)
         {
             Session.RequestAsync(targetServer, playerId, ops, data, objId, cpId, cb);
         }
@@ -98,7 +98,6 @@ namespace socket4net
         }
 
         public void Push<T>(byte targetServer, long playerId, short ops, T proto, long objId, short cpId)
-            where T : IProtobufInstance
         {
             Session.Push(targetServer, playerId, ops, proto, objId, cpId);
         }

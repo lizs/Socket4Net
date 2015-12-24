@@ -5,8 +5,15 @@ using ProtoBuf;
 
 namespace socket4net
 {
-    public interface IProtobufInstance
+    /// <summary>
+    ///     bytes反序列化成Value
+    /// </summary>
+    public static class Value
     {
+        public static T As<T>(this byte[] bytes)
+        {
+            return PiSerializer.DeserializeValue<T>(bytes);
+        }
     }
 
     /// <summary>
@@ -45,7 +52,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
         /// <returns></returns>
-        public static byte[] Serialize<T>(T proto) where T : IProtobufInstance
+        public static byte[] Serialize<T>(T proto)
         {
             try
             {
@@ -57,7 +64,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0}:{1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
                 return null;
             }
         }
@@ -68,7 +75,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static T Deserialize<T>(byte[] data) where T : IProtobufInstance
+        public static T Deserialize<T>(byte[] data)
         {
             try
             {
@@ -79,7 +86,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0}:{1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
                 return default(T);
             }
         }
@@ -103,7 +110,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0}:{1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
                 return null;
             }
         }
@@ -124,7 +131,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0}:{1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
                 return null;
             }
         }
@@ -146,7 +153,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0}:{1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
                 return default(T);
             }
         }
@@ -165,7 +172,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0}:{1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
                 return null;
             }
         }
@@ -176,26 +183,35 @@ namespace socket4net
         /// </summary>
         public static object Deserialize(Type type, byte[] data)
         {
-            if (type.IsSubclassOf(typeof(IProtobufInstance)))
+            try
             {
                 using (var ms = new MemoryStream(data))
                 {
                     return Serializer.NonGeneric.Deserialize(type, ms);
                 }
             }
-
-            Logger.Instance.Error("Unkonwn type");
-            return null;
+            catch (Exception e)
+            {
+                Logger.Instance.Exception(e);
+                return null;
+            }
         }
 
-        public static byte[] Serialize(object obj)
-        {
-            var ins = obj as IProtobufInstance;
-            if (ins != null)
-                return Serialize(ins);
+        //public static byte[] Serialize(object obj)
+        //{
+        //    try
+        //    {
+        //        using (var ms = new MemoryStream(data))
+        //        {
+        //            return Serializer.NonGeneric.Deserialize(type, ms);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Logger.Instance.Exception(e);
+        //    }
 
-            Logger.Instance.Error("Unkonwn type");
-            return null;
-        }
+        //    return Serialize(ins);
+        //}
     }
 }

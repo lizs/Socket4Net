@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 
 namespace socket4net
 {
-    public class RpcClient<TSession, TLogicService, TNetService> : Client<TSession, TLogicService, TNetService>
+    public class RpcClient<TSession> : Client<TSession>
         where TSession : class, IRpcSession, new()
-        where TLogicService : class, ILogicService, new()
-        where TNetService : class, INetService, new()
     {
 #if NET45
         public async Task<RpcResult> RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId,
-            short componentId) where T : IProtobufInstance
+            short componentId)
         {
             var session = Session;
             if (session == null) return false;
@@ -37,7 +35,6 @@ namespace socket4net
 
         public void RequestAsync<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId,
             Action<bool, byte[]> cb)
-            where T : IProtobufInstance
         {
             var session = Session;
             if (session == null)
@@ -73,7 +70,6 @@ namespace socket4net
         }
 
         public void Push<T>(byte targetServer, long playerId, short ops, T proto, long objId, short componentId)
-            where T : IProtobufInstance
         {
             var session = Session;
             if (session == null)
@@ -91,7 +87,7 @@ namespace socket4net
             session.Push(targetServer, playerId, ops, data, objId, componentId);
         }
 
-        public void Push<T>(long playerId, short ops, T proto, long objId, short componentId) where T : IProtobufInstance
+        public void Push<T>(long playerId, short ops, T proto, long objId, short componentId)
         {
             Push(0, playerId, ops, proto, objId, componentId);
         }
@@ -100,13 +96,5 @@ namespace socket4net
         {
             Push(0, playerId, ops, data, objId, componentId);
         }
-    }
-
-    public class Client<TSession> : RpcClient<TSession, AutoLogicService, NetService> where TSession : class, IRpcSession, new()
-    {
-    }
-
-    public class UnityClient<TSession> : RpcClient<TSession, PassiveLogicService, NetService> where TSession : class, IRpcSession, new()
-    {
     }
 }

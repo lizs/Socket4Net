@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace socket4net
 {
-    public class Scheduler : IScheduled
+    public class Scheduler
     {
         protected string Name;
         public Scheduler(string name)

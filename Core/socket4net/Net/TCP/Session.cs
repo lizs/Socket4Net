@@ -35,7 +35,7 @@ namespace socket4net
         void Close(SessionCloseReason reason);
         void SendWithHeader(byte[] data);
         void Send(byte[] data);
-        void Send<T>(T proto) where T : IProtobufInstance;
+        void Send<T>(T proto);
 
 #if NET35
         void Dispatch(byte[] packData);
@@ -194,7 +194,7 @@ namespace socket4net
             }
         }
 
-        public void Send<T>(T proto) where T : IProtobufInstance
+        public void Send<T>(T proto)
         {
             if (_closed) return;
 
@@ -241,7 +241,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
         /// <param name="sessions"></param>
-        public void MultiCast<T>(T proto, IEnumerable<ISession> sessions) where T : IProtobufInstance
+        public void MultiCast<T>(T proto, IEnumerable<ISession> sessions)
         {
             foreach (var session in sessions)
             {
@@ -273,7 +273,7 @@ namespace socket4net
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
-        public void Broadcast<T>(T proto) where T : IProtobufInstance
+        public void Broadcast<T>(T proto)
         {
             MultiCast(proto, HostPeer.SessionMgr.Sessions);
         }

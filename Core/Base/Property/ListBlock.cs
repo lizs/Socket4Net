@@ -6,8 +6,8 @@ using System.Text;
 
 namespace socket4net
 {
-    public class ListBlock<TKey, TItem> : Block<TKey, List<ListItemRepresentation<TItem>>>,
-        IListBlock<TKey, TItem>
+    public class ListBlock<TItem> : Block<List<ListItemRepresentation<TItem>>>,
+        IListBlock<TItem>
     {
         private int _uidSeed;
 
@@ -16,7 +16,7 @@ namespace socket4net
             return ++_uidSeed;
         }
 
-        public ListBlock(TKey id, List<TItem> value, EBlockMode mode)
+        public ListBlock(short id, List<TItem> value, EBlockMode mode)
             : base(id, null, mode)
         {
             Value = new List<ListItemRepresentation<TItem>>();

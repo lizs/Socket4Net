@@ -1,8 +1,8 @@
 ﻿namespace socket4net
 {
-    public class SettableBlock<TKey, TItem> : Block<TKey, TItem>, ISettableBlock<TKey, TItem>
+    public class SettableBlock<TItem> : Block<TItem>, ISettableBlock<TItem>
     {
-        public SettableBlock(TKey id, TItem value, EBlockMode mode)
+        public SettableBlock(short id, TItem value, EBlockMode mode)
             : base(id, value, mode)
         {
             PreviousValue = value;

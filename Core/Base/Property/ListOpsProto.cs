@@ -3,7 +3,7 @@ using ProtoBuf;
 
 namespace socket4net
 {
-    public interface IListOpsProto : IProtobufInstance
+    public interface IListOpsProto
     {
         byte[] Serialize();
     }
@@ -37,7 +37,7 @@ namespace socket4net
     public class InsertOpsProto<T> : IListOpsProto
     {
         [ProtoContract]
-        public class InsertProto : IProtobufInstance
+        public class InsertProto
         {
             [ProtoMember(1)]
             public int Index { get; set; }
@@ -84,7 +84,7 @@ namespace socket4net
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [ProtoContract]
-    public class ListOpsProto<T> : IProtobufInstance
+    public class ListOpsProto<T>
     {
         [ProtoMember(1)]
         public List<KeyValuePair<EPropertyOps, byte[]>> OpsStack { get; set; }

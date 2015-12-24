@@ -1,4 +1,6 @@
-﻿namespace socket4net
+﻿using System;
+
+namespace socket4net
 {
     public interface ILog
     {
@@ -22,6 +24,7 @@
         void WarnFormat(string format, object arg0);
         void WarnFormat(string format, object arg0, object arg1);
         void WarnFormat(string format, object arg0, object arg1, object arg2);
+        void Exception(Exception e);
 
         void Shutdown();
     }

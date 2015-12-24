@@ -1,8 +1,8 @@
 ﻿namespace socket4net
 {
-    public class IncreasableBlock<TKey, TItem> : Block<TKey, TItem>, IIncreasableBlock<TKey, TItem>
+    public class IncreasableBlock<TItem> : Block<TItem>, IIncreasableBlock<TItem>
     {
-        public IncreasableBlock(TKey id, TItem value, EBlockMode mode,
+        public IncreasableBlock(short id, TItem value, EBlockMode mode,
             TItem lowerBound, TItem upperBound)
             : base(id, value, mode)
         {

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Diagnostics;
 using System.IO;
 using log4net;
@@ -118,6 +119,11 @@ namespace CustomLog
         public void WarnFormat(string format, object arg0, object arg1, object arg2)
         {
             _log.WarnFormat(format, arg0, arg1, arg2);
+        }
+
+        public void Exception(Exception e)
+        {
+            _log.FatalFormat("{0}:{1}", e.InnerException != null ? e.InnerException.Message : e.Message, e.StackTrace);
         }
 
         public void Shutdown()
