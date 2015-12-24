@@ -36,7 +36,8 @@ namespace ChatS
             server.Start();
 
             // 结束服务器
-            while (true)
+            var stop = false;
+            while (!stop)
             {
                 var msg = Console.ReadLine();
                 if (string.IsNullOrEmpty(msg)) continue;
@@ -46,6 +47,7 @@ namespace ChatS
                     case "QUIT":
                     case "EXIT":
                         server.LogicService.Perform(server.Destroy);
+                        stop = true;
                         break;
                 }
             }

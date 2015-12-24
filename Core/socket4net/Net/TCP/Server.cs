@@ -155,6 +155,8 @@ namespace socket4net
 #endif
             if (_sessionFactoryWorker != null)
                 _sessionFactoryWorker.Join();
+
+            Logger.Instance.Info("Server stopped!");
         }
 
         public void PerformInLogic(Action action)

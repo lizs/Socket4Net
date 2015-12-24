@@ -42,7 +42,8 @@ namespace ChatC
             client.Start();
 
             // 结束
-            while (true)
+            var stop = false;
+            while (!stop)
             {
                 var msg = Console.ReadLine();
                 if (string.IsNullOrEmpty(msg)) continue;
@@ -53,6 +54,7 @@ namespace ChatC
                     case "EXIT":
                         {
                             client.Destroy();
+                            stop = true;
                         }
                         break;
 

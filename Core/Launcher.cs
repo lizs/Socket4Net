@@ -65,18 +65,23 @@ namespace socket4net
         protected override void OnStart()
         {
             base.OnStart();
-            GlobalVarPool.Instance.NetService.Start();
-            GlobalVarPool.Instance.LogicService.Start();
+            NetService.Start();
+            LogicService.Start();
             ScheduleSys.Instance.Start();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            ScheduleSys.Instance.Destroy();
-            GlobalVarPool.Instance.NetService.Destroy();
-            GlobalVarPool.Instance.LogicService.Destroy();
-            Logger.Instance.Shutdown();
+
+            NetService.Perform(()=>NetService.Destroy());
+            LogicService.Perform(() =>
+            {
+                ScheduleSys.Instance.Destroy();
+                LogicService.Destroy();
+
+                Logger.Instance.Shutdown();
+            });
         }
     }
 }

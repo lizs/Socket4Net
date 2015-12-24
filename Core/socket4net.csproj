@@ -85,8 +85,8 @@
     <Compile Include="Base\BatchLocker.cs" />
     <Compile Include="ECS\Component\Component.cs" />
     <Compile Include="ECS\Component\DataComponent.cs" />
-    <Compile Include="ECS\Component\IData.cs" />
-    <Compile Include="ECS\Component\IScheduler.cs" />
+    <Compile Include="Base\Interface\IData.cs" />
+    <Compile Include="Base\Interface\IScheduler.cs" />
     <Compile Include="ECS\Component\ScheduleComponent.cs" />
     <Compile Include="Base\ReflectionCache\ComponentIdCache.cs" />
     <Compile Include="ECS\Component\ComponentsMgr.cs" />
@@ -108,8 +108,8 @@
     <Compile Include="ECS\Entity\EntityScheduler.cs" />
     <Compile Include="ECS\Entity\EntityData.cs" />
     <Compile Include="ECS\Entity\Entity.cs" />
-    <Compile Include="ECS\Entity\Obj.cs" />
-    <Compile Include="ECS\Entity\UniqueObj.cs" />
+    <Compile Include="Base\Obj.cs" />
+    <Compile Include="Base\UniqueObj.cs" />
     <Compile Include="Base\Property\Block.cs" />
     <Compile Include="Base\Property\EBlockType.cs" />
     <Compile Include="Base\Property\EPropertyOps.cs" />

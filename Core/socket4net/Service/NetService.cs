@@ -60,7 +60,7 @@ namespace socket4net
             base.OnDestroy();
 
             _stopping = true;
-            _wokerThread.Join();
+            //_wokerThread.Join();
 
             Logger.Instance.Debug("Net service stopped!");
         }
