@@ -39,7 +39,7 @@ namespace ChatS
             while (true)
             {
                 var msg = Console.ReadLine();
-                if (msg.IsNullOrEmpty()) continue;
+                if (string.IsNullOrEmpty(msg)) continue;
 
                 switch (msg.ToUpper())
                 {

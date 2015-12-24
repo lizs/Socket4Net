@@ -18,11 +18,13 @@ namespace ChatC
                     port = ushort.Parse(args[1]);
             }
 
-            // 初始Logger
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, new CustomLog.Log4Net("log4net.config", "ChatC"));
+            Obj.Create<Launcher>(new LauncherArg(null, new CustomLog.Log4Net("log4net.config", "ChatC")));
+            Launcher.Instance.Start();
 
             // 启动客户端
             RunClient(ip, port);
+
+            Launcher.Instance.Destroy();
         }
 
         private static void RunClient(string ip, ushort port)

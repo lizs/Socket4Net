@@ -1,5 +1,4 @@
-﻿using System;
-#if NET45
+﻿#if NET45
 using System.Threading.Tasks;
 #endif
 

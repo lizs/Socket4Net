@@ -3,7 +3,7 @@ using socket4net;
 
 namespace ChatC
 {
-    public class Client : Client<ChatSession>
+    public class Client : RpcClient<ChatSession>
     {
         public static Client Instance { get; private set; }
 

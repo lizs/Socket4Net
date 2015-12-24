@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+#if NET45
 using System.Threading.Tasks;
+#endif
 
 namespace socket4net
 {
@@ -65,6 +67,7 @@ namespace socket4net
         /// <param name="action"></param>
         void CancelInvoke(Action action);
 
+#if NET45
         /// <summary>
         ///     每日的times时间点执行action
         /// </summary>
@@ -78,5 +81,6 @@ namespace socket4net
         Task<bool> InvokeAsync(Action action, TimeSpan time);
         Task<bool> InvokeAsync(Action action, DateTime when);
         Task<bool> InvokeAsync(Action action, uint delay);
+#endif
     }
 }

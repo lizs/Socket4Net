@@ -73,14 +73,14 @@ namespace socket4net
         /// <summary>
         ///     监听本对象的某些属性改变
         /// </summary>
-        protected Dictionary<short, List<Action<Entity, IBlock>>> Listeners
-            = new Dictionary<short, List<Action<Entity, IBlock>>>();
+        protected Dictionary<short, List<Action<IEntity, IBlock>>> Listeners
+            = new Dictionary<short, List<Action<IEntity, IBlock>>>();
 
         /// <summary>
         ///     监听本对象的任何属性改变
         /// </summary>
-        protected List<Action<Entity, IBlock>> GreedyListeners
-            = new List<Action<Entity, IBlock>>();
+        protected List<Action<IEntity, IBlock>> GreedyListeners
+            = new List<Action<IEntity, IBlock>>();
 
         /// <summary>
         ///     通知属性修改
@@ -101,7 +101,7 @@ namespace socket4net
             if (Listeners.ContainsKey(pid))
             {
                 var actions = Listeners[pid];
-                var copy = new Action<Entity, IBlock>[actions.Count];
+                var copy = new Action<IEntity, IBlock>[actions.Count];
                 Listeners[pid].CopyTo(copy);
 
                 foreach (var action in copy)
@@ -123,7 +123,7 @@ namespace socket4net
         {
         }
 
-        public void Listen(Action<Entity, IBlock> handler, params short[] pids)
+        public void Listen(Action<IEntity, IBlock> handler, params short[] pids)
         {
             if (pids.Length == 0)
             {
@@ -137,7 +137,7 @@ namespace socket4net
                 if (!pids.All(x => PropertyBody.Contains(x))) return;
                 foreach (var pid in pids)
                 {
-                    if (!Listeners.ContainsKey(pid)) Listeners.Add(pid, new List<Action<Entity, IBlock>>());
+                    if (!Listeners.ContainsKey(pid)) Listeners.Add(pid, new List<Action<IEntity, IBlock>>());
 
                     var lst = Listeners[pid];
                     if (!lst.Contains(handler))
@@ -148,7 +148,7 @@ namespace socket4net
             }
         }
 
-        public void Unlisten(Action<Entity, IBlock> handler, params short[] pids)
+        public void Unlisten(Action<IEntity, IBlock> handler, params short[] pids)
         {
             if (pids.Length == 0)
             {
