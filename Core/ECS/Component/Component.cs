@@ -80,7 +80,7 @@
         ///     处理消息
         /// </summary>
         /// <param name="msg"></param>
-        public virtual void OnMessage(object msg)
+        public virtual void OnMessage(Message msg)
         {
         }
     }

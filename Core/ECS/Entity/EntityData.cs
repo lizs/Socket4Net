@@ -7,7 +7,7 @@ namespace socket4net
     ///     E(ECS)
     ///     Êý¾Ý²Ù×÷
     /// </summary>
-    public sealed partial class Entity
+    public partial class Entity
     {
         private DataComponent _data;
 

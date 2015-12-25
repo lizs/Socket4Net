@@ -10,7 +10,7 @@ namespace socket4net
     ///     E(ECS)
     ///     µ÷¶È²Ù×÷
     /// </summary>
-    public sealed partial class Entity
+    public partial class Entity
     {
         public IEnumerator WaitFor(uint ms)
         {

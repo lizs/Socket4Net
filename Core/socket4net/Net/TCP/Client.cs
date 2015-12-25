@@ -25,7 +25,6 @@ namespace socket4net
         public bool AutoReconnectEnabled { get; set; }
     }
 
-    [ConsistsOf(typeof(ScheduleComponent))]
     public class Client<TSession> : Obj, IClient
         where TSession : class, ISession, new()
     {

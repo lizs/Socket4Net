@@ -15,38 +15,29 @@ namespace socket4net
         public short Group { get; private set; }
     }
 
-    public interface IEntity : IUniqueObj<long>, IData, IScheduler
+    public class Message
     {
-        short Group { get; }
+    }
+
+    public interface IEntity : IUniqueObj<string>, IData, IScheduler
+    {
         T GetComponent<T>() where T : Component;
         T GetComponent<T>(short cpId) where T : Component;
         void Listen(Action<IEntity, IBlock> handler, params short[] pids);
         void Unlisten(Action<IEntity, IBlock> handler, params short[] pids);
-        void SendMessage(object msg);
+        void SendMessage(Message msg);
     }
 
     /// <summary>
     ///    E(ECS)
     /// </summary>
-    public sealed partial class Entity : UniqueObj<long>, IEntity, IEnumerable<Component>
+    public partial class Entity : UniqueObj<string>, IEntity, IEnumerable<Component>
     {
-        /// <summary>
-        ///     组
-        /// </summary>
-        public short Group { get; private set; }
-
         /// <summary>
         ///     创建组件
         /// </summary>
-        private void SpawnComponents()
+        protected virtual void SpawnComponents()
         {
-            var cps = ComponentsCache.Instance.Get(GetType());
-            if (cps.IsNullOrEmpty()) return;
-
-            foreach (var type in cps)
-            {
-                AddComponent(type);
-            }
         }
         
         #region 初始化、卸载
@@ -104,7 +95,7 @@ namespace socket4net
 
         #endregion
 
-        public void SendMessage(object msg)
+        public void SendMessage(Message msg)
         {
             foreach (var component in Components)
             {

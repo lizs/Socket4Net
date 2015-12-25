@@ -1,51 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+<ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="socket4net.BatchLocker" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="34.25" Y="0.5" Width="1.5" />
+    <Position X="52.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\BatchLocker.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="socket4net.ComponentArg" Collapsed="true">
-    <Position X="12.75" Y="11.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Component.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.Component&lt;TPKey&gt;" Collapsed="true">
-    <Position X="10.5" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAABCAAAAABAAAAAIBAABAAAAAACAAQAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Component.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="socket4net.ComponentIdCache" Collapsed="true">
-    <Position X="29" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAgAAAAAABAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
-      <FileName>Base\ComponentsMgr.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.ComponentIdAttribute" Collapsed="true">
-    <Position X="27.25" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\ComponentsMgr.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.ComponentsMgr&lt;TPKey&gt;" Collapsed="true">
-    <Position X="6" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\ComponentsMgr.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="socket4net.KeyValue" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="36" Y="2.5" Width="1.5" />
+    <Position X="57.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAACAABAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\ConfigMgr.cs</FileName>
@@ -53,28 +17,28 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.ConfigMgrArg" Collapsed="true">
-    <Position X="10.5" Y="8.75" Width="1.5" />
+    <Position X="5.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Base\Config\ConfigMgr.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.ConfigMgr" Collapsed="true">
-    <Position X="21.75" Y="6.25" Width="1.5" />
+    <Position X="28.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BQAAAAAIoAAAEAAAAAAAAAABUAAKgAUAcAQAAACEIAE=</HashCode>
       <FileName>Base\Config\ConfigMgr.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.OrderAttribute" Collapsed="true">
-    <Position X="27.25" Y="4.5" Width="1.5" />
+    <Position X="48.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\OrderAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.OrderComparer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="29" Y="4.5" Width="1.5" />
+    <Position X="50.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Base\Config\Parser\CsvParser.cs</FileName>
@@ -82,14 +46,14 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.ConfigOrder&lt;T&gt;" Collapsed="true">
-    <Position X="34.25" Y="1.5" Width="1.5" />
+    <Position X="50.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\Parser\CsvParser.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Parser&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="34.25" Y="4.5" Width="1.5" />
+    <Position X="55.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAgAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\Parser\CsvParser.cs</FileName>
@@ -97,7 +61,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.KeyValueParser" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="37.75" Y="2.5" Width="1.5" />
+    <Position X="59.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\Parser\KeyValueParser.cs</FileName>
@@ -105,7 +69,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.RichParser&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="29" Y="5.5" Width="1.5" />
+    <Position X="48.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAiAAAAAEAAAAAAAAQAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Base\Config\Parser\RichCsvParser.cs</FileName>
@@ -113,7 +77,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.StructParser&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="32.5" Y="6.5" Width="1.5" />
+    <Position X="52.25" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAgAAAAAEAAAAAAQAQAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\Parser\StructParser.cs</FileName>
@@ -121,7 +85,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.Summary" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="36" Y="6.5" Width="1.5" />
+    <Position X="55.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\Summary.cs</FileName>
@@ -129,14 +93,14 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.Locker" Collapsed="true">
-    <Position X="34.25" Y="3.5" Width="1.5" />
+    <Position X="54" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAgAAAAAAAAIAAAAAAAAAAAIAAAAACAgAAAAAA=</HashCode>
       <FileName>Base\Locker.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.AutoLocker" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="30.75" Y="0.5" Width="1.5" />
+    <Position X="48.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Locker.cs</FileName>
@@ -144,127 +108,67 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.Logger" Collapsed="true">
-    <Position X="36" Y="3.5" Width="1.5" />
+    <Position X="55.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Base\Logger.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Mgr&lt;TValue&gt;" Collapsed="true">
-    <Position X="19.5" Y="1.75" Width="1.5" />
+    <Position X="16.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAABBAEAAAAAgAABBAAEAEAAAAAQAgAAA=</HashCode>
       <FileName>Base\Mgr.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.EntityArg&lt;TPKey&gt;" Collapsed="true">
-    <Position X="15" Y="13.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\Entity.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.Entity&lt;TPKey&gt;" Collapsed="true">
-    <Position X="12.75" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAABAAAAAAAIIJBAEAAABAAgAAAACAQEAAAAAAAggAA=</HashCode>
-      <FileName>Base\Objects\Entity.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="socket4net.ObjArg" Collapsed="true">
-    <Position X="11.5" Y="7.5" Width="1.5" />
+    <Position X="15.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\Obj.cs</FileName>
+      <HashCode>AAAAAACAAAAAAAAAAAIAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\Obj.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.EmptyArg" Collapsed="true">
-    <Position X="3.75" Y="8.75" Width="1.5" />
+    <Position X="23.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\Obj.cs</FileName>
+      <FileName>Base\Obj.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Obj" Collapsed="true">
-    <Position X="11.5" Y="0.5" Width="1.5" />
+    <Position X="18.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABEACAACAABAQEUgAAAAYEAAJAAFQAAAACAgAoQIA=</HashCode>
-      <FileName>Base\Objects\Obj.cs</FileName>
+      <FileName>Base\Obj.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.PropertiedObjArg&lt;TKey&gt;" Collapsed="true">
-    <Position X="15" Y="11.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
-      <FileName>Base\Objects\PropertiedObj.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.PropertiedObj&lt;TPKey&gt;" Collapsed="true">
-    <Position X="12.75" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AEYEIEAAAAACBMBAIAACBAACAABBAASCIABAAAAEkCY=</HashCode>
-      <FileName>Base\Objects\PropertiedObj.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="socket4net.ScheduledObjArg" Collapsed="true">
-    <Position X="15" Y="8.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\ScheduledObj.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.ScheduledObj" Collapsed="true">
-    <Position X="13.75" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAABAAAAAAAIAAAAAAABAgAAIAAAAAQQAAIAAAAAAgA=</HashCode>
-      <FileName>Base\Objects\ScheduledObj.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="socket4net.UniqueObjArg&lt;TKey&gt;" Collapsed="true">
-    <Position X="15" Y="10.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\UniqueObj.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.UniqueObj&lt;TKey&gt;" Collapsed="true">
-    <Position X="11.5" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAQAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\UniqueObj.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="socket4net.Block&lt;TKey&gt;" Collapsed="true">
-    <Position X="3" Y="10.5" Width="1.5" />
+  <Class Name="socket4net.Block" Collapsed="true">
+    <Position X="4.5" Y="10.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACABAAAKACAgBEAAAAAAAAACRCwABAAQAgAAAACAg=</HashCode>
       <FileName>Base\Property\Block.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.Block&lt;TKey, TItem&gt;" Collapsed="true">
-    <Position X="3" Y="11.75" Width="1.5" />
+  <Class Name="socket4net.Block&lt;TItem&gt;" Collapsed="true">
+    <Position X="4.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAABAAAAAAAAAACBAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Property\Block.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.IncreasableBlock&lt;TKey, TItem&gt;" Collapsed="true">
-    <Position X="0.75" Y="13.25" Width="1.5" />
+  <Class Name="socket4net.IncreasableBlock&lt;TItem&gt;" Collapsed="true">
+    <Position X="2.25" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAAAAAAAABAAAAAAAAAAEAwAAAAACAAAAAECA=</HashCode>
       <FileName>Base\Property\IncreasableBlock.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.ListBlock&lt;TKey, TItem&gt;" Collapsed="true">
-    <Position X="3" Y="13.25" Width="1.5" />
+  <Class Name="socket4net.ListBlock&lt;TItem&gt;" Collapsed="true">
+    <Position X="6.75" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEYCAEBAAAAEAABEgAAABACAACBBgEACKAAAEBAABiA=</HashCode>
       <FileName>Base\Property\ListBlock.cs</FileName>
@@ -272,14 +176,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="socket4net.ListItemRepresentation&lt;T&gt;" Collapsed="true">
-    <Position X="30.75" Y="3.5" Width="1.5" />
+    <Position X="50.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Property\ListItemRepresentation.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.RemoveOpsProto" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="27.25" Y="5.5" Width="1.5" />
+    <Position X="47" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Property\ListOpsProto.cs</FileName>
@@ -287,7 +191,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.InsertOpsProto&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="34.25" Y="2.5" Width="1.5" />
+    <Position X="55.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAACBAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Base\Property\ListOpsProto.cs</FileName>
@@ -295,23 +199,22 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.UpdateOpsProto&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="34.25" Y="7.5" Width="1.5" />
+    <Position X="54" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Property\ListOpsProto.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="socket4net.ListOpsProto&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="32.5" Y="3.5" Width="1.5" />
+  <Class Name="socket4net.ListOpsProto&lt;T&gt;" Collapsed="true">
+    <Position X="52.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
       <FileName>Base\Property\ListOpsProto.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.ListOpsRepresentation" Collapsed="true">
-    <Position X="3" Y="4.5" Width="1.5" />
+    <Position X="4.5" Y="14.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Base\Property\ListOpsRepresentation.cs</FileName>
@@ -319,102 +222,121 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="socket4net.ListInsertOps" Collapsed="true">
-    <Position X="0.75" Y="5.75" Width="1.5" />
+    <Position X="2.25" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACAA=</HashCode>
       <FileName>Base\Property\ListOpsRepresentation.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.ListRemoveOps" Collapsed="true">
-    <Position X="3" Y="5.75" Width="1.5" />
+    <Position X="4.5" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Base\Property\ListOpsRepresentation.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.ListUpdateOps" Collapsed="true">
-    <Position X="5.25" Y="5.75" Width="1.5" />
+    <Position X="6.75" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Base\Property\ListOpsRepresentation.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.PropertyBodyArg" Collapsed="true">
-    <Position X="6" Y="8.75" Width="1.5" />
+    <Position X="28" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Property\PropertyBody.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.PropertyBody&lt;TKey&gt;" Collapsed="true">
-    <Position X="3.75" Y="1.75" Width="1.5" />
+  <Class Name="socket4net.PropertyBody" Collapsed="true">
+    <Position X="40" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEYEAEAAAAAABBBEAAACBAAAAAABAAQGIAAAABAQECQ=</HashCode>
       <FileName>Base\Property\PropertyBody.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.PublisherExt" Collapsed="true">
-    <Position X="37.75" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAEAAAFAAAAAAAAAAAAAAAABAAAEAAAA=</HashCode>
-      <FileName>Base\Property\PropertyPublishableExt.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.SettableBlock&lt;TKey, TItem&gt;" Collapsed="true">
-    <Position X="5.25" Y="13.25" Width="1.5" />
+  <Class Name="socket4net.SettableBlock&lt;TItem&gt;" Collapsed="true">
+    <Position X="4.5" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAAAAABAAAAAAAAAAAAAAAwAAAAACAAAAAAAA=</HashCode>
       <FileName>Base\Property\SettableBlock.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.PropertyPublisherArg" Collapsed="true">
-    <Position X="8.25" Y="8.75" Width="1.5" />
+  <Class Name="socket4net.AttributesCache&lt;TValue, TAttribute&gt;" Collapsed="true">
+    <Position X="4.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\PropertyPublisher.cs</FileName>
+      <HashCode>AAAAAAAAAIAAAABAAAAAAAAAAAAAAAIAAAAAAABAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\AttributesCache.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.PropertyPublisher&lt;TPKey&gt;" Collapsed="true">
-    <Position X="8.25" Y="1.75" Width="2.75" />
+  <Class Name="socket4net.DependOnAttribute" Collapsed="true">
+    <Position X="57.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAAAAAGAAAFBAAABEAAAAAAQAAABAAAEAAAA=</HashCode>
-      <FileName>Base\PropertyPublisher.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\ComponentDepedencyCache.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.RpcComponentArg" Collapsed="true">
-    <Position X="17.25" Y="11.75" Width="1.5" />
+  <Class Name="socket4net.ComponentDepedencyCache" Collapsed="true">
+    <Position X="2.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\RpcComponent.cs</FileName>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAIAQAAAAAAAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\ComponentDepedencyCache.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.RpcComponent&lt;TPKey&gt;" Collapsed="true">
-    <Position X="10.5" Y="6.25" Width="1.5" />
+  <Class Name="socket4net.ComponentIdAttribute" Collapsed="true">
+    <Position X="59.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAEAAAQBAAAAAgAAAAgAAAAQAAAAAAAAACAA=</HashCode>
-      <FileName>Base\RpcComponent.cs</FileName>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\ComponentIdCache.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="socket4net.ComponentIdCache" Collapsed="true">
+    <Position X="4.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAIAQAAAAAAAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\ComponentIdCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.ConsistsOfAttribute" Collapsed="true">
+    <Position X="52.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\ComponentsCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.ComponentsCache" Collapsed="true">
+    <Position X="6.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAIAQAAAAAAAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\ComponentsCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.ObjFactory" Collapsed="true">
+    <Position X="47" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIAAAAAAAAAAQAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\ReflectionCache\ObjectCreatorCache.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Scheduler" Collapsed="true">
-    <Position X="22.5" Y="20.5" Width="1.5" />
+    <Position X="23" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAAAAAAAAAQAAABAAAAAAAIAAABEAgA=</HashCode>
       <FileName>Base\Scheduler.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="socket4net.BatchedScheduler" Collapsed="true">
-    <Position X="22.5" Y="21.75" Width="1.5" />
+    <Position X="23" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
       <FileName>Base\Scheduler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.TaskBase" Collapsed="true">
-    <Position X="21.75" Y="1.75" Width="1.5" />
+    <Position X="28.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAADACAAAAAAABAAAAAAAAAAAAAAAAAAMBBAAAIAAAA=</HashCode>
       <FileName>Base\Task.cs</FileName>
@@ -422,36 +344,51 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="socket4net.FuzzyTask" Collapsed="true">
-    <Position X="21.75" Y="3.25" Width="1.5" />
+    <Position X="28.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Task.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.StrictTask" Collapsed="true">
-    <Position X="21.75" Y="4.75" Width="1.5" />
+    <Position X="28.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAACgAAA=</HashCode>
       <FileName>Base\Task.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.UniqueMgrArg" Collapsed="true">
-    <Position X="1.5" Y="8.75" Width="1.5" />
+    <Position X="3.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\UniqueMgr.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.UniqueMgr&lt;TKey, TValue&gt;" Collapsed="true">
-    <Position X="6" Y="1.75" Width="1.5" />
+    <Position X="15" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIBAAAAAAAACBBAGEAABAQAAABAAEAEAAEAAQMgAAA=</HashCode>
       <FileName>Base\UniqueMgr.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="socket4net.UniqueObjArg&lt;TKey&gt;" Collapsed="true">
+    <Position X="12.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\UniqueObj.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.UniqueObj&lt;TKey&gt;" Collapsed="true">
+    <Position X="18.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\UniqueObj.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
   <Class Name="socket4net.AutoWatch" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="32.5" Y="0.5" Width="1.5" />
+    <Position X="50.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACIIAAAAAAAAAAQAAAAAAAAAAAAAAAgAAAA=</HashCode>
       <FileName>Base\Util\AutoWatch.cs</FileName>
@@ -459,7 +396,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.Default&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="36" Y="1.5" Width="1.5" />
+    <Position X="54" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Base\Util\DefaultTraitor.cs</FileName>
@@ -467,112 +404,250 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.DefaultTraitor" Collapsed="true">
-    <Position X="37.75" Y="1.5" Width="1.5" />
+    <Position X="55.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
       <FileName>Base\Util\DefaultTraitor.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.ArrayExt" Collapsed="true">
-    <Position X="29" Y="0.5" Width="1.5" />
+  <Class Name="socket4net.Enumerable" Collapsed="true">
+    <Position X="47" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
-      <FileName>Base\Util\Ext\Array.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.ListExt" Collapsed="true">
-    <Position X="29" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
-      <FileName>Base\Util\Ext\List.cs</FileName>
+      <FileName>Base\Util\Ext\Enumerable.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Add&lt;T&gt;" Collapsed="true">
-    <Position X="27.25" Y="0.5" Width="1.5" />
+    <Position X="47" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\Add.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Equals&lt;T&gt;" Collapsed="true">
-    <Position X="27.25" Y="2.5" Width="1.5" />
+    <Position X="48.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\Equals.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.GreaterThan&lt;T&gt;" Collapsed="true">
-    <Position X="30.75" Y="2.5" Width="1.5" />
+    <Position X="52.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\GreaterThan.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.GreaterThanOrEqual&lt;T&gt;" Collapsed="true">
-    <Position X="32.5" Y="2.5" Width="1.5" />
+    <Position X="54" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\GreaterThan.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.LessThan&lt;T&gt;" Collapsed="true">
-    <Position X="39.5" Y="2.5" Width="1.5" />
+    <Position X="47" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\LessThan.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.LessThanOrEqual&lt;T&gt;" Collapsed="true">
-    <Position X="27.25" Y="3.5" Width="1.5" />
+    <Position X="48.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\LessThan.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Subtract&lt;T&gt;" Collapsed="true">
-    <Position X="34.25" Y="6.5" Width="1.5" />
+    <Position X="54" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\Subtract.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="socket4net.Pair&lt;TFirst, TSecond&gt;" Collapsed="true">
+    <Position X="20.25" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Base\Util\Pair.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.Pair&lt;T&gt;" Collapsed="true">
+    <Position X="19.25" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\Util\Pair.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.Value" Collapsed="true">
+    <Position X="55.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\Util\PiSerializer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="socket4net.ValueProto&lt;T&gt;" Collapsed="true">
-    <Position X="36" Y="7.5" Width="1.5" />
+    <Position X="57.5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Util\PiSerializer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.PiSerializer" Collapsed="true">
-    <Position X="36" Y="4.5" Width="1.5" />
+    <Position X="57.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAACBAAAEAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Util\PiSerializer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.StringParser" Collapsed="true">
-    <Position X="30.75" Y="6.5" Width="1.5" />
+    <Position X="50.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAEAAAAgAAAAAAAAAACAAAAAAAAA=</HashCode>
       <FileName>Base\Util\StringParser.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Watch&lt;T&gt;" Collapsed="true">
-    <Position X="37.75" Y="7.5" Width="1.5" />
+    <Position X="59.25" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAABAAAAAAAAAAAAAQAA=</HashCode>
       <FileName>Base\WatchableObj.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="socket4net.ComponentArg" Collapsed="true">
+    <Position X="14.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Component\Component.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.Component" Collapsed="true">
+    <Position X="17.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABCAAAAAAAAAAAEBAABAAAAAAACAAAAACAAAAAAAA=</HashCode>
+      <FileName>ECS\Component\Component.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="socket4net.ComponentsMgr" Collapsed="true">
+    <Position X="13.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAABgBAA=</HashCode>
+      <FileName>ECS\Component\ComponentsMgr.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.DataComponent" Collapsed="true">
+    <Position X="15.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEYEIEAAAAAABMBAIAACBAACAAABAASCIABAAAAEECY=</HashCode>
+      <FileName>ECS\Component\DataComponent.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="socket4net.RpcComponentArg" Collapsed="true">
+    <Position X="10" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Component\RpcComponent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.RpcComponent" Collapsed="true">
+    <Position X="17.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAQBAAAAAgAAAAgAAAAQAAAAAAAAACAA=</HashCode>
+      <FileName>ECS\Component\RpcComponent.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="socket4net.ScheduleComponent" Collapsed="true">
+    <Position X="19.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAIAAAAAAAAAAAAIAAAAAAQAAIAAABAAgA=</HashCode>
+      <FileName>ECS\Component\ScheduleComponent.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="socket4net.EntityArg" Collapsed="true">
+    <Position X="12.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Entity\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.Message" Collapsed="true">
+    <Position X="57.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Entity\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.Entity" Collapsed="true">
+    <Position X="19.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEYBAEAABEAIJNBAECACBAAgIAABCARWIAJAAABkEiI=</HashCode>
+      <FileName>ECS\Entity\Entity.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="socket4net.EntityMgr" Collapsed="true">
+    <Position X="15.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Sys\EntitySys.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.EntitySysArg" Collapsed="true">
+    <Position X="25.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Sys\EntitySys.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.EntitySys" Collapsed="true">
+    <Position X="9" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAGAAAAIAAAAAAAAQAQAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Sys\EntitySys.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.PropertyPublisher" Collapsed="true">
+    <Position X="42.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAgAAAAAAAEAAAFAAAAAEAAAAAAAAAAhAAAEAAAA=</HashCode>
+      <FileName>ECS\Sys\PropertyPublisher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.ScheduleSys" Collapsed="true">
+    <Position X="10.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAEAIAAAAAAABAgAAIAAAAAQQQAIAAABAAgA=</HashCode>
+      <FileName>ECS\Sys\ScheduleSys.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="socket4net.GlobalVarPool" Collapsed="true">
-    <Position X="29" Y="2.5" Width="1.5" />
+    <Position X="50.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABEAAAAAAIABABAgAAgAQAAIACAAEAAQAAAABAAAAA=</HashCode>
       <FileName>GlobalVarPool.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="socket4net.LauncherArg" Collapsed="true">
+    <Position X="7.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Launcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.Launcher" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAEAAAAAAAAACAAAQAQAAAABAAAAA=</HashCode>
+      <FileName>Launcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="socket4net.BlockingCollection&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="36" Y="0.5" Width="1.5" />
+    <Position X="54" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAABACCAABAEEAAAEASCAAAIAAAEAAEAAABAIAA=</HashCode>
       <FileName>socket4net\Concurrent\BlockingCollection.cs</FileName>
@@ -580,7 +655,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.ConcurrentDictionary&lt;TKey, TValue&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="30.75" Y="1.5" Width="1.5" />
+    <Position X="47" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAIAAABAAAAFABAACAAABASAAAAIAAAEAAAAAABAAAA=</HashCode>
       <FileName>socket4net\Concurrent\ConcurrentDictionary.cs</FileName>
@@ -588,108 +663,94 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.ConcurrentQueue&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="32.5" Y="1.5" Width="1.5" />
+    <Position X="48.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAAgBACCAABAAEAAAEASAAAAIAAAEAAAAAABAIAA=</HashCode>
       <FileName>socket4net\Concurrent\ConcurrentQueue.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
+  <Class Name="socket4net.CoroutineScheduler" Collapsed="true">
+    <Position X="22.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAQAAAAAAABAAAAAAAAAAAAgAQAAAAAAABAAAA=</HashCode>
+      <FileName>socket4net\Coroutine\CoroutineScheduler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="socket4net.CircularBuffer" Collapsed="true">
-    <Position X="37.75" Y="0.5" Width="1.5" />
+    <Position X="55.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAABIAAAAAAAAAiAAAAABAAAAACAAEAwBA=</HashCode>
       <FileName>socket4net\Net\TCP\CircularBuffer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.ClientArg" Collapsed="true">
-    <Position X="21.75" Y="10.25" Width="1.5" />
+    <Position X="19" Y="10.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\Client.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.Client&lt;TSession, TLogicService, TNetService&gt;" Collapsed="true">
-    <Position X="16" Y="3.25" Width="1.5" />
+  <Class Name="socket4net.Client&lt;TSession&gt;" Collapsed="true">
+    <Position X="25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BgIBAiIgBICAQQABEEQAiIQADACBEAYCAAgYAHAAIAA=</HashCode>
+      <HashCode>BgIBAiIgBICAQQABEEQAiIQADACAEAYCAAgYADAAIAA=</HashCode>
       <FileName>socket4net\Net\TCP\Client.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="socket4net.Monitor&lt;TSession, TLogicService, TNetService&gt;" Collapsed="true">
-    <Position X="0.5" Y="14.5" Width="1.5" />
+    <Position X="15" Y="20.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAABACAAAAAAAAAAIAAAAAAAAAI=</HashCode>
       <FileName>socket4net\Net\TCP\Monitor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Monitor&lt;TSesion&gt;" Collapsed="true">
-    <Position X="0.5" Y="15.75" Width="1.5" />
+    <Position X="15" Y="21.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\Monitor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.Packer" Collapsed="true">
-    <Position X="30.75" Y="4.5" Width="1.5" />
+    <Position X="52.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABAAAABYAAAABIQAAkAAAAAUAAAAAAAAAAAAABSAEAA=</HashCode>
       <FileName>socket4net\Net\TCP\Packer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.PeerArg" Collapsed="true">
-    <Position X="20.5" Y="8.75" Width="1.5" />
+    <Position X="18" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAAAABAAIAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAIAA=</HashCode>
       <FileName>socket4net\Net\TCP\PeerArg.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.RpcClient&lt;TSession, TLogicService, TNetService&gt;" Collapsed="true">
-    <Position X="16" Y="4.75" Width="1.5" />
+  <Class Name="socket4net.RpcClient&lt;TSession&gt;" Collapsed="true">
+    <Position X="25" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>socket4net\Net\TCP\RpcClient.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.Client&lt;TSession&gt;" Collapsed="true">
-    <Position X="15" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>socket4net\Net\TCP\RpcClient.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.UnityClient&lt;TSession&gt;" Collapsed="true">
-    <Position X="17.25" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>socket4net\Net\TCP\RpcClient.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="socket4net.ServerArg" Collapsed="true">
-    <Position X="19.5" Y="10.25" Width="1.5" />
+    <Position X="16.75" Y="10.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\Server.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.Server&lt;TSession, TNetService, TLogicService&gt;" Collapsed="true">
-    <Position X="1.5" Y="1.75" Width="1.5" />
+  <Class Name="socket4net.Server&lt;TSession&gt;" Collapsed="true">
+    <Position X="21" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AqABQQIgAICCQAAAEAQAAESACBCRUIYCQAAYAPAAIAA=</HashCode>
+      <HashCode>AqABAQIgAICCQAAAEAQAAESACBCQEIYCAAAQAPAAIAA=</HashCode>
       <FileName>socket4net\Net\TCP\Server.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.Server&lt;TSession&gt;" Collapsed="true">
-    <Position X="1.5" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>socket4net\Net\TCP\Server.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="socket4net.Session" Collapsed="true">
-    <Position X="8.5" Y="10.5" Width="1.5" />
+    <Position X="10" Y="11.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AChCECAAQCiAIAAIEMAAGATEgAAAABAQQCAhRAKAABA=</HashCode>
       <FileName>socket4net\Net\TCP\Session.cs</FileName>
@@ -697,7 +758,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="socket4net.SessionFactory&lt;TSession&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="37.75" Y="5.5" Width="1.5" />
+    <Position X="57.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAQAA=</HashCode>
       <FileName>socket4net\Net\TCP\SessionFactory.cs</FileName>
@@ -705,7 +766,7 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.SessionMgr" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="39.5" Y="5.5" Width="1.5" />
+    <Position X="59.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAIAAAAABBAACAABAQAAABACAAkAACCAABAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\SessionMgr.cs</FileName>
@@ -713,195 +774,187 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.SocketExt" Collapsed="true">
-    <Position X="27.25" Y="6.5" Width="1.5" />
+    <Position X="47" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\SocketExt.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.NetProto" Collapsed="true">
-    <Position X="37.75" Y="3.5" Width="1.5" />
+    <Position X="59.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Proto\NetProto.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.RpcPack" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="30.75" Y="5.5" Width="1.5" />
+  <Class Name="socket4net.RpcPack" Collapsed="true">
+    <Position X="50.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAAEAAAAAAAAABAAQBAABQAICAAACAA=</HashCode>
       <FileName>socket4net\Proto\RpcProto.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.RpcRequest" Collapsed="true">
-    <Position X="34.25" Y="5.5" Width="1.5" />
+    <Position X="54" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAAEAAAAAAAAAAAAQBAAAAAICAAACAA=</HashCode>
       <FileName>socket4net\Proto\RpcProto.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.RpcResponse" Collapsed="true">
-    <Position X="36" Y="5.5" Width="1.5" />
+    <Position X="55.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAABAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Proto\RpcProto.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.RpcPush" Collapsed="true">
-    <Position X="32.5" Y="5.5" Width="1.5" />
+    <Position X="52.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAAEAAAAAAAAAAAAQBAAAAAICAAACAA=</HashCode>
       <FileName>socket4net\Proto\RpcProto.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.RpcResult" Collapsed="true">
-    <Position X="14.75" Y="21.75" Width="1.5" />
+    <Position X="21.5" Y="19.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAEAAAAAAAAEAAAIAgAAAgAAQACAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\RPC\RpcResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.RpcResult&lt;T&gt;" Collapsed="true">
-    <Position X="14.75" Y="23.25" Width="1.5" />
+    <Position X="21.5" Y="21.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\RPC\RpcResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.RpcSession" Collapsed="true">
-    <Position X="8.5" Y="11.75" Width="1.5" />
+    <Position X="10" Y="12.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgAAAAQAEBAAABAAAAAgAAAAAAAAACAgAAAAACACAA=</HashCode>
       <FileName>socket4net\RPC\RpcSession.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.Timer" Collapsed="true">
-    <Position X="37.75" Y="6.5" Width="1.5" />
+  <Class Name="socket4net.Timer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="57.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAgACAAAIAAAAAAAAAAAAAAIAAAgAAAAAA=</HashCode>
+      <HashCode>AAAUAAAAACAAABAAAAABAAQgAABAAAAEIAAABAAAAAI=</HashCode>
       <FileName>socket4net\Schedule\Timer.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.QueueEntry" Collapsed="true">
-    <Position X="39.5" Y="4.5" Width="1.5" />
+    <Position X="59.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgAAAAAAAAAAAAAAAAAAEIAAAAAABEAAAAAAAAAUAAA=</HashCode>
       <FileName>socket4net\Schedule\TimerScheduler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.TimerConstant" Collapsed="true">
-    <Position X="39.5" Y="6.5" Width="1.5" />
+    <Position X="59.25" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAABAAAABA=</HashCode>
       <FileName>socket4net\Schedule\TimerScheduler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.TVN" Collapsed="true">
-    <Position X="30.75" Y="7.5" Width="1.5" />
+    <Position X="50.5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAACAAAAAAABAAAAAAAAAABAAAAAAA=</HashCode>
+      <HashCode>AEAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>socket4net\Schedule\TimerScheduler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.TVR" Collapsed="true">
-    <Position X="32.5" Y="7.5" Width="1.5" />
+    <Position X="52.25" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAACAAAAAAABAAAAAAAAAABAAAAAAA=</HashCode>
+      <HashCode>AEAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>socket4net\Schedule\TimerScheduler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="socket4net.TimerScheduler" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="27.25" Y="7.5" Width="1.5" />
+    <Position X="47" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CQIABAAAACAgAACAAAAABAAAAAIAAAAAABAAMA0AAAA=</HashCode>
+      <HashCode>CAIABAAAACAAAACIABAABAAAAAIBAAAAAAAAMA0AAAA=</HashCode>
       <FileName>socket4net\Schedule\TimerScheduler.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="socket4net.TimerWrapper" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="29" Y="7.5" Width="1.5" />
+  <Class Name="socket4net.TimerWrapper" Collapsed="true">
+    <Position X="48.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAUAAAAACAAABAAAAABAAQgAABAAAAEIAAABAAAAAI=</HashCode>
+      <HashCode>AAAAAAAAACAgACAAAIAAAAAAAAAAAAAAIAAAgAAAAAA=</HashCode>
       <FileName>socket4net\Schedule\TimerWrapper.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="socket4net.AutoLogicService" Collapsed="true">
-    <Position X="19.75" Y="22.75" Width="1.5" />
+    <Position X="37.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAJAAABAACAAAAAAAEAAAAACAAAAAgAAIAAAAAAAAAA=</HashCode>
+      <HashCode>CAJBAABAAAAAAAAAEEAAAAACAAAAAgAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Service\AutoLogicService.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.LogicServiceBase" Collapsed="true">
-    <Position X="18.75" Y="21.5" Width="1.5" />
+  <Class Name="socket4net.ServiceArg" Collapsed="true">
+    <Position X="21.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAFACABAECIAAggAAEACAAACgEAAACAAIABAAAAIAAI=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>socket4net\Service\IService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="socket4net.LogicServiceBase" Collapsed="true">
+    <Position X="36.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAFBCgBAEAIAAggAEEACAAACgEAAACQAAABAAAAIAAI=</HashCode>
       <FileName>socket4net\Service\LogicServiceBase.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="socket4net.NetService" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="39.5" Y="3.5" Width="1.5" />
+  <Class Name="socket4net.NetService" Collapsed="true">
+    <Position X="44.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAFACBAEACEAAgAAAMAAEAACgACABBAIIARAgAAgAAI=</HashCode>
+      <HashCode>EAFBChAEACEAAgAAEMAAEAACgACABBQIAARAgAAgAAI=</HashCode>
       <FileName>socket4net\Service\NetService.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="socket4net.PassiveLogicService" Collapsed="true">
-    <Position X="17.5" Y="22.75" Width="1.5" />
+    <Position X="35.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAABBAACAAAAAAAEAAAAAAQAAAAAAAJAAAAAAAAAA=</HashCode>
+      <HashCode>AABBABBAAAAAAAAAEEAAAAAAQAAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Service\PassiveLogicService.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Stateless.StateMachine&lt;TState, TTrigger&gt;" Collapsed="true">
-    <Position X="29" Y="6.5" Width="1.5" />
+    <Position X="48.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAEAAAAAAEAARRACAAAAAUAACECBQSDQAgAQA=</HashCode>
       <FileName>Base\StateMachine\Stateless\Custom\Initialization.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Stateless.Enforce" Collapsed="true">
-    <Position X="39.5" Y="1.5" Width="1.5" />
+    <Position X="59.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
       <FileName>Base\StateMachine\Stateless\Enforce.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Stateless.ParameterConversion" Collapsed="true">
-    <Position X="32.5" Y="4.5" Width="1.5" />
+    <Position X="54" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>Base\StateMachine\Stateless\ParameterConversion.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Pi.Common.Numeric.Compare&lt;T&gt;" Collapsed="true">
-    <Position X="39.5" Y="0.5" Width="1.5" />
+    <Position X="57.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAQAAAABAAAAAAAAAEA=</HashCode>
       <FileName>Base\Util\Numeric\Compare.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="socket4net.Util.Pair&lt;TFirst, TSecond&gt;" Collapsed="true">
-    <Position X="13.75" Y="20.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
-      <FileName>Base\Util\Pair.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="socket4net.Util.Pair&lt;T&gt;" Collapsed="true">
-    <Position X="12.5" Y="21.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Util\Pair.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Struct Name="socket4net.Job" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="27.25" Y="8.75" Width="1.5" />
+    <Position X="47" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAgAAAAAAAAgAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Service\Job.cs</FileName>
@@ -909,425 +962,397 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Struct>
   <Struct Name="socket4net.Job&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="29" Y="8.75" Width="1.5" />
+    <Position X="48.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAoQAAAAAAAgAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Service\Job.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Struct>
-  <Interface Name="socket4net.IComponent" Collapsed="true">
-    <Position X="17" Y="18.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Component.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="socket4net.IParser" Collapsed="true">
-    <Position X="32.5" Y="10.75" Width="1.5" />
+    <Position X="54" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IStructParser" Collapsed="true">
-    <Position X="27.25" Y="11.5" Width="1.5" />
+    <Position X="48.75" Y="11.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IKeyValueParser" Collapsed="true">
-    <Position X="37.75" Y="10" Width="1.5" />
+    <Position X="57.5" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.ICsv" Collapsed="true">
-    <Position X="23.75" Y="17.5" Width="1.5" />
+    <Position X="11.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IStruct" Collapsed="true">
-    <Position X="39.5" Y="10.75" Width="1.5" />
+    <Position X="47" Y="11.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IKeyValue" Collapsed="true">
-    <Position X="36" Y="10" Width="1.5" />
+    <Position X="55.75" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAACAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IOrdered" Collapsed="true">
-    <Position X="29" Y="10.75" Width="1.5" />
+    <Position X="50.5" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IRichCsv&lt;T&gt;" Collapsed="true">
-    <Position X="22.5" Y="18.75" Width="1.5" />
+    <Position X="10.25" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IEntityCsv" Collapsed="true">
-    <Position X="24.75" Y="18.75" Width="1.5" />
+    <Position X="12.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IConfig.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IFileLoader" Collapsed="true">
-    <Position X="32.5" Y="10" Width="1.5" />
+    <Position X="52.25" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Config\IFileLoader.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IBatched" Collapsed="true">
-    <Position X="15" Y="15.75" Width="1.5" />
+    <Position X="12.5" Y="19.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IPropertyPublishable&lt;TKey&gt;" Collapsed="true">
-    <Position X="21.75" Y="15.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Interface\IBase.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="socket4net.IObserver" Collapsed="true">
-    <Position X="27.25" Y="10.75" Width="1.5" />
+    <Position X="48.75" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.ISerializable" Collapsed="true">
-    <Position X="4.25" Y="15.75" Width="1.5" />
+    <Position X="14" Y="12.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.ISerializable&lt;T&gt;" Collapsed="true">
-    <Position X="5.25" Y="14.5" Width="1.5" />
+    <Position X="15" Y="11.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IDifferentialSerializable" Collapsed="true">
-    <Position X="8.75" Y="17.25" Width="1.5" />
+    <Position X="18.5" Y="14.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IDifferentialSerializable&lt;T&gt;" Collapsed="true">
-    <Position X="8.75" Y="15.75" Width="1.5" />
+    <Position X="18.5" Y="12.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAgAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IRpc" Collapsed="true">
-    <Position X="36" Y="10.75" Width="1.5" />
+    <Position X="57.5" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAEAAAQBAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IScheduled" Collapsed="true">
-    <Position X="19" Y="14.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAIAAAAAAgA=</HashCode>
-      <FileName>Base\Interface\IBase.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="socket4net.IParseFromString" Collapsed="true">
-    <Position X="30.75" Y="10.75" Width="1.5" />
+    <Position X="52.25" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.ICloneable&lt;T&gt;" Collapsed="true">
-    <Position X="29" Y="10" Width="1.5" />
+    <Position X="48.75" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBase.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IBlock" Collapsed="true">
-    <Position X="4.25" Y="17.25" Width="1.5" />
+    <Position X="14" Y="14.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIACAgBAAAAAAAAAAARCwABAAQAgAAAACAA=</HashCode>
+      <HashCode>AAACAAAAAIACAgBAAAAAAAAAAARCwABAAQAgAAAACAA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IBlock&lt;TKey&gt;" Collapsed="true">
-    <Position X="4.25" Y="18.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Interface\IBlock.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="socket4net.ISettableBlock&lt;TKey&gt;" Collapsed="true">
-    <Position X="2" Y="20.25" Width="1.5" />
+  <Interface Name="socket4net.ISettableBlock" Collapsed="true">
+    <Position X="11.75" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.ISettableBlock&lt;TKey, TItem&gt;" Collapsed="true">
-    <Position X="4.25" Y="21.5" Width="1.5" />
+  <Interface Name="socket4net.ISettableBlock&lt;TItem&gt;" Collapsed="true">
+    <Position X="14" Y="17.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.ITrackableBlock&lt;TKey&gt;" Collapsed="true">
-    <Position X="5.25" Y="20.25" Width="1.5" />
+  <Interface Name="socket4net.ITrackableBlock" Collapsed="true">
+    <Position X="15" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IIncreasableBlock&lt;TKey&gt;" Collapsed="true">
-    <Position X="6.5" Y="21.5" Width="1.5" />
+  <Interface Name="socket4net.IIncreasableBlock" Collapsed="true">
+    <Position X="16.25" Y="17.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IIncreasableBlock&lt;TKey, TItem&gt;" Collapsed="true">
-    <Position X="6.5" Y="23" Width="1.5" />
+  <Interface Name="socket4net.IIncreasableBlock&lt;TItem&gt;" Collapsed="true">
+    <Position X="16.25" Y="18.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IListBlock&lt;TKey&gt;" Collapsed="true">
-    <Position X="9.5" Y="20.25" Width="1.5" />
+  <Interface Name="socket4net.IListBlock" Collapsed="true">
+    <Position X="19.25" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAYAAEAAAAAAAAAAAAAABAAAAAAAAAAAIAAAABAAAgA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IListBlock&lt;TKey, TItem&gt;" Collapsed="true">
-    <Position X="9.5" Y="21.75" Width="1.5" />
+  <Interface Name="socket4net.IListBlock&lt;TItem&gt;" Collapsed="true">
+    <Position X="19.25" Y="17.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEIAAEAAAAAAAAAAAAAABAAAAAABAAACKAAAABAAACA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.ILog" Collapsed="true">
-    <Position X="39.5" Y="10" Width="1.5" />
+  <Interface Name="socket4net.IData" Collapsed="true">
+    <Position X="6.75" Y="20" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAYCAAAAAAQAAAAAgAAUAAAAACEAEAQA=</HashCode>
+      <HashCode>AEYAAEAAAAAABAAAAAACBAAAAAABAAACIAAAAAAEECI=</HashCode>
+      <FileName>Base\Interface\IData.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="socket4net.ILog" Collapsed="true">
+    <Position X="47" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAYCAAAAAAQAAAAAgAAUAAABACEAEAQA=</HashCode>
       <FileName>Base\Interface\ILog.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IEntity&lt;TPKey&gt;" Collapsed="true">
-    <Position X="19.25" Y="20.25" Width="1.5" />
+  <Interface Name="socket4net.IScheduler" Collapsed="true">
+    <Position X="0.5" Y="20" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\Entity.cs</FileName>
+      <HashCode>AAAAAAAAAEAIAAAAAAAAAAAAIAAAAAAQAAIAAABAAgA=</HashCode>
+      <FileName>Base\Interface\IScheduler.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IObj" Collapsed="true">
-    <Position X="16" Y="14.5" Width="1.5" />
+    <Position X="7" Y="18.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAABAQEAAAAAAQAAABAABAAAAACAAAAQAA=</HashCode>
-      <FileName>Base\Objects\Obj.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="socket4net.IPropertiedObj&lt;TPKey&gt;" Collapsed="true">
-    <Position X="19.25" Y="18.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AEYEIEAAAAAABMBAAAACBAAAAAABAAACIABAAAAEECY=</HashCode>
-      <FileName>Base\Objects\PropertiedObj.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="socket4net.IScheduledObj" Collapsed="true">
-    <Position X="18" Y="15.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\ScheduledObj.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
-  <Interface Name="socket4net.IUniqueObj&lt;TKey&gt;" Collapsed="true">
-    <Position X="18" Y="17.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Objects\UniqueObj.cs</FileName>
+      <FileName>Base\Obj.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IBlockOps" Collapsed="true">
-    <Position X="27.25" Y="10" Width="1.5" />
+    <Position X="47" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>Base\Property\IBlockOps.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IListOpsProto" Collapsed="true">
-    <Position X="0.5" Y="22.75" Width="1.5" />
+    <Position X="59.25" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Property\ListOpsProto.cs</FileName>
     </TypeIdentifier>
   </Interface>
+  <Interface Name="socket4net.IUniqueObj&lt;TKey&gt;" Collapsed="true">
+    <Position X="3.75" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\UniqueObj.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Interface Name="socket4net.IDefault" Collapsed="true">
-    <Position X="30.75" Y="10" Width="1.5" />
+    <Position X="50.5" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Base\Util\DefaultTraitor.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="socket4net.IProtobufInstance" Collapsed="true">
-    <Position X="0.5" Y="21.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Base\Util\PiSerializer.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="socket4net.IWatchable&lt;T&gt;" Collapsed="true">
-    <Position X="29" Y="11.5" Width="1.5" />
+    <Position X="50.5" Y="11.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\WatchableObj.cs</FileName>
     </TypeIdentifier>
   </Interface>
+  <Interface Name="socket4net.IComponent" Collapsed="true">
+    <Position X="6" Y="21.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ECS\Component\Component.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="socket4net.IEntity" Collapsed="true">
+    <Position X="3.75" Y="21.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAEAAACAABAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>ECS\Entity\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Interface Name="socket4net.IProducerConsumerCollection&lt;T&gt;" Collapsed="true">
-    <Position X="34.25" Y="10.75" Width="1.5" />
+    <Position X="55.75" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAIAA=</HashCode>
       <FileName>socket4net\Concurrent\ConcurrentQueue.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IClient" Collapsed="true">
-    <Position X="11.5" Y="17.75" Width="1.5" />
+    <Position X="22" Y="15.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAAAAAAAAAAAQAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\Client.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IPeer" Collapsed="true">
-    <Position X="11.5" Y="16.5" Width="1.5" />
+    <Position X="22" Y="14.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAAAAgAIAAQAAAAAAAAAAACACBEAACAAAQAHAAIAA=</HashCode>
+      <HashCode>AgAAAAAgAIAAQAAAAAAAAAAACACAEAACAAAQADAAIAA=</HashCode>
       <FileName>socket4net\Net\TCP\IPeer.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.ISession" Collapsed="true">
-    <Position X="11.5" Y="13.5" Width="1.5" />
+    <Position X="21" Y="11.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAgCAAAAACAAAAAAAEAAEAQAAAAAAAAAAAAgQACAABA=</HashCode>
       <FileName>socket4net\Net\TCP\Session.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.ISessionFactory&lt;TSession&gt;" Collapsed="true">
-    <Position X="37.75" Y="10.75" Width="1.5" />
+    <Position X="59.25" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\SessionFactory.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IRpcSession" Collapsed="true">
-    <Position X="11.5" Y="14.75" Width="1.5" />
+    <Position X="21" Y="12.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAEAAAABAAAAAgAAAAAAAAAAAAAAAAAAACAA=</HashCode>
       <FileName>socket4net\RPC\RpcSession.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IService" Collapsed="true">
-    <Position X="23.75" Y="11.5" Width="1.5" />
+    <Position X="10" Y="19.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEAAAAAACAAAgAAAEAAAAACAAAAAAAAIAAAAAAAAAI=</HashCode>
+      <HashCode>AAEAAAAAAAAAAgAAAEAAAAACAAAAAAAAAAAAAAAAAAI=</HashCode>
       <FileName>socket4net\Service\IService.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.INetService" Collapsed="true">
-    <Position X="22.5" Y="12.75" Width="1.5" />
+    <Position X="9" Y="21.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAAAAEAAAAAAAAAAAAAAAAAACAAAAAAARAAAAgAAA=</HashCode>
       <FileName>socket4net\Service\IService.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.ILogicService" Collapsed="true">
-    <Position X="24.75" Y="12.75" Width="1.5" />
+    <Position X="11.25" Y="21.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAABAAAIAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgBAAAIAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Service\IService.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="socket4net.IJob" Collapsed="true">
-    <Position X="34.25" Y="10" Width="1.5" />
+    <Position X="54" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>socket4net\Service\Job.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="socket4net.EBlockMode" Collapsed="true">
-    <Position X="27.25" Y="12.5" Width="1.5" />
+    <Position X="47" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAJAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Interface\IBlock.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="socket4net.EBlockType" Collapsed="true">
-    <Position X="29" Y="12.5" Width="1.5" />
+    <Position X="48.75" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAEAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAI=</HashCode>
       <FileName>Base\Property\EBlockType.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="socket4net.EPropertyOps" Collapsed="true">
-    <Position X="32.5" Y="12.5" Width="1.5" />
+    <Position X="52.25" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAEAAAAAABAAAAAAABAAAACAAAAAAAAAAAAAAECA=</HashCode>
       <FileName>Base\Property\EPropertyOps.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="socket4net.EContainerOps" Collapsed="true">
-    <Position X="30.75" Y="12.5" Width="1.5" />
+    <Position X="50.5" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAEAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\UniqueMgr.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="socket4net.PackerError" Collapsed="true">
-    <Position X="36" Y="12.5" Width="1.5" />
+    <Position X="55.75" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAIABAAAAAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\Packer.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="socket4net.SessionCloseReason" Collapsed="true">
-    <Position X="37.75" Y="12.5" Width="1.5" />
+    <Position X="57.5" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAQAAAQAAAjAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>socket4net\Net\TCP\Session.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="socket4net.ERpc" Collapsed="true">
-    <Position X="34.25" Y="12.5" Width="1.5" />
+    <Position X="54" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAgAAAAAAAAAAACAA=</HashCode>
       <FileName>socket4net\RPC\RpcResult.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Font Name="微软雅黑" Size="9" />
+  <Font Name="Microsoft YaHei" Size="9" />
 </ClassDiagram>

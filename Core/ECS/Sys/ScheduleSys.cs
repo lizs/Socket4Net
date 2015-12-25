@@ -1,12 +1,12 @@
-﻿namespace socket4net
-{
-    using System;
-    using System.Collections;
-    using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Linq;
 #if NET45
-    using System.Threading.Tasks;
+using System.Threading.Tasks;
 #endif
 
+namespace socket4net
+{
     public class ScheduleSys : Obj
     {
         public const uint MillisecondsPerDay = 24 * 60 * 60 * 1000;

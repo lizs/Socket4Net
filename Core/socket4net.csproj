@@ -87,7 +87,6 @@
     <Compile Include="ECS\Component\DataComponent.cs" />
     <Compile Include="Base\Interface\IData.cs" />
     <Compile Include="Base\Interface\IScheduler.cs" />
-    <Compile Include="ECS\Component\ScheduleComponent.cs" />
     <Compile Include="Base\ReflectionCache\ComponentIdCache.cs" />
     <Compile Include="ECS\Component\ComponentsMgr.cs" />
     <Compile Include="Base\Config\ConfigMgr.cs" />

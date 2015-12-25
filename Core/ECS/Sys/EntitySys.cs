@@ -4,19 +4,18 @@ using System.Linq;
 
 namespace socket4net
 {
-    public class EntityMgr : UniqueMgr<long, IEntity>
+    public class EntityMgr : UniqueMgr<string, Entity>
     {
-        public short Group { get; set; }
     }
 
     public class EntitySysArg : ObjArg
     {
-        public EntitySysArg(IObj owner, IEnumerable<short> groups) : base(owner)
+        public EntitySysArg(IObj owner, IEnumerable<Type> groups) : base(owner)
         {
             Groups = groups;
         }
 
-        public IEnumerable<short> Groups { get; private set; } 
+        public IEnumerable<Type> Groups { get; private set; } 
     }
 
     /// <summary>
@@ -24,11 +23,8 @@ namespace socket4net
     /// </summary>
     public class EntitySys : Obj
     {
-        private readonly Dictionary<short, EntityMgr> _groups = new Dictionary<short, EntityMgr>();
-
-        public static EntitySys Instance { get; private set; }
-
-        public EntityMgr this[short group]
+        private readonly Dictionary<Type, EntityMgr> _groups = new Dictionary<Type, EntityMgr>();
+        public EntityMgr this[Type group]
         {
             get { return _groups.ContainsKey(@group) ? _groups[@group] : null; }
         }
@@ -36,10 +32,6 @@ namespace socket4net
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
-
-            if (Instance != null)
-                throw new Exception("EntitySys<" + typeof (short) + "> already instantiated!");
-            Instance = this;
 
             var more = arg.As<EntitySysArg>();
             foreach (var @group in more.Groups.Where(@group => !_groups.ContainsKey(@group)))

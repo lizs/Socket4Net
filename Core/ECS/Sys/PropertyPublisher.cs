@@ -19,15 +19,15 @@ namespace socket4net
         /// <summary>
         ///     全局类型监听者，即：监听某类型的任何属性改变
         /// </summary>
-        private readonly Dictionary<short, List<Action<Entity, IBlock>>> _globalGroupListeners =
-            new Dictionary<short, List<Action<Entity, IBlock>>>();
+        private readonly Dictionary<Type, List<Action<Entity, IBlock>>> _globalTypeListeners =
+            new Dictionary<Type, List<Action<Entity, IBlock>>>();
 
         /// <summary> 
         ///     类型监听， 即：监听某个类型的某些属性改变
         /// </summary>
-        private readonly Dictionary<short, Dictionary<short, List<Action<Entity, IBlock>>>>
-            _groupListeners =
-                new Dictionary<short, Dictionary<short, List<Action<Entity, IBlock>>>>();
+        private readonly Dictionary<Type, Dictionary<short, List<Action<Entity, IBlock>>>>
+            _typeListeners =
+                new Dictionary<Type, Dictionary<short, List<Action<Entity, IBlock>>>>();
 
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace socket4net
                 });
 
                 // 类型发布
-                Publish(host.Group, host, block);
+                Publish(host.GetType(), host, block);
 #if DEBUG
             }
 #endif
@@ -65,20 +65,25 @@ namespace socket4net
         /// <summary>
         ///     递归发布类型属性改变
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="type"></param>
         /// <param name="host"></param>
         /// <param name="block"></param>
-        private void Publish(short group, Entity host, IBlock block)
+        private void Publish(Type type, Entity host, IBlock block)
         {
-            // type listeners
-            if (_groupListeners.ContainsKey(group))
+            while (true)
             {
-                var typeDic = _groupListeners[group];
-                if (typeDic.ContainsKey(block.Id))
+                if (type == null || type == typeof(Entity))
+                    return;
+
+                // type listeners
+                if (_typeListeners.ContainsKey(type))
                 {
-                    var cbs = typeDic[block.Id].ToList();
-                    cbs.ForEach(cb =>
+                    var typeDic = _typeListeners[type];
+                    if (typeDic.ContainsKey(block.Id))
                     {
+                        var cbs = typeDic[block.Id].ToList();
+                        cbs.ForEach(cb =>
+                        {
 #if DEBUG
                         using (new AutoWatch(string.Format("回调 {0}:{1}", cb.Target, cb.Method.Name)))
                         {
@@ -87,25 +92,28 @@ namespace socket4net
 #if DEBUG
                         }
 #endif
-                    });
+                        });
+                    }
                 }
-            }
 
-            // type any listeners
-            if (_globalGroupListeners.ContainsKey(@group))
-            {
-                var cbs = _globalGroupListeners[@group].ToList();
-                cbs.ForEach(cb =>
+                // type any listeners
+                if (_globalTypeListeners.ContainsKey(type))
                 {
+                    var cbs = _globalTypeListeners[type].ToList();
+                    cbs.ForEach(cb =>
+                    {
 #if DEBUG
                     using (new AutoWatch(string.Format("回调 {0}:{1}", cb.Target, cb.Method.Name)))
                     {
 #endif
-                    cb(host, block);
+                        cb(host, block);
 #if DEBUG
                     }
 #endif
-                });
+                    });
+                }
+
+                type = type.BaseType;
             }
         }
 
@@ -136,16 +144,16 @@ namespace socket4net
         /// </summary>
         /// <param name="group"></param>
         /// <param name="handler"></param>
-        public void GlobalListen(short group, Action<Entity, IBlock> handler)
+        public void GlobalListen<T>(Action<Entity, IBlock> handler) where T : Entity
         {
-            if (!_globalGroupListeners.ContainsKey(group))
-                _globalGroupListeners.Add(group, new List<Action<Entity, IBlock>>());
+            if (!_globalTypeListeners.ContainsKey(typeof(T)))
+                _globalTypeListeners.Add(typeof(T), new List<Action<Entity, IBlock>>());
 
-            var listeners = _globalGroupListeners[group];
+            var listeners = _globalTypeListeners[typeof(T)];
             if (!listeners.Contains(handler))
                 listeners.Add(handler);
             else
-                Logger.Instance.WarnFormat("Handler {0} already registered for type {2}!", handler, group);
+                Logger.Instance.WarnFormat("Handler {0} already registered for type {2}!", handler, typeof(T));
         }
 
         /// <summary>
@@ -153,12 +161,12 @@ namespace socket4net
         /// </summary>
         /// <param name="group"></param>
         /// <param name="handler"></param>
-        public void GlobalUnlisten(short group, Action<Entity, IBlock> handler)
+        public void GlobalUnlisten<T>(Action<Entity, IBlock> handler) where T : Entity
         {
-            if (!_globalGroupListeners.ContainsKey(group))
+            if (!_globalTypeListeners.ContainsKey(typeof(T)))
                 return;
 
-            var listeners = _globalGroupListeners[group];
+            var listeners = _globalTypeListeners[typeof(T)];
             listeners.Remove(handler);
         }
         
@@ -168,14 +176,14 @@ namespace socket4net
         /// <param name="group"></param>
         /// <param name="handler"></param>
         /// <param name="pids"></param>
-        public void Listen(short group, Action<Entity, IBlock> handler, params short[] pids)
+        public void Listen<T>(Action<Entity, IBlock> handler, params short[] pids) where T : Entity
         {
             if (pids.Length == 0) return;
 
-            if (!_groupListeners.ContainsKey(group))
-                _groupListeners.Add(group, new Dictionary<short, List<Action<Entity, IBlock>>>());
+            if (!_typeListeners.ContainsKey(typeof(T)))
+                _typeListeners.Add(typeof(T), new Dictionary<short, List<Action<Entity, IBlock>>>());
 
-            var typeDic = _groupListeners[group];
+            var typeDic = _typeListeners[typeof(T)];
             foreach (var pid in pids)
             {
                 if (!typeDic.ContainsKey(pid))
@@ -185,7 +193,7 @@ namespace socket4net
                 if (!listeners.Contains(handler))
                     listeners.Add(handler);
                 else
-                    Logger.Instance.WarnFormat("Handler {0} already registered for {1} of type {2}!", handler, pid, group);
+                    Logger.Instance.WarnFormat("Handler {0} already registered for {1} of type {2}!", handler, pid, typeof(T));
             }
         }
 
@@ -195,14 +203,14 @@ namespace socket4net
         /// <param name="group"></param>
         /// <param name="handler"></param>
         /// <param name="pids"></param>
-        public void Unlisten(short group, Action<Entity, IBlock> handler, params short[] pids)
+        public void Unlisten<T>(Action<Entity, IBlock> handler, params short[] pids) where T : Entity
         {
             if (pids.Length == 0) return;
 
-            if (!_groupListeners.ContainsKey(group))
+            if (!_typeListeners.ContainsKey(typeof(T)))
                 return;
 
-            var typeDic = _groupListeners[group];
+            var typeDic = _typeListeners[typeof(T)];
             foreach (var pid in pids.Where(typeDic.ContainsKey))
             {
                 typeDic[pid].Remove(handler);
@@ -213,7 +221,8 @@ namespace socket4net
         {
             base.OnDestroy();
             _globalListenrs.Clear();
-            _groupListeners.Clear();
+            _typeListeners.Clear();
+            _globalTypeListeners.Clear();
         }
     }
 }
