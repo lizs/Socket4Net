@@ -9,7 +9,7 @@ namespace ChatC
         private static void Main(string[] args)
         {
             var ip = "127.0.0.1";
-            ushort port = 5000;
+            ushort port = 843;
 
             if (args.Length > 0)
             {

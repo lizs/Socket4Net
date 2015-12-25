@@ -6,4 +6,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <StartWorkingDirectory>D:\Git\Socket4Net\Publish\net45\</StartWorkingDirectory>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartWorkingDirectory>D:\Git\Socket4Net\Publish\net45\</StartWorkingDirectory>
+  </PropertyGroup>
 </Project>
