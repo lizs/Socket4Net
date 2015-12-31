@@ -7,4 +7,9 @@ namespace socket4net.tests
         Two,
         Three,
     }
+
+    internal class PropertyCase : Case
+    {
+        
+    }
 }

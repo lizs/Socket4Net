@@ -15,22 +15,13 @@
         /// <summary>
         ///     旧值
         /// </summary>
-        public object PreviousValue { get; private set; }
+        public TItem PreviousValue { get; private set; }
 
         public TItem UpperBound { get; private set; }
         public TItem LowerBound { get; private set; }
 
         public override EBlockType EBlockType { get { return EBlockType.Increasable; } }
-
-        public void Inc(object delta, out object overflow)
-        {
-            overflow = default(TItem);
-
-            TItem of;
-            Inc((TItem) delta, out of);
-            overflow = of;
-        }
-
+        
         public void IncTo(object target)
         {
             IncTo((TItem)target);
@@ -66,19 +57,9 @@
                 InternalSet(target);
         }
 
-        /// <summary>
-        ///     cast旧值
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public T PreviousAs<T>()
+        protected override void InternalSet(TItem value)
         {
-            return (T)PreviousValue;
-        }
-
-        protected override void InternalSet(object value)
-        {
-            PreviousValue = Value;
+            PreviousValue = (TItem)Value;
             base.InternalSet(value);
         }
     }

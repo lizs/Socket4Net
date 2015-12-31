@@ -10,11 +10,6 @@ namespace socket4net
     public class DataComponent : Component, IData
     {
         /// <summary>
-        ///     属性id格式化方法
-        /// </summary>
-        public Func<string, short> KeyFormator { get; set; }
-
-        /// <summary>
         ///     属性体
         /// </summary>
         private PropertyBody _propertyBody;
@@ -28,31 +23,22 @@ namespace socket4net
             }
         }
 
+        /// <summary>
+        ///     获取属性块
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public IBlock GetBlock(short key)
         {
             return PropertyBody.GetBlock(key);
         }
-
-        public IEnumerable<string> Feilds
-        {
-            get { return PropertyBody.Where(x => x.Synchronizable).Select(x => x.RedisFeild); }
-        }
-
+        
+        /// <summary>
+        ///     枚举属性块
+        /// </summary>
         public IEnumerable<IBlock> Blocks
         {
             get { return PropertyBody; }
-        }
-
-        /// <summary>
-        ///     执行初始化
-        /// </summary>
-        protected override void OnInit(ObjArg objArg)
-        {
-            base.OnInit(objArg);
-
-            //// 应用属性
-            //var more = objArg.As<PropertiedObjArg>();
-            //Apply(more.Properties);
         }
 
         /// <summary>
@@ -165,23 +151,29 @@ namespace socket4net
         #endregion
 
         #region 属性操作
-        public T Get<T>(short id)
+
+        public bool Apply(IReadOnlyCollection<IBlock> blocks)
         {
-            T ret;
-            return PropertyBody.Get(id, out ret) ? ret : default(T);
+            return PropertyBody.Apply(blocks);
         }
 
-        public bool Get<T>(short id, out T value)
+        public T Get<T>(short pid)
         {
-            if (PropertyBody.Get(id, out value)) return true;
+            T ret;
+            return PropertyBody.Get(pid, out ret) ? ret : default(T);
+        }
 
-            Logger.Instance.WarnFormat("Pid : {0} of {1} not exist!", id, Name);
+        public bool Get<T>(short pid, out T value)
+        {
+            if (PropertyBody.Get(pid, out value)) return true;
+
+            Logger.Instance.WarnFormat("Pid : {0} of {1} not exist!", pid, Name);
             return false;
         }
 
-        public List<T> GetList<T>(short id)
+        public List<T> GetList<T>(short pid)
         {
-            var lst = Get<List<ListItemRepresentation<T>>>(id);
+            var lst = Get<List<ListItemRepresentation<T>>>(pid);
             return lst != null ? lst.Select(x => x.Item).ToList() : null;
         }
 
@@ -208,43 +200,43 @@ namespace socket4net
 
         #region increasable
 
-        public bool Inc<T>(short id, T delta)
+        public bool Inc<T>(short pid, T delta)
         {
             T overflow;
-            return Inc(id, delta, out overflow);
+            return Inc(pid, delta, out overflow);
         }
 
-        public bool Inc(short id, object delta)
+        public bool Inc(short pid, object delta)
         {
             object overflow;
-            return Inc(id, delta, out overflow);
+            return Inc(pid, delta, out overflow);
         }
 
-        public bool Inc<T>(short id, T delta, out T overflow)
+        public bool Inc<T>(short pid, T delta, out T overflow)
         {
-            if (!PropertyBody.Inc(id, delta, out overflow)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Inc(pid, delta, out overflow)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Inc(short id, object delta, out object overflow)
+        public bool Inc(short pid, object delta, out object overflow)
         {
-            if (!PropertyBody.Inc(id, delta, out overflow)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Inc(pid, delta, out overflow)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool IncTo<T>(short id, T target)
+        public bool IncTo<T>(short pid, T target)
         {
-            if (!PropertyBody.IncTo(id, target)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.IncTo(pid, target)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool IncTo(short id, object target)
+        public bool IncTo(short pid, object target)
         {
-            if (!PropertyBody.IncTo(id, target)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.IncTo(pid, target)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
@@ -252,17 +244,17 @@ namespace socket4net
 
         #region settable
 
-        public bool Set<T>(short id, T value)
+        public bool Set<T>(short pid, T value)
         {
-            if (!PropertyBody.Set(id, value)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Set(pid, value)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Set(short id, object value)
+        public bool Set(short pid, object value)
         {
-            if (!PropertyBody.Set(id, value)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Set(pid, value)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
@@ -285,99 +277,92 @@ namespace socket4net
             return PropertyBody.GetByIndex<T>(pid, idx);
         }
 
-        public bool Add<T>(short id, T value)
+        public bool Add<T>(short pid, T value)
         {
-            if (!PropertyBody.Add(id, value)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Add(pid, value)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Add(short id, object value)
+        public bool Add(short pid, object value)
         {
-            if (!PropertyBody.Add(id, value)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Add(pid, value)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool AddRange<T>(short id, List<T> items)
+        public bool AddRange<T>(short pid, List<T> items)
         {
-            if (!PropertyBody.MultiAdd(id, items)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.MultiAdd(pid, items)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Remove<T>(short id, T item)
+        public bool Remove<T>(short pid, T item)
         {
-            if (!PropertyBody.Remove(id, item)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Remove(pid, item)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Remove(short id, object item)
+        public bool Remove(short pid, object item)
         {
-            if (!PropertyBody.Remove(id, item)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Remove(pid, item)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool RemoveAll<T>(short id, Predicate<T> predicate)
+        public bool RemoveAll<T>(short pid, Predicate<T> predicate)
         {
             int cnt;
-            return RemoveAll(id, predicate, out cnt);
+            return RemoveAll(pid, predicate, out cnt);
         }
 
-        public bool RemoveAll<T>(short id, Predicate<T> predicate, out int count)
+        public bool RemoveAll<T>(short pid, Predicate<T> predicate, out int count)
         {
-            if (!PropertyBody.RemoveAll(id, predicate, out count)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.RemoveAll(pid, predicate, out count)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool RemoveAll(short id)
+        public bool RemoveAll(short pid)
         {
             int cnt;
-            return RemoveAll(id, out cnt);
+            return RemoveAll(pid, out cnt);
         }
 
-        public bool RemoveAll(short id, out int count)
+        public bool RemoveAll(short pid, out int count)
         {
-            if (!PropertyBody.RemoveAll(id, out count)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.RemoveAll(pid, out count)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Insert<T>(short id, int idx, T item)
+        public bool Insert<T>(short pid, int idx, T item)
         {
-            if (!PropertyBody.Insert(id, idx, item)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Insert(pid, idx, item)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Insert(short id, int idx, object item)
+        public bool Insert(short pid, int idx, object item)
         {
-            if (!PropertyBody.Insert(id, idx, item)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Insert(pid, idx, item)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Update(short id, int idx)
+        public bool Replace<T>(short pid, int idx, T item)
         {
-            if (!PropertyBody.Update(id, idx)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Replace(pid, idx, item)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 
-        public bool Replace<T>(short id, int idx, T item)
+        public bool Swap<T>(short pid, int idxA, int idxB)
         {
-            if (!PropertyBody.Replace(id, idx, item)) return false;
-            NotifyPropertyChanged(id);
-            return true;
-        }
-
-        public bool Swap<T>(short id, int idxA, int idxB)
-        {
-            if (!PropertyBody.Swap<T>(id, idxA, idxB)) return false;
-            NotifyPropertyChanged(id);
+            if (!PropertyBody.Swap<T>(pid, idxA, idxB)) return false;
+            NotifyPropertyChanged(pid);
             return true;
         }
 

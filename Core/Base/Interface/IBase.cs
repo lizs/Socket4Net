@@ -35,7 +35,7 @@ namespace socket4net
     public interface ISerializable<T>
     {
         T Serialize();
-        void Deserialize(T data);
+        bool Deserialize(T data);
     }
 
     /// <summary>

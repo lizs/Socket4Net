@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 
 namespace socket4net.tests
@@ -13,7 +14,7 @@ namespace socket4net.tests
         [Test]
         public void TestComponent()
         {
-            var obj = Obj.Create<Entity>(new EntityArg(null, 1, (short)EEntityGroup.One));
+            var obj = Obj.Create<Entity>(new EntityArg(null, new Guid()));
 
             obj.AddComponent<ComponentA>();
             obj.AddComponent<ComponentB>();
@@ -32,7 +33,7 @@ namespace socket4net.tests
         [Test]
         public void TestDependOn()
         {
-            var obj = Obj.Create<Entity>(new EntityArg(null, 1, (short)EEntityGroup.Two));
+            var obj = Obj.Create<Entity>(new EntityArg(null, new Guid()));
 
             obj.AddComponent<ComponentB>();
 

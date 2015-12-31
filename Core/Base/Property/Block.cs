@@ -7,13 +7,6 @@ namespace socket4net
     public abstract class Block : IBlock
     {
         public const int InvalidIndex = -1;
-        protected Block(string feild)
-        {
-            RedisFeild = string.Format("{0}:{1}", feild, Id);
-        } 
-
-        public string RedisFeild { get; set; }
-
         private IBlockOps _ops;
         public virtual bool Dirty { get; set; }
         public short Id { get; set; }
@@ -26,7 +19,7 @@ namespace socket4net
         /// </summary>
         public bool Persistable
         {
-            get { return Mode >= EBlockMode.Persistable; }
+            get { return (Mode & EBlockMode.Persistable) != 0; }
         }
 
         /// <summary>
@@ -34,7 +27,7 @@ namespace socket4net
         /// </summary>
         public bool Synchronizable
         {
-            get { return Mode >= EBlockMode.Synchronizable; }
+            get { return (Mode & EBlockMode.Synchronizable) != 0; }
         }
 
         public IBlockOps Ops
@@ -99,7 +92,7 @@ namespace socket4net
         }
 
         public abstract byte[] Serialize();
-        public abstract void Deserialize(byte[] proto);
+        public abstract bool Deserialize(byte[] data);
     }
 
     public abstract class Block<TItem> : Block
@@ -114,12 +107,7 @@ namespace socket4net
             return (TItem)Value;
         }
 
-        protected void InternalSet(TItem value)
-        {
-            InternalSet((object)value);
-        }
-
-        protected virtual void InternalSet(object value)
+        protected virtual void InternalSet(TItem value)
         {
             Value = value;
             Dirty = true;
@@ -130,10 +118,11 @@ namespace socket4net
             return PiSerializer.SerializeValue((TItem)Value);
         }
 
-        public override void Deserialize(byte[] bytes)
+        public override bool Deserialize(byte[] data)
         {
-            if(bytes == null) return;
-            Value = PiSerializer.DeserializeValue<TItem>(bytes);
+            if(data.IsNullOrEmpty()) return false;
+            Value = PiSerializer.DeserializeValue<TItem>(data);
+            return true;
         }
     }
 }

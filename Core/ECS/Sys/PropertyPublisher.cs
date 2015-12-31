@@ -142,7 +142,6 @@ namespace socket4net
         /// <summary>
         ///     监听某类型对象的任何属性修改
         /// </summary>
-        /// <param name="group"></param>
         /// <param name="handler"></param>
         public void GlobalListen<T>(Action<Entity, IBlock> handler) where T : Entity
         {
@@ -159,7 +158,6 @@ namespace socket4net
         /// <summary>
         ///     取消监听某类型对象的任何属性修改
         /// </summary>
-        /// <param name="group"></param>
         /// <param name="handler"></param>
         public void GlobalUnlisten<T>(Action<Entity, IBlock> handler) where T : Entity
         {
@@ -169,11 +167,10 @@ namespace socket4net
             var listeners = _globalTypeListeners[typeof(T)];
             listeners.Remove(handler);
         }
-        
+
         /// <summary>
         ///     监听类型属性
         /// </summary>
-        /// <param name="group"></param>
         /// <param name="handler"></param>
         /// <param name="pids"></param>
         public void Listen<T>(Action<Entity, IBlock> handler, params short[] pids) where T : Entity
@@ -200,7 +197,6 @@ namespace socket4net
         /// <summary>
         ///     取消监听类型
         /// </summary>
-        /// <param name="group"></param>
         /// <param name="handler"></param>
         /// <param name="pids"></param>
         public void Unlisten<T>(Action<Entity, IBlock> handler, params short[] pids) where T : Entity

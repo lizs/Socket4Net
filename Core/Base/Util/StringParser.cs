@@ -131,7 +131,7 @@ namespace socket4net
 
             var arr = strInput.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
-            var unkonwn = typeof(List<>);
+            var unkonwn = typeof(List);
             Type[] typeArgs = { type };
             var generic = unkonwn.MakeGenericType(typeArgs);
 

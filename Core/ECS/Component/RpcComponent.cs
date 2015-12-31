@@ -5,27 +5,8 @@ using System.Threading.Tasks;
 
 namespace socket4net
 {
-    public class RpcComponentArg : UniqueObjArg<short>
-    {
-        public RpcComponentArg(IObj parent, short key, Func<IRpcSession> sessionGetter)
-            : base(parent, key)
-        {
-            SessionGetter = sessionGetter;
-        }
-
-        public Func<IRpcSession> SessionGetter { get; private set; }
-    }
-
     public abstract class RpcComponent : Component, IRpc
     {
-        protected override void OnInit(ObjArg arg)
-        {
-            base.OnInit(arg);
-
-            var more = arg as RpcComponentArg;
-            SessionGetter = more.SessionGetter;
-        }
-
         #region IRpc Members
 
         public Func<IRpcSession> SessionGetter { get; private set; }

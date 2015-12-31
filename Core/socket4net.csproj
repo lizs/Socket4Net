@@ -83,6 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\BatchLocker.cs" />
+    <Compile Include="Base\Util\Convertor.cs" />
+    <Compile Include="Base\Util\Key.cs" />
+    <Compile Include="ECS\Sys\EntityBridge.cs" />
     <Compile Include="ECS\Component\Component.cs" />
     <Compile Include="ECS\Component\DataComponent.cs" />
     <Compile Include="Base\Interface\IData.cs" />
@@ -155,6 +158,7 @@
     <Compile Include="ECS\Sys\EntitySys.cs" />
     <Compile Include="ECS\Sys\ScheduleSys.cs" />
     <Compile Include="Launcher.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="socket4net\Coroutine\CoroutineScheduler.cs" />
     <Compile Include="socket4net\Net\TCP\PeerArg.cs" />
     <Compile Include="socket4net\Schedule\TimerWrapper.cs" />
@@ -196,7 +200,9 @@
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Base\Serializer\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"</PostBuildEvent>

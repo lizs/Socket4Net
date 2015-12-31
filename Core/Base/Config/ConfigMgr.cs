@@ -258,11 +258,11 @@ namespace socket4net
             switch (info[1])
             {
                 case "Csv":
-                    ParseCsv(typeof (Parser<>), info[2], path);
+                    ParseCsv(typeof (Parser), info[2], path);
                     break;
 
                 case "RichCsv":
-                    ParseCsv(typeof (RichParser<>), info[2], path);
+                    ParseCsv(typeof (RichParser), info[2], path);
                     break;
 
                 case "KeyValue":
@@ -270,7 +270,7 @@ namespace socket4net
                     break;
 
                 case "Struct":
-                    ParseStruct(typeof(StructParser<>), info[2], path);
+                    ParseStruct(typeof(StructParser), info[2], path);
                     break;
 
                 default:

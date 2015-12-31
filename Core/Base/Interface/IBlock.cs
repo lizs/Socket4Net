@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace socket4net
 {
+    [Flags]
     public enum EBlockMode
     {
         // 临时的
-        Temporary,
-        // 可同步
-        Synchronizable,
-        // 即时存储
-        Persistable,
+        Temporary = 0,
+        // 需同步
+        Synchronizable = 1,
+        // 需存储
+        Persistable = 2,
     }
 
-    public interface IBlock : ISerializable
+    public interface IBlock : ISerializable /*where TKey : IComparable, IEquatable, IComparable*/
     {
         /// <summary>
         ///     属性Id
@@ -67,17 +67,12 @@ namespace socket4net
         T As<T>();
 
         /// <summary>
-        ///     将Value强转成List<T>
+        ///     将Value强转成List
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         List<T> AsList<T>();
         
-        /// <summary>
-        ///     Redis字段名
-        /// </summary>
-        string RedisFeild { get; set; }
-
         /// <summary>
         ///     模式
         /// </summary>
@@ -94,67 +89,53 @@ namespace socket4net
     }
 
     /// <summary>
-    /// 可重新设值的属性块
+    ///     存储旧值的block
     /// </summary>
-    public interface ISettableBlock : IBlock
-    {
-        void Set(object value);
-    }
-
-    public interface ISettableBlock<in TItem> : ITrackableBlock
-    {
-        void Set(TItem value);
-    }
-
-    public interface ITrackableBlock : IBlock
+    /// <typeparam name="TItem"></typeparam>
+    public interface ITrackableBlock<out TItem> : IBlock
     {
         /// <summary>
         ///     旧值
         /// </summary>
-        object PreviousValue { get; }
-
-        /// <summary>
-        ///     cast旧值
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        T PreviousAs<T>();
+        TItem PreviousValue { get; }
     }
 
     /// <summary>
-    /// 可增减值的属性块
+    ///     可重新设值的属性块
     /// </summary>
-    public interface IIncreasableBlock : ITrackableBlock
+    public interface ISettableBlock<TItem> : ITrackableBlock<TItem>
     {
-        void Inc(object delta, out object overflow);
-        void IncTo(object target);
+        void Set(TItem value);
     }
-    public interface IIncreasableBlock<TItem> : IIncreasableBlock
+
+    /// <summary>
+    ///     可增减值的属性块
+    /// </summary>
+    public interface IIncreasableBlock<TItem> : ITrackableBlock<TItem>
     {
         void Inc(TItem delta, out TItem overflow);
         void IncTo(TItem taget);
     }
 
-    public interface IListBlock : IBlock, IDifferentialSerializable
+    public interface IListBlock : IBlock
     {
-        Type ItemType { get; }
-        void Add(object item);
-        bool Insert(int idx, object item);
-        bool Update(int idx);
-        bool Remove(object item);
-        void MultiAdd(IList items);
-        void MultiRemove(List<object> items);
         int RemoveAll();
     }
 
-    public interface IListBlock<TItem> : IListBlock
+    /// <summary>
+    ///     列表块
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TItem"></typeparam>
+    public interface IListBlock<TItem> : IListBlock, IDifferentialSerializable
     {
+        Type ItemType { get; }
         int IndexOf(TItem item);
         int IndexOf(Predicate<TItem> condition);
         void Add(TItem item);
         bool Insert(int idx, TItem item);
-        void MultiAdd(List<TItem> items);
-        void MultiRemove(List<TItem> items);
+        void MultiAdd(IReadOnlyCollection<TItem> items);
+        void MultiRemove(IReadOnlyCollection<TItem> items);
         bool Remove(TItem item);
         bool RemoveAt(int idx);
         int RemoveAll(Predicate<TItem> predicate);

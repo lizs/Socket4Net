@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Case.cs" />
     <Compile Include="EntityCase.cs" />
+    <Compile Include="REnum.cs" />
     <Compile Include="ScheduleCase.cs" />
     <Compile Include="Components.cs" />
     <Compile Include="EProperty.cs" />

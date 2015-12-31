@@ -23,6 +23,18 @@ namespace socket4net
 
         public Dictionary<short, IBlock> Blocks { get; private set; }
 
+        public bool Apply(IReadOnlyCollection<IBlock> blocks)
+        {
+            if (blocks.IsNullOrEmpty()) return true;
+            foreach (var block in blocks)
+            {
+                if (!Contains(block.Id, block.Type)) return false;
+                Blocks[block.Id] = block;
+            }
+
+            return true;
+        }
+
         public bool Contains(short pid)
         {
             return Blocks.ContainsKey(pid);
@@ -58,58 +70,24 @@ namespace socket4net
             return true;
         }
 
-        public virtual bool Inc(short pid, object delta, out object overflow)
+        public bool IncTo<TItem>(short pid, TItem target)
         {
-            overflow = null;
-            if (!Contains(pid, delta.GetType())) return false;
+            if (!Contains<TItem>(pid)) return false;
 
-            var incBlock = Blocks[pid] as IIncreasableBlock<short>;
-            if (incBlock == null) return false;
-
-            incBlock.Inc(delta, out overflow);
-            return true;
-        }
-
-        public bool IncTo(short pid, object target)
-        {
-            if (!Contains(pid, target.GetType())) return false;
-
-            var incBlock = Blocks[pid] as IIncreasableBlock<short>;
-            if(incBlock == null) return false;
-
-            incBlock.IncTo(target);
-            return true;
-        }
-
-        public bool IncTo<T>(short pid, T target)
-        {
-            if (!Contains<T>(pid)) return false;
-
-            var incBlock = Blocks[pid] as IIncreasableBlock<T>;
+            var incBlock = Blocks[pid] as IIncreasableBlock<TItem>;
             if(incBlock == null) return false;
             
             incBlock.IncTo(target);
             return true;
         }
 
-        public virtual bool Set(short pid, object value)
+        public virtual bool Set<TItem>(short pid, TItem value)
         {
-            if (value != null && !Contains(pid, value.GetType())) return false;
+            if (!Contains(pid, typeof(TItem))) return false;
 
-            var settableBlock = Blocks[pid] as ISettableBlock;
+            var settableBlock = Blocks[pid] as ISettableBlock<TItem>;
             if (settableBlock == null) return false;
-            
-            settableBlock.Set(value);
-            return true;
-        }
-
-        public virtual bool Set<T>(short pid, T value)
-        {
-            if (!Contains(pid, typeof(T))) return false;
-
-            var settableBlock = Blocks[pid] as ISettableBlock<T>;
-            if (settableBlock == null) return false;
-            if (Equals<T>.Function(settableBlock.As<T>(), value)) return false;
+            if (Equals<TItem>.Function(settableBlock.As<TItem>(), value)) return false;
 
             settableBlock.Set(value);
             return true;
@@ -155,16 +133,7 @@ namespace socket4net
             return true;
         }
 
-        public virtual bool Add(short pid, object item)
-        {
-            var lstBlock = Blocks[pid] as IListBlock<short>;
-            if (lstBlock == null || lstBlock.ItemType != item.GetType()) return false;
-
-            lstBlock.Add(item);
-            return true;
-        }
-
-        public virtual bool MultiAdd<TItem>(short pid, List<TItem> items)
+        public virtual bool MultiAdd<TItem>(short pid, IReadOnlyCollection<TItem> items)
         {
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return false;
 
@@ -174,34 +143,11 @@ namespace socket4net
             lstBlock.MultiAdd(items);
             return true;
         }
-
-        public virtual bool MultiAdd(short pid, IList items)
-        {
-            var lstBlock = Blocks[pid] as IListBlock<short>;
-            if (lstBlock == null) return false;
-
-            if (items.GetType() != typeof (List<>).MakeGenericType(new[] {lstBlock.ItemType})) return false;
-
-            lstBlock.MultiAdd(items);
-            return true;
-        }
-
-        public bool Insert<T>(short pid, int idx, T item)
-        {
-            var lstBlock = Blocks[pid] as IListBlock<T>;
-            return lstBlock != null && lstBlock.Insert(idx, item);
-        }
-
-        public bool Insert(short pid, int idx, object item)
-        {
-            var lstBlock = Blocks[pid] as IListBlock<short>;
-            return lstBlock != null && lstBlock.Insert(idx, item);
-        }
         
-        public bool Update(short pid, int idx)
+        public bool Insert<TItem>(short pid, int idx, TItem item)
         {
-            var lstBlock = Blocks[pid] as IListBlock<short>;
-            return lstBlock != null && lstBlock.Update(idx);
+            var lstBlock = Blocks[pid] as IListBlock<TItem>;
+            return lstBlock != null && lstBlock.Insert(idx, item);
         }
 
         public bool Swap<TItem>(short pid, int idxA, int idxB)
@@ -224,16 +170,7 @@ namespace socket4net
             return lstBlock != null && lstBlock.Remove(item);
         }
 
-        public virtual bool Remove(short pid, object item)
-        {
-            if (!Contains(pid)) return false;
-
-            var lstBlock = Blocks[pid] as IListBlock<short>;
-            if (lstBlock == null || lstBlock.ItemType != item.GetType()) return false;
-            return lstBlock.Remove(item);
-        }
-
-        public virtual bool MultiRemove<TItem>(short pid, List<TItem> items)
+        public virtual bool MultiRemove<TItem>(short pid, IReadOnlyCollection<TItem> items)
         {
             if (!Contains<List<ListItemRepresentation<TItem>>>(pid)) return false;
 
@@ -243,24 +180,13 @@ namespace socket4net
             lstBlock.MultiRemove(items);
             return true;
         }
-
-        public virtual bool MultiRemove(short pid, List<object> items)
-        {
-            if (!Contains(pid)) return false;
-
-            var lstBlock = Blocks[pid] as IListBlock<short>;
-            if (lstBlock == null) return false;
-
-            lstBlock.MultiRemove(items);
-            return true;
-        }
-
+        
         public virtual bool RemoveAll(short pid, out int count)
         {
             count = 0;
             if (!Contains(pid)) return false;
 
-            var lstBlock = Blocks[pid] as IListBlock<short>;
+            var lstBlock = Blocks[pid] as IListBlock;
             if (lstBlock == null) return false;
 
             count = lstBlock.RemoveAll();

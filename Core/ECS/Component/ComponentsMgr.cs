@@ -25,16 +25,16 @@ namespace socket4net
             var id = ComponentIdCache.Instance.Get(cpType);
             if(Exist(id)) return Get(id);
 
-            var cp = (Component) ObjFactory.Create(cpType, new ComponentArg(this, id));
-            Add(cp, false);
+            var cp = (Component)ObjFactory.Create(cpType, new ComponentArg(this, id));
+            Add(cp);
             return cp;
         }
 
-        private T CreateComponent<T>() where T : Component, new ()
+        private T CreateComponent<T>() where T : Component, new()
         {
             var id = ComponentIdCache.Instance.Get(typeof(T));
-            return Exist(id) ? Get<T>(id) : Create<T>(new ComponentArg(this, id), false, false);
-        } 
+            return Exist(id) ? Get<T>(id) : Create<T>(new ComponentArg(this, id));
+        }
 
         public T AddComponent<T>() where T : Component, new()
         {

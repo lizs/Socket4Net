@@ -4,22 +4,22 @@ using System.Collections.Generic;
 
 namespace socket4net
 {
-    public class EntityArg : UniqueObjArg<long>
+    public class EntityArg : UniqueObjArg<Guid>
     {
-        public EntityArg(IObj parent, long key, short group)
+        public EntityArg(IObj parent, Guid key)
             : base(parent, key)
         {
-            Group = group;
         }
-
-        public short Group { get; private set; }
     }
 
+    /// <summary>
+    ///     组件消息通知基类
+    /// </summary>
     public class Message
     {
     }
 
-    public interface IEntity : IUniqueObj<string>, IData, IScheduler
+    public interface IEntity : IUniqueObj<Guid>, IData, IScheduler
     {
         T GetComponent<T>() where T : Component;
         T GetComponent<T>(short cpId) where T : Component;
@@ -31,7 +31,7 @@ namespace socket4net
     /// <summary>
     ///    E(ECS)
     /// </summary>
-    public partial class Entity : UniqueObj<string>, IEntity, IEnumerable<Component>
+    public partial class Entity : UniqueObj<Guid>, IEntity, IEnumerable<Component>
     {
         /// <summary>
         ///     创建组件
@@ -49,9 +49,6 @@ namespace socket4net
         protected override void OnInit(ObjArg objArg)
         {
             base.OnInit(objArg);
-
-            // 组
-            Group = objArg.As<EntityArg>().Group;
 
             // 添加组件
             SpawnComponents();
@@ -163,12 +160,13 @@ namespace socket4net
 
         IEnumerator<Component> IEnumerable<Component>.GetEnumerator()
         {
-            return (IEnumerator<Component>) GetEnumerator();
+            return (IEnumerator<Component>)GetEnumerator();
         }
 
         #endregion
 
         #region 订阅
+
         public void Listen(Action<IEntity, IBlock> handler, params short[] pids)
         {
             _data.Listen(handler, pids);

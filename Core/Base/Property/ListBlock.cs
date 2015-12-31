@@ -10,7 +10,6 @@ namespace socket4net
         IListBlock<TItem>
     {
         private int _uidSeed;
-
         private int GetUid()
         {
             return ++_uidSeed;
@@ -223,12 +222,7 @@ namespace socket4net
             return true;
         }
 
-        public void MultiAdd(IList items)
-        {
-            MultiAdd((List<TItem>) items);
-        }
-
-        public void MultiAdd(List<TItem> items)
+        public void MultiAdd(IReadOnlyCollection<TItem> items)
         {
             if (items == null || items.Count == 0) return;
             foreach (var item in items)
@@ -237,12 +231,7 @@ namespace socket4net
             }
         }
 
-        public void MultiRemove(List<object> items)
-        {
-            MultiRemove(items.Cast<TItem>().ToList());
-        }
-
-        public void MultiRemove(List<TItem> items)
+        public void MultiRemove(IReadOnlyCollection<TItem> items)
         {
             if (items == null) return;
 
@@ -288,15 +277,16 @@ namespace socket4net
             return PiSerializer.SerializeValue(lst);
         }
 
-        public override void Deserialize(byte[] bytes)
+        public override bool Deserialize(byte[] data)
         {
-            if (bytes.IsNullOrEmpty()) return;
+            if (data.IsNullOrEmpty()) return false;
 
             Get().Clear();
-            var lst = PiSerializer.DeserializeValue<List<TItem>>(bytes);
-            if (lst == null || lst.Count <= 0) return;
+            var lst = PiSerializer.DeserializeValue<List<TItem>>(data);
+            if (lst == null || lst.Count <= 0) return false;
 
             MultiAdd(lst);
+            return true;
         }
 
         /// <summary>
@@ -364,8 +354,10 @@ namespace socket4net
                     case EPropertyOps.Insert:
                         {
                             var x = InsertOpsProto<TItem>.Deserialize(o.Value);
-                            if (x == null || x.ListItem == null)
-                                Logger.Instance.ErrorFormat("插入的item为空，位置：{0}，RedisFeild：{1}", x.Index, RedisFeild);
+                            if (x == null)
+                                Logger.Instance.Error("插入的item为空");
+                            else if (x.ListItem == null)
+                                Logger.Instance.ErrorFormat("插入的item为空，位置：{0}", x.Index);
                             else
                             {
 #if NET35
@@ -381,7 +373,7 @@ namespace socket4net
                         {
                             var x = RemoveOpsProto.Deserialize(o.Value);
                             if (x == null)
-                                Logger.Instance.ErrorFormat("移除item失败，属性：{0}:{1}", Id, RedisFeild);
+                                Logger.Instance.ErrorFormat("移除item失败，属性：{0}", Id);
                             else
                             {
                                 var idx = GetIndexById(x.Id);

@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace socket4net
 {
+    /*  todo lizs
+     *  在方法中AddComponent更直观
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public class ConsistsOfAttribute : Attribute
     {
@@ -35,4 +37,5 @@ namespace socket4net
             throw new NotImplementedException("");
         }
     }
+     * */
 }

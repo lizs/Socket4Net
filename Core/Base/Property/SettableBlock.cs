@@ -13,7 +13,7 @@
         /// <summary>
         ///     旧值
         /// </summary>
-        public object PreviousValue { get; private set; }
+        public TItem PreviousValue { get; private set; }
 
         /// <summary>
         /// 暴露settter
@@ -21,7 +21,7 @@
         /// <param name="value"></param>
         public void Set(object value)
         {
-            InternalSet(value);
+            InternalSet((TItem)value);
         }
 
         /// <summary>
@@ -33,19 +33,9 @@
             InternalSet(value);
         }
 
-        /// <summary>
-        ///     cast旧值
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public T PreviousAs<T>()
+        protected override void InternalSet(TItem value)
         {
-            return (T) PreviousValue;
-        }
-
-        protected override void InternalSet(object value)
-        {
-            PreviousValue = Value;
+            PreviousValue = (TItem)Value;
             base.InternalSet(value);
         }
     }

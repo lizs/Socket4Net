@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace socket4net
 {
@@ -11,9 +12,19 @@ namespace socket4net
     {
         private DataComponent _data;
 
+        public IReadOnlyCollection<IBlock> Blocks
+        {
+            get { return _data.Blocks.ToList(); }
+        } 
+
         public void Inject(IEnumerable<IBlock> blocks)
         {
             _data.Inject(blocks);
+        }
+
+        public bool Apply(IReadOnlyCollection<IBlock> blocks)
+        {
+            return _data.Apply(blocks);
         }
 
         public T Get<T>(short id)
@@ -144,11 +155,6 @@ namespace socket4net
         public bool Insert(short id, int idx, object item)
         {
             return _data.Insert(id, idx, item);
-        }
-
-        public bool Update(short id, int idx)
-        {
-            return _data.Update(id, idx);
         }
 
         public bool Replace<T>(short id, int idx, T item)

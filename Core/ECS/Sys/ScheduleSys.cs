@@ -12,7 +12,9 @@ namespace socket4net
         public const uint MillisecondsPerDay = 24 * 60 * 60 * 1000;
         public static ScheduleSys Instance { get; private set; }
         private Scheduler _scheduler;
-        
+
+        #region 协程
+
         /// <summary>
         ///     产生一个在逻辑线程等待n毫秒的枚举器
         ///     用在协程中
@@ -29,8 +31,6 @@ namespace socket4net
 
             yield return false;
         }
-
-        #region 协程
 
         public void StartCoroutine(Func<IEnumerator> fun)
         {
