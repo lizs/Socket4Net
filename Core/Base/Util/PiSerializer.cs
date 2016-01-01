@@ -123,7 +123,7 @@ namespace socket4net
             {
                 using (var ms = new MemoryStream())
                 {
-                    var genericType = typeof(ValueProto).MakeGenericType(value.GetType());
+                    var genericType = typeof(ValueProto<>).MakeGenericType(value.GetType());
                     var constructor = genericType.GetConstructor(new[] { value.GetType() });
                     Serializer.NonGeneric.Serialize(ms, constructor.Invoke(new[] { value }));
                     return ms.ToArray();
@@ -164,7 +164,7 @@ namespace socket4net
             {
                 using (var ms = new MemoryStream(data))
                 {
-                    var genericType = typeof(ValueProto).MakeGenericType(type);
+                    var genericType = typeof(ValueProto<>).MakeGenericType(type);
                     var value = Serializer.NonGeneric.Deserialize(genericType, ms);
 
                     return genericType.GetProperty("Result").GetValue(value, BindingFlags.GetProperty, null, null, null);

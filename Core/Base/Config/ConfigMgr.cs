@@ -35,7 +35,7 @@ namespace socket4net
         }
     }
 
-    public class ConfigMgr : StrictTask
+    public class ConfigMgr : Tsk
     {
         // for IBatch<string>
         public ConfigMgr()
@@ -226,20 +226,7 @@ namespace socket4net
             }
             return type;
         }
-
-        // for task
-        public override IEnumerator Step()
-        {
-            foreach (var path in _summary)
-            {
-                LoadOne(path);
-
-                yield return null;
-            }
-
-            IsDone = true;
-        }
-
+        
         public void LoadAll()
         {
             foreach (var path in _summary)
@@ -258,11 +245,11 @@ namespace socket4net
             switch (info[1])
             {
                 case "Csv":
-                    ParseCsv(typeof (Parser), info[2], path);
+                    ParseCsv(typeof (Parser<>), info[2], path);
                     break;
 
                 case "RichCsv":
-                    ParseCsv(typeof (RichParser), info[2], path);
+                    ParseCsv(typeof(RichParser<>), info[2], path);
                     break;
 
                 case "KeyValue":
@@ -270,7 +257,7 @@ namespace socket4net
                     break;
 
                 case "Struct":
-                    ParseStruct(typeof(StructParser), info[2], path);
+                    ParseStruct(typeof(StructParser<>), info[2], path);
                     break;
 
                 default:

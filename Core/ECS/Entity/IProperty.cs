@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace socket4net
 {
-    public interface IData
+    public interface IProperty
     {
         #region Êý¾Ý²Ù×÷
 

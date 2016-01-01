@@ -3,18 +3,23 @@
 namespace socket4net
 {
     /// <summary>
-    /// 计数锁
+    ///     计数器
+    ///     在计数为0时触发回调
     /// </summary>
-    public class Locker
+    public class Counter
     {
         private int _count;
         private readonly Action _action;
-        public Locker(Action action)
+
+        public Counter(Action action)
         {
             _action = action;
         }
 
-        public bool Locked { get { return _count != 0; } }
+        public bool Expired
+        {
+            get { return _count != 0; }
+        }
 
         public void Increment()
         {
@@ -29,24 +34,6 @@ namespace socket4net
 
             if (_count == 0 && _action != null)
                 _action();
-        }
-    }
-
-    /// <summary>
-    /// 自动锁
-    /// </summary>
-    public class AutoLocker : IDisposable
-    {
-        private readonly Locker _locker;
-        public AutoLocker(Locker locker)
-        {
-            _locker = locker;
-            _locker.Increment();
-        }
-
-        public void Dispose()
-        {
-            if (_locker != null) _locker.Decrement();
         }
     }
 }

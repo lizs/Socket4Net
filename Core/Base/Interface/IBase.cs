@@ -4,22 +4,13 @@ using System.Threading.Tasks;
 
 namespace socket4net
 {   
-    /// <summary>
-    ///     批量推送、存储接口
-    /// </summary>
-    public interface IBatched : IObj
-    {
-        Locker BatchLocker { get; }
-    }
-    
-    /// <summary>
-    /// 订阅、反订阅
-    /// </summary>
-    public interface IObserver
-    {
-        void Subscribe();
-        void Unsubscribe();
-    }
+    ///// <summary>
+    /////     批量推送、存储接口
+    ///// </summary>
+    //public interface IBatched : IObj
+    //{
+    //    Counter BatchCounter { get; }
+    //}
 
     /// <summary>
     /// 序列化接口

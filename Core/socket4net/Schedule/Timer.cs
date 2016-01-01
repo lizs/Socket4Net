@@ -16,7 +16,7 @@ namespace socket4net
     /// <summary>
     /// A timer class base on Linux style timer scheduler.
     /// </summary>
-    public sealed class Timer : IDisposable
+    public sealed class Timer
     {
         private readonly TimerScheduler _scheduler;
 
@@ -160,14 +160,6 @@ namespace socket4net
             State = null;
             _scheduler.Remove(this);
             Arrived = null;
-        }
-
-        /// <summary>
-        /// Dispose this timer
-        /// </summary>
-        public void Dispose()
-        {
-            Stop();
         }
     }
 }

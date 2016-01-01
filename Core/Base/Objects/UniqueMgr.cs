@@ -29,7 +29,7 @@ namespace socket4net
     {
         public event Action<TValue> EventObjCreated;
         public event Action<TValue> EventDefaultObjCreated;
-        public event Action<TKey> EventObjDestroyed;
+        public event Action<TKey, Type> EventObjDestroyed;
         protected readonly Dictionary<TKey, TValue> Items = new Dictionary<TKey, TValue>();
 
         public List<TValue> OrderedValues
@@ -248,10 +248,13 @@ namespace socket4net
         public bool Destroy(TKey key)
         {
             var obj = Remove(key);
-            if (obj != null)
-                obj.Destroy();
+            if (obj == null) return false;
 
-            return obj != null;
+            obj.Destroy();
+            if (EventObjDestroyed != null)
+                EventObjDestroyed(key, obj.GetType());
+
+            return true;
         }
 
         public bool Destroy(TValue value)

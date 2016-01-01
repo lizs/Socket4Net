@@ -82,14 +82,15 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\BatchLocker.cs" />
+    <Compile Include="Base\Counter\AutoCounter.cs" />
     <Compile Include="Base\Util\Convertor.cs" />
     <Compile Include="Base\Util\Key.cs" />
-    <Compile Include="ECS\Sys\EntityBridge.cs" />
+    <Compile Include="ECS\Sys\Data\IRedisClient.cs" />
+    <Compile Include="ECS\Sys\EntitySys.cs" />
     <Compile Include="ECS\Component\Component.cs" />
-    <Compile Include="ECS\Component\DataComponent.cs" />
-    <Compile Include="Base\Interface\IData.cs" />
-    <Compile Include="Base\Interface\IScheduler.cs" />
+    <Compile Include="ECS\Component\PropertyComponent.cs" />
+    <Compile Include="ECS\Entity\IProperty.cs" />
+    <Compile Include="ECS\Entity\IScheduler.cs" />
     <Compile Include="Base\ReflectionCache\ComponentIdCache.cs" />
     <Compile Include="ECS\Component\ComponentsMgr.cs" />
     <Compile Include="Base\Config\ConfigMgr.cs" />
@@ -102,16 +103,20 @@
     <Compile Include="Base\Config\Parser\StructParser.cs" />
     <Compile Include="Base\Config\Summary.cs" />
     <Compile Include="Base\Interface\IBase.cs" />
-    <Compile Include="Base\Interface\IBlock.cs" />
-    <Compile Include="Base\Interface\ILog.cs" />
-    <Compile Include="Base\Locker.cs" />
-    <Compile Include="Base\Logger.cs" />
-    <Compile Include="Base\Mgr.cs" />
+    <Compile Include="Base\Property\IBlock.cs" />
+    <Compile Include="ECS\Sys\Data\PersistSys.cs" />
+    <Compile Include="ECS\Sys\Data\DataSys.cs" />
+    <Compile Include="ECS\Sys\Data\SyncSys.cs" />
+    <Compile Include="ECS\Sys\Player.cs" />
+    <Compile Include="socket4net\Log\ILog.cs" />
+    <Compile Include="Base\Counter\Counter.cs" />
+    <Compile Include="socket4net\Log\Logger.cs" />
+    <Compile Include="Base\Objects\Mgr.cs" />
     <Compile Include="ECS\Entity\EntityScheduler.cs" />
     <Compile Include="ECS\Entity\EntityData.cs" />
     <Compile Include="ECS\Entity\Entity.cs" />
-    <Compile Include="Base\Obj.cs" />
-    <Compile Include="Base\UniqueObj.cs" />
+    <Compile Include="Base\Objects\Obj.cs" />
+    <Compile Include="Base\Objects\UniqueObj.cs" />
     <Compile Include="Base\Property\Block.cs" />
     <Compile Include="Base\Property\EBlockType.cs" />
     <Compile Include="Base\Property\EPropertyOps.cs" />
@@ -122,13 +127,13 @@
     <Compile Include="Base\Property\ListOpsProto.cs" />
     <Compile Include="Base\Property\ListOpsRepresentation.cs" />
     <Compile Include="Base\Property\PropertyBody.cs" />
-    <Compile Include="ECS\Sys\PropertyPublisher.cs" />
+    <Compile Include="ECS\Sys\EntitySysPublisher.cs" />
     <Compile Include="Base\Property\SettableBlock.cs" />
     <Compile Include="Base\ReflectionCache\ComponentDepedencyCache.cs" />
     <Compile Include="Base\ReflectionCache\ComponentsCache.cs" />
     <Compile Include="Base\ReflectionCache\ObjectCreatorCache.cs" />
     <Compile Include="Base\ReflectionCache\AttributesCache.cs" />
-    <Compile Include="Base\Scheduler.cs" />
+    <Compile Include="Base\Objects\Scheduler.cs" />
     <Compile Include="Base\StateMachine\Stateless\Custom\Initialization.cs" />
     <Compile Include="Base\StateMachine\Stateless\DynamicTriggerBehaviour.cs" />
     <Compile Include="Base\StateMachine\Stateless\Enforce.cs" />
@@ -142,7 +147,7 @@
     <Compile Include="Base\StateMachine\Stateless\TransitioningTriggerBehaviour.cs" />
     <Compile Include="Base\StateMachine\Stateless\TriggerBehaviour.cs" />
     <Compile Include="Base\StateMachine\Stateless\TriggerWithParameters.cs" />
-    <Compile Include="Base\Task.cs" />
+    <Compile Include="Base\Objects\Tsk.cs" />
     <Compile Include="Base\Util\AutoWatch.cs" />
     <Compile Include="Base\Util\DefaultTraitor.cs" />
     <Compile Include="Base\Util\Ext\Enumerable.cs" />
@@ -155,14 +160,13 @@
     <Compile Include="Base\Util\Pair.cs" />
     <Compile Include="Base\Util\PiSerializer.cs" />
     <Compile Include="Base\Util\StringParser.cs" />
-    <Compile Include="ECS\Sys\EntitySys.cs" />
     <Compile Include="ECS\Sys\ScheduleSys.cs" />
     <Compile Include="Launcher.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="socket4net\Coroutine\CoroutineScheduler.cs" />
     <Compile Include="socket4net\Net\TCP\PeerArg.cs" />
     <Compile Include="socket4net\Schedule\TimerWrapper.cs" />
-    <Compile Include="Base\UniqueMgr.cs" />
+    <Compile Include="Base\Objects\UniqueMgr.cs" />
     <Compile Include="GlobalVarPool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ECS\Component\RpcComponent.cs" />
@@ -192,7 +196,7 @@
     <Compile Include="socket4net\Service\NetService.cs" />
     <Compile Include="socket4net\Schedule\Timer.cs" />
     <Compile Include="socket4net\Schedule\TimerScheduler.cs" />
-    <Compile Include="Base\WatchableObj.cs" />
+    <Compile Include="Base\Objects\WatchableObj.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Base\StateMachine\Stateless\Readme.txt" />
@@ -200,9 +204,7 @@
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Base\Serializer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"</PostBuildEvent>

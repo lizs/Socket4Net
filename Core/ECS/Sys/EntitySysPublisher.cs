@@ -5,10 +5,10 @@ using System.Linq;
 namespace socket4net
 {
     /// <summary>
-    ///     属性发布器
+    ///     全局属性发布
     ///     注： 用于监听类型属性、全局属性改变
     /// </summary>
-    public sealed class PropertyPublisher : Obj
+    public sealed partial class EntitySys
     {
         /// <summary>
         ///     全局监听者，即：监听任何类型的任何属性改变

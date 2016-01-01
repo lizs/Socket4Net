@@ -7,7 +7,7 @@ namespace socket4net
     /// <summary>
     ///     内置属性组件
     /// </summary>
-    public class DataComponent : Component, IData
+    public class PropertyComponent : Component, IProperty
     {
         /// <summary>
         ///     属性体

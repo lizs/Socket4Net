@@ -54,10 +54,7 @@ namespace socket4net
                 throw new Exception("ScheduleSys already instantiated!");
             Instance = this;
 
-            var batchedOwner = Owner as IBatched;
-            _scheduler = batchedOwner != null ?
-                new BatchedScheduler(batchedOwner, Name) :
-                new Scheduler(Name);
+            _scheduler = Create<Scheduler>(ObjArg.Empty);
         }
 
         protected override void OnDestroy()

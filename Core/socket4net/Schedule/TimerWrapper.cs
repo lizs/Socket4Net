@@ -26,7 +26,6 @@ namespace socket4net
         {
             _timer.Arrived -= OnTimer;
             _timer.Stop();
-            _timer.Dispose();
         }
 
         private readonly Timer _timer;

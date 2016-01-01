@@ -21,7 +21,7 @@ namespace socket4net
         {
             if (type == typeof(string)) return string.Empty;
 
-            var unkonwn = typeof(Default);
+            var unkonwn = typeof(Default<>);
             Type[] typeArgs = { type };
             var generic = unkonwn.MakeGenericType(typeArgs);
 

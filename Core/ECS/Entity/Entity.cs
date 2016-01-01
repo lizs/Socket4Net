@@ -19,7 +19,7 @@ namespace socket4net
     {
     }
 
-    public interface IEntity : IUniqueObj<Guid>, IData, IScheduler
+    public interface IEntity : IUniqueObj<Guid>, IProperty, IScheduler
     {
         T GetComponent<T>() where T : Component;
         T GetComponent<T>(short cpId) where T : Component;
@@ -54,7 +54,7 @@ namespace socket4net
             SpawnComponents();
 
             // 缓存内置组件（可能为空）
-            _data = GetComponent<DataComponent>();
+            _property = GetComponent<PropertyComponent>();
         }
 
         /// <summary>
@@ -169,12 +169,12 @@ namespace socket4net
 
         public void Listen(Action<IEntity, IBlock> handler, params short[] pids)
         {
-            _data.Listen(handler, pids);
+            _property.Listen(handler, pids);
         }
 
         public void Unlisten(Action<IEntity, IBlock> handler, params short[] pids)
         {
-            _data.Unlisten(handler, pids);
+            _property.Unlisten(handler, pids);
         }
 
         #endregion

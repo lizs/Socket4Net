@@ -2,7 +2,7 @@
 
 namespace socket4net
 {
-    public interface IWatchable<T>
+    public interface IWatchable<out T>
     {
         event Func<T, bool> Watch;
     }
