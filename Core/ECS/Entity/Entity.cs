@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace socket4net
 {
-    public class EntityArg : UniqueObjArg<Guid>
+    public class EntityArg : UniqueObjArg<long>
     {
-        public EntityArg(IObj parent, Guid key)
+        public EntityArg(IObj parent, long key)
             : base(parent, key)
         {
         }
@@ -19,7 +19,7 @@ namespace socket4net
     {
     }
 
-    public interface IEntity : IUniqueObj<Guid>, IProperty, IScheduler
+    public interface IEntity : IUniqueObj<long>, IProperty, IScheduler
     {
         T GetComponent<T>() where T : Component;
         T GetComponent<T>(short cpId) where T : Component;
@@ -31,7 +31,7 @@ namespace socket4net
     /// <summary>
     ///    E(ECS)
     /// </summary>
-    public partial class Entity : UniqueObj<Guid>, IEntity, IEnumerable<Component>
+    public partial class Entity : UniqueObj<long>, IEntity, IEnumerable<Component>
     {
         /// <summary>
         ///     创建组件

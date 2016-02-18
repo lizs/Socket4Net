@@ -15,10 +15,10 @@ namespace socket4net
     public class EntitySysArg : UniqueMgrArg
     {
         public Func<short, IBlock> BlockMaker { get; private set; }
-        public Func<short, string> BlockFeildFormatter { get; private set; }
+        public Func<long, short, string> BlockFeildFormatter { get; private set; }
         public Func<string, short> BlockFeildExtractor { get; private set; }
 
-        public EntitySysArg(IObj parent, Func<short, IBlock> blockMaker, Func<short, string> blockFeildFormatter,
+        public EntitySysArg(IUniqueObj<long> parent, Func<short, IBlock> blockMaker, Func<long, short, string> blockFeildFormatter,
             Func<string, short> blockFeildExtractor) : base(parent)
         {
             BlockMaker = blockMaker;
@@ -39,14 +39,27 @@ namespace socket4net
     ///     5、 实体同步
     ///     6、 实体存取
     /// </summary>
-    public sealed partial class EntitySys : UniqueMgr<Guid, Entity>
+    public sealed partial class EntitySys : UniqueMgr<long, Entity>
     {
         private Func<short, IBlock> _blockMaker;
-        private Func<short, string> _blockFeildFormatter;
+        private Func<long, short, string> _blockFeildFormatter;
         private Func<string, short> _blockFeildExtractor;
 
         //public event Action<Entity> EventEntityExtracted;
         //public event Action<Entity> EventEntityCreated;
+
+        private string _key;
+        public string Key
+        {
+            get
+            {
+                if (!_key.IsNullOrEmpty()) return _key;
+                var owner = GetAncestor<IUniqueObj<long>>();
+                _key = FormatFeild(owner.Id, owner.GetType());
+
+                return _key;
+            }
+        }
 
         protected override void OnInit(ObjArg arg)
         {
@@ -92,33 +105,35 @@ namespace socket4net
         /// <returns></returns>
         public IReadOnlyCollection<RedisEntry> FormatEntity(Entity entity)
         {
-            return entity.Blocks.Select(FormatBlock).ToArray();
+            return entity.Blocks.Select(x=>FormatBlock(entity.Id, x)).ToArray();
         }
 
         /// <summary>
         ///     格式化输出一个属性块
         /// </summary>
+        /// <param name="id"></param>
         /// <param name="block"></param>
         /// <returns></returns>
-        public RedisEntry FormatBlock(IBlock block)
+        public RedisEntry FormatBlock(long id, IBlock block)
         {
-            return new RedisEntry {Feild = _blockFeildFormatter(block.Id), Data = block.Serialize()};
+            return new RedisEntry { Feild = _blockFeildFormatter(id, block.Id), Data = block.Serialize() };
         }
 
         #endregion
 
 
         #region helper
-        private string FormatEntityFeild(EntityEntry entry)
+
+        public string FormatFeild(long id, Type type)
         {
-            return string.Format("{0}:{1}", entry.Type.Name, entry.Id);
+            return string.Format("{0}:{1}", type.Name, id);
         }
 
-        private EntityEntry ExtractEntityFeild(string feild)
-        {
-            var fileds = feild.Split(':');
-            return new EntityEntry { Type = Type.GetType(fileds[0]), Id = Guid.Parse(fileds[1]) };
-        }
+        //public EntityEntry ExtractFeild(string feild)
+        //{
+        //    var fileds = feild.Split(':');
+        //    return new EntityEntry { Type = Type.GetType(fileds[0]), Id = long.Parse(fileds[1]) };
+        //}
 
         private IBlock ExtractBlock(RedisEntry entry)
         {
@@ -132,9 +147,9 @@ namespace socket4net
             return item.Deserialize(entry.Data);
         }
 
-        private RedisEntry SerializeBlock(IBlock block)
+        private RedisEntry SerializeBlock(long id, IBlock block)
         {
-            var feild = _blockFeildFormatter(block.Id);
+            var feild = _blockFeildFormatter(id, block.Id);
             var data = block is IDifferentialSerializable
                 ? (block as IDifferentialSerializable).SerializeDifference()
                 : block.Serialize();

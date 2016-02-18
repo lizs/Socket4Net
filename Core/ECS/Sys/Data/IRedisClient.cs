@@ -1,12 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace socket4net
 {
+    [ProtoContract]
+    public class ProtoWrapper<T>
+    {
+        [ProtoMember(1)]
+        public T Item { get; set; }
+    }
+
+    /// <summary>
+    ///     对接Redis key-value
+    /// </summary>
+    public class RedisEntry
+    {
+        public string Feild { get; set; }
+        public byte[] Data { get; set; }
+    }
+
+    /// <summary>
+    ///     实体信息
+    ///     一个实体由 类型、Id、属性定义
+    /// </summary>
+    public class EntityEntry
+    {
+        public Type Type { get; set; }
+        public long Id { get; set; }
+        public IReadOnlyCollection<RedisEntry> Blocks { get; set; }
+    }
+
+
     public interface IRedisClient
     {
         bool HashMultiDel(string key, List<string> feilds);
-        bool HashMultiSet(string key, List<Pair<byte[]>> blocks);
+        bool HashMultiSet(string key, List<RedisEntry> blocks);
         List<byte[]> HashGetAll(string key);
         List<byte[]> HashMultiGet(string key, List<string> feilds);
         long SortedSetLength(string key);

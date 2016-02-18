@@ -18,28 +18,28 @@ namespace socket4net
     /// </summary>
     public abstract class DataSys : Obj
     {
-        private EntitySys _es;
-        protected readonly Dictionary<Guid, List<IBlock>> UpdateCache = new Dictionary<Guid, List<IBlock>>();
-        protected readonly Dictionary<Guid, Type> DestroyCache = new Dictionary<Guid, Type>(); 
+        protected EntitySys Es;
+        protected readonly Dictionary<long, List<IBlock>> UpdateCache = new Dictionary<long, List<IBlock>>();
+        protected readonly Dictionary<long, Type> DestroyCache = new Dictionary<long, Type>(); 
 
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
 
-            _es = arg.As<DataSysArg>().Es;
+            Es = arg.As<DataSysArg>().Es;
 
             // 监听实体系统
-            _es.GlobalListen(OnEntityPropertyChanged);
-            _es.EventDefaultObjCreated += OnEntityCreated;
-            _es.EventObjDestroyed += OnEntityDestroyed;
+            Es.GlobalListen(OnEntityPropertyChanged);
+            Es.EventDefaultObjCreated += OnEntityCreated;
+            Es.EventObjDestroyed += OnEntityDestroyed;
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            _es.GlobalUnlisten(OnEntityPropertyChanged);
-            _es.EventDefaultObjCreated -= OnEntityCreated;
-            _es.EventObjDestroyed -= OnEntityDestroyed;
+            Es.GlobalUnlisten(OnEntityPropertyChanged);
+            Es.EventDefaultObjCreated -= OnEntityCreated;
+            Es.EventObjDestroyed -= OnEntityDestroyed;
         }
 
         private void OnEntityCreated(Entity entity)
@@ -47,7 +47,7 @@ namespace socket4net
             CacheBlock(entity.Id, entity.Blocks);
         }
 
-        private void OnEntityDestroyed(Guid id, Type type)
+        private void OnEntityDestroyed(long id, Type type)
         {
             if(!DestroyCache.ContainsKey(id))
                 DestroyCache.Add(id, type);
@@ -55,7 +55,7 @@ namespace socket4net
             UpdateCache.Remove(id);
         }
 
-        private void CacheBlock(Guid id, IReadOnlyCollection<IBlock> blocks)
+        private void CacheBlock(long id, IReadOnlyCollection<IBlock> blocks)
         {
             if(blocks.IsNullOrEmpty()) return;
             foreach (var block in blocks)
@@ -64,7 +64,7 @@ namespace socket4net
             }
         }
 
-        private void CacheBlock(Guid id, IBlock block)
+        private void CacheBlock(long id, IBlock block)
         {
             if (!UpdateCache.ContainsKey(id))
                 UpdateCache[id] = new List<IBlock> { block };

@@ -75,8 +75,6 @@ namespace socket4net
             Enqueue(action, param);
         }
 
-        public CoroutineScheduler CoroutineScheduler { get; private set; }
-
         private void Enqueue<T>(Action<T> proc, T param)
         {
             if(!_jobs.Add(new Job<T>(proc, param)))

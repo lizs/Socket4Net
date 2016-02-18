@@ -20,7 +20,7 @@ namespace socket4net
     public class EntityProto
     {
         [ProtoMember(1)]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
     }
 
     public class EntityDestroyProto : EntityProto
