@@ -43,7 +43,6 @@
     <Compile Include="config\RedisElementCollection.cs" />
     <Compile Include="Launcher.cs" />
     <Compile Include="Node.cs" />
-    <Compile Include="NodeId.cs" />
     <Compile Include="NodeMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerNode.cs" />

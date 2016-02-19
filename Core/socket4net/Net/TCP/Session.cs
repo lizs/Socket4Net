@@ -62,7 +62,7 @@ namespace socket4net
         }
 
         public Socket UnderlineSocket { get; private set; }
-        public IPeer HostPeer { get; private set; }
+        public IPeer HostPeer { get { return Owner as IPeer; } }
 
         /// <summary>
         /// 指定接收buffer长度
@@ -100,6 +100,8 @@ namespace socket4net
         {
             base.OnInit(arg);
 
+            var more = arg.As<SessionArg>();
+            UnderlineSocket = more.UnderlineSocket;
             _sendingQueue = new Queue<byte[]>();
 
             _sendAsyncEventArgs = new SocketAsyncEventArgs();
@@ -123,6 +125,7 @@ namespace socket4net
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            Close(SessionCloseReason.ClosedByMyself);
         }
 
         public virtual void Close(SessionCloseReason reason)
@@ -146,7 +149,6 @@ namespace socket4net
             _packer = null;
 
             HostPeer.SessionMgr.RemoveSession(Id, reason);
-            HostPeer = null;
         }
 
         protected byte[][] Split(byte[] data, ushort maxLen)
@@ -358,8 +360,9 @@ namespace socket4net
             ReceiveNext();
         }
 
-        public void Start()
+        protected override void OnStart()
         {
+            base.OnStart();
             _receiveBuffer = new CircularBuffer(ReceiveBufSize);
             _packer = new Packer(PackageMaxSize);
 

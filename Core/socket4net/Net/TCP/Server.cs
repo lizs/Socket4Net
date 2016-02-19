@@ -190,7 +190,6 @@ namespace socket4net
                 while (_clients.TryDequeue(out client))
                 {
                     var session = _sessionFactory.Create(client, this);
-                    session.Start();
                     SessionMgr.AddSession(session);
                 }
             }
@@ -198,17 +197,22 @@ namespace socket4net
 
         private void OnAcceptCompleted(object sender, SocketAsyncEventArgs e)
         {
-            if (e.SocketError != SocketError.Success)
+            ProcessAccept(e.AcceptSocket, e.SocketError);
+        }
+
+        private void ProcessAccept(Socket sock, SocketError error)
+        {
+            SocketAsyncEventArgs e;
+            if (error != SocketError.Success)
             {
-                Logger.Ins.Error("Accepted failed!");
+                Logger.Ins.Error("Listener down!");
             }
             else
             {
-                _clients.Enqueue(e.AcceptSocket);
+                _clients.Enqueue(sock);
                 _socketAcceptedEvent.Set();
+                AcceptNext();
             }
-
-            AcceptNext();
         }
 
         private void AcceptNext()
@@ -219,10 +223,7 @@ namespace socket4net
             {
                 if (!_listener.AcceptAsync(_acceptEvent))
                 {
-                    _clients.Enqueue(_acceptEvent.AcceptSocket);
-                    _socketAcceptedEvent.Set();
-
-                    AcceptNext();
+                    ProcessAccept(_acceptEvent.AcceptSocket, _acceptEvent.SocketError);
                 }
             }
             catch (Exception e)
@@ -233,8 +234,7 @@ namespace socket4net
                 if (EventErrorCatched != null)
                     EventErrorCatched(msg);
 
-                if (_listener.IsBound)
-                    AcceptNext();
+                AcceptNext();
             }
         }
     }

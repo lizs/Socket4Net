@@ -228,7 +228,10 @@ namespace socket4net
                 throw new Exception("Not initialized yet!");
 
             if (Started)
-                throw new Exception("Already started");
+            {
+                Logger.Ins.Warn("Already started");
+                return;
+            }
 
             OnStart();
             Started = true;
@@ -244,7 +247,10 @@ namespace socket4net
         public void Destroy()
         {
             if (Destroyed)
+            {
+                Logger.Ins.Warn("Already destroyed");
                 return;
+            }
 
             OnDestroy();
             Destroyed = true;
@@ -256,7 +262,10 @@ namespace socket4net
         public void Reset()
         {
             if (Reseted)
-                throw new Exception("Already rested");
+            {
+                Logger.Ins.Warn("Already rested");
+                return;
+            }
 
             OnReset();
             Reseted = true;

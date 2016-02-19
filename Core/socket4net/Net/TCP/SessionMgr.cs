@@ -51,7 +51,11 @@ namespace socket4net
         {
             if (Items.TryAdd(session.Id, session))
             {
-                Peer.PerformInLogic(() => _openCb(session));
+                Peer.PerformInLogic(() =>
+                {
+                    if (_openCb == null) return;
+                    _openCb(session);
+                });
             }
             else
                 Logger.Ins.Warn("Insert session failed for id : " + session.Id);
@@ -63,7 +67,11 @@ namespace socket4net
             if (Items.TryRemove(id, out session))
             {
                 if (Peer != null && _closeCb != null)
-                    Peer.PerformInLogic(() => _closeCb(session, reason));
+                    Peer.PerformInLogic(() =>
+                    {
+                        if(_closeCb == null) return;
+                        _closeCb(session, reason);
+                    });
             }
             else if (Items.ContainsKey(id))
                 Logger.Ins.Warn("Remove session failed for id : " + id);

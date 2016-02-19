@@ -12,7 +12,7 @@ namespace socket4net
     {
         public TSession Create(Socket sock, IPeer hostPeer)
         {
-            return Obj.Create<TSession>(new SessionArg(hostPeer, GetGUID(), sock), false);
+            return Obj.Create<TSession>(new SessionArg(hostPeer, GetGUID(), sock), true);
         }
 
         private long GetGUID()
