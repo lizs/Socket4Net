@@ -1,16 +1,21 @@
 ﻿
 using System.Collections;
 using System.Diagnostics;
+using ecs;
 using NUnit.Framework;
 
 namespace socket4net.tests
 {
+    internal class ScheduleObj : Obj{}
+
     internal class ScheduleCase : Case
     {
+        private Obj _scheduObj;
         [Test]
         public void TestCoroutine()
         {
-            ScheduleSys.Instance.StartCoroutine(MyCoroutine);
+            _scheduObj = Obj.Create<ScheduleObj>(ObjArg.Empty);
+            _scheduObj.StartCoroutine(MyCoroutine);
         }
 
         private IEnumerator MyCoroutine()
@@ -18,24 +23,24 @@ namespace socket4net.tests
             var watch = new Stopwatch();
             watch.Start();
 
-            Logger.Instance.Info("Hello coroutine");
-            yield return ScheduleSys.WaitFor(2 * 1000);
-            Logger.Instance.InfoFormat("{0}ms passed", watch.ElapsedMilliseconds);
+            Logger.Ins.Info("Hello coroutine");
+            yield return _scheduObj.WaitFor(2 * 1000);
+            Logger.Ins.Info("{0}ms passed", watch.ElapsedMilliseconds);
 
-            yield return ScheduleSys.WaitFor(2 * 1000);
-            Logger.Instance.InfoFormat("{0}ms passed", watch.ElapsedMilliseconds);
+            yield return _scheduObj.WaitFor(2 * 1000);
+            Logger.Ins.Info("{0}ms passed", watch.ElapsedMilliseconds);
 
             yield return SubCoroutine();
-            Logger.Instance.InfoFormat("{0}ms passed", watch.ElapsedMilliseconds);
+            Logger.Ins.Info("{0}ms passed", watch.ElapsedMilliseconds);
 
             watch.Stop();
         }
 
         private IEnumerator SubCoroutine()
         {
-            yield return ScheduleSys.WaitFor(1 * 1000);
-            yield return ScheduleSys.WaitFor(1 * 1000);
-            yield return ScheduleSys.WaitFor(1 * 1000);
+            yield return _scheduObj.WaitFor(1 * 1000);
+            yield return _scheduObj.WaitFor(1 * 1000);
+            yield return _scheduObj.WaitFor(1 * 1000);
         }
     }
 }

@@ -15,10 +15,10 @@ namespace socket4net
 
     public class ComponentIdCache : AttributesCache<short, ComponentIdAttribute>
     {
-        private static ComponentIdCache _instance;
-        public static ComponentIdCache Instance
+        private static ComponentIdCache _ins;
+        public static ComponentIdCache Ins
         {
-            get { return _instance ?? (_instance = new ComponentIdCache()); }
+            get { return _ins ?? (_ins = new ComponentIdCache()); }
         }
 
         protected override short Handle(IEnumerable<ComponentIdAttribute> attributes)

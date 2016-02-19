@@ -18,17 +18,21 @@ namespace socket4net
             return ret;
         }
 
-        public static Obj Create(Type type, ObjArg arg)
+        public static Obj Create(Type type, ObjArg arg, bool start)
         {
             var ctor = GetCtor(type);
             var obj = ctor();
             obj.Init(arg);
+
+            if (start)
+                obj.Start();
+
             return obj;
         }
 
-        public static T Create<T>(ObjArg arg) where T : Obj
+        public static T Create<T>(ObjArg arg, bool start) where T : Obj
         {
-            var obj = Create(typeof (T), arg);
+            var obj = Create(typeof (T), arg, start);
             return (T) obj;
         }
 

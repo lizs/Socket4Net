@@ -5,14 +5,14 @@ namespace ChatC
 {
     public class Client : RpcClient<ChatSession>
     {
-        public static Client Instance { get; private set; }
+        public static Client Ins { get; private set; }
 
         public Client()
         {
-            if (Instance != null)
+            if (Ins != null)
                 throw new Exception("Client already instantiated!");
 
-            Instance = this;
+            Ins = this;
         }
     }
 }

@@ -74,7 +74,7 @@ namespace socket4net
         }
     }
 
-    public abstract class Obj : IObj
+    public partial class Obj : IObj
     {
         /// <summary>
         ///     实例动态id
@@ -179,25 +179,31 @@ namespace socket4net
         /// <summary>
         ///     创建对象
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="arg"></param>
         /// <returns></returns>
-        public static T Create<T>(ObjArg arg) where T : IObj, new()
+        public static T Create<T>(ObjArg arg, bool start = false) where T : IObj, new()
         {
             var ret = new T();
             ret.Init(arg);
+            if (start)
+                ret.Start();
             return ret;
         }
 
         /// <summary>
         ///     非泛型创建
         /// </summary>
-        /// <param name="objType"></param>
-        /// <param name="arg"></param>
         /// <returns></returns>
-        public static Obj Create(Type objType, ObjArg arg)
+        public static Obj Create(Type objType, ObjArg arg, bool start = false)
         {
-            return ObjFactory.Create(objType, arg);
+            return ObjFactory.Create(objType, arg, start);
+        }
+
+        /// <summary>
+        ///     非泛型创建
+        /// </summary>
+        public static T Create<T>(Type objType, ObjArg arg, bool start = false) where T : class, IObj
+        {
+            return Create(objType, arg, start) as T;
         }
 
         /// <summary>
@@ -211,11 +217,6 @@ namespace socket4net
             // 执行初始化
             OnInit(arg);
             Initialized = true;
-        }
-
-        protected virtual void OnInit(ObjArg arg)
-        {
-            Owner = arg.Owner;
         }
         
         /// <summary>
@@ -247,10 +248,6 @@ namespace socket4net
 
             OnDestroy();
             Destroyed = true;
-        }
-
-        protected virtual void OnDestroy()
-        {
         }
 
         /// <summary>

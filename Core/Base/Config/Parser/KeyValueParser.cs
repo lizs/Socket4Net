@@ -15,7 +15,7 @@ namespace socket4net
             var text = _loader.Read(path);
             if (string.IsNullOrEmpty(text)) 
             {
-                Logger.Instance.FatalFormat("Parse {0} failed!", path);
+                Logger.Ins.Fatal("Parse {0} failed!", path);
                 return;
             }
 

@@ -7,7 +7,7 @@ namespace socket4net
     /// 终端
     /// 对服务器、客户端的抽象
     /// </summary>
-    public interface IPeer
+    public interface IPeer : IObj
     {
         string Ip { get; }
         ushort Port { get; }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -355,9 +354,9 @@ namespace socket4net
                         {
                             var x = InsertOpsProto<TItem>.Deserialize(o.Value);
                             if (x == null)
-                                Logger.Instance.Error("插入的item为空");
+                                Logger.Ins.Error("插入的item为空");
                             else if (x.ListItem == null)
-                                Logger.Instance.ErrorFormat("插入的item为空，位置：{0}", x.Index);
+                                Logger.Ins.Error("插入的item为空，位置：{0}", x.Index);
                             else
                             {
 #if NET35
@@ -373,12 +372,12 @@ namespace socket4net
                         {
                             var x = RemoveOpsProto.Deserialize(o.Value);
                             if (x == null)
-                                Logger.Instance.ErrorFormat("移除item失败，属性：{0}", Id);
+                                Logger.Ins.Error("移除item失败，属性：{0}", Id);
                             else
                             {
                                 var idx = GetIndexById(x.Id);
                                 if (idx == InvalidIndex || !RemoveAt(idx))
-                                    Logger.Instance.ErrorFormat("移除item失败，未找到动态id为 {0} 的item", x.Id);
+                                    Logger.Ins.Error("移除item失败，未找到动态id为 {0} 的item", x.Id);
                             }
                             break;
                         }
@@ -387,7 +386,7 @@ namespace socket4net
                         {
                             var x = UpdateOpsProto<TItem>.Deserialize(o.Value);
                             if(x == null || x.ListItem == null)
-                                Logger.Instance.Warn("更新数据为空");
+                                Logger.Ins.Warn("更新数据为空");
                             else
                             {
                                 var updated = Get().Find(y => y.Id == x.ListItem.Id);
@@ -399,7 +398,7 @@ namespace socket4net
                                         updated.Item = x.ListItem.Item;
                                 }
                                 else
-                                    Logger.Instance.ErrorFormat("更新的item不存在，动态id : {0}", x.ListItem.Id);
+                                    Logger.Ins.Error("更新的item不存在，动态id : {0}", x.ListItem.Id);
                             }
                           
                             break;

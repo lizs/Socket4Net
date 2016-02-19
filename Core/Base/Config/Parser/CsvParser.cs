@@ -57,7 +57,7 @@ namespace socket4net
             var text = _loader.Read(path);
             if (string.IsNullOrEmpty(text))
             {
-                Logger.Instance.FatalFormat("Parse {0} failed!", path);
+                Logger.Ins.Fatal("Parse {0} failed!", path);
                 return;
             }
 
@@ -106,7 +106,7 @@ namespace socket4net
                 if(!config.ContainsKey(id))
                     config.Add(id, item);
                 else
-                    Logger.Instance.FatalFormat("Key {0} of {1} already exists!", id, path);
+                    Logger.Ins.Fatal("Key {0} of {1} already exists!", id, path);
             }
 
             Config = config;

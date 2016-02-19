@@ -131,7 +131,7 @@ namespace socket4net
             // 回调池
             if (!_requestPool.TryAdd(serial, cb))
             {
-                Logger.Instance.ErrorFormat("Request of serial {0} already processing!", serial);
+                Logger.Ins.Error("Request of serial {0} already processing!", serial);
                 return new RpcResult(false, null);
             }
 
@@ -166,7 +166,7 @@ namespace socket4net
             // 回调池
             if (!_requestPool.TryAdd(rq.Serial, cb))
             {
-                Logger.Instance.ErrorFormat("Request of serial {0} already processing!", rq.Serial);
+                Logger.Ins.Error("Request of serial {0} already processing!", rq.Serial);
                 return;
             }
 
@@ -190,7 +190,7 @@ namespace socket4net
             // 回调池
             if (!_requestPool.TryAdd(rq.Serial, cb))
             {
-                Logger.Instance.ErrorFormat("Request of serial {0} already processing!", rq.Serial);
+                Logger.Ins.Error("Request of serial {0} already processing!", rq.Serial);
                 return;
             }
 
@@ -273,7 +273,7 @@ namespace socket4net
                     }
                     catch (Exception e)
                     {
-                        Logger.Instance.ErrorFormat("Exception {0} : {1} when processing request {2}", e.Message,
+                        Logger.Ins.Error("Exception {0} : {1} when processing request {2}", e.Message,
                             e.StackTrace, pack);
                         Response(false, null, pack.Serial);
                     }
@@ -290,16 +290,16 @@ namespace socket4net
 
                             Action<bool, byte[]> x;
                             if (!_requestPool.TryRemove(pack.Serial, out x))
-                                Logger.Instance.ErrorFormat("Remove response of serial {0} failed", pack.Serial);
+                                Logger.Ins.Error("Remove response of serial {0} failed", pack.Serial);
 
                             cb(pack.Succes, pack.Data);
                         }
                         else
-                            Logger.Instance.ErrorFormat("No target for response of serial {0}", pack.Serial);
+                            Logger.Ins.Error("No target for response of serial {0}", pack.Serial);
                     }
                     catch (Exception e)
                     {
-                        Logger.Instance.ErrorFormat("Exception {0} : {1} when processing response {2}", e.Message,
+                        Logger.Ins.Error("Exception {0} : {1} when processing response {2}", e.Message,
                             e.StackTrace, pack);
                     }
                     break;
@@ -324,18 +324,18 @@ namespace socket4net
                         var success = await HandlePush(rp);
 #endif
                         if (!success)
-                            Logger.Instance.ErrorFormat("Handle push {0} failed!", rp.Ops);
+                            Logger.Ins.Error("Handle push {0} failed!", rp.Ops);
                     }
                     catch (Exception e)
                     {
-                        Logger.Instance.ErrorFormat("Exception {0} : {1} when processing push {2}", e.Message,
+                        Logger.Ins.Error("Exception {0} : {1} when processing push {2}", e.Message,
                             e.StackTrace, pack);
                     }
                 }
                     break;
 
                 default:
-                    Logger.Instance.ErrorFormat("Invalid rpc type : {0} of  route : {1}", pack.Type, pack.Serial);
+                    Logger.Ins.Error("Invalid rpc type : {0} of  route : {1}", pack.Type, pack.Serial);
                     Close(SessionCloseReason.ClosedByMyself);
                     break;
             }

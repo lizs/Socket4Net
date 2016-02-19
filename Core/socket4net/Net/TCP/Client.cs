@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -17,12 +18,13 @@ namespace socket4net
     
     public class ClientArg : PeerArg
     {
-        public ClientArg(IObj parent, string ip, ushort port)
+        public ClientArg(IObj parent, string ip, ushort port, bool autoReconnectEnabled = false)
             : base(parent, ip, port)
         {
+            AutoReconnectEnabled = autoReconnectEnabled;
         }
 
-        public bool AutoReconnectEnabled { get; set; }
+        public bool AutoReconnectEnabled { get; private set; }
     }
 
     public class Client<TSession> : Obj, IClient
@@ -48,12 +50,12 @@ namespace socket4net
 
         public ILogicService LogicService
         {
-            get { return Launcher.Instance.LogicService; }
+            get { return Launcher.Ins.LogicService; }
         }
 
         public INetService NetService
         {
-            get { return Launcher.Instance.NetService; }
+            get { return Launcher.Ins.NetService; }
         }
 
 
@@ -106,12 +108,12 @@ namespace socket4net
             AutoReconnectEnabled = more.AutoReconnectEnabled;
 
             if(string.IsNullOrEmpty(more.Ip) || more.Port == 0)
-                Logger.Instance.Warn("Ip or Port is invalid!");
+                Logger.Ins.Warn("Ip or Port is invalid!");
             else if (!SetAddress(more.Ip, more.Port))
                 throw new Exception("Ip or Port is invalid!");
 
             _sessionFactory = new SessionFactory<TSession>();
-            SessionMgr = new SessionMgr(this,
+            SessionMgr = Create<SessionMgr>(new SessionMgrArg(this,
                 session =>
                 {
                     OnConnected(session);
@@ -125,34 +127,34 @@ namespace socket4net
 
                     if (EventSessionClosed != null)
                         EventSessionClosed(session as TSession, reason);
-                });
+                }));
         }
 
         protected virtual void OnConnected(ISession session)
         {
             Connected = true;
-            Logger.Instance.InfoFormat("{0} : {1} connected!", Name, session.Name);
+            Logger.Ins.Info("{0} : {1} connected!", Name, session.Name);
         }
 
         protected virtual void OnDisconnected(ISession session, SessionCloseReason reason)
         {
             Connected = false;
-            Logger.Instance.InfoFormat("{0} : {1} disconnected by {2}", Name, session.Name, reason);
+            Logger.Ins.Info("{0} : {1} disconnected by {2}", Name, session.Name, reason);
 
             if (AutoReconnectEnabled)
             {
-                ScheduleSys.Instance.Invoke(Reconnect, ReconnectRetryDelay);
+                Invoke(Reconnect, ReconnectRetryDelay);
             }
         }
 
         protected virtual void OnError(string msg)
         {
             Connected = false;
-            Logger.Instance.ErrorFormat("{0} : {1}", Name, msg);
+            Logger.Ins.Error("{0} : {1}", Name, msg);
 
             if (AutoReconnectEnabled)
             {
-                ScheduleSys.Instance.Invoke(Reconnect, ReconnectRetryDelay);
+                Invoke(Reconnect, ReconnectRetryDelay);
             }
         }
 
@@ -212,7 +214,7 @@ namespace socket4net
             if (EventPeerClosing != null)
                 EventPeerClosing();
 
-            Logger.Instance.Debug("Client stopped!");
+            Logger.Ins.Debug("Client stopped!");
         }
 
         public void PerformInLogic(Action action)
@@ -275,7 +277,7 @@ namespace socket4net
         private void HandleConnection(Socket sock)
         {
             var session = _sessionFactory.Create(sock, this);
-            SessionMgr.Add(session);
+            SessionMgr.AddSession(session);
             Session.Start();
         }
         

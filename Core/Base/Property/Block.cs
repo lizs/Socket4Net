@@ -74,7 +74,7 @@ namespace socket4net
         {
             if (!(this is IListBlock<TItem>))
             {
-                Logger.Instance.ErrorFormat("尝试Cast一个非List，Id : {0}", Id);
+                Logger.Ins.Error("尝试Cast一个非List，Id : {0}", Id);
                 return null;
             }
 

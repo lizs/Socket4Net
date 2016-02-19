@@ -26,17 +26,17 @@ namespace CustomLog
             _log.Debug(message);
         }
 
-        public void DebugFormat(string format, object arg0)
+        public void Debug(string format, object arg0)
         {
             _log.DebugFormat(format, arg0);
         }
 
-        public void DebugFormat(string format, object arg0, object arg1)
+        public void Debug(string format, object arg0, object arg1)
         {
             _log.DebugFormat(format, arg0, arg1);
         }
 
-        public void DebugFormat(string format, object arg0, object arg1, object arg2)
+        public void Debug(string format, object arg0, object arg1, object arg2)
         {
             _log.DebugFormat(format, arg0, arg1, arg2);
         }
@@ -46,17 +46,17 @@ namespace CustomLog
             _log.Error(message);
         }
 
-        public void ErrorFormat(string format, object arg0)
+        public void Error(string format, object arg0)
         {
             _log.ErrorFormat(format, arg0);
         }
 
-        public void ErrorFormat(string format, object arg0, object arg1)
+        public void Error(string format, object arg0, object arg1)
         {
             _log.ErrorFormat(format, arg0, arg1);
         }
 
-        public void ErrorFormat(string format, object arg0, object arg1, object arg2)
+        public void Error(string format, object arg0, object arg1, object arg2)
         {
             _log.ErrorFormat(format, arg0, arg1, arg2);
         }
@@ -66,17 +66,17 @@ namespace CustomLog
             _log.Fatal(message);
         }
 
-        public void FatalFormat(string format, object arg0)
+        public void Fatal(string format, object arg0)
         {
             _log.FatalFormat(format, arg0);
         }
 
-        public void FatalFormat(string format, object arg0, object arg1)
+        public void Fatal(string format, object arg0, object arg1)
         {
             _log.FatalFormat(format, arg0, arg1);
         }
 
-        public void FatalFormat(string format, object arg0, object arg1, object arg2)
+        public void Fatal(string format, object arg0, object arg1, object arg2)
         {
             _log.FatalFormat(format, arg0, arg1, arg2);
         }
@@ -86,17 +86,17 @@ namespace CustomLog
             _log.Info(message);
         }
 
-        public void InfoFormat(string format, object arg0)
+        public void Info(string format, object arg0)
         {
             _log.InfoFormat(format, arg0);
         }
 
-        public void InfoFormat(string format, object arg0, object arg1)
+        public void Info(string format, object arg0, object arg1)
         {
             _log.InfoFormat(format, arg0, arg1);
         }
 
-        public void InfoFormat(string format, object arg0, object arg1, object arg2)
+        public void Info(string format, object arg0, object arg1, object arg2)
         {
             _log.InfoFormat(format, arg0, arg1, arg2);
         }
@@ -106,17 +106,17 @@ namespace CustomLog
             _log.Warn(message);
         }
 
-        public void WarnFormat(string format, object arg0)
+        public void Warn(string format, object arg0)
         {
             _log.WarnFormat(format, arg0);
         }
 
-        public void WarnFormat(string format, object arg0, object arg1)
+        public void Warn(string format, object arg0, object arg1)
         {
             _log.WarnFormat(format, arg0, arg1);
         }
 
-        public void WarnFormat(string format, object arg0, object arg1, object arg2)
+        public void Warn(string format, object arg0, object arg1, object arg2)
         {
             _log.WarnFormat(format, arg0, arg1, arg2);
         }

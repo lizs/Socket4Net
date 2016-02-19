@@ -47,7 +47,7 @@
         {
             if (len > ReadableSize)
             {
-                Logger.Instance.Error("No enough data to read!");
+                Logger.Ins.Error("No enough data to read!");
                 return false;
             }
 
@@ -72,7 +72,7 @@
         {
             if (len > WritableSize)
             {
-                Logger.Instance.Error("No enough space to write!");
+                Logger.Ins.Error("No enough space to write!");
                 return false;
             }
 

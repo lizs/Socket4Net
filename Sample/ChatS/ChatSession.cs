@@ -42,7 +42,7 @@ namespace ChatS
             var responseData = PiSerializer.Serialize(proto);
 
             // ¹ã²¥
-            foreach (var session in Server.Instance.SessionMgr.OfType<IRpcSession>())
+            foreach (var session in Server.Ins.SessionMgr.OfType<IRpcSession>())
             {
                 session.Push(0, 0, (short) ECommand.Push, responseData, 0, 0);
             }

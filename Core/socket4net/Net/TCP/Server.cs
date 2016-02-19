@@ -32,12 +32,12 @@ namespace socket4net
 
         public ILogicService LogicService
         {
-            get { return Launcher.Instance.LogicService; }
+            get { return Launcher.Ins.LogicService; }
         }
 
         public INetService NetService
         {
-            get { return Launcher.Instance.NetService; }
+            get { return Launcher.Ins.NetService; }
         }
 
         public SessionMgr SessionMgr { get; private set; }
@@ -49,8 +49,6 @@ namespace socket4net
 
         private Socket _listener;
         private SessionFactory<TSession> _sessionFactory;
-
-
         private SocketAsyncEventArgs _acceptEvent;
 
         private ConcurrentQueue<Socket> _clients;
@@ -69,15 +67,14 @@ namespace socket4net
 
             IPAddress address;
             if (!IPAddress.TryParse(Ip, out address)) 
-                Logger.Instance.FatalFormat("Invalid ip {0}", Ip);
+                Logger.Ins.Fatal("Invalid ip {0}", Ip);
 
             Address = address;
             EndPoint = new IPEndPoint(Address, Port);
 
             _sessionFactory = new SessionFactory<TSession>();
 
-            SessionMgr = new SessionMgr(this,
-                session =>
+            SessionMgr = Create<SessionMgr>(new SessionMgrArg(this, session =>
                 {
                     if (EventSessionEstablished == null) return;
 
@@ -89,22 +86,22 @@ namespace socket4net
                     if (EventSessionClosed != null)
                         EventSessionClosed(session as TSession, reason);
                     OnDisconnected(session, reason);
-                });
+                }));
         }
 
         protected virtual void OnConnected(ISession session)
         {
-            Logger.Instance.InfoFormat("{0} : {1} connected!", Name, session.Name);
+            Logger.Ins.Info("{0} : {1} connected!", Name, session.Name);
         }
 
         protected virtual void OnDisconnected(ISession session, SessionCloseReason reason)
         {
-            Logger.Instance.InfoFormat("{0} : {1} disconnected by {2}", Name, session.Name, reason);
+            Logger.Ins.Info("{0} : {1} disconnected by {2}", Name, session.Name, reason);
         }
 
         protected virtual void OnError(string msg)
         {
-            Logger.Instance.ErrorFormat("{0} : {1}", Name, msg);
+            Logger.Ins.Error("{0} : {1}", Name, msg);
         }
 
         protected override void OnStart()
@@ -132,6 +129,7 @@ namespace socket4net
             _acceptEvent.Completed += OnAcceptCompleted;
 
             AcceptNext();
+            Logger.Ins.Debug("Server started on {0}:{1}", Ip, Port);
         }
 
         protected override void OnDestroy()
@@ -159,7 +157,7 @@ namespace socket4net
             if (_sessionFactoryWorker != null)
                 _sessionFactoryWorker.Join();
 
-            Logger.Instance.Info("Server stopped!");
+            Logger.Ins.Info("Server stopped!");
         }
 
         public void PerformInLogic(Action action)
@@ -193,31 +191,39 @@ namespace socket4net
                 {
                     var session = _sessionFactory.Create(client, this);
                     session.Start();
-                    SessionMgr.Add(session);
+                    SessionMgr.AddSession(session);
                 }
             }
         }
 
         private void OnAcceptCompleted(object sender, SocketAsyncEventArgs e)
         {
-            if (e.SocketError == SocketError.Success)
+            if (e.SocketError != SocketError.Success)
+            {
+                Logger.Ins.Error("Accepted failed!");
+            }
+            else
             {
                 _clients.Enqueue(e.AcceptSocket);
                 _socketAcceptedEvent.Set();
-
-                AcceptNext();
             }
+
+            AcceptNext();
         }
 
         private void AcceptNext()
         {
             _acceptEvent.AcceptSocket = null;
 
-            var result = true;
             try
             {
-                // _listener在服务器stop时会抛出异常
-                result = _listener.AcceptAsync(_acceptEvent);
+                if (!_listener.AcceptAsync(_acceptEvent))
+                {
+                    _clients.Enqueue(_acceptEvent.AcceptSocket);
+                    _socketAcceptedEvent.Set();
+
+                    AcceptNext();
+                }
             }
             catch (Exception e)
             {
@@ -226,17 +232,10 @@ namespace socket4net
 
                 if (EventErrorCatched != null)
                     EventErrorCatched(msg);
-            }
-            finally
-            {
-                if (!result)
-                    HandleListenerError();
-            }
-        }
 
-        private void HandleListenerError()
-        {
-            _listener.Close();
+                if (_listener.IsBound)
+                    AcceptNext();
+            }
         }
     }
 }

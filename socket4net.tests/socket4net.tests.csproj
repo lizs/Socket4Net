@@ -81,6 +81,10 @@
       <Project>{ed0bb4a5-50c0-410f-a55f-94c842c744ac}</Project>
       <Name>socket4net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ecs\ecs.csproj">
+      <Project>{76C25DE3-C35B-48C6-A7DD-039C89EE7453}</Project>
+      <Name>ecs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{88A3AC04-0DD9-401D-96A8-72AE7EDDC275}</Project>
       <Name>Logger</Name>

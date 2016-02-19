@@ -27,7 +27,7 @@ namespace ChatC
                 case ECommand.Push:
                     {
                         var msg = PiSerializer.Deserialize<PushMsgProto>(rp.Data);
-                        Logger.Instance.Info(msg.From + " : " + msg.Message);
+                        Logger.Ins.Info(msg.From + " : " + msg.Message);
                         return Task.FromResult(true);
                     }
 

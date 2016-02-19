@@ -25,7 +25,7 @@ namespace socket4net
         {
             _watch.Stop();
             if (_watch.ElapsedMilliseconds > Threhold)
-                Logger.Instance.WarnFormat("{0} : {1} ms", Name, _watch.ElapsedMilliseconds);
+                Logger.Ins.Warn("{0} : {1} ms", Name, _watch.ElapsedMilliseconds);
 
             if (Handler != null)
                 Handler(Name, _watch.ElapsedMilliseconds);

@@ -210,7 +210,7 @@ namespace socket4net
         {
             if (Blocks.ContainsKey(block.Id))
             {
-                Logger.Instance.WarnFormat("Block already exist for {0} of {1}", block.Id, OwnerDescription);
+                Logger.Ins.Warn("Block already exist for {0} of {1}", block.Id, OwnerDescription);
                 return false;
             }
 
@@ -222,7 +222,7 @@ namespace socket4net
         {
             var block = Blocks.ContainsKey(pid) ? Blocks[pid] : null;
             if(block == null)
-                Logger.Instance.WarnFormat("Block not exist for {0} of {1}", pid, OwnerDescription);
+                Logger.Ins.Warn("Block not exist for {0} of {1}", pid, OwnerDescription);
 
             return block;
         }

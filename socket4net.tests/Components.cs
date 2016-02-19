@@ -1,4 +1,6 @@
 
+using ecs;
+
 namespace socket4net.tests
 {
     internal enum EComponentId : short

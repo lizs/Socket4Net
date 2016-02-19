@@ -34,7 +34,7 @@ namespace socket4net
     //        sb.AppendLine();
     //        sb.AppendFormat("LJob : {0}/s, NJob : {1}/s", Target.LogicService.ExcutedJobsPerSec, Target.NetService.ExcutedJobsPerSec);
 
-    //        Logger.Instance.Info(sb.ToString());
+    //        Logger.Ins.Info(sb.ToString());
     //        GC.Collect();
     //    }
     //}

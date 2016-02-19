@@ -19,57 +19,52 @@ namespace ChatC
             }
 
             Obj.Create<Launcher>(new LauncherArg(new CustomLog.Log4Net("log4net.config", "ChatC")));
-            Launcher.Instance.Start();
+            Launcher.Ins.Start();
 
             // 启动客户端
             RunClient(ip, port);
 
-            Launcher.Instance.Destroy();
+            Launcher.Ins.Destroy();
         }
 
         private static void RunClient(string ip, ushort port)
         {
             // 创建客户端
-            var client = Obj.Create<Client>(new ClientArg(null, ip, port){ AutoReconnectEnabled = true});
+            var client = Obj.Create<Client>(new ClientArg(null, ip, port));
             
             // 监听事件
             client.EventSessionClosed +=
-                (session, reason) => Logger.Instance.InfoFormat("{0} disconnected by {1}", session.Id, reason);
+                (session, reason) => Logger.Ins.Info("{0} disconnected by {1}", session.Id, reason);
             client.EventSessionEstablished +=
-                session => Logger.Instance.InfoFormat("{0} connected", session.Id);
+                session => Logger.Ins.Info("{0} connected", session.Id);
             
             // 启动
             client.Start();
 
             // 结束
-            var stop = false;
-            while (!stop)
-            {
+            while (!client.Destroyed){
                 var msg = Console.ReadLine();
                 if (string.IsNullOrEmpty(msg)) continue;
 
-                switch (msg.ToUpper())
-                {
+                switch (msg.ToUpper()){
                     case "QUIT":
                     case "EXIT":
                         {
-                            client.Destroy();
-                            stop = true;
+                            client.LogicService.Perform(client.Destroy);
                         }
                         break;
 
-                    case "REQ":
-                    {
+                    case "REQ":{
                         //  请求服务器
                         client.RequestAsync(0, 0, (short) ECommand.Request, new RequestMsgProto {Message = msg}, 0, 0,
                             (b, bytes) =>
                             {
                                 if (!b)
-                                    Logger.Instance.Error("请求失败");
+                                    Logger.Ins.Error("请求失败");
                                 else
                                 {
                                     var proto = PiSerializer.Deserialize<ResponseMsgProto>(bytes);
-                                    Logger.Instance.Info(proto.Message);
+                                    Logger.Ins.Info(proto.Message);
                                 }
                             });
 

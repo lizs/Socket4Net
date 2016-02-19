@@ -3,16 +3,16 @@ using System.Net.Sockets;
 
 namespace socket4net
 {
-    public interface ISessionFactory<out TSession> where TSession : ISession
-    {
-        TSession Create(Socket sock, IPeer hostPeer);
-    }
+    //public interface ISessionFactory<out TSession> where TSession : ISession
+    //{
+    //    TSession Create(Socket sock, IPeer hostPeer);
+    //}
 
-    public class SessionFactory<TSession> : ISessionFactory<TSession> where TSession : ISession, new()
+    public class SessionFactory<TSession> where TSession : ISession, new()
     {
         public TSession Create(Socket sock, IPeer hostPeer)
         {
-            return new TSession { Id = GetGUID(), UnderlineSocket = sock, HostPeer = hostPeer };
+            return Obj.Create<TSession>(new SessionArg(hostPeer, GetGUID(), sock), false);
         }
 
         private long GetGUID()

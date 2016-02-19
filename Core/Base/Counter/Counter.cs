@@ -30,7 +30,7 @@ namespace socket4net
         {
             --_count;
             if (_count < 0)
-                Logger.Instance.Error("Counter < 0!!!");
+                Logger.Ins.Error("Counter < 0!!!");
 
             if (_count == 0 && _action != null)
                 _action();

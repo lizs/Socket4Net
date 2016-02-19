@@ -120,7 +120,7 @@ namespace socket4net
             _packageLen = (ushort)(two << 8 | one);
             if (_packageLen > PackageMaxSize)
             {
-                Logger.Instance.WarnFormat("Processing buffer size : {0} bytes,  bigger than {1} bytes!", _packageLen, PackageMaxSize);
+                Logger.Ins.Warn("Processing buffer size : {0} bytes,  bigger than {1} bytes!", _packageLen, PackageMaxSize);
                 return PackerError.Failed;
             }
 

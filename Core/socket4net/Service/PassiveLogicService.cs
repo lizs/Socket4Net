@@ -19,7 +19,7 @@ namespace socket4net
 
             StopWorking = false;
             Watch.Start();
-            Logger.Instance.Debug("Passive logic service started!");
+            Logger.Ins.Debug("Passive logic service started!");
         }
 
         protected override void OnDestroy()
@@ -28,7 +28,7 @@ namespace socket4net
 
             StopWorking = true;
             Watch.Stop();
-            Logger.Instance.Debug("Logic service stopped!");
+            Logger.Ins.Debug("Logic service stopped!");
         }
 
         public override int Jobs
@@ -50,7 +50,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
             }
         }
 
@@ -68,7 +68,7 @@ namespace socket4net
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.Exception(e);
+                    Logger.Ins.Exception(e);
                 }
 
                 return;
@@ -89,7 +89,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
             }
         }
 

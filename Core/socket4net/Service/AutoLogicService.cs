@@ -23,12 +23,12 @@ namespace socket4net
             if (_workingQueue != null
                 || _workingThread != null)
             {
-                Logger.Instance.Fatal("AutoLogicService being start more than once");
+                Logger.Ins.Fatal("AutoLogicService being start more than once");
                 return;
             }
 
             DoStartup();
-            Logger.Instance.Debug("Auto logic service started!");
+            Logger.Ins.Debug("Auto logic service started!");
         }
 
         protected override void OnDestroy()
@@ -38,14 +38,13 @@ namespace socket4net
             if (_workingThread == null
                 || _workingQueue == null)
             {
-                Logger.Instance.Fatal("AutoLogicService not yet been started");
+                Logger.Ins.Fatal("AutoLogicService not yet been started");
                 return;
             }
 
             StopWorking = true;
-            //_workingThread.Join();
-
-            Logger.Instance.Debug("Logic service stopped!");
+            _workingThread.Join();
+            Logger.Ins.Debug("auto-LogicService stopped!");
         }
 
         public override event Action Idle;
@@ -122,7 +121,7 @@ namespace socket4net
                     }
                     catch (Exception ex)
                     {   
-                        Logger.Instance.FatalFormat("{0} : {1}", ex.Message, ex.StackTrace);
+                        Logger.Ins.Fatal("{0} : {1}", ex.Message, ex.StackTrace);
                     }
 
                 }
@@ -138,7 +137,7 @@ namespace socket4net
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Fatal(string.Format("{0} : {1}", ex.Message, ex.StackTrace));
+                    Logger.Ins.Fatal(string.Format("{0} : {1}", ex.Message, ex.StackTrace));
                 }
 
                 IdleCallbackElapsed = Watch.ElapsedMilliseconds - t2;

@@ -12,8 +12,8 @@ namespace socket4net
         public const string NameOfLogger = "Logger";
         
         private GlobalVarPool(){}
-        private static GlobalVarPool _instance;
-        public static GlobalVarPool Instance { get { return _instance ?? (_instance = new GlobalVarPool()); } }
+        private static GlobalVarPool _ins;
+        public static GlobalVarPool Ins { get { return _ins ?? (_ins = new GlobalVarPool()); } }
 
         private readonly Dictionary<string, object> _vars = new Dictionary<string, object>();
         public T Get<T>(string key)

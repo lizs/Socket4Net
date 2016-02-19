@@ -2,10 +2,10 @@
 {
     public static class Logger
     {
-        private static ILog _instance;
-        public static ILog Instance
+        private static ILog _ins;
+        public static ILog Ins
         {
-            get { return _instance ?? (_instance = GlobalVarPool.Instance.Logger); }
+            get { return _ins ?? (_ins = GlobalVarPool.Ins.Logger); }
         }
     }
 }

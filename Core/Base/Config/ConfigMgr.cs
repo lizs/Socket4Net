@@ -40,14 +40,14 @@ namespace socket4net
         // for IBatch<string>
         public ConfigMgr()
         {
-            if (Instance != null)
+            if (Ins != null)
             {
                 throw new Exception("ConfigMgr already Instantiated!");
             }
-            Instance = this;
+            Ins = this;
         }
 
-        public static ConfigMgr Instance { get; private set; }
+        public static ConfigMgr Ins { get; private set; }
 
         // 存放配置文件相对路径
         readonly List<string> _summary = new List<string>();
@@ -221,7 +221,7 @@ namespace socket4net
             var type = Type.GetType(fullName);
             if (type == null)
             {
-                Logger.Instance.FatalFormat("Type of config : {0} doesn't exist!!!", fullName);
+                Logger.Ins.Fatal("Type of config : {0} doesn't exist!!!", fullName);
                 throw new Exception(string.Format("Type of config : {0} doesn't exist!!!", fullName));
             }
             return type;
@@ -233,14 +233,14 @@ namespace socket4net
                 LoadOne(path);
 
             // todo lizs
-            //GoodsConvertor.Instance.Cache();
+            //GoodsConvertor.Ins.Cache();
 
             IsDone = true;
         }
 
         private void LoadOne(string path)
         {
-            Logger.Instance.Info("Parse : " + path);
+            Logger.Ins.Info("Parse : " + path);
             var info = path.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
             switch (info[1])
             {
@@ -263,7 +263,7 @@ namespace socket4net
                 default:
                     throw new Exception(string.Format("Unknown type : {0}", info[1]));
             }
-            Logger.Instance.Info("Parse : " + path + " success!!!");
+            Logger.Ins.Info("Parse : " + path + " success!!!");
         }
     }
 }

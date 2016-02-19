@@ -18,10 +18,10 @@ namespace socket4net
 
     public class ComponentsCache : AttributesCache<Type[], ConsistsOfAttribute>
     {
-        private static ComponentsCache _instance;
-        public static ComponentsCache Instance
+        private static ComponentsCache _ins;
+        public static ComponentsCache Ins
         {
-            get { return _instance ?? (_instance = new ComponentsCache()); }
+            get { return _ins ?? (_ins = new ComponentsCache()); }
         }
 
         protected override Type[] Handle(IEnumerable<ConsistsOfAttribute> attributes)

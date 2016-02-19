@@ -64,7 +64,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
                 return null;
             }
         }
@@ -86,7 +86,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
                 return default(T);
             }
         }
@@ -110,7 +110,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
                 return null;
             }
         }
@@ -131,7 +131,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
                 return null;
             }
         }
@@ -153,7 +153,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
                 return default(T);
             }
         }
@@ -172,7 +172,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
                 return null;
             }
         }
@@ -192,7 +192,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.Exception(e);
+                Logger.Ins.Exception(e);
                 return null;
             }
         }
@@ -208,7 +208,7 @@ namespace socket4net
         //    }
         //    catch (Exception e)
         //    {
-        //        Logger.Instance.Exception(e);
+        //        Logger.Ins.Exception(e);
         //    }
 
         //    return Serialize(ins);

@@ -35,7 +35,7 @@ namespace socket4net
         {
             Name = name;
             DueTime = dueTime;
-            _scheduler = GlobalVarPool.Instance.LogicService.Scheduler;
+            _scheduler = GlobalVarPool.Ins.LogicService.Scheduler;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace socket4net
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.ErrorFormat("Timer exception, {0} : {1}", e.Message, e.StackTrace);
+                    Logger.Ins.Error("Timer exception, {0} : {1}", e.Message, e.StackTrace);
                 }
             }
         }

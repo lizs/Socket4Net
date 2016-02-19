@@ -55,17 +55,15 @@ namespace socket4net
             _jobs = new BlockingCollection<IJob>(Capacity);
             _wokerThread = new Thread(WorkingProcedure) {Name = "NetService"};
             _wokerThread.Start();
-            Logger.Instance.Debug("Net service started!");
+            Logger.Ins.Debug("Net service started!");
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-
             _stopping = true;
-            //_wokerThread.Join();
-
-            Logger.Instance.Debug("Net service stopped!");
+            _wokerThread.Join();
+            Logger.Ins.Debug("Net service stopped!");
         }
 
         public void Perform(Action action)
@@ -104,7 +102,7 @@ namespace socket4net
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.ErrorFormat("{0} : {1}", e.Message, e.StackTrace);
+                    Logger.Ins.Error("{0} : {1}", e.Message, e.StackTrace);
                 }
             }
 
@@ -118,7 +116,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0} : {1}", e.Message, e.StackTrace);
+                Logger.Ins.Error("{0} : {1}", e.Message, e.StackTrace);
             }
         }
 

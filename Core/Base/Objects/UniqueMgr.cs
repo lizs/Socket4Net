@@ -19,18 +19,14 @@ namespace socket4net
         Remove,
     }
 
-    /// <summary>
-    ///     对象管理器
-    ///     对象之间以id唯一区分
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    public class UniqueMgr<TKey, TValue> : Obj, IEnumerable<TValue> where TValue : class, IUniqueObj<TKey>
+    public class UniqueMgr<TContainer, TKey, TValue> : Obj, IEnumerable<TValue> 
+        where TContainer : IDictionary<TKey, TValue>, new()
+        where TValue : class, IUniqueObj<TKey>
     {
         public event Action<TValue> EventObjCreated;
         public event Action<TValue> EventDefaultObjCreated;
         public event Action<TKey, Type> EventObjDestroyed;
-        protected readonly Dictionary<TKey, TValue> Items = new Dictionary<TKey, TValue>();
+        protected readonly TContainer Items = new TContainer();
 
         public List<TValue> OrderedValues
         {
@@ -81,7 +77,7 @@ namespace socket4net
             foreach (var item in OrderedValues)
                 item.Reset();
         }
-        
+
         public IEnumerator<TValue> GetEnumerator()
         {
             return Items.Select(x => x.Value).GetEnumerator();
@@ -93,17 +89,19 @@ namespace socket4net
         }
 
         #region 创建
+
         /// <summary>
         ///     创建
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
+        /// <param name="start"></param>
         /// <returns></returns>
-        public T Create<T>(UniqueObjArg<TKey> arg) where T : class, TValue, new()
+        public T Create<T>(UniqueObjArg<TKey> arg, bool start) where T : class, TValue, new()
         {
             if (Exist(arg.Key)) return null;
 
-            var ret = Obj.Create<T>(arg);
+            var ret = Obj.Create<T>(arg, start);
             Add(ret);
 
             if (EventObjCreated != null)
@@ -117,13 +115,14 @@ namespace socket4net
         /// </summary>
         /// <param name="type"></param>
         /// <param name="arg"></param>
+        /// <param name="start"></param>
         /// <returns></returns>
-        public Obj Create(Type type, UniqueObjArg<TKey> arg)
+        public Obj Create(Type type, UniqueObjArg<TKey> arg, bool start)
         {
             if (Exist(arg.Key)) return null;
-            if (!type.IsSubclassOf(typeof (TValue))) return null;
+            if (!type.IsSubclassOf(typeof(TValue))) return null;
 
-            var ret = Obj.Create(type, arg);
+            var ret = Obj.Create(type, arg, start);
             var obj = ret as TValue;
             Add(obj);
 
@@ -140,28 +139,28 @@ namespace socket4net
         /// <param name="type"></param>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public T Create<T>(Type type, UniqueObjArg<TKey> arg) where T : class, TValue
+        public T Create<T>(Type type, UniqueObjArg<TKey> arg, bool start) where T : class, TValue
         {
             if (Exist(arg.Key)) return null;
-            if (type.IsSubclassOf(typeof (T))) return null;
+            if (type.IsSubclassOf(typeof(T))) return null;
 
-            return Create(type, arg) as T;
+            return Create(type, arg, start) as T;
         }
-        
+
         /// <summary>
         ///     创建默认
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public T CreateDefault<T>(UniqueObjArg<TKey> arg) where T : class, TValue, new()
+        public T CreateDefault<T>(UniqueObjArg<TKey> arg, bool start) where T : class, TValue, new()
         {
             if (Exist(arg.Key)) return null;
 
-            var ret = Create<T>(arg);
+            var ret = Create<T>(arg, start);
             ret.Reset();
             Add(ret);
-            
+
             if (EventDefaultObjCreated != null)
                 EventDefaultObjCreated(ret);
 
@@ -174,17 +173,17 @@ namespace socket4net
         /// <param name="type"></param>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public Obj CreateDefault(Type type, UniqueObjArg<TKey> arg)
+        public Obj CreateDefault(Type type, UniqueObjArg<TKey> arg, bool start)
         {
             if (Exist(arg.Key)) return null;
             if (!type.IsSubclassOf(typeof(TValue))) return null;
 
-            var ret = Create(type, arg);
+            var ret = Create(type, arg, start);
             ret.Reset();
 
             var obj = ret as TValue;
             Add(obj);
-            
+
             if (EventDefaultObjCreated != null)
                 EventDefaultObjCreated(obj);
 
@@ -198,12 +197,12 @@ namespace socket4net
         /// <param name="type"></param>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public T CreateDefault<T>(Type type, UniqueObjArg<TKey> arg) where T : class, TValue
+        public T CreateDefault<T>(Type type, UniqueObjArg<TKey> arg, bool start) where T : class, TValue
         {
             if (Exist(arg.Key)) return null;
             if (type.IsSubclassOf(typeof(T))) return null;
 
-            return CreateDefault(type, arg) as T;
+            return CreateDefault(type, arg, start) as T;
         }
         #endregion
 
@@ -283,7 +282,7 @@ namespace socket4net
 
         public bool Exist(Predicate<TValue> condition)
         {
-            return Items.Select(x => x.Value).Any(x=>condition(x));
+            return Items.Select(x => x.Value).Any(x => condition(x));
         }
 
         public bool Exist<T>(Predicate<T> condition) where T : TValue
@@ -298,7 +297,7 @@ namespace socket4net
 
         public TValue GetFirst(Predicate<TValue> condition)
         {
-            return this.FirstOrDefault(x=>condition(x));
+            return this.FirstOrDefault(x => condition(x));
         }
 
         public List<TValue> Get(Predicate<TValue> condition)
@@ -363,7 +362,7 @@ namespace socket4net
             var victims = Get(condition);
             victims.ForEach(x => Items.Remove(x.Id));
             return victims;
-        } 
+        }
 
         protected List<T> Remove<T>() where T : TValue
         {
@@ -379,5 +378,16 @@ namespace socket4net
             return victims;
         }
         #endregion remove
+    }
+
+    /// <summary>
+    ///     对象管理器
+    ///     对象之间以id唯一区分
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    public class UniqueMgr<TKey, TValue> : UniqueMgr<Dictionary<TKey, TValue>, TKey, TValue>
+        where TValue : class, IUniqueObj<TKey>
+    {
     }
 }

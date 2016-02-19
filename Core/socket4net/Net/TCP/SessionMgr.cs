@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 #if NET45
 using System.Collections.Concurrent;
@@ -8,116 +6,77 @@ using System.Collections.Concurrent;
 
 namespace socket4net
 {
-    public class SessionMgr : IEnumerable<ISession>
+    public class SessionMgrArg : UniqueMgrArg
     {
-        public int Count { get { return _sessions.Count; } }
-        public IPeer Host { get; private set; }
+        public SessionMgrArg(IPeer peer, Action<ISession> openCb, Action<ISession, SessionCloseReason> closeCb)
+            : base(peer)
+        {
+            OpenCallback = openCb;
+            CloseCallback = closeCb;
+        }
 
-        private readonly ConcurrentDictionary<long, ISession> _sessions = new ConcurrentDictionary<long, ISession>();
+        public Action<ISession> OpenCallback { get; private set; }
+        public Action<ISession, SessionCloseReason> CloseCallback { get; private set; }
+    }
+
+    public class SessionMgr : UniqueMgr<ConcurrentDictionary<long, ISession>, long, ISession> 
+    {
+        public IPeer Peer
+        {
+            get { return Owner as IPeer; }
+        }
+
         private Action<ISession> _openCb;
         private Action<ISession, SessionCloseReason> _closeCb;
-
-        public SessionMgr(IPeer host, Action<ISession> openCb, Action<ISession, SessionCloseReason> closeCb)
-        {
-            Host = host;
-            _openCb = openCb;
-            _closeCb = closeCb;
-        }
-
-        public void Add(ISession session)
-        {
-            if (_sessions.TryAdd(session.Id, session))
-            {
-                Host.PerformInLogic(()=>_openCb(session));
-            }
-            else
-                Logger.Instance.Warn("Insert session failed for id : " + session.Id);
-        }
         
-        public void Remove(long id, SessionCloseReason reason)
+        protected override void OnInit(ObjArg arg)
         {
-            ISession session;
-            if (_sessions.TryRemove(id, out session))
-            {
-                if (Host != null && _closeCb != null)
-                    Host.PerformInLogic(() =>_closeCb(session, reason));
-            }
-            else if (_sessions.ContainsKey(id))
-                Logger.Instance.Warn("Remove session failed for id : " + id);
-            else
-                Logger.Instance.Warn("Remove session failed for id :  cause of it doesn't exist" + id);
+            base.OnInit(arg);
+            var more = arg.As<SessionMgrArg>();
+
+            _openCb = more.OpenCallback;
+            _closeCb = more.CloseCallback;
         }
 
-        public ISession Get(long id)
+        protected override void OnDestroy()
         {
-            ISession session;
-            return _sessions.TryGetValue(id, out session) ? session : null;
-        }
-
-        /// <summary>
-        ///     获取T类型的所有会话
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public IEnumerable<T> Get<T>() where T : ISession
-        {
-            return _sessions.Select(x=>x.Value).OfType<T>();
-        }
-
-        public T Get<T>(long sid) where T : class ,ISession
-        {
-            if (!_sessions.ContainsKey(sid)) return null;
-            return _sessions[sid] as T;
-        }
-
-        public ISession FirstOrDefault()
-        {
-            return _sessions.Select(x => x.Value).FirstOrDefault();
-        }
-
-        public T FirstOrDefault<T>() where T : ISession
-        {
-            return _sessions.Select(x=>x.Value).OfType<T>().FirstOrDefault();
-        }
-
-        public T FirstOrDefault<T>(Predicate<T> condition) where T : ISession
-        {
-            return _sessions.Select(x => x.Value).OfType<T>().FirstOrDefault(x => condition(x));
-        }
-
-        public void Clear()
-        {
-            foreach (var session in Sessions.ToArray())
-            {
-                session.Close(SessionCloseReason.ClosedByMyself);
-            }
-        }
-
-        public IEnumerable<ISession> Sessions
-        {
-            get
-            {
-                return _sessions.Select(x => x.Value);
-            }
-        }
-
-        public void Destroy()
-        {
+            base.OnDestroy();
             Clear();
 
             _openCb = null;
             _closeCb = null;
-            Host = null;
         }
 
-        public IEnumerator<ISession> GetEnumerator()
+        public void AddSession(ISession session)
         {
-            return Sessions.GetEnumerator();
+            if (Items.TryAdd(session.Id, session))
+            {
+                Peer.PerformInLogic(() => _openCb(session));
+            }
+            else
+                Logger.Ins.Warn("Insert session failed for id : " + session.Id);
+        }
+        
+        public void RemoveSession(long id, SessionCloseReason reason)
+        {
+            ISession session;
+            if (Items.TryRemove(id, out session))
+            {
+                if (Peer != null && _closeCb != null)
+                    Peer.PerformInLogic(() => _closeCb(session, reason));
+            }
+            else if (Items.ContainsKey(id))
+                Logger.Ins.Warn("Remove session failed for id : " + id);
+            else
+                Logger.Ins.Warn("Remove session failed for id :  cause of it doesn't exist" + id);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public void Clear()
         {
-            return GetEnumerator();
+            foreach (var session in this.ToArray())
+            {
+                session.Close(SessionCloseReason.ClosedByMyself);
+            }
         }
     }
 }

@@ -16,10 +16,10 @@ namespace socket4net
 
     public class ComponentDepedencyCache : AttributesCache<Type[], DependOnAttribute>
     {
-        private static ComponentDepedencyCache _instance;
-        public static ComponentDepedencyCache Instance
+        private static ComponentDepedencyCache _ins;
+        public static ComponentDepedencyCache Ins
         {
-            get { return _instance ?? (_instance = new ComponentDepedencyCache()); }
+            get { return _ins ?? (_ins = new ComponentDepedencyCache()); }
         }
 
         protected override Type[] Handle(IEnumerable<DependOnAttribute> attributes)

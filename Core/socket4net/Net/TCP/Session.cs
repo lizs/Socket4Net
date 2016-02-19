@@ -22,16 +22,12 @@ namespace socket4net
         Replaced,
     }
 
-    public interface ISession
+    public interface ISession : IUniqueObj<long>
     {
-        IPeer HostPeer { get; set; }
-        long Id { get; set; }
-        string Name { get; }
-        Socket UnderlineSocket { get; set; }
+        Socket UnderlineSocket { get;}
         ushort ReceiveBufSize { get; }
         ushort PackageMaxSize { get; }
-        
-        void Start();
+
         void Close(SessionCloseReason reason);
         void SendWithHeader(byte[] data);
         void Send(byte[] data);
@@ -44,23 +40,29 @@ namespace socket4net
 #endif
     }
 
-    public abstract class Session : ISession
+    public class SessionArg : UniqueObjArg<long>
+    {
+        public SessionArg(IPeer owner, long key, Socket underlineSock) : base(owner, key)
+        {
+            UnderlineSocket = underlineSock;
+        }
+
+        public Socket UnderlineSocket { get; private set; }
+    }
+
+    public abstract class Session : UniqueObj<long>, ISession
     {
         public const ushort DefaultPackageMaxSize = 4 * 1024;
         public const ushort DefaultReceiveBufferSize = 4 * 1024;
-        protected const ushort HeaderSize = sizeof (ushort);
-        public long Id { get; set; }
+        protected const ushort HeaderSize = sizeof(ushort);
 
-        public virtual string Name
+        public override string Name
         {
-            get
-            {
-                return string.Format("{0}:{1}", GetType().Name, Id);
-            }
+            get { return string.Format("{0}:{1}", GetType().Name, Id); }
         }
 
-        public Socket UnderlineSocket { get; set; }
-        public IPeer HostPeer { get; set; }
+        public Socket UnderlineSocket { get; private set; }
+        public IPeer HostPeer { get; private set; }
 
         /// <summary>
         /// 指定接收buffer长度
@@ -82,7 +84,7 @@ namespace socket4net
 
         // 发送相关
         private bool _isSending;
-        private readonly Queue<byte[]> _sendingQueue;
+        private Queue<byte[]> _sendingQueue;
         private SocketAsyncEventArgs _sendAsyncEventArgs;
 
         // 接收相关
@@ -94,8 +96,10 @@ namespace socket4net
         private ushort _receiveBufferSize = DefaultReceiveBufferSize;
         private ushort _packageMaxSize = DefaultPackageMaxSize;
 
-        protected Session()
+        protected override void OnInit(ObjArg arg)
         {
+            base.OnInit(arg);
+
             _sendingQueue = new Queue<byte[]>();
 
             _sendAsyncEventArgs = new SocketAsyncEventArgs();
@@ -115,41 +119,43 @@ namespace socket4net
 #else
         public abstract Task Dispatch(byte[] packData);
 #endif
-        
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
+
         public virtual void Close(SessionCloseReason reason)
         {
             if (_closed) return;
             _closed = true;
-            
-            HostPeer.PerformInNet(() =>
-            {
-                _sendingQueue.Clear();
 
-                if (UnderlineSocket.Connected)
-                    UnderlineSocket.Shutdown(SocketShutdown.Both);
+            _sendingQueue.Clear();
 
-                UnderlineSocket.Close();
-                UnderlineSocket = null;
-                
-                _sendAsyncEventArgs.Dispose();
-                _receiveAsyncEventArgs.Dispose();
-                _sendAsyncEventArgs = null;
-                _receiveAsyncEventArgs = null;
-                _receiveBuffer = null;
-                _packer = null;
+            if (UnderlineSocket.Connected)
+                UnderlineSocket.Shutdown(SocketShutdown.Both);
 
-                HostPeer.SessionMgr.Remove(Id, reason);
-                HostPeer = null;
-            });
+            UnderlineSocket.Close();
+            UnderlineSocket = null;
+
+            _sendAsyncEventArgs.Dispose();
+            _receiveAsyncEventArgs.Dispose();
+            _sendAsyncEventArgs = null;
+            _receiveAsyncEventArgs = null;
+            _receiveBuffer = null;
+            _packer = null;
+
+            HostPeer.SessionMgr.RemoveSession(Id, reason);
+            HostPeer = null;
         }
 
         protected byte[][] Split(byte[] data, ushort maxLen)
         {
-            if (data == null) return new byte[][] {};
-            if (data.Length <= maxLen) return new[] {data};
+            if (data == null) return new byte[][] { };
+            if (data.Length <= maxLen) return new[] { data };
 
-            var segmentsCnt = data.Length/maxLen;
-            var tailSize = data.Length%maxLen;
+            var segmentsCnt = data.Length / maxLen;
+            var tailSize = data.Length % maxLen;
             if (tailSize != 0)
                 ++segmentsCnt;
 
@@ -180,7 +186,7 @@ namespace socket4net
             for (var i = 1; i < segments.Length; i++)
                 Send(segments[i], 1);
         }
-        
+
         private void Send(byte[] data, byte segmentsCnt)
         {
             using (var ms = new MemoryStream())
@@ -207,7 +213,7 @@ namespace socket4net
             if (_closed) return;
             HostPeer.PerformInNet(SendImp, data);
         }
-        
+
         /// <summary>
         /// 多播
         /// </summary>
@@ -255,7 +261,7 @@ namespace socket4net
         /// <param name="data"></param>
         public void Broadcast(byte[] data)
         {
-            MultiCast(data, HostPeer.SessionMgr.Sessions);
+            MultiCast(data, HostPeer.SessionMgr);
         }
 
         /// <summary>
@@ -265,7 +271,7 @@ namespace socket4net
         /// <param name="data"></param>
         public void BroadcastWithHeader(byte[] data)
         {
-            MultiCastWithHeader(data, HostPeer.SessionMgr.Sessions);
+            MultiCastWithHeader(data, HostPeer.SessionMgr);
         }
 
         /// <summary>
@@ -275,7 +281,7 @@ namespace socket4net
         /// <param name="proto"></param>
         public void Broadcast<T>(T proto)
         {
-            MultiCast(proto, HostPeer.SessionMgr.Sessions);
+            MultiCast(proto, HostPeer.SessionMgr);
         }
 
         private void SendImp(byte[] data)
@@ -312,7 +318,7 @@ namespace socket4net
             }
             catch (ObjectDisposedException e)
             {
-                Logger.Instance.WarnFormat("Socket already closed! detail : {0}", e.StackTrace);
+                Logger.Ins.Warn("Socket already closed! detail : {0}", e.StackTrace);
             }
             catch
             {
@@ -321,14 +327,14 @@ namespace socket4net
 
             if (!_isSending)
             {
-                HostPeer.NetService.OnWriteCompleted(data.Length);
+                GlobalVarPool.Ins.NetService.OnWriteCompleted(data.Length);
                 SendNext();
             }
         }
 
         private void OnSendCompleted(object sender, SocketAsyncEventArgs e)
         {
-            if(_closed) return;
+            if (_closed) return;
 
             HostPeer.PerformInNet(() =>
             {
@@ -338,7 +344,7 @@ namespace socket4net
                     return;
                 }
 
-                HostPeer.NetService.OnWriteCompleted(e.BytesTransferred);
+                GlobalVarPool.Ins.NetService.OnWriteCompleted(e.BytesTransferred);
 
                 if (_sendingQueue.Count > 0)
                     SendNext();
@@ -388,7 +394,7 @@ namespace socket4net
             if (_receiveBuffer.Overload)
                 _receiveBuffer.Reset();
 
-            HostPeer.NetService.OnReadCompleted(_receiveAsyncEventArgs.BytesTransferred, packagesCnt);
+            GlobalVarPool.Ins.NetService.OnReadCompleted(_receiveAsyncEventArgs.BytesTransferred, packagesCnt);
 
             while (_packer.Packages.Count > 0)
             {
@@ -415,7 +421,7 @@ namespace socket4net
                 ProcessReceive();
             }
         }
-        
+
         private void OnReceiveCompleted(object sender, SocketAsyncEventArgs e)
         {
             if (_closed) return;

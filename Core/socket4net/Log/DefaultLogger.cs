@@ -9,17 +9,17 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void DebugFormat(string format, object arg0)
+        public void Debug(string format, object arg0)
         {
             Console.WriteLine(format, arg0);
         }
 
-        public void DebugFormat(string format, object arg0, object arg1)
+        public void Debug(string format, object arg0, object arg1)
         {
             Console.WriteLine(format, arg0, arg1);
         }
 
-        public void DebugFormat(string format, object arg0, object arg1, object arg2)
+        public void Debug(string format, object arg0, object arg1, object arg2)
         {
             Console.WriteLine(format, arg0, arg1, arg2);
         }
@@ -29,17 +29,17 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void ErrorFormat(string format, object arg0)
+        public void Error(string format, object arg0)
         {
             Console.WriteLine(format, arg0);
         }
 
-        public void ErrorFormat(string format, object arg0, object arg1)
+        public void Error(string format, object arg0, object arg1)
         {
             Console.WriteLine(format, arg0, arg1);
         }
 
-        public void ErrorFormat(string format, object arg0, object arg1, object arg2)
+        public void Error(string format, object arg0, object arg1, object arg2)
         {
             Console.WriteLine(format, arg0, arg1, arg2);
         }
@@ -49,17 +49,17 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void FatalFormat(string format, object arg0)
+        public void Fatal(string format, object arg0)
         {
             Console.WriteLine(format, arg0);
         }
 
-        public void FatalFormat(string format, object arg0, object arg1)
+        public void Fatal(string format, object arg0, object arg1)
         {
             Console.WriteLine(format, arg0, arg1);
         }
 
-        public void FatalFormat(string format, object arg0, object arg1, object arg2)
+        public void Fatal(string format, object arg0, object arg1, object arg2)
         {
             Console.WriteLine(format, arg0, arg1, arg2);
         }
@@ -69,17 +69,17 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void InfoFormat(string format, object arg0)
+        public void Info(string format, object arg0)
         {
             Console.WriteLine(format, arg0);
         }
 
-        public void InfoFormat(string format, object arg0, object arg1)
+        public void Info(string format, object arg0, object arg1)
         {
             Console.WriteLine(format, arg0, arg1);
         }
 
-        public void InfoFormat(string format, object arg0, object arg1, object arg2)
+        public void Info(string format, object arg0, object arg1, object arg2)
         {
             Console.WriteLine(format, arg0, arg1, arg2);
         }
@@ -89,17 +89,17 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void WarnFormat(string format, object arg0)
+        public void Warn(string format, object arg0)
         {
             Console.WriteLine(format, arg0);
         }
 
-        public void WarnFormat(string format, object arg0, object arg1)
+        public void Warn(string format, object arg0, object arg1)
         {
             Console.WriteLine(format, arg0, arg1);
         }
 
-        public void WarnFormat(string format, object arg0, object arg1, object arg2)
+        public void Warn(string format, object arg0, object arg1, object arg2)
         {
             Console.WriteLine(format, arg0, arg1, arg2);
         }

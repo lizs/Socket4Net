@@ -84,10 +84,7 @@ namespace socket4net
 
         public T Create<T>(ObjArg arg, bool init, bool start) where T : class, TValue, new()
         {
-            var ret = Create<T>(arg);
-            if (start)
-                ret.Start();
-
+            var ret = Create<T>(arg, start);
             _items.Add(ret);
             return ret;
         }

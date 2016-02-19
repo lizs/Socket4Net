@@ -5,14 +5,14 @@ namespace ChatS
 {
     public class Server : Server<ChatSession>
     {
-        public static Server Instance { get; private set; }
+        public static Server Ins { get; private set; }
 
         public Server()
         {
-            if(Instance != null)
+            if(Ins != null)
                 throw new Exception("Server already instantiated!");
 
-            Instance = this;
+            Ins = this;
         }
     }
 }

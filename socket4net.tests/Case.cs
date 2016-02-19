@@ -10,13 +10,13 @@ namespace socket4net.tests
         public virtual void Init()
         {
             Obj.Create<Launcher>(new LauncherArg(new Log4Net("log4net.config", "socket4net.tests")));
-            Launcher.Instance.Start();
+            Launcher.Ins.Start();
         }
 
         [TearDown]
         public virtual void Destroy()
         {
-            Launcher.Instance.Destroy();
+            Launcher.Ins.Destroy();
         }
     }
 }
