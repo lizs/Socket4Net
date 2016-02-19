@@ -4,7 +4,7 @@ namespace socket4net
 {
     public class LauncherArg : ObjArg
     {
-        public LauncherArg(IObj owner, ILog logger, bool passiveLogicServiceEnabled = false) : base(owner)
+        public LauncherArg(ILog logger = null, bool passiveLogicServiceEnabled = false) : base(null)
         {
             Logger = logger;
             PassiveLogicServiceEnabled = passiveLogicServiceEnabled;
@@ -45,7 +45,7 @@ namespace socket4net
             var more = arg.As<LauncherArg>();
 
             // logger
-            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, more.Logger);
+            GlobalVarPool.Instance.Set(GlobalVarPool.NameOfLogger, more.Logger ?? new DefaultLogger());
 
             // logic service
             var serviceArg = new ServiceArg(this, 10000, 10);

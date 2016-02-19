@@ -18,7 +18,7 @@ namespace ChatC
                     port = ushort.Parse(args[1]);
             }
 
-            Obj.Create<Launcher>(new LauncherArg(null, new CustomLog.Log4Net("log4net.config", "ChatC")));
+            Obj.Create<Launcher>(new LauncherArg(new CustomLog.Log4Net("log4net.config", "ChatC")));
             Launcher.Instance.Start();
 
             // 启动客户端

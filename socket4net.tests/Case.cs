@@ -9,7 +9,7 @@ namespace socket4net.tests
         [SetUp]
         public virtual void Init()
         {
-            Obj.Create<Launcher>(new LauncherArg(null, new CustomLog.Log4Net("log4net.config", "socket4net.tests")));
+            Obj.Create<Launcher>(new LauncherArg(new Log4Net("log4net.config", "socket4net.tests")));
             Launcher.Instance.Start();
         }
 

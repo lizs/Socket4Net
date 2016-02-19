@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading;
+#if NET45
+using System.Collections.Concurrent;
+#endif
 
 namespace socket4net
 {
@@ -77,14 +80,12 @@ namespace socket4net
 
         private void Enqueue<T>(Action<T> proc, T param)
         {
-            if(!_jobs.Add(new Job<T>(proc, param)))
-                Logger.Instance.Error("网络服务队列溢出");
+            _jobs.Add(new Job<T>(proc, param));
         }
 
         private void Enqueue(Action proc)
         {
-            if(!_jobs.Add(new Job(proc)))
-                Logger.Instance.Error("网络服务队列溢出");
+            _jobs.Add(new Job(proc));
         }
 
         private void WorkingProcedure()

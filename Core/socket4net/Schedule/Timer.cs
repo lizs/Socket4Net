@@ -1,15 +1,4 @@
-﻿/********************************************************************
- *  created:    2011/12/21   3:59
- *  filename:   Timer.cs
- *
- *  author:     Linguohua
- *  copyright(c) 2011
- *
- *  purpose:    Timer class. A timer class base on Linux style
- *      timer scheduler.
-*********************************************************************/
-
-using System;
+﻿using System;
 
 namespace socket4net
 {

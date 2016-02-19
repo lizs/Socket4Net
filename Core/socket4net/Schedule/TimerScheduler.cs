@@ -1,16 +1,4 @@
-﻿/********************************************************************
- *  created:    2011/12/21   3:57
- *  filename:   TimerScheduler.cs
- *
- *  author:     Linguohua
- *  copyright(c) 2011
- *
- *  purpose:    Implements a Linux style timer scheduler.
- *      The code are partial migrate from Linux core.
- *      See Linux/Kernel/Timer.c file for details.
-*********************************************************************/
-
-using System;
+﻿using System;
 using System.Diagnostics;
 
 namespace socket4net

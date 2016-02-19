@@ -3,6 +3,11 @@ using System.Diagnostics;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     逻辑服务
+    ///     1、可将多线程任务转换为单线程任务
+    ///     2、提供定时调度、协程调度服务
+    /// </summary>
     public abstract class LogicServiceBase : Obj, ILogicService
     {
         protected const int StopWatchDivider = 128;

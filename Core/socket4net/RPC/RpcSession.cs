@@ -1,5 +1,7 @@
 ﻿using System;
+
 #if NET45
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 #endif
 

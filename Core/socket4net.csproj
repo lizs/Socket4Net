@@ -108,6 +108,8 @@
     <Compile Include="ECS\Sys\Data\DataSys.cs" />
     <Compile Include="ECS\Sys\Data\SyncSys.cs" />
     <Compile Include="ECS\Sys\Player.cs" />
+    <Compile Include="socket4net\Log\DefaultLogger.cs" />
+    <Compile Include="socket4net\Log\EmptyLogger.cs" />
     <Compile Include="socket4net\Log\ILog.cs" />
     <Compile Include="Base\Counter\Counter.cs" />
     <Compile Include="socket4net\Log\Logger.cs" />

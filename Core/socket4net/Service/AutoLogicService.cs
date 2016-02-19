@@ -1,25 +1,13 @@
-﻿/********************************************************************
- *  created:    2011/12/17   6:17
- *  filename:   StaService.cs
- *
- *  author:     Linguohua
- *  copyright(c) 2011
- *
- *  purpose:    implement StaService class. StaService represents single thread
- *      apartment.  It's a work items queue plus an Idle event,
- *      it consumes work items or call Idle event when it's arrive
- *      it's period.
-*********************************************************************/
-
-using System;
+﻿using System;
 using System.Threading;
+
+#if NET45
+using System.Collections.Concurrent;
+#endif
 
 namespace socket4net
 {
     /// <summary>
-    /// StaService is a component provides a producer/consumer
-    /// pattern working queue, thus translate multiple
-    /// threads model into single thread model.
     ///     自动逻辑服务
     ///     定时器刷新以及Jobs队列的刷新完全由本模块自理
     /// </summary>
@@ -78,10 +66,7 @@ namespace socket4net
         /// <param name="w">the work item object, must not be null</param>
         public override void Enqueue(IJob w)
         {
-            if (_workingQueue.TryAdd(w, 0)) return;
-
-            if(!_workingQueue.Add(w))
-                Logger.Instance.Error("逻辑服务队列溢出");
+            _workingQueue.Add(w);
         }
    
         /// <summary>

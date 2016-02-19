@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if NET35
+using System.Collections;
 using System.Collections.Generic;
 
 namespace socket4net
@@ -118,3 +119,4 @@ namespace socket4net
         }
     }
 }
+#endif

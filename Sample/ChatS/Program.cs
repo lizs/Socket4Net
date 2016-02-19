@@ -9,7 +9,7 @@ namespace ChatS
     {
         static void Main(string[] args)
         {
-            Obj.Create<Launcher>(new LauncherArg(null, new CustomLog.Log4Net("log4net.config", "ChatS")));
+            Obj.Create<Launcher>(new LauncherArg(/* new CustomLog.Log4Net("log4net.config", "ChatS") */));
             Launcher.Instance.Start();
             
             // Rpc示例

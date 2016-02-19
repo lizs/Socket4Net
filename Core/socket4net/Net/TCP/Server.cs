@@ -2,6 +2,9 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+#if NET45
+using System.Collections.Concurrent;
+#endif
 
 namespace socket4net
 {

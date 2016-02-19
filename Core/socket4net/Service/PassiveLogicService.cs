@@ -1,4 +1,7 @@
 ﻿using System;
+#if NET45
+using System.Collections.Concurrent;
+#endif
 
 namespace socket4net
 {
@@ -16,7 +19,6 @@ namespace socket4net
 
             StopWorking = false;
             Watch.Start();
-
             Logger.Instance.Debug("Passive logic service started!");
         }
 
@@ -36,8 +38,7 @@ namespace socket4net
 
         public override void Enqueue(IJob w)
         {
-            if(!_jobs.TryAdd(w))
-                Logger.Instance.Error("逻辑服务队列溢出");
+            _jobs.Enqueue(w);
         }
 
         public void UpdateTimer()
@@ -49,7 +50,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0} : {1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
             }
         }
 
@@ -67,7 +68,7 @@ namespace socket4net
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.ErrorFormat("{0} : {1}", e.Message, e.StackTrace);
+                    Logger.Instance.Exception(e);
                 }
 
                 return;
@@ -88,7 +89,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Instance.ErrorFormat("{0} : {1}", e.Message, e.StackTrace);
+                Logger.Instance.Exception(e);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET35
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -161,3 +162,4 @@ namespace socket4net
         #endregion
     }
 }
+#endif
