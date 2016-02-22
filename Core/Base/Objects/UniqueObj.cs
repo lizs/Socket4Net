@@ -22,11 +22,11 @@
     /// <typeparam name="TKey"></typeparam>
     public abstract class UniqueObj<TKey> : Obj, IUniqueObj<TKey>
     {
-        protected override void OnInit(ObjArg objArg)
+        protected override void OnInit(ObjArg arg)
         {
-            base.OnInit(objArg);
+            base.OnInit(arg);
 
-            var more = objArg.As<UniqueObjArg<TKey>>();
+            var more = arg.As<UniqueObjArg<TKey>>();
             Id = more.Key;
         }
 

@@ -15,9 +15,9 @@ namespace socket4net
 
     public class PropertyBody : Obj, IEnumerable<IBlock>
     {
-        protected override void OnInit(ObjArg objArg)
+        protected override void OnInit(ObjArg arg)
         {
-            base.OnInit(objArg);
+            base.OnInit(arg);
             Blocks = new Dictionary<short, IBlock>();
         }
 

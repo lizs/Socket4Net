@@ -1,4 +1,8 @@
-﻿using socket4net;
+﻿using System;
+using socket4net;
+#if NET45
+using System.Threading.Tasks;
+#endif
 
 namespace ecs
 {
@@ -49,6 +53,9 @@ namespace ecs
             return GetAncestor<Entity>().GetComponent<T>(cpId);
         }
 
+        /// <summary>
+        ///     启动
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -85,5 +92,17 @@ namespace ecs
         public virtual void OnMessage(Message msg)
         {
         }
+
+#if NET45
+        public virtual Task<RpcResult> OnMessageAsync(AsyncMsg msg)
+        {
+            return Task.FromResult(RpcResult.Failure);
+        }
+#else
+        public virtual void OnMessageAsync(AsyncMsg msg, Action<RpcResult> cb)
+        {
+            
+        }
+#endif
     }
 }

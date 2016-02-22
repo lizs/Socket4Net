@@ -7,6 +7,7 @@ namespace node
     ///     服务器节点
     /// </summary>
     /// <typeparam name="TSession"></typeparam>
+    /// <typeparam name="TCategory"></typeparam>
     public abstract class ServerNode<TCategory, TSession> : Node<TCategory, TSession> where TSession : class, IRpcSession, new()
     {
         protected override void OnInit(ObjArg arg)

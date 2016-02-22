@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using socket4net;
 
 namespace ecs
@@ -18,6 +19,31 @@ namespace ecs
     /// </summary>
     public class Message
     {
+    }
+
+    /// <summary>
+    ///     异步消息
+    /// </summary>
+    public class AsyncMsg
+    {
+    }
+
+    /// <summary>
+    ///     网络请求消息
+    /// </summary>
+    public class NetReqMsg : AsyncMsg
+    {
+        public short Ops { get; set; }
+        public byte[] Data { get; set; }
+    }
+
+    /// <summary>
+    ///     网络推送消息
+    /// </summary>
+    public class NetPushMsg : AsyncMsg
+    {
+        public short Ops { get; set; }
+        public byte[] Data { get; set; }
     }
 
     public interface IEntity : IUniqueObj<long>, IProperty
@@ -46,10 +72,10 @@ namespace ecs
         /// <summary>
         ///     初始化
         /// </summary>
-        /// <param name="objArg"></param>
-        protected override void OnInit(ObjArg objArg)
+        /// <param name="arg"></param>
+        protected override void OnInit(ObjArg arg)
         {
-            base.OnInit(objArg);
+            base.OnInit(arg);
 
             // 添加组件
             SpawnComponents();
@@ -95,11 +121,28 @@ namespace ecs
 
         public void SendMessage(Message msg)
         {
+            OnMessage(msg);
+
             foreach (var component in Components)
             {
                 component.OnMessage(msg);
             }
         }
+
+        public virtual void OnMessage(Message msg)
+        {
+        }
+
+#if NET45
+        public virtual Task<RpcResult> OnMessageAsync(AsyncMsg msg)
+        {
+            return Task.FromResult(RpcResult.Failure);
+        }
+#else
+        public virtual void OnMessageAsync(AsyncMsg msg, Action<RpcResult> cb)
+        {
+        }
+#endif
 
         #region 组件化实现
 

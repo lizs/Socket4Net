@@ -5,7 +5,7 @@ namespace node
 {
     public interface IServerConfig
     {
-        Guid Id { get; }
+        //Guid Id { get; }
     }
 
     public class NodesMgrArg : UniqueMgrArg

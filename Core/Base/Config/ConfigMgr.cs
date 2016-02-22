@@ -81,11 +81,11 @@ namespace socket4net
         ///     执行初始化
         /// </summary>
         /// <param name="arg"></param>
-        protected override void OnInit(ObjArg objArg)
+        protected override void OnInit(ObjArg arg)
         {
-            base.OnInit(objArg);
+            base.OnInit(arg);
 
-            var more = objArg.As<ConfigMgrArg>();
+            var more = arg.As<ConfigMgrArg>();
             if ( more.FileLoader == null) throw new ArgumentException();
 
             _loader = more.FileLoader;

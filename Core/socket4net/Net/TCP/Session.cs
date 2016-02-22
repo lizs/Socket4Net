@@ -29,9 +29,52 @@ namespace socket4net
         ushort PackageMaxSize { get; }
 
         void Close(SessionCloseReason reason);
-        void SendWithHeader(byte[] data);
         void Send(byte[] data);
         void Send<T>(T proto);
+        void SendWithHeader(byte[] data);
+
+        /// <summary>
+        /// 多播
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="sessions"></param>
+        void MultiCast(byte[] data, IEnumerable<ISession> sessions);
+
+        /// <summary>
+        /// 多播
+        /// 包头已完备
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="sessions"></param>
+        void MultiCastWithHeader(byte[] data, IEnumerable<ISession> sessions);
+
+        /// <summary>
+        /// 多播
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="proto"></param>
+        /// <param name="sessions"></param>
+        void MultiCast<T>(T proto, IEnumerable<ISession> sessions);
+
+        /// <summary>
+        /// 广播
+        /// </summary>
+        /// <param name="data"></param>
+        void Broadcast(byte[] data);
+
+        /// <summary>
+        /// 广播
+        /// data已包含包头
+        /// </summary>
+        /// <param name="data"></param>
+        void BroadcastWithHeader(byte[] data);
+
+        /// <summary>
+        /// 广播
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="proto"></param>
+        void Broadcast<T>(T proto);
 
 #if NET35
         void Dispatch(byte[] packData);

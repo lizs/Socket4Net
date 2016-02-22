@@ -14,7 +14,7 @@ namespace socket4net
             return ++_uidSeed;
         }
 
-        public ListBlock(short id, List<TItem> value, EBlockMode mode)
+        public ListBlock(short id, IReadOnlyCollection<TItem> value, EBlockMode mode)
             : base(id, null, mode)
         {
             Value = new List<ListItemRepresentation<TItem>>();

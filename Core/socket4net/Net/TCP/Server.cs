@@ -76,9 +76,8 @@ namespace socket4net
 
             SessionMgr = Create<SessionMgr>(new SessionMgrArg(this, session =>
                 {
-                    if (EventSessionEstablished == null) return;
-
-                    EventSessionEstablished(session as TSession);
+                    if (EventSessionEstablished != null)
+                        EventSessionEstablished(session as TSession);
                     OnConnected(session);
                 },
                 (session, reason) =>

@@ -116,7 +116,7 @@ namespace Sample
 
         //void Keys(string pattern)
         //{
-        //    Server.Keys()
+        //    MyServer.Keys()
         //}
 
         #endregion

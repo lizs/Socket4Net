@@ -1,20 +1,33 @@
-﻿using socket4net;
+﻿using System;
+using socket4net;
+#if NET45
+using System.Threading.Tasks;
+#endif
 
 namespace ecs
 {
     public class PlayerArg : UniqueObjArg<long>
     {
-        public PlayerArg(IObj owner, long key, IRpcSession session, bool syncEnabled, bool persistEnabled)
+        public PlayerArg(IObj owner, long key, IRpcSession session)
             : base(owner, key)
         {
-            SyncEnabled = syncEnabled;
-            PersistEnabled = persistEnabled;
             Session = session;
         }
 
-        public bool SyncEnabled { get; private set; }
-        public bool PersistEnabled { get; private set; }
         public IRpcSession Session { get; private set; }
+    }
+
+    public class FlushablePlayerArg : PlayerArg
+    {
+        public FlushablePlayerArg(IObj owner, long key, IRpcSession session, bool persistEnabled,
+            Func<IAsyncRedisClient> redisClientGetter) : base(owner, key, session)
+        {
+            PersistEnabled = persistEnabled;
+            RedisClientGetter = redisClientGetter;
+        }
+
+        public bool PersistEnabled { get; private set; }
+        public Func<IAsyncRedisClient> RedisClientGetter { get; private set; }
     }
 
     /// <summary>
@@ -24,27 +37,28 @@ namespace ecs
     ///     2、 同步系统
     ///     3、 存储系统
     /// </summary>
-    public abstract class Player : UniqueObj<long>
+    public abstract class Player : Entity
     {
         public EntitySys Es { get; protected set; }
-        public PersistSys Ps { get; private set; }
         public SyncSys Ss { get; private set; }
 
         public IRpcSession Session { get; private set; }
-        protected override void OnInit(ObjArg objArg)  
+        protected override void OnInit(ObjArg arg)  
         {
-            base.OnInit(objArg);
-
-            Es = CreateEntitySys();
-
-            var more = objArg.As<PlayerArg>();
+            base.OnInit(arg);
+            var more = arg.As<PlayerArg>();
 
             Session = more.Session;
-            if (more.PersistEnabled)
-                Ps = Create<PersistSys>(new DataSysArg(this, Es));
+            Es = CreateEntitySys();
+            Ss = Create<SyncSys>(new DataSysArg(this, Es));
+        }
 
-            if (more.SyncEnabled)
-                Ss = Create<SyncSys>(new DataSysArg(this, Es));
+        protected override void OnStart()
+        {
+            base.OnStart();
+            if (Ss != null)
+                Ss.Start();
+            Es.Start();
         }
 
         protected override void OnDestroy()
@@ -54,18 +68,97 @@ namespace ecs
             if(Ss != null)
                 Ss.Destroy();
 
-            if(Ps != null)
-                Ps.Destroy();
-
             Es.Destroy();
         }
 
         protected abstract EntitySys CreateEntitySys();
+
+#if NET45
+        public Task<RpcResult> OnRequest(RpcRequest rq)
+        {
+            var entity = Es.Get(rq.ObjId);
+            if (entity == null) return Task.FromResult(RpcResult.Failure);
+            if (rq.ComponentId == 0)
+                return entity.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data });
+
+            var cp = entity.GetComponent(rq.ComponentId);
+            return cp == null
+                ? Task.FromResult(RpcResult.Failure)
+                : cp.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data });
+        }
+
+        public async Task<bool> OnPush(RpcPush rp)
+        {
+            var entity = Es.Get(rp.ObjId);
+            if (entity == null) return false;
+            if (rp.ComponentId == 0)
+                return await entity.OnMessageAsync(new NetPushMsg { Ops = rp.Ops, Data = rp.Data });
+
+            var cp = entity.GetComponent(rp.ComponentId);
+            return cp != null && await cp.OnMessageAsync(new NetReqMsg { Ops = rp.Ops, Data = rp.Data });
+        }
+#else
+        public void OnRequest(RpcRequest rq, Action<RpcResult> cb)
+        {
+            var entity = Es.Get(rq.ObjId);
+            if (entity == null)
+            {
+                cb(RpcResult.Failure);
+                return;
+            }
+
+            if (rq.ComponentId == 0)
+            {
+                entity.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data }, cb);
+                return;
+            }
+
+            var cp = entity.GetComponent(rq.ComponentId);
+            if (cp == null)
+            {
+                cb(RpcResult.Failure);
+                return;
+            }
+
+            cp.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data }, cb);
+        }
+
+        public void OnPush(RpcPush rp, Action<bool> cb)
+        {
+            var entity = Es.Get(rp.ObjId);
+            if (entity == null)
+            {
+                cb(false);
+                return;
+            }
+            if (rp.ComponentId == 0)
+            {
+                entity.OnMessageAsync(new NetPushMsg { Ops = rp.Ops, Data = rp.Data }, cb);
+                return;
+            }
+
+            var cp = entity.GetComponent(rp.ComponentId);
+            if (cp == null)
+            {
+                cb(false);
+                return;
+            }
+
+            cp.OnMessageAsync(new NetReqMsg { Ops = rp.Ops, Data = rp.Data }, cb);
+        }
+
+#endif
     }
 
-    public abstract class Player<T> : Player, IFlushable where T : UniqueObj<short>, IAsyncRedisClient
+    public abstract class FlushablePlayer : Player, IFlushable
     {
-        protected abstract T RedisClient { get; }
+        public PersistSys Ps { get; private set; }
+        private Func<IAsyncRedisClient> _redisClientGetter;
+        private IAsyncRedisClient RedisClient
+        {
+            get { return _redisClientGetter(); }
+        }
+
         public async void Flush()
         {
             if (Ps != null)
@@ -73,6 +166,30 @@ namespace ecs
 
             if (Ss != null)
                 Ss.Sync(Session);
+        }
+
+        protected override void OnInit(ObjArg arg)
+        {
+            base.OnInit(arg);
+            var more = arg.As<FlushablePlayerArg>();
+            if (!more.PersistEnabled) return;
+
+            _redisClientGetter = more.RedisClientGetter;
+            Ps = Create<PersistSys>(new DataSysArg(this, Es));
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            if (Ps != null)
+                Ps.Start();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (Ps != null)
+                Ps.Destroy();
         }
     }
 }

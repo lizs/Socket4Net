@@ -2,7 +2,7 @@
 using Proto;
 using socket4net;
 
-namespace ChatC
+namespace Sample
 {
     internal class Program
     {
@@ -18,7 +18,7 @@ namespace ChatC
                     port = ushort.Parse(args[1]);
             }
 
-            Obj.Create<Launcher>(new LauncherArg(new CustomLog.Log4Net("log4net.config", "ChatC")), true);
+            Obj.Create<Launcher>(new LauncherArg(new CustomLog.Log4Net("log4net.config", "Sample")), true);
 
             // 启动客户端
             RunClient(ip, port);
