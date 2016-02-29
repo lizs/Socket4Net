@@ -11,7 +11,7 @@ namespace Sample
         static void Main(string[] args)
         {
             // 加载app.config
-            var map = new ExeConfigurationFileMap { ExeConfigFilename = "EcsChats.exe.config" };
+            var map = new ExeConfigurationFileMap { ExeConfigFilename = "Server.exe.config" };
             var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
             var x = config.GetSection("ServerConfig");
             var section = x as ChatConfig;
