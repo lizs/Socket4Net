@@ -6,7 +6,7 @@ using ecs;
 using socket4net;
 using StackExchange.Redis;
 
-namespace Sample
+namespace node
 {
     public class AsyncRedisClient : RedisClient, IAsyncRedisClient
     {

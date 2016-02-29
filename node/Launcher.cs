@@ -3,27 +3,29 @@ using socket4net;
 
 namespace node
 {
-    public class LauncherArg<T> : LauncherArg where T : IServerConfig
+    public class LauncherArg<T> : LauncherArg where T : NodesMgrConfig
     {
         public T Config { get; private set; }
 
         public LauncherArg(T cfg, ILog logger, bool passiveLogicServiceEnabled = false)
-            : base(logger, passiveLogicServiceEnabled)
+            : base(logger, null, passiveLogicServiceEnabled)
         {
             Config = cfg;
         }
     }
 
-    public class Launcher<T> : Launcher where T : IServerConfig
+    public class Launcher<T> : Launcher where T : NodesMgrConfig
     {
-        protected readonly Mgr<Obj> Jobs = Create<Mgr<Obj>>(ObjArg.Empty);
+        protected readonly Mgr<Obj> Jobs = Create<Mgr<Obj>>(ObjArg.Empty, false);
         public T Config { get; private set; }
+        public Guid Id { get; private set; }
 
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
             var more = arg.As<LauncherArg<T>>();
             Config = more.Config;
+            Id = more.Id;
 
             SpawnJobs();
         }

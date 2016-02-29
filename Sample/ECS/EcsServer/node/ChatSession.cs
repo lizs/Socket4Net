@@ -28,9 +28,9 @@ namespace Sample
 
         //    var responseData = PiSerializer.Serialize(proto);
 
-        //    foreach (var session in MyServer.Ins.SessionMgr.OfType<IRpcSession>())
+        //    foreach (var session in ChatServer.Ins.SessionMgr.OfType<IRpcSession>())
         //    {
-        //        session.Push(0, 0, (short) ECommand.Push, responseData, 0, 0);
+        //        session.Push(0, 0, (short) EOps.Push, responseData, 0, 0);
         //    }
         //}
 

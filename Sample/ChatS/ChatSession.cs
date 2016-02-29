@@ -15,9 +15,9 @@ namespace ChatS
 
         public override Task<RpcResult> HandleRequest(RpcRequest rq)
         {
-            switch ((ECommand)rq.Ops)
+            switch ((EOps)rq.Ops)
             {
-                case ECommand.Request:
+                case EOps.Request:
                     {
                         var request = PiSerializer.Deserialize<RequestMsgProto>(rq.Data);
 
@@ -44,15 +44,15 @@ namespace ChatS
             // ¹ã²¥
             foreach (var session in Server.Ins.SessionMgr.OfType<IRpcSession>())
             {
-                session.Push(0, 0, (short) ECommand.Push, responseData, 0, 0);
+                session.Push(0, 0, (short) EOps.Push, responseData, 0, 0);
             }
         }
 
         public override Task<bool> HandlePush(RpcPush rp)
         {
-            switch ((ECommand)rp.Ops)
+            switch ((EOps)rp.Ops)
             {
-                case ECommand.Push:
+                case EOps.Push:
                     {
                         var msg = PiSerializer.Deserialize<PushMsgProto>(rp.Data);
                         Broadcast(msg.Message);

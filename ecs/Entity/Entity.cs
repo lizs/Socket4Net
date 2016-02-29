@@ -14,11 +14,29 @@ namespace ecs
         }
     }
 
+    public enum EMsg
+    {
+        // 网络消息皆为异步消息
+        NetPush,
+        NetReq,
+
+        LogicPush,
+        LogicReq,
+        LogicPushAsync,
+        LogicReqAsync,
+    }
+
     /// <summary>
     ///     组件消息通知基类
     /// </summary>
     public class Message
     {
+        public Message(EMsg type)
+        {
+            Type = type;
+        }
+
+        public EMsg Type { get; private set; }
     }
 
     /// <summary>
@@ -26,6 +44,12 @@ namespace ecs
     /// </summary>
     public class AsyncMsg
     {
+        public AsyncMsg(EMsg type)
+        {
+            Type = type;
+        }
+
+        public EMsg Type { get; private set; }
     }
 
     /// <summary>
@@ -33,8 +57,14 @@ namespace ecs
     /// </summary>
     public class NetReqMsg : AsyncMsg
     {
-        public short Ops { get; set; }
-        public byte[] Data { get; set; }
+        public NetReqMsg(short ops, byte[] data) : base(EMsg.NetReq)
+        {
+            Ops = ops;
+            Data = data;
+        }
+
+        public short Ops { get; private set; }
+        public byte[] Data { get; private set; }
     }
 
     /// <summary>
@@ -42,8 +72,15 @@ namespace ecs
     /// </summary>
     public class NetPushMsg : AsyncMsg
     {
-        public short Ops { get; set; }
-        public byte[] Data { get; set; }
+        public NetPushMsg(short ops, byte[] data)
+            : base(EMsg.NetPush)
+        {
+            Ops = ops;
+            Data = data;
+        }
+
+        public short Ops { get; private set; }
+        public byte[] Data { get; private set; }
     }
 
     public interface IEntity : IUniqueObj<long>, IProperty

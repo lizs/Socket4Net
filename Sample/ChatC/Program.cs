@@ -9,7 +9,7 @@ namespace ChatC
         private static void Main(string[] args)
         {
             var ip = "127.0.0.1";
-            ushort port = 843;
+            ushort port = 6001;
 
             if (args.Length > 0)
             {
@@ -51,7 +51,7 @@ namespace ChatC
                     case "REQ":
                     {
                         //  请求服务器
-                        client.RequestAsync(0, 0, (short) ECommand.Request, new RequestMsgProto {Message = msg}, 0, 0,
+                        client.RequestAsync(0, 0, (short) EOps.Request, new RequestMsgProto {Message = msg}, 0, 0,
                             (b, bytes) =>
                             {
                                 if (!b)
@@ -69,7 +69,7 @@ namespace ChatC
                     default:
                     {
                         //  请求服务器
-                        client.Push(0, 0, (short) ECommand.Push, new PushMsgProto {Message = msg}, 0, 0);
+                        client.Push(0, 0, (short) EOps.Push, new PushMsgProto {Message = msg}, 0, 0);
                         break;
                     }
                 }

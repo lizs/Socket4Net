@@ -27,7 +27,7 @@ namespace socket4net
 
         public override string Name
         {
-            get { return string.Format("{0}:{1}:{2}", typeof (TSession).Name, Ip, Port); }
+            get { return string.Format("{0}:{1}", Ip, Port); }
         }
 
         public ILogicService LogicService
@@ -90,17 +90,17 @@ namespace socket4net
 
         protected virtual void OnConnected(ISession session)
         {
-            Logger.Ins.Info("{0} : {1} connected!", Name, session.Name);
+            Logger.Ins.Info("{0}:{1} connected!", Name, session.Name);
         }
 
         protected virtual void OnDisconnected(ISession session, SessionCloseReason reason)
         {
-            Logger.Ins.Info("{0} : {1} disconnected by {2}", Name, session.Name, reason);
+            Logger.Ins.Info("{0}:{1} disconnected by {2}", Name, session.Name, reason);
         }
 
         protected virtual void OnError(string msg)
         {
-            Logger.Ins.Error("{0} : {1}", Name, msg);
+            Logger.Ins.Error("{0}:{1}", Name, msg);
         }
 
         protected override void OnStart()

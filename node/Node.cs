@@ -6,23 +6,48 @@ using socket4net;
 
 namespace node
 {
-    public class NodeArg<TCategory> : UniqueObjArg<Guid>
+    public class NodeArg : UniqueObjArg<Guid>
     {
-        public NodeArg(IObj parent, Guid key, NodeElement cfg, Func<TCategory, byte> convertor)
+        public NodeArg(IObj parent, Guid key, NodeElement cfg)
             : base(parent, key)
         {
             Config = cfg;
-            CategoryConvertor = convertor;
         }
 
         public NodeElement Config { get; private set; }
-        public Func<TCategory, byte> CategoryConvertor { get; private set; } 
+    }
+
+    public interface INode : IObj
+    {
+        IEnumerable<T> GetSession<T>() where T : ISession;
+        T GetSession<T>(long sid) where T : class, ISession;
+        IEnumerable<T> GetSession<T>(Predicate<T> condition) where T : ISession;
+        T GetFirstSession<T>(Predicate<T> condition) where T : ISession;
+        T GetFirstSession<T>() where T : ISession;
+
+        Task<RpcResult> RequestAsync<T>(long sessionId, byte targetServer, long playerId, short ops,
+            T proto, long objId, short componentId);
+
+        Task<RpcResult> RequestAsync(long sessionId, byte targetServer, long playerId, short ops,
+            byte[] data, long objId, short componentId);
+
+        void RequestAsync<T>(long sessionId, byte targetServer, long playerId, short ops,
+            T proto, long objId, short componentId, Action<bool, byte[]> cb);
+
+        void RequestAsync(long sessionId, byte targetServer, long playerId, short ops,
+            byte[] data, long objId, short componentId, Action<bool, byte[]> cb);
+
+        bool Push<T>(long sessionId, byte targetServer, long playerId, short ops, T proto, long objId,
+            short componentId);
+
+        bool Push(long sessionId, byte targetServer, long playerId, short ops, byte[] data, long objId,
+            short componentId);
     }
 
     /// <summary>
     ///     节点
     /// </summary>
-    public abstract class Node<TCategory> : UniqueObj<Guid>
+    public abstract class Node : UniqueObj<Guid>, INode
     {
         /// <summary>
         ///     名
@@ -39,9 +64,9 @@ namespace node
         /// <summary>
         ///     节点类型
         /// </summary>
-        public string Category
+        public string Type
         {
-            get { return Config.Category; }
+            get { return Config.Type; }
         }
 
         /// <summary>
@@ -55,11 +80,6 @@ namespace node
         public NodeElement Config { get; private set; }
 
         /// <summary>
-        ///     类型转化
-        /// </summary>
-        protected Func<TCategory, byte> CategoryConvertor;
-
-        /// <summary>
         ///     获取配置
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -69,6 +89,12 @@ namespace node
             return Config as T;
         }
 
+        /// <summary>
+        ///     获取会话集
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public IEnumerable<T> GetSession<T>() where T : ISession
         {
             return Peer == null ? null : Peer.SessionMgr.Get<T>();
@@ -100,11 +126,66 @@ namespace node
         {
             base.OnInit(arg);
 
-            Config = arg.As<NodeArg<TCategory>>().Config;
+            Config = arg.As<NodeArg>().Config;
         }
+
+        #region
+
+        public async Task<RpcResult> RequestAsync<T>(long sessionId, byte targetServer, long playerId, short ops,
+            T proto, long objId, short componentId)
+        {
+            return
+                await
+                    RequestAsync(sessionId, targetServer, playerId, ops, PiSerializer.Serialize(proto), objId,
+                        componentId);
+        }
+
+        public async Task<RpcResult> RequestAsync(long sessionId, byte targetServer, long playerId, short ops,
+            byte[] data, long objId, short componentId)
+        {
+            var session = Peer.SessionMgr.Get(sessionId) as IRpcSession;
+            if (session == null) return RpcResult.Failure;
+            return await session.RequestAsync(targetServer, playerId, ops, data, objId, componentId);
+        }
+
+        public void RequestAsync<T>(long sessionId, byte targetServer, long playerId, short ops,
+            T proto, long objId, short componentId, Action<bool, byte[]> cb)
+        {
+            RequestAsync(sessionId, targetServer, playerId, ops, PiSerializer.Serialize(proto), objId, componentId, cb);
+        }
+
+        public void RequestAsync(long sessionId, byte targetServer, long playerId, short ops,
+            byte[] data, long objId, short componentId, Action<bool, byte[]> cb)
+        {
+            var session = Peer.SessionMgr.Get(sessionId) as IRpcSession;
+            if (session == null)
+            {
+                cb(false, null);
+                return;
+            }
+
+            session.RequestAsync((byte)targetServer, playerId, ops, data, objId, componentId, cb);
+        }
+
+        public bool Push<T>(long sessionId, byte targetServer, long playerId, short ops, T proto, long objId,
+            short componentId)
+        {
+            return Push(sessionId, targetServer, playerId, ops, PiSerializer.Serialize(proto), objId, componentId);
+        }
+
+        public bool Push(long sessionId, byte targetServer, long playerId, short ops, byte[] data, long objId,
+            short componentId)
+        {
+            var session = Peer.SessionMgr.Get(sessionId) as IRpcSession;
+            if (session == null) return false;
+            session.Push((byte)targetServer, playerId, ops, data, objId, componentId);
+            return true;
+        }
+
+        #endregion
     }
 
-    public abstract class Node<TCategory, TSession> : Node<TCategory> where TSession : class, IRpcSession, new()
+    public abstract class Node<TSession> : Node where TSession : class, IRpcSession, new()
     {
         protected override void OnStart()
         {
@@ -124,71 +205,26 @@ namespace node
             Peer.EventErrorCatched -= OnError;
         }
 
-        protected virtual void OnConnected(ISession session)
+        private void OnConnected(ISession session)
+        {
+            OnConnected((TSession)session);
+        }
+
+        private void OnDisconnected(ISession session, SessionCloseReason reason)
+        {
+            OnDisconnected((TSession)session, reason);
+        }
+
+        protected virtual void OnConnected(TSession session)
         {
         }
 
-        protected virtual void OnDisconnected(ISession session, SessionCloseReason reason)
+        protected virtual void OnDisconnected(TSession session, SessionCloseReason reason)
         {
         }
 
         protected virtual void OnError(string msg)
         {
         }
-
-        #region
-
-        public async Task<RpcResult> RequestAsync<T>(long sessionId, TCategory targetServer, long playerId, short ops,
-            T proto, long objId, short componentId)
-        {
-            return
-                await
-                    RequestAsync(sessionId, targetServer, playerId, ops, PiSerializer.Serialize(proto), objId,
-                        componentId);
-        }
-
-        public async Task<RpcResult> RequestAsync(long sessionId, TCategory targetServer, long playerId, short ops,
-            byte[] data, long objId, short componentId)
-        {
-            var session = Peer.SessionMgr.Get(sessionId) as TSession;
-            if (session == null) return RpcResult.Failure;
-            return await session.RequestAsync(CategoryConvertor(targetServer), playerId, ops, data, objId, componentId);
-        }
-
-        public void RequestAsync<T>(long sessionId, TCategory targetServer, long playerId, short ops,
-            T proto, long objId, short componentId, Action<bool, byte[]> cb)
-        {
-            RequestAsync(sessionId, targetServer, playerId, ops, PiSerializer.Serialize(proto), objId, componentId, cb);
-        }
-
-        public void RequestAsync(long sessionId, TCategory targetServer, long playerId, short ops,
-            byte[] data, long objId, short componentId, Action<bool, byte[]> cb)
-        {
-            var session = Peer.SessionMgr.Get(sessionId) as TSession;
-            if (session == null)
-            {
-                cb(false, null);
-                return;
-            }
-
-            session.RequestAsync(CategoryConvertor(targetServer), playerId, ops, data, objId, componentId, cb);
-        }
-
-        public bool Push<T>(long sessionId, TCategory targetServer, long playerId, short ops, T proto, long objId,
-            short componentId)
-        {
-            return Push(sessionId, targetServer, playerId, ops, PiSerializer.Serialize(proto), objId, componentId);
-        }
-
-        public bool Push(long sessionId, TCategory targetServer, long playerId, short ops, byte[] data, long objId,
-            short componentId)
-        {
-            var session = Peer.SessionMgr.Get(sessionId) as TSession;
-            if (session == null) return false;
-            session.Push(CategoryConvertor(targetServer), playerId, ops, data, objId, componentId);
-            return true;
-        }
-
-        #endregion
     }
 }

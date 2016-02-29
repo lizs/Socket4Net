@@ -4,14 +4,17 @@ namespace socket4net
 {
     public class LauncherArg : ObjArg
     {
-        public LauncherArg(ILog logger = null, bool passiveLogicServiceEnabled = false) : base(null)
+        public LauncherArg(ILog logger = null, Guid? id = null, bool passiveLogicServiceEnabled = false)
+            : base(null)
         {
             Logger = logger;
             PassiveLogicServiceEnabled = passiveLogicServiceEnabled;
+            Id = id ?? new Guid();
         }
 
         public bool PassiveLogicServiceEnabled { get; private set; }
         public ILog Logger { get; private set; }
+        public Guid Id { get; private set; }
     }
 
     public class Launcher : Obj
@@ -38,24 +41,24 @@ namespace socket4net
         {
             base.OnInit(arg);
 
-            if(Ins != null)
+            if (Ins != null)
                 throw new Exception("Launcher already instantiated!");
             Ins = this;
 
             var more = arg.As<LauncherArg>();
 
             // logger
-            GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogger, more.Logger ?? new DefaultLogger());
+            GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogger, more.Logger);
 
             // logic service
             var serviceArg = new ServiceArg(this, 10000, 10);
             var logicService = more.PassiveLogicServiceEnabled
-                ? Create<PassiveLogicService>(serviceArg)
-                : (ILogicService)Create<AutoLogicService>(serviceArg);
+                ? Create<PassiveLogicService>(serviceArg, false)
+                : (ILogicService)Create<AutoLogicService>(serviceArg, false);
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogicService, logicService);
 
             // net service
-            var netService = Create<NetService>(serviceArg);
+            var netService = Create<NetService>(serviceArg, false);
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfNetService, netService);
         }
 
@@ -73,6 +76,8 @@ namespace socket4net
             NetService.Destroy();
             LogicService.Destroy();
             Logger.Ins.Shutdown();
+
+            Ins = null;
         }
     }
 }

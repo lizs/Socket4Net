@@ -39,7 +39,7 @@ namespace socket4net
 
         public override string Name
         {
-            get { return string.Format("{0}:{1}:{2}", typeof(TSession).Name, Ip, Port); }
+            get { return string.Format("{0}:{1}", Ip, Port); }
         }
 
         public string Ip { get; private set; }
@@ -133,13 +133,13 @@ namespace socket4net
         protected virtual void OnConnected(ISession session)
         {
             Connected = true;
-            Logger.Ins.Info("{0} : {1} connected!", Name, session.Name);
+            Logger.Ins.Info("{0}:{1} connected!", Name, session.Name);
         }
 
         protected virtual void OnDisconnected(ISession session, SessionCloseReason reason)
         {
             Connected = false;
-            Logger.Ins.Info("{0} : {1} disconnected by {2}", Name, session.Name, reason);
+            Logger.Ins.Info("{0}:{1} disconnected by {2}", Name, session.Name, reason);
 
             if (AutoReconnectEnabled)
             {
@@ -150,7 +150,7 @@ namespace socket4net
         protected virtual void OnError(string msg)
         {
             Connected = false;
-            Logger.Ins.Error("{0} : {1}", Name, msg);
+            Logger.Ins.Error("{0}:{1}", Name, msg);
 
             if (AutoReconnectEnabled)
             {
@@ -278,7 +278,6 @@ namespace socket4net
         {
             var session = _sessionFactory.Create(sock, this);
             SessionMgr.AddSession(session);
-            Session.Start();
         }
         
         private void OnConnectCompleted(object sender, SocketAsyncEventArgs e)

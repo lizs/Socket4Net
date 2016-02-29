@@ -6,29 +6,20 @@ using ecs;
 using socket4net;
 using StackExchange.Redis;
 
-namespace Sample
+namespace node
 {
-    public class RedisClientArg : UniqueObjArg<short>
+    public class RedisClientArg : UniqueObjArg<string>
     {
-        public RedisClientArg(IObj parent, short key, string ip, string port, string pwd)
+        public NodeElement Config { get; private set; }
+        public RedisClientArg(IObj parent, string key, NodeElement cfg)
             : base(parent, key)
         {
-            Ip = ip;
-            Port = port;
-            Pwd = pwd;
+            Config = cfg;
         }
-
-        public string Ip { get; private set; }
-        public string Port { get; private set; }
-        public string Pwd { get; private set; }
     }
 
-    public class RedisClient : UniqueObj<short>, IRedisClient
+    public class RedisClient : UniqueObj<string>, IRedisClient
     {
-        public string Ip { get; private set; }
-        public string Port { get; private set; }
-        public string Pwd { get; private set; }
-
         private readonly object _connectionLocker = new object();
         private ConnectionMultiplexer _connection;
         protected ConnectionMultiplexer Connection
@@ -40,8 +31,8 @@ namespace Sample
                 if(_connection != null)
                     _connection.Dispose();
 
-                var ops = ConfigurationOptions.Parse(Ip + ":" + Port);
-                ops.Password = Pwd;
+                var ops = ConfigurationOptions.Parse(Config.Ip + ":" + Config.Port);
+                ops.Password = Config.Pwd;
                 ops.AbortOnConnectFail = false;
 
                 try
@@ -72,16 +63,15 @@ namespace Sample
         private IServer _server;
         public IServer Server
         {
-            get { return _server ?? (_server = Multiplexer.GetServer(Ip, Port)); }
+            get { return _server ?? (_server = Multiplexer.GetServer(Config.Ip, Config.Port)); }
         }
+
+        public NodeElement Config { get; private set; }
 
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
-            var more = arg.As<RedisClientArg>();
-            Ip = more.Ip;
-            Port = more.Port;
-            Pwd = more.Pwd;
+            Config = arg.As<RedisClientArg>().Config;
         }
 
         protected override void OnStart()
@@ -116,7 +106,7 @@ namespace Sample
 
         //void Keys(string pattern)
         //{
-        //    MyServer.Keys()
+        //    Server.Keys()
         //}
 
         #endregion
@@ -147,7 +137,7 @@ namespace Sample
 
         public bool HashMultiSet(string key, List<RedisEntry> blocks)
         {
-            if (blocks == null || blocks.Count == 0) return true;
+            if (blocks.IsNullOrEmpty()) return true;
 
             var hashEntries = new List<HashEntry>();
             blocks.ForEach(block =>
@@ -212,7 +202,6 @@ namespace Sample
                 return null;
             }
         }
-
         #endregion
 
         #region sorted set
@@ -255,8 +244,7 @@ namespace Sample
         {
             var db = Multiplexer.GetDatabase();
             var ret = db.SortedSetRangeByScore(key, from, to);
-            if (ret.IsNullOrEmpty()) return null;
-            return ret.Select(x => (byte[])x).ToList();
+            return ret.IsNullOrEmpty() ? null : ret.Select(x => (byte[])x).ToList();
         }
 
         public List<Pair<byte[], double>> SortedSetRangeByScoreWithScores(string key, long from, long to)

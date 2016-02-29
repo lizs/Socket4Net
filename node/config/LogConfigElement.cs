@@ -14,6 +14,7 @@ namespace node
         public override string ToString()
         {
             var sb = new StringBuilder();
+            sb.AppendLine("---------------------");
             sb.AppendLine(base.ToString());
             sb.AppendLine(string.Format("File : {0}", File));
             return sb.ToString();

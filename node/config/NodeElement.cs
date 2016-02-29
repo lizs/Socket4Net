@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Configuration;
 using System.Text;
 
@@ -6,13 +7,6 @@ namespace node
 {
     public class ClientNodeElement : NodeElement
     {
-        [ConfigurationProperty("pwd",
-               IsRequired = true)]
-        public string Pwd
-        {
-            get { return (string)this["pwd"]; }
-        }
-
         [ConfigurationProperty("autoreconnect",
             DefaultValue = true,
             IsRequired = true)]
@@ -27,26 +21,30 @@ namespace node
             sb.AppendLine();
             sb.AppendLine(base.ToString());
             sb.AppendLine("AutoReconnect : " + AutoReconnect);
-            sb.AppendLine("Pwd : " + Pwd);
             return sb.ToString();
         }
     }
 
     public class ServerNodeElement : NodeElement
     {
-        [ConfigurationProperty("pwd",
-               IsRequired = true)]
-        public string Pwd
+        /// <summary>
+        ///     代理Ip
+        /// </summary>
+        [ConfigurationProperty("proxyip",
+            DefaultValue = "",
+            IsRequired = false)]
+        public string ProxyIp
         {
-            get { return (string)this["pwd"]; }
+            get { return (string)this["proxyip"]; }
         }
+
 
         public override string ToString()
         {
             var sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendLine(base.ToString());
-            sb.AppendLine("Pwd : " + Pwd);
+            sb.AppendLine("ProxyIp : " + ProxyIp);
             return sb.ToString();
         }
     }
@@ -66,22 +64,25 @@ namespace node
         /// <summary>
         ///     节点类型
         /// </summary>
-        [ConfigurationProperty("category",
+        [ConfigurationProperty("type",
             IsRequired = true)]
-        public string Category
+        public string Type
         {
-            get { return (string)this["category"]; }
+            get { return (string)this["type"]; }
         }
 
         /// <summary>
-        ///     监控
+        ///     节点类
+        ///     注： 
+        ///     若显示指定，则用指定类创建节点，否则根据上下文自行创建(ServerNode<TSession> or ClientNode<TSession>)
         /// </summary>
-        [ConfigurationProperty("monitorenabled",
-            DefaultValue = false,
+        [ConfigurationProperty("class",
+            DefaultValue = null,
             IsRequired = false)]
-        public bool MonitorEnabled
+        [TypeConverter(typeof(TypeNameConverter))]
+        public Type NodeClass
         {
-            get { return (bool)this["monitorenabled"]; }
+            get { return (Type)this["class"]; }
         }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace node
             IsRequired = true)]
         public string Ip
         {
-            get { return (string) this["ip"]; }
+            get { return (string)this["ip"]; }
         }
 
         /// <summary>
@@ -101,21 +102,28 @@ namespace node
             IsRequired = true)]
         public ushort Port
         {
-            get { return (ushort) this["port"]; }
+            get { return (ushort)this["port"]; }
             set { this["port"] = value; }
+        }
+
+        [ConfigurationProperty("pwd",
+                DefaultValue = "",
+               IsRequired = false)]
+        public string Pwd
+        {
+            get { return (string)this["pwd"]; }
         }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine();
             sb.AppendLine(base.ToString());
             sb.AppendFormat("Guid : {0}\r\n", Guid);
-            sb.AppendFormat("Category : {0}\r\n", Category);
-            //sb.AppendFormat("File : {0}\r\n", LogConfig);
-            sb.AppendFormat("MonitorEnabled : {0}\r\n", MonitorEnabled);
+            sb.AppendFormat("Type : {0}\r\n", Type);
             sb.AppendFormat("Ip : {0}\r\n", Ip);
-            sb.AppendFormat("Port : {0}", Port);
+            sb.AppendFormat("Port : {0}\r\n", Port);
+            sb.AppendFormat("Class : {0}\r\n", NodeClass);
+            sb.AppendFormat("Pwd : {0}", Pwd);
 
             return sb.ToString();
         }

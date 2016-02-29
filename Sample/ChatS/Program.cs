@@ -24,7 +24,7 @@ namespace ChatS
         private static void RunServer()
         {
             // 创建服务器
-            var server = Obj.Create<Server>(new ServerArg(null, "0.0.0.0", 843), true);
+            var server = Obj.Create<Server>(new ServerArg(null, "0.0.0.0", 6001), true);
 
             Console.WriteLine("Press any key to exit");
             Console.ReadLine();

@@ -13,6 +13,9 @@
       copy "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(PublishDir)"
       copy "$(ProjectDir)$(OutDir)$(TargetFileName).config" "$(PublishDir)"
       copy "$(ProjectDir)$(OutDir)$(TargetName).pdb" "$(PublishDir)"
+      echo "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(PublishDir)"
+      echo "$(ProjectDir)$(OutDir)$(TargetFileName).config" "$(PublishDir)"
+      echo "$(ProjectDir)$(OutDir)$(TargetName).pdb" "$(PublishDir)"
     </PostBuildEvent>
 
   </PropertyGroup>

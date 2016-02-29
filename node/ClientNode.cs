@@ -8,7 +8,7 @@ namespace node
         Registered,
     }
 
-    public abstract class ClientNode<TCategory, TSession> : SingleSessionNode<TCategory, TSession>, IWatchable<ENodeEvent>
+    public class ClientNode<TSession> : SingleSessionNode<TSession>, IWatchable<ENodeEvent>
         where TSession : class, IRpcSession, new()
     {
         /// <summary>
@@ -22,8 +22,8 @@ namespace node
             get { return _registered; }
             protected set
             {
-                _registered = value; 
-                if(Watch != null)
+                _registered = value;
+                if (Watch != null)
                     Watch(ENodeEvent.Registered);
             }
         }
@@ -52,14 +52,14 @@ namespace node
         protected override void OnStart()
         {
             base.OnStart();
-            Peer.Start();
+            (Peer as Obj).Start();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if(Peer == null) return;
-            Peer.Destroy();
+            if (Peer == null) return;
+            (Peer as Obj).Destroy();
         }
     }
 }

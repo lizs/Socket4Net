@@ -3,42 +3,26 @@ using node;
 
 namespace Sample
 {
-    public class MyNodesMgr : NodesMgr<ENode>
+    public class ChatNodesMgr : NodesMgr
     {
-        public MyNodesMgr()
+        public ChatNodesMgr()
         {
-            if (_ins != null) throw new Exception("MyNodesMgr already instantiated!");
+            if (_ins != null) throw new Exception("ChatNodesMgr already instantiated!");
             _ins = this;
         }
 
-        private static MyNodesMgr _ins;
-        public static MyNodesMgr Ins { get { return _ins; } }
-        private RedisMgr<AsyncRedisClient> _redisMgr;
+        private static ChatNodesMgr _ins;
+        public static ChatNodesMgr Ins { get { return _ins; } }
 
-        protected override bool CreateInternal()
+        protected override Type MapSession(string type)
         {
-            var more = Config as ChatConfig;
+            switch (type.ToUpper())
+            {
+                case "CHAT":
+                    return typeof (ChatSession);
+            }
 
-            var client =
-                Create<MyServer>(
-                    new NodeArg<ENode>(this, more.Chat.Guid, more.Chat, node => (byte)node), false);
-
-            return client != null;
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
-
-            var more = Config as ChatConfig;
-            _redisMgr = Create<RedisMgr<AsyncRedisClient>>(new RedisMgrArg(this,
-                    more.Chat.RedisNodes), true);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            _redisMgr.Destroy();
+            throw new ArgumentException("type");
         }
     }
 }

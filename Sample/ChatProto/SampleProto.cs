@@ -2,7 +2,7 @@ using ProtoBuf;
 
 namespace Proto
 {
-    public enum ECommand
+    public enum EOps
     {
         Request,
         Push,

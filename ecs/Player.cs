@@ -74,33 +74,35 @@ namespace ecs
         protected abstract EntitySys CreateEntitySys();
 
 #if NET45
-        public Task<RpcResult> OnRequest(RpcRequest rq)
+        public async Task<RpcResult> OnRequest(RpcRequest rq)
         {
-            var entity = Es.Get(rq.ObjId);
-            if (entity == null) return Task.FromResult(RpcResult.Failure);
+            var entity = rq.ObjId != 0 ? Es.Get(rq.ObjId) : this;
+            if (entity == null) return RpcResult.Failure;
+
             if (rq.ComponentId == 0)
-                return entity.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data });
+                return await entity.OnMessageAsync(new NetReqMsg(rq.Ops, rq.Data));
 
             var cp = entity.GetComponent(rq.ComponentId);
             return cp == null
-                ? Task.FromResult(RpcResult.Failure)
-                : cp.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data });
+                ? RpcResult.Failure
+                : await cp.OnMessageAsync(new NetReqMsg(rq.Ops, rq.Data));
         }
 
         public async Task<bool> OnPush(RpcPush rp)
         {
-            var entity = Es.Get(rp.ObjId);
+            var entity = rp.ObjId != 0 ? Es.Get(rp.ObjId) : this;
             if (entity == null) return false;
+
             if (rp.ComponentId == 0)
-                return await entity.OnMessageAsync(new NetPushMsg { Ops = rp.Ops, Data = rp.Data });
+                return await entity.OnMessageAsync(new NetPushMsg(rp.Ops, rp.Data));
 
             var cp = entity.GetComponent(rp.ComponentId);
-            return cp != null && await cp.OnMessageAsync(new NetReqMsg { Ops = rp.Ops, Data = rp.Data });
+            return cp != null && await cp.OnMessageAsync(new NetReqMsg(rp.Ops, rp.Data));
         }
 #else
         public void OnRequest(RpcRequest rq, Action<RpcResult> cb)
         {
-            var entity = Es.Get(rq.ObjId);
+            var entity = rp.ObjId != 0 ? Es.Get(rp.ObjId) : this;
             if (entity == null)
             {
                 cb(RpcResult.Failure);
@@ -109,7 +111,7 @@ namespace ecs
 
             if (rq.ComponentId == 0)
             {
-                entity.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data }, cb);
+                entity.OnMessageAsync(new NetReqMsg(rp.Ops, rp.Data), cb);
                 return;
             }
 
@@ -120,12 +122,12 @@ namespace ecs
                 return;
             }
 
-            cp.OnMessageAsync(new NetReqMsg { Ops = rq.Ops, Data = rq.Data }, cb);
+            cp.OnMessageAsync(new NetReqMsg(rp.Ops, rp.Data), cb);
         }
 
         public void OnPush(RpcPush rp, Action<bool> cb)
         {
-            var entity = Es.Get(rp.ObjId);
+            var entity = rp.ObjId != 0 ? Es.Get(rp.ObjId) : this;
             if (entity == null)
             {
                 cb(false);
@@ -133,7 +135,7 @@ namespace ecs
             }
             if (rp.ComponentId == 0)
             {
-                entity.OnMessageAsync(new NetPushMsg { Ops = rp.Ops, Data = rp.Data }, cb);
+                entity.OnMessageAsync(new NetPushMsg(rp.Ops, rp.Data), cb);
                 return;
             }
 
@@ -144,7 +146,7 @@ namespace ecs
                 return;
             }
 
-            cp.OnMessageAsync(new NetReqMsg { Ops = rp.Ops, Data = rp.Data }, cb);
+            cp.OnMessageAsync(new NetReqMsg(rp.Ops, rp.Data), cb);
         }
 
 #endif
@@ -187,9 +189,10 @@ namespace ecs
 
         protected override void OnDestroy()
         {
-            base.OnDestroy();
             if (Ps != null)
                 Ps.Destroy();
+
+            base.OnDestroy();
         }
     }
 }

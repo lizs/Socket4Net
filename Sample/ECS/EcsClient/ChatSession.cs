@@ -22,9 +22,9 @@ namespace Sample
 
         public override Task<bool> HandlePush(RpcPush rp)
         {
-            switch ((ECommand)rp.Ops)
+            switch ((EOps)rp.Ops)
             {
-                case ECommand.Push:
+                case EOps.Push:
                     {
                         var msg = PiSerializer.Deserialize<PushMsgProto>(rp.Data);
                         Logger.Ins.Info(msg.From + " : " + msg.Message);
