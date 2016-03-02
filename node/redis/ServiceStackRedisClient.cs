@@ -33,6 +33,8 @@ namespace node
                 new RedisClientManagerConfig
                 {
                     AutoStart = false,
+                    MaxReadPoolSize = 10,
+                    MaxWritePoolSize = 10,
                 });
         }
 
