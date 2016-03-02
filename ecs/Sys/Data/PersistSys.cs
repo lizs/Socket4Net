@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using socket4net;
 
@@ -21,7 +23,8 @@ namespace ecs
 
             // 拷贝缓存（防止容器在异步返回之前被修改）
             var tmpDestroyCache = DestroyCache.ToDictionary(kv => kv.Key, kv => kv.Value);
-            var tmpUpdateCache = UpdateCache.ToDictionary(kv => kv.Key, kv => kv.Value.ToList());
+            var tmpUpdateCache = UpdateCache.ToDictionary(kv => kv.Key,
+                kv => new Pair<Type, List<IBlock>>(kv.Value.Key, kv.Value.Value.ToList()));
 
             // 删除
             var destroyRet = true;
@@ -43,8 +46,8 @@ namespace ecs
             // 存储
             var entries =
                 (from kv in tmpUpdateCache
-                    where !kv.Value.IsNullOrEmpty()
-                    from item in kv.Value
+                    where !kv.Value.Value.IsNullOrEmpty()
+                    from item in kv.Value.Value
                     select Es.FormatBlock(kv.Key, item)).ToList();
 
             var setRet = client.HashMultiSet(Es.Key, entries);

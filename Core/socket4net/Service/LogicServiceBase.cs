@@ -169,7 +169,7 @@ namespace socket4net
             base.OnStart();
             QueueCapacity = Capacity;
             Scheduler = new TimerScheduler(this);
-            CoroutineScheduler = Create<CoroutineScheduler>(new ObjArg(this));
+            CoroutineScheduler = New<CoroutineScheduler>(new ObjArg(this));
             CoroutineScheduler.Start();
         }
 

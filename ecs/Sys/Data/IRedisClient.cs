@@ -14,7 +14,7 @@ namespace ecs
     }
 
     /// <summary>
-    ///     对接Redis key-value
+    ///     对接Redis hashid-value
     /// </summary>
     public class RedisEntry
     {
@@ -37,16 +37,16 @@ namespace ecs
     public interface IRedisClient
     {
         bool HashMultiDel(string key, List<string> feilds);
-        bool HashMultiSet(string key, List<RedisEntry> blocks);
-        List<byte[]> HashGetAll(string key);
-        List<byte[]> HashMultiGet(string key, List<string> feilds);
+        bool HashMultiSet(string hashid, List<RedisEntry> blocks);
+        byte[][] HashGetAll(string key);
+        byte[][] HashMultiGet(string hashid, List<string> feilds);
         long SortedSetLength(string key);
-        bool SortedSetAdd(string key, byte[] value, double score);
+        long SortedSetAdd(string key, byte[] value, double score);
         long SortedSetAdd(string key, List<Pair<byte[], double>> entries);
-        List<byte[]> SortedSetRange(string key, long from, long to);
-        List<Pair<byte[], double>> SortedSetRangeWithScores(string key, long from, long to);
-        List<byte[]> SortedSetRangeByScore(string key, double from, double to);
-        List<Pair<byte[], double>> SortedSetRangeByScoreWithScores(string key, long from, long to);
+        byte[][] SortedSetRange(string key, int from, int to);
+        byte[][] SortedSetRangeWithScores(string key, int from, int to);
+        byte[][] SortedSetRangeByScore(string key, double from, double to);
+        byte[][] SortedSetRangeByScoreWithScores(string key, double from, double to);
         string GetString(string key);
         byte[] Get(string key);
         bool Set(string key, string value);
@@ -57,19 +57,19 @@ namespace ecs
     public interface IAsyncRedisClient : IRedisClient
     {
         Task<bool> HashMultiDelAsync(string key, List<string> feilds);
-        Task<List<byte[]>> HashGetAllAsync(string key);
-        Task<List<byte[]>> HashMultiGetAsync(string key, List<string> feilds);
+        Task<byte[][]> HashGetAllAsync(string key);
+        Task<byte[][]> HashMultiGetAsync(string key, List<string> feilds);
         Task<long> SortedSetLengthAsync(string key);
-        Task<bool> SortedSetRemoveAsync(string key, byte[] member);
+        Task<long> SortedSetRemoveAsync(string key, byte[] member);
         Task<long> SortedSetRemoveAsync(string key, List<byte[]> members);
         Task<long?> SortedSetRankAsync(string key, byte[] member);
-        Task<bool> SortedSetAddAsync(string key, byte[] value, double score);
+        Task<long> SortedSetAddAsync(string key, byte[] value, double score);
         Task<double> SortedSetIncAsync(string key, byte[] value, double score);
         Task<long> SortedSetAddAsync(string key, List<Pair<byte[], double>> entries);
-        Task<List<byte[]>> SortedSetRangeAsync(string key, long from, long to);
-        Task<List<Pair<byte[], double>>> SortedSetRangeWithScoresAsync(string key, long from, long to);
-        Task<List<byte[]>> SortedSetRangeByScoreAsync(string key, double from, double to);
-        Task<List<Pair<byte[], double>>> SortedSetRangeByScoreWithScoresAsync(string key, long from, long to);
+        Task<byte[][]> SortedSetRangeAsync(string key, int from, int to);
+        Task<byte[][]> SortedSetRangeWithScoresAsync(string key, int from, int to);
+        Task<byte[][]> SortedSetRangeByScoreAsync(string key, double from, double to);
+        Task<byte[][]> SortedSetRangeByScoreWithScoresAsync(string key, double from, double to);
         Task<string> GetStringAsync(string key);
         Task<byte[]> GetAsync(string key);
         Task<bool> SetAsync(string key, string value);

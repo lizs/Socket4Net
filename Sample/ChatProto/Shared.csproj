@@ -7,8 +7,8 @@
     <ProjectGuid>{B4AF3B64-7884-4864-B007-DD3B59A084D5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Proto</RootNamespace>
-    <AssemblyName>SampleProto</AssemblyName>
+    <RootNamespace>Shared</RootNamespace>
+    <AssemblyName>Shared</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -55,18 +55,31 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net, Version=1.0.0.282, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\2\work\DotaServer\PI-master\Build\Dependencies\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EcsProto.cs" />
-    <Compile Include="SampleProto.cs" />
+    <Compile Include="Business\ChatComponent.cs" />
+    <Compile Include="Business\Ship.cs" />
+    <Compile Include="Proto\BlockMaker.cs" />
+    <Compile Include="Proto\ComponentProto.cs" />
+    <Compile Include="Proto\EComponentId.cs" />
+    <Compile Include="Proto\ENonPlayerOps.cs" />
+    <Compile Include="Proto\EPid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\socket4net.csproj">
       <Project>{ed0bb4a5-50c0-410f-a55f-94c842c744ac}</Project>
       <Name>socket4net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ecs\ecs.csproj">
+      <Project>{76C25DE3-C35B-48C6-A7DD-039C89EE7453}</Project>
+      <Name>ecs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

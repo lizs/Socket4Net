@@ -1,4 +1,5 @@
 ﻿using System;
+using ecs;
 using node;
 
 namespace Sample
@@ -19,7 +20,7 @@ namespace Sample
             switch (type.ToUpper())
             {
                 case "CHAT":
-                    return typeof (ChatSession);
+                    return typeof (DispatchableSession);
             }
 
             throw new ArgumentException("type");

@@ -1,6 +1,7 @@
 ﻿using System;
 using ecs;
 using node;
+using Shared;
 using socket4net;
 
 namespace Sample
@@ -21,10 +22,15 @@ namespace Sample
         {
             base.OnConnected(session);
 
-            session.Player = PlayerMgr.Ins.Create<Player>(
+            // 用会话Id作为玩家的唯一id（测试）
+            // 正常情况是从身份验证服务器获取
+            PlayerMgr.Ins.Create<Player>(
                 new FlushablePlayerArg(PlayerMgr.Ins, session.Id, session, true,
-                    () => RedisMgr<AsyncRedisClient>.Instance.GetFirst(x=>x.Config.Type == "Chat")),
+                    () => RedisMgr<AsyncRedisClient>.Instance.GetFirst(x => x.Config.Type == "Chat")),
                 true);
+
+            // 通知客户端创建玩家
+            session.Push(session.Id, (short)ENonPlayerOps.CreatePlayer, null, 0, 0);
         }
 
         protected override void OnDisconnected(ChatSession session, SessionCloseReason reason)

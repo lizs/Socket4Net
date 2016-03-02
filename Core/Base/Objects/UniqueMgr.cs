@@ -97,11 +97,11 @@ namespace socket4net
         /// <param name="arg"></param>
         /// <param name="start"></param>
         /// <returns></returns>
-        public T Create<T>(UniqueObjArg<TKey> arg, bool start) where T : class, TValue, new()
+        public T Create<T>(UniqueObjArg<TKey> arg, bool start = false) where T : class, TValue, new()
         {
             if (Exist(arg.Key)) return null;
 
-            var ret = Obj.Create<T>(arg, start);
+            var ret = New<T>(arg, start);
             Add(ret);
 
             if (EventObjCreated != null)
@@ -117,12 +117,12 @@ namespace socket4net
         /// <param name="arg"></param>
         /// <param name="start"></param>
         /// <returns></returns>
-        public Obj Create(Type type, UniqueObjArg<TKey> arg, bool start)
+        public Obj Create(Type type, UniqueObjArg<TKey> arg, bool start = false)
         {
             if (Exist(arg.Key)) return null;
             if (!type.IsSubclassOf(typeof(TValue))) return null;
 
-            var ret = Obj.Create(type, arg, start);
+            var ret = New(type, arg, start);
             var obj = ret as TValue;
             Add(obj);
 
@@ -139,7 +139,7 @@ namespace socket4net
         /// <param name="type"></param>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public T Create<T>(Type type, UniqueObjArg<TKey> arg, bool start) where T : class, TValue
+        public T Create<T>(Type type, UniqueObjArg<TKey> arg, bool start = false) where T : class, TValue
         {
             if (Exist(arg.Key)) return null;
             if (type.IsSubclassOf(typeof(T))) return null;

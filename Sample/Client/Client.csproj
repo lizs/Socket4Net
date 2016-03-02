@@ -35,11 +35,21 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\..\2\work\DotaServer\PI-master\Build\Dependencies\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatSession.cs" />
-    <Compile Include="Client.cs" />
+    <Compile Include="business\ChatComponent.cs" />
+    <Compile Include="business\ChatSession.cs" />
+    <Compile Include="business\Player.cs" />
+    <Compile Include="node\ChatClient.cs" />
+    <Compile Include="node\MyLauncher.cs" />
+    <Compile Include="node\ChatConfig.cs" />
+    <Compile Include="node\NodesMgr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -48,13 +58,21 @@
       <Project>{ed0bb4a5-50c0-410f-a55f-94c842c744ac}</Project>
       <Name>socket4net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ecs\ecs.csproj">
+      <Project>{76c25de3-c35b-48c6-a7dd-039c89ee7453}</Project>
+      <Name>ecs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Logger\Logger.csproj">
       <Project>{88a3ac04-0dd9-401d-96a8-72ae7eddc275}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ChatProto\SampleProto.csproj">
+    <ProjectReference Include="..\..\node\node.csproj">
+      <Project>{C84FB5BD-BB3F-4E23-B5E6-294C176B02F1}</Project>
+      <Name>node</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ChatProto\Shared.csproj">
       <Project>{b4af3b64-7884-4864-b007-dd3b59a084d5}</Project>
-      <Name>SampleProto</Name>
+      <Name>Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

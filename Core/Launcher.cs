@@ -53,12 +53,12 @@ namespace socket4net
             // logic service
             var serviceArg = new ServiceArg(this, 10000, 10);
             var logicService = more.PassiveLogicServiceEnabled
-                ? Create<PassiveLogicService>(serviceArg, false)
-                : (ILogicService)Create<AutoLogicService>(serviceArg, false);
+                ? New<PassiveLogicService>(serviceArg)
+                : (ILogicService)New<AutoLogicService>(serviceArg);
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogicService, logicService);
 
             // net service
-            var netService = Create<NetService>(serviceArg, false);
+            var netService = New<NetService>(serviceArg);
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfNetService, netService);
         }
 

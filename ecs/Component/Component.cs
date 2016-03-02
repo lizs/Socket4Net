@@ -29,7 +29,7 @@ namespace ecs
         /// </summary>
         public Entity Host
         {
-            get { return Owner as Entity; }
+            get { return GetAncestor<Entity>(); }
         }
 
         /// <summary>
@@ -94,14 +94,24 @@ namespace ecs
         }
 
 #if NET45
-        public virtual Task<RpcResult> OnMessageAsync(AsyncMsg msg)
+        public virtual Task<RpcResult> OnRequest(short ops, byte[] data)
         {
             return Task.FromResult(RpcResult.Failure);
         }
-#else
-        public virtual void OnMessageAsync(AsyncMsg msg, Action<RpcResult> cb)
+
+        public virtual Task<bool> OnPush(short ops, byte[] data)
         {
-            
+            return Task.FromResult(false);
+        }
+#else
+        public virtual void OnRequest(short ops, byte[] data, Action<RpcResult> cb)
+        {
+            cb(RpcResult.Failure);
+        }
+        
+        public virtual void OnPush(short ops, byte[] data, Action<bool> cb)
+        {
+            cb(false);
         }
 #endif
     }

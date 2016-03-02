@@ -180,7 +180,7 @@ namespace socket4net
         ///     创建对象
         /// </summary>
         /// <returns></returns>
-        public static T Create<T>(ObjArg arg, bool start = false) where T : IObj, new()
+        public static T New<T>(ObjArg arg, bool start = false) where T : IObj, new()
         {
             var ret = new T();
             ret.Init(arg);
@@ -193,7 +193,7 @@ namespace socket4net
         ///     非泛型创建
         /// </summary>
         /// <returns></returns>
-        public static Obj Create(Type objType, ObjArg arg, bool start = false)
+        public static Obj New(Type objType, ObjArg arg, bool start = false)
         {
             return ObjFactory.Create(objType, arg, start);
         }
@@ -201,9 +201,9 @@ namespace socket4net
         /// <summary>
         ///     非泛型创建
         /// </summary>
-        public static T Create<T>(Type objType, ObjArg arg, bool start = false) where T : class, IObj
+        public static T New<T>(Type objType, ObjArg arg, bool start = false) where T : class, IObj
         {
-            return Create(objType, arg, start) as T;
+            return New(objType, arg, start) as T;
         }
 
         /// <summary>

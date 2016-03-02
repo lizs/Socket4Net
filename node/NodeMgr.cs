@@ -1,52 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Text;
 using socket4net;
 
 namespace node
 {
-    public class NodesMgrConfig : ConfigurationSection
-    {
-        [ConfigurationProperty("logconfig")]
-        public LogConfigElement LogConfig
-        {
-            get { return this["logconfig"] as LogConfigElement; }
-        }
-
-        [ConfigurationProperty("servers")]
-        public ServerCollection Servers
-        {
-            get { return this["servers"] as ServerCollection; }
-        }
-
-        [ConfigurationProperty("clients")]
-        public ClientCollection Clients
-        {
-            get { return this["clients"] as ClientCollection; }
-        }
-
-        [ConfigurationProperty("redisnodes")]
-        public RedisElementCollection RedisNodes
-        {
-            get { return this["redisnodes"] as RedisElementCollection; }
-        }
-
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.Append(LogConfig);
-            sb.Append(RedisNodes);
-            sb.Append(Servers);
-            return sb.ToString();
-        }
-    }
-
     public class NodesMgrArg : UniqueMgrArg
     {
-        public NodesMgrConfig Config { get; private set; }
-        public NodesMgrArg(IObj parent, NodesMgrConfig config)
+        public LauncherConfig Config { get; private set; }
+        public NodesMgrArg(IObj parent, LauncherConfig config)
             : base(parent)
         {
             Config = config;
@@ -58,7 +19,7 @@ namespace node
     /// </summary>
     public abstract class NodesMgr : UniqueMgr<Guid, Node>
     {
-        public NodesMgrConfig Config { get; private set; }
+        public LauncherConfig Config { get; private set; }
         private RedisMgr<AsyncRedisClient> _redisMgr;
 
         protected override void OnInit(ObjArg arg)
@@ -127,7 +88,7 @@ namespace node
         {
             if (Config == null) return false;
 
-            _redisMgr = Create<RedisMgr<AsyncRedisClient>>(new RedisMgrArg(this,
+            _redisMgr = New<RedisMgr<AsyncRedisClient>>(new RedisMgrArg(this,
                 Config.RedisNodes), true);
 
             foreach (var cfg in Config.Servers)

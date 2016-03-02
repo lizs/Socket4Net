@@ -46,12 +46,16 @@
   <ItemGroup>
     <Compile Include="Component\Component.cs" />
     <Compile Include="Component\ComponentsMgr.cs" />
+    <Compile Include="Component\EInternalComponentId.cs" />
     <Compile Include="Component\PropertyComponent.cs" />
     <Compile Include="Component\RpcComponent.cs" />
+    <Compile Include="Component\SyncComponent.cs" />
+    <Compile Include="DispatchableSession.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\EntityData.cs" />
     <Compile Include="Entity\IProperty.cs" />
     <Compile Include="Entity\IScheduler.cs" />
+    <Compile Include="PlayerMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sys\Data\DataSys.cs" />
     <Compile Include="Sys\Data\IRedisClient.cs" />

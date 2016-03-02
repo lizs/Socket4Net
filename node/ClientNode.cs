@@ -46,7 +46,7 @@ namespace node
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
-            Peer = Create<Client<TSession>>(new ClientArg(null, Ip, Port, AutoReconnectEnabled), false);
+            Peer = New<Client<TSession>>(new ClientArg(null, Ip, Port, AutoReconnectEnabled), false);
         }
 
         protected override void OnStart()

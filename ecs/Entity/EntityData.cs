@@ -16,7 +16,12 @@ namespace ecs
         public IReadOnlyCollection<IBlock> Blocks
         {
             get { return _property.Blocks.ToList(); }
-        } 
+        }
+
+        public IBlock GetBlock(short key)
+        {
+            return _property.GetBlock(key);
+        }
 
         public void Inject(IEnumerable<IBlock> blocks)
         {
@@ -27,6 +32,27 @@ namespace ecs
         {
             return _property.Apply(blocks);
         }
+        
+        /// <summary>
+        ///     ”¶”√ Ù–‘
+        /// </summary>
+        /// <param name="properties"></param>
+        public void Apply(IEnumerable<Pair<short, byte[]>> properties)
+        {
+            if (properties == null) return;
+
+            foreach (var kv in properties.Where(kv => kv.Value != null))
+            {
+                var block = GetBlock(kv.Key);
+                if (block != null)
+                {
+                    block.Deserialize(kv.Value);
+                }
+                else
+                    Logger.Ins.Error("Block of {0} not injected for {1}", kv.Key, Name);
+            }
+        }
+
 
         public T Get<T>(short id)
         {

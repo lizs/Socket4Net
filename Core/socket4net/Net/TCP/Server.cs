@@ -74,7 +74,7 @@ namespace socket4net
 
             _sessionFactory = new SessionFactory<TSession>();
 
-            SessionMgr = Create<SessionMgr>(new SessionMgrArg(this, session =>
+            SessionMgr = New<SessionMgr>(new SessionMgrArg(this, session =>
                 {
                     if (EventSessionEstablished != null)
                         EventSessionEstablished(session as TSession);

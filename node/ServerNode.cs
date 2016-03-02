@@ -12,7 +12,7 @@ namespace node
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
-            Peer = Create<Server<TSession>>(new PeerArg(null, Config.Ip, Config.Port));
+            Peer = New<Server<TSession>>(new PeerArg(null, Config.Ip, Config.Port));
         }
 
         protected override void OnStart()

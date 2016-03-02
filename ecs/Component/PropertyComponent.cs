@@ -8,6 +8,7 @@ namespace ecs
     /// <summary>
     ///     内置属性组件
     /// </summary>
+    [ComponentId((short)EInternalComponentId.Property)]
     public class PropertyComponent : Component, IProperty
     {
         /// <summary>
@@ -19,7 +20,7 @@ namespace ecs
             get
             {
                 if (_propertyBody != null) return _propertyBody;
-                _propertyBody = Create<PropertyBody>(new PropertyBodyArg(this));
+                _propertyBody = New<PropertyBody>(new PropertyBodyArg(this));
                 return _propertyBody;
             }
         }

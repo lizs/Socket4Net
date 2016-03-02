@@ -45,10 +45,7 @@ namespace ecs
         private Func<short, IBlock> _blockMaker;
         private Func<long, short, string> _blockFeildFormatter;
         private Func<string, short> _blockFeildExtractor;
-
-        //public event Action<Entity> EventEntityExtracted;
-        //public event Action<Entity> EventEntityCreated;
-
+        
         private string _key;
         public string Key
         {

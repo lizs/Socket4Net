@@ -15,7 +15,7 @@ namespace socket4net.tests
         [Test]
         public void TestComponent()
         {
-            var obj = Obj.Create<Entity>(new EntityArg(null, 1));
+            var obj = Obj.New<Entity>(new EntityArg(null, 1));
 
             obj.AddComponent<ComponentA>();
             obj.AddComponent<ComponentB>();
@@ -34,7 +34,7 @@ namespace socket4net.tests
         [Test]
         public void TestDependOn()
         {
-            var obj = Obj.Create<Entity>(new EntityArg(null, 1));
+            var obj = Obj.New<Entity>(new EntityArg(null, 1));
 
             obj.AddComponent<ComponentB>();
 

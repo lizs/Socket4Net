@@ -38,51 +38,7 @@ namespace ecs
 
         public EMsg Type { get; private set; }
     }
-
-    /// <summary>
-    ///     异步消息
-    /// </summary>
-    public class AsyncMsg
-    {
-        public AsyncMsg(EMsg type)
-        {
-            Type = type;
-        }
-
-        public EMsg Type { get; private set; }
-    }
-
-    /// <summary>
-    ///     网络请求消息
-    /// </summary>
-    public class NetReqMsg : AsyncMsg
-    {
-        public NetReqMsg(short ops, byte[] data) : base(EMsg.NetReq)
-        {
-            Ops = ops;
-            Data = data;
-        }
-
-        public short Ops { get; private set; }
-        public byte[] Data { get; private set; }
-    }
-
-    /// <summary>
-    ///     网络推送消息
-    /// </summary>
-    public class NetPushMsg : AsyncMsg
-    {
-        public NetPushMsg(short ops, byte[] data)
-            : base(EMsg.NetPush)
-        {
-            Ops = ops;
-            Data = data;
-        }
-
-        public short Ops { get; private set; }
-        public byte[] Data { get; private set; }
-    }
-
+    
     public interface IEntity : IUniqueObj<long>, IProperty
     {
         T GetComponent<T>() where T : Component;
@@ -171,13 +127,24 @@ namespace ecs
         }
 
 #if NET45
-        public virtual Task<RpcResult> OnMessageAsync(AsyncMsg msg)
+        public virtual Task<RpcResult> OnRequest(short ops, byte[] data)
         {
             return Task.FromResult(RpcResult.Failure);
         }
-#else
-        public virtual void OnMessageAsync(AsyncMsg msg, Action<RpcResult> cb)
+
+        public virtual Task<bool> OnPush(short ops, byte[] data)
         {
+            return Task.FromResult(false);
+        }
+#else
+        public virtual void OnRequest(short ops, byte[] data, Action<RpcResult> cb)
+        {
+            cb(RpcResult.Failure);
+        }
+        
+        public virtual void OnPush(short ops, byte[] data, Action<bool> cb)
+        {
+            cb(false);
         }
 #endif
 
@@ -190,7 +157,7 @@ namespace ecs
             {
                 return _components ??
                        (_components =
-                           Create<ComponentsMgr>(new UniqueMgrArg(this)));
+                           New<ComponentsMgr>(new UniqueMgrArg(this)));
             }
         }
 

@@ -113,7 +113,7 @@ namespace socket4net
                 throw new Exception("Ip or Port is invalid!");
 
             _sessionFactory = new SessionFactory<TSession>();
-            SessionMgr = Create<SessionMgr>(new SessionMgrArg(this,
+            SessionMgr = New<SessionMgr>(new SessionMgrArg(this,
                 session =>
                 {
                     OnConnected(session);

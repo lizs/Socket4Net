@@ -3,7 +3,7 @@ using socket4net;
 
 namespace node
 {
-    public class LauncherArg<T> : LauncherArg where T : NodesMgrConfig
+    public class LauncherArg<T> : LauncherArg where T : LauncherConfig
     {
         public T Config { get; private set; }
 
@@ -14,9 +14,9 @@ namespace node
         }
     }
 
-    public class Launcher<T> : Launcher where T : NodesMgrConfig
+    public class Launcher<T> : Launcher where T : LauncherConfig
     {
-        protected readonly Mgr<Obj> Jobs = Create<Mgr<Obj>>(ObjArg.Empty, false);
+        protected readonly Mgr<Obj> Jobs = New<Mgr<Obj>>(ObjArg.Empty, false);
         public T Config { get; private set; }
         public Guid Id { get; private set; }
 

@@ -50,7 +50,7 @@ namespace ecs
 
             Session = more.Session;
             Es = CreateEntitySys();
-            Ss = Create<SyncSys>(new DataSysArg(this, Es));
+            Ss = New<SyncSys>(new DataSysArg(this, Es));
         }
 
         protected override void OnStart()
@@ -80,12 +80,12 @@ namespace ecs
             if (entity == null) return RpcResult.Failure;
 
             if (rq.ComponentId == 0)
-                return await entity.OnMessageAsync(new NetReqMsg(rq.Ops, rq.Data));
+                return await entity.OnRequest(rq.Ops, rq.Data);
 
             var cp = entity.GetComponent(rq.ComponentId);
             return cp == null
                 ? RpcResult.Failure
-                : await cp.OnMessageAsync(new NetReqMsg(rq.Ops, rq.Data));
+                : await cp.OnRequest(rq.Ops, rq.Data);
         }
 
         public async Task<bool> OnPush(RpcPush rp)
@@ -94,10 +94,10 @@ namespace ecs
             if (entity == null) return false;
 
             if (rp.ComponentId == 0)
-                return await entity.OnMessageAsync(new NetPushMsg(rp.Ops, rp.Data));
+                return await entity.OnPush(rp.Ops, rp.Data);
 
             var cp = entity.GetComponent(rp.ComponentId);
-            return cp != null && await cp.OnMessageAsync(new NetReqMsg(rp.Ops, rp.Data));
+            return cp != null && await cp.OnPush(rp.Ops, rp.Data);
         }
 #else
         public void OnRequest(RpcRequest rq, Action<RpcResult> cb)
@@ -177,7 +177,7 @@ namespace ecs
             if (!more.PersistEnabled) return;
 
             _redisClientGetter = more.RedisClientGetter;
-            Ps = Create<PersistSys>(new DataSysArg(this, Es));
+            Ps = New<PersistSys>(new DataSysArg(this, Es));
         }
 
         protected override void OnStart()

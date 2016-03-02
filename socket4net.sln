@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{9DBF46BD-14E8-49D1-8406-FEA9F4E55F01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleProto", "Sample\ChatProto\SampleProto.csproj", "{B4AF3B64-7884-4864-B007-DD3B59A084D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Sample\ChatProto\Shared.csproj", "{B4AF3B64-7884-4864-B007-DD3B59A084D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "socket4net", "Core\socket4net.csproj", "{ED0BB4A5-50C0-410F-A55F-94C842C744AC}"
 EndProject

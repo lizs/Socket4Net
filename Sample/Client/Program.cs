@@ -1,5 +1,8 @@
 ﻿using System;
-using Proto;
+using System.Linq;
+using CustomLog;
+using ecs;
+using node;
 using socket4net;
 
 namespace Sample
@@ -8,29 +11,21 @@ namespace Sample
     {
         private static void Main(string[] args)
         {
-            var ip = "127.0.0.1";
-            ushort port = 6001;
+            // App.Config
+            var launcherCfg = LauncherConfig.LoadAs<ChatConfig>("Client.exe.config");
 
-            if (args.Length > 0)
-            {
-                ip = args[0];
-                if (args.Length > 1)
-                    port = ushort.Parse(args[1]);
-            }
+            // 创建并启动Launcher
+            var arg = new LauncherArg<ChatConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Client"));
+            Obj.New<MyLauncher>(arg, true);
 
-            Obj.Create<Launcher>(new LauncherArg(new CustomLog.Log4Net("log4net.config", "Sample")), true);
+            Test();
 
-            // 启动客户端
-            RunClient(ip, port);
-
+            // 销毁Launcher
             Launcher.Ins.Destroy();
         }
 
-        private static void RunClient(string ip, ushort port)
+        private static void Test()
         {
-            // 创建并启动客户端
-            var client = Obj.Create<Client>(new ClientArg(null, ip, port, true), true);
-
             // 结束
             var stopped = false;
             while (!stopped)
@@ -43,33 +38,23 @@ namespace Sample
                     case "QUIT":
                     case "EXIT":
                     {
-                        client.LogicService.Perform(client.Destroy);
                         stopped = true;
-                    }
                         break;
+                    }
 
-                    case "REQ":
+                    case "ECHO":
                     {
-                        //  请求服务器
-                        client.RequestAsync(0, 0, (short) EOps.Request, new RequestMsgProto {Message = msg}, 0, 0,
-                            (b, bytes) =>
-                            {
-                                if (!b)
-                                    Logger.Ins.Error("请求失败");
-                                else
-                                {
-                                    var proto = PiSerializer.Deserialize<ResponseMsgProto>(bytes);
-                                    Logger.Ins.Info(proto.Message);
-                                }
-                            });
-
+                        var player = PlayerMgr.Ins.FirstOrDefault();
+                        var cp = player.GetComponent<ChatComponent>();
+                        cp.Echo("Echo " + msg);
                         break;
                     }
 
                     default:
                     {
-                        //  请求服务器
-                        client.Push(0, 0, (short) EOps.Push, new PushMsgProto {Message = msg}, 0, 0);
+                        var player = PlayerMgr.Ins.FirstOrDefault();
+                        var cp = player.GetComponent<ChatComponent>();
+                        cp.Broadcast("Broadcat " + msg);
                         break;
                     }
                 }

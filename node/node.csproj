@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StackExchange.Redis">
-      <HintPath>..\Depedencies\StackExchange.Redis.dll</HintPath>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\Depedencies\ServiceStack.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -47,11 +47,12 @@
     <Compile Include="config\NodeElement.cs" />
     <Compile Include="config\NodeCollection.cs" />
     <Compile Include="Launcher.cs" />
+    <Compile Include="config\LauncherConfig.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="NodeMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="redis\AsyncRedisClient.cs" />
-    <Compile Include="redis\RedisClient.cs" />
+    <Compile Include="redis\ServiceStackAsyncRedisClient.cs" />
+    <Compile Include="redis\ServiceStackRedisClient.cs" />
     <Compile Include="redis\RedisMgr.cs" />
     <Compile Include="ServerNode.cs" />
     <Compile Include="SingleSessionNode.cs" />

@@ -9,11 +9,9 @@ namespace ecs
     public abstract class RpcComponent : Component, IRpc
     {
         #region IRpc Members
-
-        public Func<IRpcSession> SessionGetter { get; private set; }
         public IRpcSession Session
         {
-            get { return SessionGetter != null ? SessionGetter() : null; }
+            get { return GetAncestor<Player>().Session; }
         }
 
 #if NET35

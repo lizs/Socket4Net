@@ -1,33 +1,34 @@
-using ProtoBuf;
+﻿using ProtoBuf;
 
-namespace Proto
+namespace Shared
 {
-    public enum EOps
+    public enum EChatOps
     {
-        Request,
-        Push,
-    }
+        Echo,
+        Broadcst,
 
+        Create,
+        Destroy,
+    }
+    
     [ProtoContract]
-    public class RequestMsgProto
+    public class EchoProto
     {
         [ProtoMember(1)]
         public string Message { get; set; }
     }
 
     [ProtoContract]
-    public class ResponseMsgProto
+    public class EchoResponseProto
     {
         [ProtoMember(1)]
         public string Message { get; set; }
     }
 
     [ProtoContract]
-    public class PushMsgProto
+    public class BroadcastProto
     {
         [ProtoMember(1)]
         public string Message { get; set; }
-        [ProtoMember(2)]
-        public string From { get; set; }
     }
 }

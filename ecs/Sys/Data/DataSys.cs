@@ -20,7 +20,7 @@ namespace ecs
     public abstract class DataSys : Obj
     {
         protected EntitySys Es;
-        protected readonly Dictionary<long, List<IBlock>> UpdateCache = new Dictionary<long, List<IBlock>>();
+        protected readonly Dictionary<long, Pair<Type, List<IBlock>>> UpdateCache = new Dictionary<long, Pair<Type, List<IBlock>>>();
         protected readonly Dictionary<long, Type> DestroyCache = new Dictionary<long, Type>(); 
 
         protected override void OnInit(ObjArg arg)
@@ -45,7 +45,7 @@ namespace ecs
 
         private void OnEntityCreated(Entity entity)
         {
-            CacheBlock(entity.Id, entity.Blocks);
+            CacheBlock(entity.Id, entity.GetType(), entity.Blocks);
         }
 
         private void OnEntityDestroyed(long id, Type type)
@@ -56,30 +56,28 @@ namespace ecs
             UpdateCache.Remove(id);
         }
 
-        private void CacheBlock(long id, IReadOnlyCollection<IBlock> blocks)
+        private void CacheBlock(long id, Type type, IReadOnlyCollection<IBlock> blocks)
         {
             if(blocks.IsNullOrEmpty()) return;
             foreach (var block in blocks)
             {
-                CacheBlock(id, block);
+                CacheBlock(id, type, block);
             }
         }
 
-        private void CacheBlock(long id, IBlock block)
+        private void CacheBlock(long id, Type type, IBlock block)
         {
             if (!UpdateCache.ContainsKey(id))
-                UpdateCache[id] = new List<IBlock> { block };
-            else
-            {
-                var lst = UpdateCache[id];
-                if (lst.Contains(block)) return;
-                lst.Add(block);
-            }
+                UpdateCache[id] = new Pair<Type, List<IBlock>>(type, new List<IBlock> {block});
+
+            var lst = UpdateCache[id];
+            if (lst.Value.Contains(block)) return;
+            lst.Value.Add(block);
         }
 
         private void OnEntityPropertyChanged(Entity entity, IBlock block)
         {
-            CacheBlock(entity.Id, block);
+            CacheBlock(entity.Id, entity.GetType(), block);
         }
     }
 }

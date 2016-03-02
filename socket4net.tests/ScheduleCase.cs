@@ -14,7 +14,7 @@ namespace socket4net.tests
         [Test]
         public void TestCoroutine()
         {
-            _scheduObj = Obj.Create<ScheduleObj>(ObjArg.Empty);
+            _scheduObj = Obj.New<ScheduleObj>(ObjArg.Empty);
             _scheduObj.StartCoroutine(MyCoroutine);
         }
 

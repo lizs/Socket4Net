@@ -82,9 +82,9 @@ namespace socket4net
             return Get<T>().FirstOrDefault();
         }
 
-        public new T Create<T>(ObjArg arg, bool start) where T : class, TValue, new()
+        public T Create<T>(ObjArg arg, bool start) where T : class, TValue, new()
         {
-            var ret = Obj.Create<T>(arg, start);
+            var ret = New<T>(arg, start);
             _items.Add(ret);
             return ret;
         }

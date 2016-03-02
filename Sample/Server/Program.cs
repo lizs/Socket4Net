@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using CustomLog;
 using node;
 using socket4net;
@@ -10,18 +9,17 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            // 加载app.config
-            var map = new ExeConfigurationFileMap { ExeConfigFilename = "Server.exe.config" };
-            var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-            var x = config.GetSection("ServerConfig");
-            var section = x as ChatConfig;
+            // App.Config
+            var launcherCfg = LauncherConfig.LoadAs<ChatConfig>("Server.exe.config");
 
-            // 启动launcher
-            Obj.Create<MyLauncher>(
-                new LauncherArg<ChatConfig>(section, new Log4Net(section.LogConfig.File, "Activity")), true);
+            // 创建并启动Launcher
+            var arg = new LauncherArg<ChatConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Server"));
+            Obj.New<MyLauncher>(arg, true);
             
             Console.WriteLine("Press any key to exit!");
             Console.ReadKey();
+
+            // 销毁Launcher
             Launcher.Ins.Destroy();
         }
     }

@@ -1,23 +1,22 @@
 ﻿using System;
 using socket4net;
 
-namespace Proto
+namespace Shared
 {
-    public enum EPid
-    {
-        One,
-        Two,
-        Three,
-    }
-
     public static class BlockMaker
     {
         public static IBlock Create(short pid)
         {
-            if(!Enum.IsDefined(typeof(EPid), pid))
-                throw new ArgumentException("pid");
+            return Create((EPid) pid);
+        }
 
-            switch ((EPid)pid)
+        public static IBlock Create(EPid epid)
+        {
+            if (!Enum.IsDefined(typeof(EPid), epid))
+                throw new ArgumentException("epid");
+
+            var pid = (short) epid;
+            switch (epid)
             {
                 case EPid.One:
                     return new SettableBlock<int>(pid, 1, EBlockMode.Synchronizable);

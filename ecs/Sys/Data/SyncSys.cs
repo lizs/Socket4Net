@@ -16,20 +16,24 @@ namespace ecs
 
     [ProtoContract]
     [ProtoInclude(10, typeof(EntityDestroyProto))]
-    [ProtoInclude(20, typeof(EntityDestroyProto))]
+    [ProtoInclude(20, typeof(EntityUpdateProto))]
     public class EntityProto
     {
         [ProtoMember(1)]
         public long Id { get; set; }
     }
 
+    [ProtoContract]
     public class EntityDestroyProto : EntityProto
     {
     }
-
+    
+    [ProtoContract]
     public class EntityUpdateProto : EntityProto
     {
         [ProtoMember(1)]
+        public string Type { get; set; }
+        [ProtoMember(2)]
         public List<BlockProto> Blocks { get; set; }
     }
 
@@ -60,15 +64,18 @@ namespace ecs
                     new EntityUpdateProto
                     {
                         Id = x.Key,
-                        Blocks = x.Value.Select(y => new BlockProto { Pid = y.Id, Data = y.Serialize() }).ToList()
+                        Type = x.Value.Key.Name,
+                        Blocks = x.Value.Value.Select(y => new BlockProto { Pid = y.Id, Data = y.Serialize() }).ToList()
                     }));
 
             // 销毁
             proto.AddRange(DestroyCache.Select(x => new EntityDestroyProto { Id = x.Key }));
 
+            var player = GetAncestor<Player>();
             foreach (var rpcSession in sessions)
             {
-                rpcSession.Send(new ProtoWrapper<List<EntityProto>> { Item = proto });
+                rpcSession.Push(0, player.Id, (short) ESyncOps.Sync,
+                    new ProtoWrapper<List<EntityProto>> {Item = proto}, 0, (short) EInternalComponentId.Sync);
             }
 
             UpdateCache.Clear();

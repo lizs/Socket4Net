@@ -1,6 +1,5 @@
-using System.Threading.Tasks;
-using ecs;
-using Proto;
+锘縰sing ecs;
+using Shared;
 using socket4net;
 
 namespace Sample
@@ -10,9 +9,9 @@ namespace Sample
         protected override EntitySys CreateEntitySys()
         {
             return
-                Create<EntitySys>(new EntitySysArg(this,
+                New<EntitySys>(new EntitySysArg(this,
                     BlockMaker.Create,
-                    (l, s) => string.Format("{0}:{1}", l, (EPid) s),
+                    (l, s) => string.Format("{0}:{1}", l, (EPid)s),
                     s =>
                     {
                         var items = s.Split(':');
@@ -24,6 +23,11 @@ namespace Sample
         {
             base.OnStart();
             Logger.Ins.Debug("{0} online!", Name);
+
+            using (new Flusher(this))
+            {
+                Es.CreateDefault<Ship>(new EntityArg(this, 1), true);
+            }
         }
 
         protected override void OnDestroy()
@@ -32,46 +36,10 @@ namespace Sample
             Logger.Ins.Debug("{0} offline!", Name);
         }
 
-        public async override Task<RpcResult> OnMessageAsync(AsyncMsg msg)
+        protected override void SpawnComponents()
         {
-            switch (msg.Type)
-            {
-                case EMsg.NetReq:
-                {
-                    var more = msg as NetReqMsg;
-                    switch ((EOps) more.Ops)
-                    {
-                        case EOps.Request:
-                        {
-                            var proto = PiSerializer.Deserialize<RequestMsgProto>(more.Data);
-                            return RpcResult.MakeSuccess(new ResponseMsgProto{Message = "Response from server!"});
-                        }
-
-                        default:
-                            return RpcResult.Failure;
-                    }
-                }
-
-                case EMsg.NetPush:
-                {
-                    var more = msg as NetPushMsg;
-                    switch ((EOps)more.Ops)
-                    {
-                        case EOps.Push:
-                        {
-                            var proto = PiSerializer.Deserialize<PushMsgProto>(more.Data);
-                            // 广播该消息
-                            ChatServer.Ins.Broadcast(0, (short)EOps.Push, proto, 0);
-                            return RpcResult.Success;
-                        }
-
-                        default:
-                            return RpcResult.Failure;
-                    }
-                }
-            }
-
-            return RpcResult.Failure;
+            base.SpawnComponents();
+            AddComponent<ChatComponent>();
         }
     }
 }
