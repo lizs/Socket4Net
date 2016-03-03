@@ -34,7 +34,7 @@ namespace Sample
         protected override void SpawnComponents()
         {
             base.SpawnComponents();
-            AddComponent<ChatComponent>();
+            AddComponent<SampleComponent>();
             AddComponent<SyncComponent>();
         }
     }

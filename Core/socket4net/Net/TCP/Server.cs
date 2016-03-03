@@ -48,7 +48,6 @@ namespace socket4net
         public event Action EventPeerClosing;
 
         private Socket _listener;
-        private SessionFactory<TSession> _sessionFactory;
         private SocketAsyncEventArgs _acceptEvent;
 
         private ConcurrentQueue<Socket> _clients;
@@ -71,9 +70,7 @@ namespace socket4net
 
             Address = address;
             EndPoint = new IPEndPoint(Address, Port);
-
-            _sessionFactory = new SessionFactory<TSession>();
-
+            
             SessionMgr = New<SessionMgr>(new SessionMgrArg(this, session =>
                 {
                     if (EventSessionEstablished != null)
@@ -188,7 +185,7 @@ namespace socket4net
                 Socket client;
                 while (_clients.TryDequeue(out client))
                 {
-                    var session = _sessionFactory.Create(client, this);
+                    var session = New<TSession>(new SessionArg(this, Uid.New(), client), true);
                     SessionMgr.AddSession(session);
                 }
             }

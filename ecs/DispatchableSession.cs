@@ -51,16 +51,19 @@ namespace ecs
             if (player == null)
                 return false;
 
-            var entity = rq.ObjId != 0 ? player.Es.Get(rq.ObjId) : player;
-            if (entity == null) return RpcResult.Failure;
+            using (new Flusher(player as IFlushable))
+            {
+                var entity = rq.ObjId != 0 ? player.Es.Get(rq.ObjId) : player;
+                if (entity == null) return RpcResult.Failure;
 
-            if (rq.ComponentId == 0)
-                return await entity.OnRequest(rq.Ops, rq.Data);
+                if (rq.ComponentId == 0)
+                    return await entity.OnRequest(rq.Ops, rq.Data);
 
-            var cp = entity.GetComponent(rq.ComponentId);
-            return cp == null
-                ? RpcResult.Failure
-                : await cp.OnRequest(rq.Ops, rq.Data);
+                var cp = entity.GetComponent(rq.ComponentId);
+                return cp == null
+                    ? RpcResult.Failure
+                    : await cp.OnRequest(rq.Ops, rq.Data);
+            }
         }
 
         public async override Task<bool> HandlePush(RpcPush rp)
@@ -74,14 +77,17 @@ namespace ecs
             if (player == null)
                 return false;
 
-            var entity = rp.ObjId != 0 ? player.Es.Get(rp.ObjId) : player;
-            if (entity == null) return false;
+            using (new Flusher(player as IFlushable))
+            {
+                var entity = rp.ObjId != 0 ? player.Es.Get(rp.ObjId) : player;
+                if (entity == null) return false;
 
-            if (rp.ComponentId == 0)
-                return await entity.OnPush(rp.Ops, rp.Data);
+                if (rp.ComponentId == 0)
+                    return await entity.OnPush(rp.Ops, rp.Data);
 
-            var cp = entity.GetComponent(rp.ComponentId);
-            return cp != null && await cp.OnPush(rp.Ops, rp.Data);
+                var cp = entity.GetComponent(rp.ComponentId);
+                return cp != null && await cp.OnPush(rp.Ops, rp.Data);
+            }
         }
     }
 }

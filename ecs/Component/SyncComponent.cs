@@ -38,7 +38,7 @@ namespace ecs
                         {
                             var update = proto as EntityUpdateProto;
                             var entity = Es.Get(update.Id) ??
-                                         Es.Create<Entity>(Type.GetType(update.Type), new EntityArg(Es, update.Id));
+                                         Es.Create<Entity>(Type.GetType(string.Format("{0},Shared", update.Type)), new EntityArg(Es, update.Id), true);
 
                             entity.Apply(update.Blocks.Select(x => new Pair<short, byte[]>(x.Pid, x.Data)));
                         }

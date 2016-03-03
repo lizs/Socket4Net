@@ -18,8 +18,8 @@ namespace Sample
         {
             switch (type.ToUpper())
             {
-                case "CHAT":
-                    return typeof (ChatSession);
+                case "SAMPLE":
+                    return typeof (SampleSession);
             }
 
             throw new ArgumentException("type");

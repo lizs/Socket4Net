@@ -2,7 +2,7 @@
 
 namespace Shared
 {
-    public enum EChatOps
+    public enum EOps
     {
         Echo,
         Broadcst,
@@ -13,13 +13,6 @@ namespace Shared
     
     [ProtoContract]
     public class EchoProto
-    {
-        [ProtoMember(1)]
-        public string Message { get; set; }
-    }
-
-    [ProtoContract]
-    public class EchoResponseProto
     {
         [ProtoMember(1)]
         public string Message { get; set; }

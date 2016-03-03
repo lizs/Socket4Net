@@ -18,7 +18,7 @@ namespace ecs
         /// </summary>
         public async Task<bool> PersistAsync(IAsyncRedisClient client)
         {
-            if(_busy) return false;
+            if (client == null || _busy) return false;
             _busy = true;
 
             // 拷贝缓存（防止容器在异步返回之前被修改）

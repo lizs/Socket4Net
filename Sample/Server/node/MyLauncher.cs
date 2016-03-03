@@ -2,12 +2,12 @@
 
 namespace Sample
 {
-    internal class MyLauncher : Launcher<ChatConfig>
+    internal class MyLauncher : Launcher<ServerConfig>
     {
         protected override void SpawnJobs()
         {
             base.SpawnJobs();
-            Jobs.Create<ChatNodesMgr>(new NodesMgrArg(this, Config), false);
+            Jobs.Create<ServerNodesMgr>(new NodesMgrArg(this, Config), false);
         }
     }
 }

@@ -39,15 +39,15 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="business\ChatComponent.cs" />
-    <Compile Include="business\ChatSession.cs" />
+    <Compile Include="business\SampleComponent.cs" />
+    <Compile Include="business\SampleSession.cs" />
     <Compile Include="business\Player.cs" />
-    <Compile Include="node\ChatConfig.cs" />
+    <Compile Include="node\ServerConfig.cs" />
     <Compile Include="node\MyLauncher.cs" />
     <Compile Include="node\NodesMgr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="node\ChatServer.cs" />
+    <Compile Include="node\Server.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

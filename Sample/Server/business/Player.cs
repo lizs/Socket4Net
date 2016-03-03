@@ -23,11 +23,6 @@ namespace Sample
         {
             base.OnStart();
             Logger.Ins.Debug("{0} online!", Name);
-
-            using (new Flusher(this))
-            {
-                Es.CreateDefault<Ship>(new EntityArg(this, 1), true);
-            }
         }
 
         protected override void OnDestroy()
@@ -39,7 +34,7 @@ namespace Sample
         protected override void SpawnComponents()
         {
             base.SpawnComponents();
-            AddComponent<ChatComponent>();
+            AddComponent<SampleComponent>();
         }
     }
 }

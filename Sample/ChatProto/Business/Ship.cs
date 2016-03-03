@@ -28,6 +28,18 @@ namespace Shared
             Three = new List<int>{1, 2, 3};
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+            Logger.Ins.Info("{0} started!", Name);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Logger.Ins.Info("{0} destroyed!", Name);
+        }
+
         protected override void SpawnComponents()
         {
             base.SpawnComponents();

@@ -44,11 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="business\ChatComponent.cs" />
-    <Compile Include="business\ChatSession.cs" />
+    <Compile Include="business\SampleSession.cs" />
     <Compile Include="business\Player.cs" />
-    <Compile Include="node\ChatClient.cs" />
     <Compile Include="node\MyLauncher.cs" />
-    <Compile Include="node\ChatConfig.cs" />
+    <Compile Include="node\ClientConfig.cs" />
     <Compile Include="node\NodesMgr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

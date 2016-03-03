@@ -2,7 +2,7 @@
 
 namespace Sample
 {
-    public class ChatConfig : LauncherConfig
+    public class ClientConfig : LauncherConfig
     {
     }
 }

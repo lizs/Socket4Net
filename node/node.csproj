@@ -51,8 +51,8 @@
     <Compile Include="Node.cs" />
     <Compile Include="NodeMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="redis\ServiceStackAsyncRedisClient.cs" />
-    <Compile Include="redis\ServiceStackRedisClient.cs" />
+    <Compile Include="redis\AsyncRedisClient.cs" />
+    <Compile Include="redis\RedisClient.cs" />
     <Compile Include="redis\RedisMgr.cs" />
     <Compile Include="ServerNode.cs" />
     <Compile Include="SingleSessionNode.cs" />

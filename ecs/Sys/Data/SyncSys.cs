@@ -64,18 +64,22 @@ namespace ecs
                     new EntityUpdateProto
                     {
                         Id = x.Key,
-                        Type = x.Value.Key.Name,
+                        Type = x.Value.Key.FullName,
                         Blocks = x.Value.Value.Select(y => new BlockProto { Pid = y.Id, Data = y.Serialize() }).ToList()
                     }));
 
             // 销毁
             proto.AddRange(DestroyCache.Select(x => new EntityDestroyProto { Id = x.Key }));
 
-            var player = GetAncestor<Player>();
-            foreach (var rpcSession in sessions)
+            // 同步
+            if (!proto.IsNullOrEmpty())
             {
-                rpcSession.Push(0, player.Id, (short) ESyncOps.Sync,
-                    new ProtoWrapper<List<EntityProto>> {Item = proto}, 0, (short) EInternalComponentId.Sync);
+                var player = GetAncestor<Player>();
+                foreach (var rpcSession in sessions)
+                {
+                    rpcSession.Push(0, player.Id, (short)ESyncOps.Sync,
+                        new ProtoWrapper<List<EntityProto>> { Item = proto }, 0, (short)EInternalComponentId.Sync);
+                }
             }
 
             UpdateCache.Clear();

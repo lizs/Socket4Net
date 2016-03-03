@@ -5,7 +5,7 @@ using socket4net;
 
 namespace Sample
 {
-    public class ChatSession : ClientSession
+    public class SampleSession : ClientSession
     {
         protected override Task<bool> OnNonPlayerPush(RpcPush rp)
         {

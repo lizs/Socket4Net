@@ -10,10 +10,10 @@ namespace Sample
         static void Main(string[] args)
         {
             // App.Config
-            var launcherCfg = LauncherConfig.LoadAs<ChatConfig>("Server.exe.config");
+            var launcherCfg = LauncherConfig.LoadAs<ServerConfig>("Server.exe.config");
 
             // 创建并启动Launcher
-            var arg = new LauncherArg<ChatConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Server"));
+            var arg = new LauncherArg<ServerConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Server"));
             Obj.New<MyLauncher>(arg, true);
             
             Console.WriteLine("Press any key to exit!");

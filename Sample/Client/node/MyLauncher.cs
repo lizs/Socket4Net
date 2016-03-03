@@ -2,7 +2,7 @@
 
 namespace Sample
 {
-    internal class MyLauncher : Launcher<ChatConfig>
+    internal class MyLauncher : Launcher<ClientConfig>
     {
         protected override void SpawnJobs()
         {

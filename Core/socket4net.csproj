@@ -86,6 +86,7 @@
     <Compile Include="Base\Objects\ObjSchedule.cs" />
     <Compile Include="Base\Objects\Scheduler\Flusher.cs" />
     <Compile Include="Base\Util\Convertor.cs" />
+    <Compile Include="Base\Util\Uid.cs" />
     <Compile Include="Base\Util\Key.cs" />
     <Compile Include="Base\ReflectionCache\ComponentIdCache.cs" />
     <Compile Include="Base\Config\ConfigMgr.cs" />
@@ -173,7 +174,6 @@
     <Compile Include="socket4net\Net\TCP\Packer.cs" />
     <Compile Include="socket4net\Net\TCP\Server.cs" />
     <Compile Include="socket4net\Net\TCP\Session.cs" />
-    <Compile Include="socket4net\Net\TCP\SessionFactory.cs" />
     <Compile Include="socket4net\Net\TCP\SessionMgr.cs" />
     <Compile Include="socket4net\RPC\RpcResult.cs" />
     <Compile Include="socket4net\RPC\RpcSession.cs" />

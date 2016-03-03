@@ -2,7 +2,7 @@
 
 namespace Sample
 {
-    public class ChatSession : ServerSession
+    public class SampleSession : ServerSession
     {
     }
 }

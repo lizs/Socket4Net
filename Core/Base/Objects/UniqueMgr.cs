@@ -142,7 +142,7 @@ namespace socket4net
         public T Create<T>(Type type, UniqueObjArg<TKey> arg, bool start = false) where T : class, TValue
         {
             if (Exist(arg.Key)) return null;
-            if (type.IsSubclassOf(typeof(T))) return null;
+            if (!type.IsSubclassOf(typeof(T))) return null;
 
             return Create(type, arg, start) as T;
         }

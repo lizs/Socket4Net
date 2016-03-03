@@ -95,7 +95,6 @@ namespace socket4net
         }
 
         private Socket _underlineSocket;
-        private SessionFactory<TSession> _sessionFactory;
         private SocketAsyncEventArgs _connectEvent;
         private bool _connected;
         private uint _reconnectRetryDelay = ReconnectDefaultDelay;
@@ -112,7 +111,6 @@ namespace socket4net
             else if (!SetAddress(more.Ip, more.Port))
                 throw new Exception("Ip or Port is invalid!");
 
-            _sessionFactory = new SessionFactory<TSession>();
             SessionMgr = New<SessionMgr>(new SessionMgrArg(this,
                 session =>
                 {
@@ -276,7 +274,7 @@ namespace socket4net
 
         private void HandleConnection(Socket sock)
         {
-            var session = _sessionFactory.Create(sock, this);
+            var session = New<TSession>(new SessionArg(this, Uid.New(), sock), true);
             SessionMgr.AddSession(session);
         }
         

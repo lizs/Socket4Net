@@ -12,10 +12,10 @@ namespace Sample
         private static void Main(string[] args)
         {
             // App.Config
-            var launcherCfg = LauncherConfig.LoadAs<ChatConfig>("Client.exe.config");
+            var launcherCfg = LauncherConfig.LoadAs<ClientConfig>("Client.exe.config");
 
             // 创建并启动Launcher
-            var arg = new LauncherArg<ChatConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Client"));
+            var arg = new LauncherArg<ClientConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Client"));
             Obj.New<MyLauncher>(arg, true);
 
             Test();
@@ -45,16 +45,32 @@ namespace Sample
                     case "ECHO":
                     {
                         var player = PlayerMgr.Ins.FirstOrDefault();
-                        var cp = player.GetComponent<ChatComponent>();
-                        cp.Echo("Echo " + msg);
+                        var cp = player.GetComponent<SampleComponent>();
+                        cp.Echo(msg);
+                        break;
+                    }
+
+                    case "ADD":
+                    {
+                        var player = PlayerMgr.Ins.FirstOrDefault();
+                        var cp = player.GetComponent<SampleComponent>();
+                        cp.Add();
+                        break;
+                    }
+
+                    case "DEL":
+                    {
+                        var player = PlayerMgr.Ins.FirstOrDefault();
+                        var cp = player.GetComponent<SampleComponent>();
+                        cp.Del();
                         break;
                     }
 
                     default:
                     {
                         var player = PlayerMgr.Ins.FirstOrDefault();
-                        var cp = player.GetComponent<ChatComponent>();
-                        cp.Broadcast("Broadcat " + msg);
+                        var cp = player.GetComponent<SampleComponent>();
+                        cp.Broadcast(msg);
                         break;
                     }
                 }
