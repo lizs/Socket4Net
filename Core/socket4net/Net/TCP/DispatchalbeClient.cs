@@ -22,41 +22,46 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+using System;
+#if NET45
+using System.Threading.Tasks;
+#endif
 
-namespace socket4net.tests
+namespace socket4net
 {
-    internal enum EComponentId : short
+    public class DispatchalbeClient<TSession> : Client<TSession>
+        where TSession : class, IDispatchableSession, new()
     {
-        ComponentA,
-        ComponentB,
-    }
+#if NET45
+        public async Task<NetResult> RequestAsync<T>(T proto) where T : IDataProtocol
+        {
+            var session = Session;
+            if (session == null) return false;
+            return await session.RequestAsync(proto);
+        }
+#endif
 
-    //internal class ComponentId : Key<short>
-    //{
-    //    public ComponentId(short value)
-    //        : base(value)
-    //    {
-    //    }
+        public void RequestAsync<T>(T proto, Action<bool, byte[]> cb) where T : IDataProtocol
+        {
+            var session = Session;
+            if (session == null)
+            {
+                if (cb != null)
+                    cb(false, null);
 
-    //    public static implicit operator ComponentId(EComponentId cid)
-    //    {
-    //        return new ComponentId((short)cid);
-    //    }
+                return;
+            }
 
-    //    public override string ToString()
-    //    {
-    //        return ((EComponentId) Value).ToString();
-    //    }
-    //}
+            session.RequestAsync(proto, cb);
+        }
 
-    [ComponentId((short)EComponentId.ComponentA)]
-    internal class ComponentA : Component
-    {
-    }
+        public void Push<T>(T proto) where T : IDataProtocol
+        {
+            var session = Session;
+            if (session == null)
+                return;
 
-    [ComponentId((short)EComponentId.ComponentB)]
-    [DependOn(typeof(ComponentA))]
-    internal class ComponentB : Component
-    {
+            session.Push(proto);
+        }
     }
 }

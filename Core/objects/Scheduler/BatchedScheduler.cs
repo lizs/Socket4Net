@@ -1,4 +1,4 @@
-#region MIT
+﻿#region MIT
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -22,41 +22,51 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+using System;
 
-namespace socket4net.tests
+namespace socket4net
 {
-    internal enum EComponentId : short
+    /// <summary>
+    ///     Batch定时器调度器
+    /// </summary>
+    public class BatchedScheduler : Scheduler
     {
-        ComponentA,
-        ComponentB,
-    }
+        private readonly IFlushable _flushable;
+        public BatchedScheduler(IFlushable target)
+        {
+            _flushable = target;
+        }
 
-    //internal class ComponentId : Key<short>
-    //{
-    //    public ComponentId(short value)
-    //        : base(value)
-    //    {
-    //    }
+        public override void InterlnalInvokeRepeating(Action action, uint delay, uint period)
+        {
+            CancelInvoke(action);
 
-    //    public static implicit operator ComponentId(EComponentId cid)
-    //    {
-    //        return new ComponentId((short)cid);
-    //    }
+            var timer = TimerWrapper.New("", () =>
+            {
+                using (new Flusher(_flushable))
+                {
+                    action();
+                }
+            },
+                delay, period);
+            Timers.Add(action, timer);
+            timer.Start();
+        }
 
-    //    public override string ToString()
-    //    {
-    //        return ((EComponentId) Value).ToString();
-    //    }
-    //}
+        public override void InterlnalInvoke(Action action, uint delay)
+        {
+            CancelInvoke(action);
 
-    [ComponentId((short)EComponentId.ComponentA)]
-    internal class ComponentA : Component
-    {
-    }
-
-    [ComponentId((short)EComponentId.ComponentB)]
-    [DependOn(typeof(ComponentA))]
-    internal class ComponentB : Component
-    {
+            var timer = TimerWrapper.New("", () =>
+            {
+                using (new Flusher(_flushable))
+                {
+                    CancelInvoke(action);
+                    action();
+                }
+            }, delay);
+            Timers.Add(action, timer);
+            timer.Start();
+        }
     }
 }

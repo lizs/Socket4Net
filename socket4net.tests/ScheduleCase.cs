@@ -25,7 +25,6 @@
 
 using System.Collections;
 using System.Diagnostics;
-using ecs;
 using NUnit.Framework;
 
 namespace socket4net.tests

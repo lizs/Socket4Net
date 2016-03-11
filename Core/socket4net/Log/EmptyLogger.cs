@@ -111,6 +111,10 @@ namespace socket4net
         {
         }
 
+        public void Exception(string msg, Exception e)
+        {
+        }
+
         public void Exception(Exception e)
         {
         }

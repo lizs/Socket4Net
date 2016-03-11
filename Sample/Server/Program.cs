@@ -24,7 +24,6 @@
 #endregion
 using System;
 using CustomLog;
-using node;
 using socket4net;
 
 namespace Sample
@@ -33,15 +32,18 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            // App.Config
-            var launcherCfg = LauncherConfig.LoadAs<ServerConfig>("Server.exe.config");
-
             // 创建并启动Launcher
-            var arg = new LauncherArg<ServerConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Server"));
-            Obj.New<MyLauncher>(arg, true);
-            
+            var arg = new LauncherArg(new Log4Net("log4net.config", "Server"));
+            Obj.New<Launcher>(arg, true);
+
+            // 创建并启动服务器
+            var server = Obj.New<Server<ChatSession>>(new ServerArg(null, "127.0.0.1", 9527), true);
+
             Console.WriteLine("Press any key to exit!");
             Console.ReadKey();
+
+            // 销毁服务器
+            server.Destroy();
 
             // 销毁Launcher
             Launcher.Ins.Destroy();

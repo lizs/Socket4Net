@@ -1,4 +1,4 @@
-#region MIT
+﻿#region MIT
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -23,40 +23,34 @@
 //   * */
 #endregion
 
-namespace socket4net.tests
+using ProtoBuf;
+
+namespace Proto
 {
-    internal enum EComponentId : short
+    public enum EOps
     {
-        ComponentA,
-        ComponentB,
+        Reqeust,
+        Push,
+    }
+    
+    [ProtoContract]
+    public class RequestProto
+    {
+        [ProtoMember(1)]
+        public string Message { get; set; }
     }
 
-    //internal class ComponentId : Key<short>
-    //{
-    //    public ComponentId(short value)
-    //        : base(value)
-    //    {
-    //    }
-
-    //    public static implicit operator ComponentId(EComponentId cid)
-    //    {
-    //        return new ComponentId((short)cid);
-    //    }
-
-    //    public override string ToString()
-    //    {
-    //        return ((EComponentId) Value).ToString();
-    //    }
-    //}
-
-    [ComponentId((short)EComponentId.ComponentA)]
-    internal class ComponentA : Component
+    [ProtoContract]
+    public class ResponseProto
     {
+        [ProtoMember(1)]
+        public string Message { get; set; }
     }
 
-    [ComponentId((short)EComponentId.ComponentB)]
-    [DependOn(typeof(ComponentA))]
-    internal class ComponentB : Component
+    [ProtoContract]
+    public class PushProto
     {
+        [ProtoMember(1)]
+        public string Message { get; set; }
     }
 }

@@ -128,9 +128,10 @@ namespace socket4net
             Console.WriteLine(format, arg0, arg1, arg2);
         }
 
-        public void Exception(Exception e)
+        public void Exception(string msg, Exception e)
         {
-            Console.WriteLine("{0}:{1}", e.InnerException != null ? e.InnerException.Message : e.Message, e.StackTrace);
+            Console.WriteLine("{0}:{1}:{2}", msg, e.InnerException != null ? e.InnerException.Message : e.Message,
+                e.StackTrace);
         }
 
         public void Shutdown()

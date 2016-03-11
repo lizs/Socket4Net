@@ -61,7 +61,7 @@ namespace socket4net
         /// <summary>
         ///     每帧执行一次
         /// </summary>
-        /// <returns></returns>
+        /// <returns>false表示协程未完毕，反之协程已完毕</returns>
         public bool Update()
         {
             if (Completed) return false;

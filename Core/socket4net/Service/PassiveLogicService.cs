@@ -74,7 +74,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                Logger.Ins.Exception(e);
+                Logger.Ins.Exception("PassiveLogicService", e);
             }
         }
 
@@ -92,7 +92,7 @@ namespace socket4net
                 }
                 catch (Exception e)
                 {
-                    Logger.Ins.Exception(e);
+                    Logger.Ins.Exception("PassiveLogicService", e);
                 }
 
                 return;
@@ -100,20 +100,18 @@ namespace socket4net
 
             try
             {
-                IJob job;
-                if (_jobs.TryDequeue(out job))
+                using (var watch = new AutoWatch(""))
                 {
-                    job.Do();
-                }
-                else
-                {
-                    if (Idle != null)
-                        Idle();
+                    IJob job;
+                    while (watch.ElapsedMilliseconds < 30 && _jobs.TryDequeue(out job))
+                    {
+                        job.Do();
+                    }
                 }
             }
             catch (Exception e)
             {
-                Logger.Ins.Exception(e);
+                Logger.Ins.Exception("PassiveLogicService", e);
             }
         }
 

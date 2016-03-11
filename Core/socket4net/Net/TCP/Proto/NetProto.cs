@@ -1,4 +1,4 @@
-#region MIT
+﻿#region MIT
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -23,40 +23,27 @@
 //   * */
 #endregion
 
-namespace socket4net.tests
+namespace socket4net
 {
-    internal enum EComponentId : short
+    /// <summary>
+    /// 网络包协议
+    /// 二进制流格式：Length(2 Byte) + Body(Length Byte) + ... + Length(2 Byte) + Body(Length Byte)
+    /// 
+    /// 注意：本层仅负责打包一个个完整的Body
+    ///           上层为Body提供反序列化方式（protobuf）
+    /// </summary>
+    public class NetProto
     {
-        ComponentA,
-        ComponentB,
+        public ushort Length { get; set; }
     }
 
-    //internal class ComponentId : Key<short>
-    //{
-    //    public ComponentId(short value)
-    //        : base(value)
-    //    {
-    //    }
 
-    //    public static implicit operator ComponentId(EComponentId cid)
-    //    {
-    //        return new ComponentId((short)cid);
-    //    }
-
-    //    public override string ToString()
-    //    {
-    //        return ((EComponentId) Value).ToString();
-    //    }
-    //}
-
-    [ComponentId((short)EComponentId.ComponentA)]
-    internal class ComponentA : Component
+    /// <summary>
+    ///     响应
+    /// </summary>
+    public class Response
     {
-    }
-
-    [ComponentId((short)EComponentId.ComponentB)]
-    [DependOn(typeof(ComponentA))]
-    internal class ComponentB : Component
-    {
+        public bool Succes { get; set; }
+        public byte[] Data { get; set; }
     }
 }

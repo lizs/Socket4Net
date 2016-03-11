@@ -1,4 +1,4 @@
-#region MIT
+﻿#region MIT
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -22,41 +22,33 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+using System.Threading.Tasks;
+using Proto;
+using socket4net;
 
-namespace socket4net.tests
+namespace Sample
 {
-    internal enum EComponentId : short
+    public class ChatSession : DispatchableSession
     {
-        ComponentA,
-        ComponentB,
-    }
+        public override Task<NetResult> HandleRequest(IDataProtocol rq)
+        {
+            return Task.FromResult(NetResult.Failure);
+        }
 
-    //internal class ComponentId : Key<short>
-    //{
-    //    public ComponentId(short value)
-    //        : base(value)
-    //    {
-    //    }
+        public override Task<bool> HandlePush(IDataProtocol ps)
+        {
+            var more = ps as DefaultDataProtocol;
+            switch ((EOps)more.Ops)
+            {
+                case EOps.Push:
+                    {
+                        var proto = PiSerializer.Deserialize<PushProto>(more.Data);
+                        Logger.Ins.Info(proto.Message);
+                        return Task.FromResult(true);
+                    }
+            }
 
-    //    public static implicit operator ComponentId(EComponentId cid)
-    //    {
-    //        return new ComponentId((short)cid);
-    //    }
-
-    //    public override string ToString()
-    //    {
-    //        return ((EComponentId) Value).ToString();
-    //    }
-    //}
-
-    [ComponentId((short)EComponentId.ComponentA)]
-    internal class ComponentA : Component
-    {
-    }
-
-    [ComponentId((short)EComponentId.ComponentB)]
-    [DependOn(typeof(ComponentA))]
-    internal class ComponentB : Component
-    {
+            return Task.FromResult(false);
+        }
     }
 }

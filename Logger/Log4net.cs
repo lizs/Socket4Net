@@ -145,9 +145,10 @@ namespace CustomLog
             _log.WarnFormat(format, arg0, arg1, arg2);
         }
 
-        public void Exception(Exception e)
+        public void Exception(string msg, Exception e)
         {
-            _log.FatalFormat("{0}:{1}", e.InnerException != null ? e.InnerException.Message : e.Message, e.StackTrace);
+            _log.FatalFormat("{0}:{1}:{2}", msg, e.InnerException != null ? e.InnerException.Message : e.Message,
+                e.StackTrace);
         }
 
         public void Shutdown()

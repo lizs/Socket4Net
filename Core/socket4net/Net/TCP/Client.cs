@@ -82,7 +82,6 @@ namespace socket4net
             get { return Launcher.Ins.NetService; }
         }
 
-
         public bool Connected
         {
             get { return _connected; }
@@ -258,17 +257,7 @@ namespace socket4net
         {
             NetService.Perform(action, param);
         }
-
-        public void Send<T>(T proto)
-        {
-            if (Session != null) Session.Send(proto);
-        }
-
-        public void Send(byte[] data)
-        {
-            if (Session != null) Session.Send(data);
-        }
-
+        
         public void Reconnect()
         {
             _underlineSocket = SocketExt.CreateTcpSocket();

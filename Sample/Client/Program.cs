@@ -23,39 +23,32 @@
 //   * */
 #endregion
 using System;
-using System.Linq;
 using CustomLog;
-using ecs;
-using node;
+using Proto;
 using socket4net;
 
 namespace Sample
 {
     internal class Program
     {
+        private static Client<ChatSession> ChatClient; 
+
         private static void Main(string[] args)
         {
-            // App.Config
-            var launcherCfg = LauncherConfig.LoadAs<ClientConfig>("Client.exe.config");
-
             // 创建并启动Launcher
-            var arg = new LauncherArg<ClientConfig>(launcherCfg, new Log4Net(launcherCfg.LogConfig.File, "Client"));
-            Obj.New<MyLauncher>(arg, true);
+            var arg = new LauncherArg(new Log4Net("log4net.config", "Client"));
+            Obj.New<Launcher>(arg, true);
+
+            // 创建并启动客户端
+            ChatClient = Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527), true); 
 
             Test();
 
+            // 销毁客户端
+            ChatClient.Destroy();
+
             // 销毁Launcher
             Launcher.Ins.Destroy();
-        }
-
-        private static ecs.Player Player
-        {
-            get { return PlayerMgr.Ins.FirstOrDefault(); }
-        }
-
-        private static SampleComponent Component
-        {
-            get { return Player.GetComponent<SampleComponent>(); }
         }
 
         private static void Test()
@@ -76,27 +69,32 @@ namespace Sample
                         break;
                     }
 
-                    case "ECHO":
+                    case "REQ":
                     {
-                        Component.Echo(msg);
-                        break;
-                    }
-
-                    case "ADD":
-                    {
-                        Component.Add();
-                        break;
-                    }
-
-                    case "DEL":
-                    {
-                        Component.Del();
+                        ChatClient.Session.RequestAsync(new DefaultDataProtocol
+                        {
+                            Ops = (short) EOps.Reqeust,
+                            Data = PiSerializer.Serialize(new RequestProto {Message = msg})
+                        }, (b, bytes) =>
+                        {
+                            if (!b)
+                                Logger.Ins.Error("Request failed!");
+                            else
+                            {
+                                var proto = PiSerializer.Deserialize<ResponseProto>(bytes);
+                                Logger.Ins.Info(proto.Message);
+                            }
+                        });
                         break;
                     }
 
                     default:
                     {
-                        Component.Broadcast(msg);
+                        ChatClient.Session.Push(new DefaultDataProtocol
+                        {
+                            Ops = (short) EOps.Push,
+                            Data = PiSerializer.Serialize(new PushProto {Message = msg})
+                        });
                         break;
                     }
                 }

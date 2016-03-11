@@ -22,8 +22,7 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
-using System;
-using ecs;
+
 using NUnit.Framework;
 
 namespace socket4net.tests

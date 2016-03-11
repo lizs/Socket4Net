@@ -23,33 +23,53 @@
 //   * */
 #endregion
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace socket4net
 {
-    public interface ILog
+    public class Scheduler : Obj
     {
-        void Debug(object message);
-        void Debug(string format, object arg0);
-        void Debug(string format, object arg0, object arg1);
-        void Debug(string format, object arg0, object arg1, object arg2);
-        void Error(object message);
-        void Error(string format, object arg0);
-        void Error(string format, object arg0, object arg1);
-        void Error(string format, object arg0, object arg1, object arg2);
-        void Fatal(object message);
-        void Fatal(string format, object arg0);
-        void Fatal(string format, object arg0, object arg1);
-        void Fatal(string format, object arg0, object arg1, object arg2);
-        void Info(object message);
-        void Info(string format, object arg0);
-        void Info(string format, object arg0, object arg1);
-        void Info(string format, object arg0, object arg1, object arg2);
-        void Warn(object message);
-        void Warn(string format, object arg0);
-        void Warn(string format, object arg0, object arg1);
-        void Warn(string format, object arg0, object arg1, object arg2);
-        void Exception(string msg, Exception e);
+        protected readonly Dictionary<Action, TimerWrapper> Timers = new Dictionary<Action, TimerWrapper>();
 
-        void Shutdown();
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Clear();
+        }
+
+        public void Clear()
+        {
+            foreach (var timer in Timers.Select(x => x.Value))
+                timer.Stop();
+            Timers.Clear();
+        }
+
+        public virtual void InterlnalInvokeRepeating(Action action, uint delay, uint period)
+        {
+            CancelInvoke(action);
+
+            var timer = TimerWrapper.New(Name, action, delay, period);
+            Timers.Add(action, timer);
+            timer.Start();
+        }
+
+        public virtual void InterlnalInvoke(Action action, uint delay)
+        {
+            CancelInvoke(action);
+
+            var timer = TimerWrapper.New(Name, action, delay);
+            Timers.Add(action, timer);
+            timer.Start();
+        }
+
+        public void InterlnalCancelInvoke(Action action)
+        {
+            if (!Timers.ContainsKey(action)) return;
+
+            var timer = Timers[action];
+            timer.Stop();
+            Timers.Remove(action);
+        }
     }
 }

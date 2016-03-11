@@ -1,4 +1,4 @@
-#region MIT
+﻿#region MIT
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -22,41 +22,35 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+using System.Text;
+using ProtoBuf;
 
-namespace socket4net.tests
+namespace socket4net
 {
-    internal enum EComponentId : short
+    [ProtoContract]
+    public class NetPackage
     {
-        ComponentA,
-        ComponentB,
-    }
+        [ProtoMember(1)]
+        public ERpc Type { get; set; }
 
-    //internal class ComponentId : Key<short>
-    //{
-    //    public ComponentId(short value)
-    //        : base(value)
-    //    {
-    //    }
+        [ProtoMember(2)]
+        public ushort Serial { get; set; }
 
-    //    public static implicit operator ComponentId(EComponentId cid)
-    //    {
-    //        return new ComponentId((short)cid);
-    //    }
+        [ProtoMember(3)]
+        public byte[] Data { get; set; }
 
-    //    public override string ToString()
-    //    {
-    //        return ((EComponentId) Value).ToString();
-    //    }
-    //}
+        [ProtoMember(4)]
+        public bool Success { get; set; }
 
-    [ComponentId((short)EComponentId.ComponentA)]
-    internal class ComponentA : Component
-    {
-    }
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine();
+            sb.AppendLine("Type : " + Type);
+            sb.AppendLine("Serial : " + Serial);
+            sb.AppendFormat("Data length : {0}\r\n", Data.IsNullOrEmpty() ? 0 : Data.Length);
 
-    [ComponentId((short)EComponentId.ComponentB)]
-    [DependOn(typeof(ComponentA))]
-    internal class ComponentB : Component
-    {
+            return sb.ToString();
+        }
     }
 }
