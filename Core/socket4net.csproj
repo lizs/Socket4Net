@@ -84,9 +84,9 @@
     <Compile Include="objects\Scheduler\BatchedScheduler.cs" />
     <Compile Include="objects\ObjSchedule.cs" />
     <Compile Include="objects\Scheduler\Flusher.cs" />
-    <Compile Include="socket4net\Net\TCP\Session\DefaultDispatcher.cs" />
+    <Compile Include="socket4net\Net\TCP\Session\DefaultDataProtocol.cs" />
     <Compile Include="socket4net\Net\TCP\Session\IDispatchableSession.cs" />
-    <Compile Include="socket4net\Net\TCP\Session\IDispatcher.cs" />
+    <Compile Include="socket4net\Net\TCP\Session\IDataProtocol.cs" />
     <Compile Include="socket4net\Net\TCP\Session\ISession.cs" />
     <Compile Include="util\Convertor.cs" />
     <Compile Include="util\Uid.cs" />

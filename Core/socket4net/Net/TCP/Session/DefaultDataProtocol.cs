@@ -15,12 +15,4 @@ namespace socket4net
             return string.Format("[{0}:{1}bytes]", Ops, Data.IsNullOrEmpty() ? 0 : Data.Length);
         }
     }
-
-    public class DefaultDispatcher : IDispatcher
-    {
-        public IDataProtocol Unpack(byte[] data)
-        {
-            return PiSerializer.Deserialize<DefaultDataProtocol>(data);
-        }
-    }
 }

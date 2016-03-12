@@ -37,19 +37,19 @@ namespace socket4net
         private readonly ConcurrentDictionary<ushort, Action<bool, byte[]>> _requestPool
             = new ConcurrentDictionary<ushort, Action<bool, byte[]>>();
 
-        private IDispatcher _dispatcher = new DefaultDispatcher();
-        protected IDispatcher Dispatcher
+        private Func<byte[], IDataProtocol> _dataParser = data => PiSerializer.Deserialize<DefaultDataProtocol>(data);
+        protected Func<byte[], IDataProtocol> DataParser
         {
-            get { return _dispatcher; }
-            set { _dispatcher = value; }
+            get { return _dataParser; }
+            set { _dataParser = value; }
         }
 
-        private NetPackage PackRequest<T>(T proto) where T : IDataProtocol
+        private static NetPackage PackRequest<T>(T proto) where T : IDataProtocol
         {
             return new NetPackage { Type = ERpc.Request, Data = PiSerializer.Serialize(proto) };
         }
 
-        private NetPackage PackPush<T>(T proto) where T : IDataProtocol
+        private static NetPackage PackPush<T>(T proto) where T : IDataProtocol
         {
             return new NetPackage { Type = ERpc.Push, Data = PiSerializer.Serialize(proto) };
         }
@@ -170,7 +170,7 @@ namespace socket4net
                 {
                     try
                     {
-                        var rq = Dispatcher.Unpack(pack.Data);
+                        var rq = DataParser(pack.Data);
 #if NET35
                         var rp = HandleRequest(rq);
 #else
@@ -219,7 +219,7 @@ namespace socket4net
                 {
                     try
                     {
-                        var rp = Dispatcher.Unpack(pack.Data);
+                        var rp = DataParser(pack.Data);
 #if NET35
                         var success = HandlePush(rp);
 #else
