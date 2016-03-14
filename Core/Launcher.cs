@@ -39,6 +39,11 @@ namespace socket4net
         public bool PassiveLogicServiceEnabled { get; private set; }
         public ILog Logger { get; private set; }
         public Guid Id { get; private set; }
+
+        public static LauncherArg Default
+        {
+            get { return new LauncherArg(); }
+        }
     }
 
     public class Launcher : Obj

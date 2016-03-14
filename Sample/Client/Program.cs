@@ -36,8 +36,7 @@ namespace Sample
         private static void Main(string[] args)
         {
             // 创建并启动Launcher
-            var arg = new LauncherArg(new Log4Net("log4net.config", "Client"));
-            Obj.New<Launcher>(arg, true);
+            Obj.New<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动客户端
             ChatClient = Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527), true); 
