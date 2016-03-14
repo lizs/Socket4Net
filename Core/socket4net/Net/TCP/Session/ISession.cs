@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using System.Net.Sockets;
+#if NET45
 using System.Threading.Tasks;
+#endif
 
 namespace socket4net
 {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if NET45
 using System.Threading.Tasks;
+#endif
 
 namespace socket4net
 {
@@ -30,8 +32,8 @@ namespace socket4net
         Task<bool> HandlePush(IDataProtocol ps);
         Task<NetResult> RequestAsync<T>(T proto) where T : IDataProtocol;
 #else
-        NetResult HandleRequest(IDataProtocol rq);
-        bool HandlePush(IDataProtocol ps);
+        void HandleRequest(IDataProtocol rq, Action<NetResult> cb);
+        void HandlePush(IDataProtocol ps, Action<bool> cb);
 #endif
         void RequestAsync<T>(T proto, Action<bool, byte[]> cb) where T : IDataProtocol;
         void Push<T>(T proto) where T : IDataProtocol;

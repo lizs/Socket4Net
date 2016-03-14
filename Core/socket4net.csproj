@@ -84,6 +84,7 @@
     <Compile Include="objects\Scheduler\BatchedScheduler.cs" />
     <Compile Include="objects\ObjSchedule.cs" />
     <Compile Include="objects\Scheduler\Flusher.cs" />
+    <Compile Include="socket4net\Concurrent\ConcurrentDictionary.cs" />
     <Compile Include="socket4net\Net\TCP\Session\DefaultDataProtocol.cs" />
     <Compile Include="socket4net\Net\TCP\Session\IDispatchableSession.cs" />
     <Compile Include="socket4net\Net\TCP\Session\IDataProtocol.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="socket4net\Net\TCP\Proto\NetProto.cs" />
     <Compile Include="socket4net\Net\TCP\Proto\RpcProto.cs" />
     <Compile Include="socket4net\Concurrent\BlockingCollection.cs" />
-    <Compile Include="socket4net\Concurrent\ConcurrentDictionary.cs" />
     <Compile Include="socket4net\Concurrent\ConcurrentQueue.cs" />
     <Compile Include="socket4net\Net\TCP\CircularBuffer.cs" />
     <Compile Include="socket4net\Net\TCP\Client.cs" />

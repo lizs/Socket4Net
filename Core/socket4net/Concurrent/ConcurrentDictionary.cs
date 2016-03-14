@@ -22,22 +22,25 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+
 #if NET35
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace socket4net
 {
     /// <summary>
-    /// 并发字典的实现非常简陋，只是为了兼容.net3.5
+    /// 并发字典
+    /// 兼容.net3.5
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class ConcurrentDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
+    public class ConcurrentDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         private readonly Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
         private readonly object _syncRoot = new object();
-
+       
         public int Count
         {
             get
@@ -49,12 +52,40 @@ namespace socket4net
             }
         }
 
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
         public TValue this[TKey key]
         {
             get
             {
                 TValue value;
                 return TryGetValue(key, out value) ? value : default(TValue);
+            }
+            set { TryAdd(key, value); }
+        }
+
+        public ICollection<TKey> Keys
+        {
+            get
+            {
+                lock (_syncRoot)
+                {
+                    return _dictionary.Keys;
+                }
+            }
+        }
+
+        public ICollection<TValue> Values
+        {
+            get
+            {
+                lock (_syncRoot)
+                {
+                    return _dictionary.Values;
+                }
             }
         }
 
@@ -141,6 +172,30 @@ namespace socket4net
         {
             return GetEnumerator();
         }
+
+#region not implemented
+
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            throw new NotImplementedException("");
+        }
+
+        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
+        {
+            throw new NotImplementedException("");
+        }
+
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
+        {
+            throw new NotImplementedException("");
+        }
+
+        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
+        {
+            throw new NotImplementedException("");
+        }
+
+        #endregion
     }
 }
 #endif

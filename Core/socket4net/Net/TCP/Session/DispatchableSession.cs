@@ -172,14 +172,20 @@ namespace socket4net
                     {
                         var rq = DataParser(pack.Data);
 #if NET35
-                        var rp = HandleRequest(rq);
+                        HandleRequest(rq, rp =>
+                        {
+                            if (rp == null)
+                                Response(false, null, pack.Serial);
+                            else
+                                Response(rp.Key, rp.Value, pack.Serial);
+                        });
 #else
                         var rp = await HandleRequest(rq);
-#endif
                         if (rp == null)
                             Response(false, null, pack.Serial);
                         else
                             Response(rp.Key, rp.Value, pack.Serial);
+#endif
                     }
                     catch (Exception e)
                     {
@@ -219,14 +225,18 @@ namespace socket4net
                 {
                     try
                     {
-                        var rp = DataParser(pack.Data);
+                        var ps = DataParser(pack.Data);
 #if NET35
-                        var success = HandlePush(rp);
+                        HandlePush(ps, b =>
+                        {
+                            if (!b)
+                                Logger.Ins.Error("Handle push {0} failed!", ps);
+                        });
 #else
-                        var success = await HandlePush(rp);
-#endif
+                        var success = await HandlePush(ps);
                         if (!success)
-                            Logger.Ins.Error("Handle push {0} failed!", rp);
+                            Logger.Ins.Error("Handle push {0} failed!", ps);
+#endif
                     }
                     catch (Exception e)
                     {
