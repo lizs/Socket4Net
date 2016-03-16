@@ -48,6 +48,10 @@ namespace socket4net
         public const ushort DefaultReceiveBufferSize = 4 * 1024;
         protected const ushort HeaderSize = sizeof(ushort);
 
+        // 默认加密、解密方法（默认不加密）
+        protected Func<byte[], byte[]> Encoder = bytes => bytes;
+        protected Func<byte[], byte[]> Decoder = bytes => bytes; 
+
         public override string Name
         {
             get { return string.Format("{0}:{1}", GetType().Name, Id); }
@@ -175,8 +179,9 @@ namespace socket4net
         private void Send(byte[] data)
         {
             if (_closed || data == null || data.Length == 0) return;
+            var encoded = Encoder(data);
 
-            var segments = Split(data, PackageMaxSize);
+            var segments = Split(encoded, PackageMaxSize);
 
             // 头包
             Send(segments[0], (byte)segments.Length);
@@ -323,7 +328,8 @@ namespace socket4net
         private void Dispatch()
         {
             var pack = _packer.Packages.Dequeue();
-            HostPeer.PerformInLogic(() => Dispatch(pack));
+            var decoded = Decoder(pack);
+            HostPeer.PerformInLogic(() => Dispatch(decoded));
         }
 
         private void ReceiveNext()

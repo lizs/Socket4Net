@@ -22,14 +22,37 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
-using System.Threading.Tasks;
+
+using System;
+using System.Text;
 using Proto;
 using socket4net;
+using System.Security.Cryptography;
+#if NET45
+using System.Threading.Tasks;
+#endif
 
 namespace Sample
 {
     public class ChatSession : DispatchableSession
     {
+        private DES _des;
+        private readonly byte[] _desKey = Encoding.Default.GetBytes("12345678");
+        protected override void OnInit(ObjArg arg)
+        {
+            base.OnInit(arg);
+
+            // 设置加密、解密方法
+            _des = DES.Create();
+
+            var encryptor = _des.CreateEncryptor(_desKey, _desKey);
+            Encoder = bytes => encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
+
+            var decryptor = _des.CreateDecryptor(_desKey, _desKey);
+            Decoder = bytes => decryptor.TransformFinalBlock(bytes, 0, bytes.Length);
+        }
+        
+#if NET45
         public override Task<NetResult> HandleRequest(IDataProtocol rq)
         {
             return Task.FromResult(NetResult.Failure);
@@ -50,5 +73,29 @@ namespace Sample
 
             return Task.FromResult(false);
         }
+#else
+
+        public override void HandleRequest(IDataProtocol rq, Action<NetResult> cb)
+        {
+            cb(NetResult.Failure);
+        }
+
+        public override void HandlePush(IDataProtocol ps, Action<bool> cb)
+        {
+            var more = ps as DefaultDataProtocol;
+            switch ((EOps)more.Ops)
+            {
+                case EOps.Push:
+                    {
+                        var proto = PiSerializer.Deserialize<PushProto>(more.Data);
+                        Logger.Ins.Info(proto.Message);
+                        cb(true);
+                        return;
+                    }
+            }
+
+            cb(false);
+        }
+#endif
     }
 }

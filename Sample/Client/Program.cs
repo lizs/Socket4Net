@@ -23,7 +23,6 @@
 //   * */
 #endregion
 using System;
-using CustomLog;
 using Proto;
 using socket4net;
 
@@ -31,7 +30,7 @@ namespace Sample
 {
     internal class Program
     {
-        private static Client<ChatSession> ChatClient; 
+        private static Client<ChatSession> _chatClient; 
 
         private static void Main(string[] args)
         {
@@ -39,12 +38,12 @@ namespace Sample
             Obj.New<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动客户端
-            ChatClient = Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527), true); 
+            _chatClient = Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527), true); 
 
             Test();
 
             // 销毁客户端
-            ChatClient.Destroy();
+            _chatClient.Destroy();
 
             // 销毁Launcher
             Launcher.Ins.Destroy();
@@ -70,7 +69,7 @@ namespace Sample
 
                     case "REQ":
                     {
-                        ChatClient.Session.RequestAsync(new DefaultDataProtocol
+                        _chatClient.Session.RequestAsync(new DefaultDataProtocol
                         {
                             Ops = (short) EOps.Reqeust,
                             Data = PiSerializer.Serialize(new RequestProto {Message = msg})
@@ -89,7 +88,7 @@ namespace Sample
 
                     default:
                     {
-                        ChatClient.Session.Push(new DefaultDataProtocol
+                        _chatClient.Session.Push(new DefaultDataProtocol
                         {
                             Ops = (short) EOps.Push,
                             Data = PiSerializer.Serialize(new PushProto {Message = msg})

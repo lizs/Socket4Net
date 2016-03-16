@@ -77,7 +77,7 @@ namespace socket4net
             var more = arg.As<LauncherArg>();
 
             // logger
-            GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogger, more.Logger);
+            GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogger, more.Logger ?? new DefaultLogger());
 
             // logic service
             var serviceArg = new ServiceArg(this, 10000, 10);
