@@ -52,10 +52,10 @@ for example:
 ```
 
 ####Request/Push api
-Reqeust means that we need an response from the remote peer, but push just tell the remote peer something happened,<br>
+Reqeust means that we need a response from the remote peer, but push just tell the remote peer something happened,<br>
 needn't an response.<br>
 
-So, in the Request api, an callback provided(.net3.5) or an Task<NetResult>(.net4.5) async returned, this callback or<br>
+So, in the Request api, a callback provided(.net3.5) or a Task<NetResult>(.net4.5) async returned, this callback or<br>
 Task<NetResult> tell the caller whether this request is responsed correctly.
 ```C#
       // multi push
@@ -70,8 +70,8 @@ Task<NetResult> tell the caller whether this request is responsed correctly.
       void Push<T>(T proto) where T : IDataProtocol;
 ```
 Every proto is an protobuf-net's `ProtoContact`, it can be an socket4net's `DefaultDataProtocol`, or any custom protocol<br> that implemented from `IDataProtocol`.
-    
-for example, socket4net's default data protocol:
+
+For example, socket4net's default data protocol:
 ```C#
     [ProtoContract]
     public class DefaultDataProtocol : IDataProtocol
@@ -83,6 +83,21 @@ for example, socket4net's default data protocol:
     }
 ```
 
+#### Security
+By default, socket4net doesn't encrypt your transformed data, but you can change this by provide an `Encryptor`/`Decryptor` method
+pair in your custom session's `OnInit` method. 
+
+For example:
+```C#
+    var key = Encoding.Default.GetBytes("12345678");
+    var des = DES.Create();
+
+    var encryptor = des.CreateEncryptor(key, key);
+    Encoder = bytes => encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
+
+    var decryptor = des.CreateDecryptor(key, key);
+    Decoder = bytes => decryptor.TransformFinalBlock(bytes, 0, bytes.Length);
+```
 ##Question
 QQ group ：http://jq.qq.com/?_wv=1027&k=VptNja
 <br>e-mail : lizs4ever@163.com
