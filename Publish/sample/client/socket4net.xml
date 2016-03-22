@@ -1,0 +1,1398 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>socket4net</name>
+    </assembly>
+    <members>
+        <member name="T:socket4net.BatchedScheduler">
+            <summary>
+                Batch定时器调度器
+            </summary>
+        </member>
+        <member name="T:socket4net.Obj">
+            <summary>
+                对象基类
+            </summary>
+        </member>
+        <member name="T:socket4net.IObj">
+            <summary>
+                接口仅作代码组织用
+            </summary>
+        </member>
+        <member name="M:socket4net.IObj.CompareTo(socket4net.IObj)">
+            <summary>
+                比较
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.IObj.GetAncestor``1">
+            <summary>
+                获取根
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:socket4net.IObj.InstanceId">
+            <summary>
+                实例动态Id
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Name">
+            <summary>
+                名字
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Priority">
+            <summary>
+                调度优先级（类似Unity中的Layer）
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.WaitFor(System.UInt32)">
+            <summary>
+                产生一个在逻辑线程等待n毫秒的枚举器
+                用在协程中
+            </summary>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.ClearTimers">
+            <summary>
+                清理调度器
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.InvokeRepeating(System.Action,System.UInt32,System.UInt32)">
+            <summary>
+                延时delay，以period为周期重复执行action
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.UInt32)">
+            <summary>
+                延时delay，执行action
+            </summary>
+            <param name="action"></param>
+            <param name="delay"></param>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.DateTime)">
+            <summary>
+                在when时间点执行action
+            </summary>
+            <param name="action"></param>
+            <param name="when"></param>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                每天 hour:min:s 执行action
+                如：每天20:15执行action，此时 hour == 20 min == 15 s == 0
+            </summary>
+            <param name="action"></param>
+            <param name="hour"></param>
+            <param name="min"></param>
+            <param name="s"></param>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.TimeSpan)">
+            <summary>
+                每天 time 执行action
+                注：time并非间隔
+            </summary>
+            <param name="action"></param>
+            <param name="time"></param>
+        </member>
+        <member name="M:socket4net.Obj.CancelInvoke(System.Action)">
+            <summary>
+                取消action的调度
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.Obj.SetUserData(System.Object)">
+            <summary>
+            设置自定义数据
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:socket4net.Obj.#ctor">
+            <summary>
+                赋予运行时实例id
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.CompareTo(socket4net.IObj)">
+            <summary>
+                根据优先级比较两对象
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.ToString">
+            <summary>
+                重写ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.New``1(socket4net.ObjArg,System.Boolean)">
+            <summary>
+                创建对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.New(System.Type,socket4net.ObjArg,System.Boolean)">
+            <summary>
+                非泛型创建
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.New``1(System.Type,socket4net.ObjArg,System.Boolean)">
+            <summary>
+                非泛型创建
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Init(socket4net.ObjArg)">
+            <summary>
+                初始
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Start">
+            <summary>
+                启动
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Destroy">
+            <summary>
+                销毁
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Born">
+            <summary>
+                重置
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.GetAncestor``1">
+            <summary>
+                获取指定类型的根（递归获取）
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="F:socket4net.Obj._seed">
+            <summary>
+                实例id种子
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.InstanceId">
+            <summary>
+                实例动态id
+                仅运行时唯一
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Name">
+            <summary>
+                名字
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Priority">
+            <summary>
+                调度优先级（类似Unity中的Layer）
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.UserData">
+            <summary>
+            附带自定义数据
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Owner">
+            <summary>
+                拥有者
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.OwnerDescription">
+            <summary>
+                拥有者描述
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Initialized">
+            <summary>
+                是否已初始化
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Started">
+            <summary>
+                是否已启动
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Destroyed">
+            <summary>
+                是否已销毁
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Fresh">
+            <summary>
+                是否新生
+            </summary>
+        </member>
+        <member name="T:socket4net.ConcurrentDictionary`2">
+            <summary>
+            并发字典
+            兼容.net3.5
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="T:socket4net.IDataProtocol">
+            <summary>
+                数据协议
+                网络数据按照该协议解析
+            </summary>
+        </member>
+        <member name="T:socket4net.IDispatchableSession">
+            <summary>
+                diapatchable session
+                dispath request/push by DispatchProto
+            </summary>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.ISession})">
+            <summary>
+            多播
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <param name="sessions"></param>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.Broadcast``1(``0)">
+            <summary>
+            广播
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+        </member>
+        <member name="F:socket4net.SessionCloseReason.Replaced">
+            <summary>
+            比如同一账号使用不同会话时，会顶掉之前会话
+            </summary>
+        </member>
+        <member name="M:socket4net.Convertor.To``1(System.String)">
+            <summary>
+                转成数字或枚举
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.Coroutine">
+            <summary>
+                协程
+            </summary>
+        </member>
+        <member name="M:socket4net.Coroutine.Update">
+            <summary>
+                每帧执行一次
+            </summary>
+            <returns>false表示协程未完毕，反之协程已完毕</returns>
+        </member>
+        <member name="M:socket4net.Coroutine.Process(System.Collections.IEnumerator)">
+            <summary>
+                处理枚举器
+            </summary>
+            <param name="enumerator"></param>
+            <returns>
+                False表示当前无任务
+                True表示还有任务需处理
+            </returns>
+        </member>
+        <member name="T:socket4net.EmptyLogger">
+            <summary>
+                空日志
+            </summary>
+        </member>
+        <member name="T:socket4net.Mgr`1">
+            <summary>
+                对象管理器
+            </summary>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="T:socket4net.EmptyArg">
+            <summary>
+                空参数
+            </summary>
+        </member>
+        <member name="T:socket4net.UniqueObj`1">
+            <summary>
+                拥有唯一Id（容器内唯一，不一定是Guid）
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:socket4net.UniqueObj`1.Id">
+            <summary>
+                唯一Id
+            </summary>
+        </member>
+        <member name="P:socket4net.UniqueObj`1.Name">
+            <summary>
+                名字
+            </summary>
+        </member>
+        <member name="T:socket4net.AutoWatch">
+            <summary>
+                自动计时器
+            </summary>
+        </member>
+        <member name="T:socket4net.Value">
+            <summary>
+                bytes反序列化成Value
+            </summary>
+        </member>
+        <member name="T:socket4net.ValueProto`1">
+            <summary>
+                包装一个值以用在序列化
+                注意：Value并不是IProtobufInstance
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.ValueProto`1.#ctor">
+            <summary>
+                for pb
+            </summary>
+        </member>
+        <member name="T:socket4net.PiSerializer">
+            <summary>
+                基于protobuf的序列化器
+                注：尽可能使用泛型接口
+            </summary>
+        </member>
+        <member name="M:socket4net.PiSerializer.Serialize``1(``0)">
+            <summary>
+                序列化一个protobuf实例
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.PiSerializer.Deserialize``1(System.Byte[])">
+            <summary>
+                反序列化为一个pb实例
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.PiSerializer.SerializeValue``1(``0)">
+            <summary>
+                序列化一个值
+                比如：int, float, long ...
+            </summary>
+            <typeparam name="T">值类型</typeparam>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])" -->
+        <member name="M:socket4net.PiSerializer.Deserialize(System.Type,System.Byte[])">
+            <summary>
+                非泛型方式的反序列化
+                仅用于pb实例
+            </summary>
+        </member>
+        <member name="P:socket4net.Launcher.LogicService">
+            <summary>
+                逻辑服务
+            </summary>
+        </member>
+        <member name="P:socket4net.Launcher.NetService">
+            <summary>
+                网络服务
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage
+            </summary>
+            <example><code>
+            [CanBeNull] public object Test() { return null; }
+            public void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>
+            </summary>
+            <example><code>
+            [NotNull] public object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            public void ShowError(string message, params object[] args) { /* do something */ }
+            public void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:socket4net.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:socket4net.Annotations.InvokerParameterNameAttribute">
+            <summary>
+            Indicates that the function argument should be string literal and match one
+            of the parameters of the caller function. For example, ReSharper annotates
+            the parameter of <see cref="T:System.ArgumentNullException"/>
+            </summary>
+            <example><code>
+            public void Foo(string param) {
+              if (param == null)
+                throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
+            }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+             Indicates that the method is contained in a type that implements
+             <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface
+             and this method is used to notify that some property value changed
+             </summary>
+             <remarks>
+             The method should be non-static and conform to one of the supported signatures:
+             <list>
+             <item><c>NotifyChanged(string)</c></item>
+             <item><c>NotifyChanged(params string[])</c></item>
+             <item><c>NotifyChanged{T}(Expression{Func{T}})</c></item>
+             <item><c>NotifyChanged{T,U}(Expression{Func{T,U}})</c></item>
+             <item><c>SetProperty{T}(ref T, T, string)</c></item>
+             </list>
+             </remarks>
+             <example><code>
+             public class Foo : INotifyPropertyChanged {
+               public event PropertyChangedEventHandler PropertyChanged;
+               [NotifyPropertyChangedInvocator]
+               protected virtual void NotifyChanged(string propertyName) { ... }
+            
+               private string _name;
+               public string Name {
+                 get { return _name; }
+                 set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+               }
+             }
+             </code>
+             Examples of generated notifications:
+             <list>
+             <item><c>NotifyChanged("Property")</c></item>
+             <item><c>NotifyChanged(() =&gt; Property)</c></item>
+             <item><c>NotifyChanged((VM x) =&gt; x.Property)</c></item>
+             <item><c>SetProperty(ref myField, value, "Property")</c></item>
+             </list>
+             </example>
+        </member>
+        <member name="T:socket4net.Annotations.ContractAnnotationAttribute">
+            <summary>
+            Describes dependency between method input and output
+            </summary>
+            <syntax>
+            <p>Function Definition Table syntax:</p>
+            <list>
+            <item>FDT      ::= FDTRow [;FDTRow]*</item>
+            <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
+            <item>Input    ::= ParameterName: Value [, Input]*</item>
+            <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
+            <item>Value    ::= true | false | null | notnull | canbenull</item>
+            </list>
+            If method has single input parameter, it's name could be omitted.<br/>
+            Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same)
+            for method output means that the methos doesn't return normally.<br/>
+            <c>canbenull</c> annotation is only applicable for output parameters.<br/>
+            You can use multiple <c>[ContractAnnotation]</c> for each FDT row,
+            or use single attribute with rows separated by semicolon.<br/>
+            </syntax>
+            <examples><list>
+            <item><code>
+            [ContractAnnotation("=> halt")]
+            public void TerminationMethod()
+            </code></item>
+            <item><code>
+            [ContractAnnotation("halt &lt;= condition: false")]
+            public void Assert(bool condition, string text) // regular assertion method
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null => true")]
+            public bool IsNullOrEmpty(string s) // string.IsNullOrEmpty()
+            </code></item>
+            <item><code>
+            // A method that returns null if the parameter is null, and not null if the parameter is not null
+            [ContractAnnotation("null => null; notnull => notnull")]
+            public object Transform(object data) 
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
+            public bool TryParse(string s, out Person result)
+            </code></item>
+            </list></examples>
+        </member>
+        <member name="T:socket4net.Annotations.LocalizationRequiredAttribute">
+            <summary>
+            Indicates that marked element should be localized or not
+            </summary>
+            <example><code>
+            [LocalizationRequiredAttribute(true)]
+            public class Foo {
+              private string str = "my string"; // Warning: Localizable string
+            }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.CannotApplyEqualityOperatorAttribute">
+            <summary>
+            Indicates that the value of the marked type (or its derivatives)
+            cannot be compared using '==' or '!=' operators and <c>Equals()</c>
+            should be used instead. However, using '==' or '!=' for comparison
+            with <c>null</c> is always permitted.
+            </summary>
+            <example><code>
+            [CannotApplyEqualityOperator]
+            class NoEquality { }
+            class UsesNoEquality {
+              public void Test() {
+                var ca1 = new NoEquality();
+                var ca2 = new NoEquality();
+                if (ca1 != null) { // OK
+                  bool condition = ca1 == ca2; // Warning
+                }
+              }
+            }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.BaseTypeRequiredAttribute">
+            <summary>
+            When applied to a target attribute, specifies a requirement for any type marked
+            with the target attribute to implement or inherit specific type or types.
+            </summary>
+            <example><code>
+            [BaseTypeRequired(typeof(IComponent)] // Specify requirement
+            public class ComponentAttribute : Attribute { }
+            [Component] // ComponentAttribute requires implementing IComponent interface
+            public class MyComponent : IComponent { }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly
+            (e.g. via reflection, in external library), so this symbol
+            will not be marked as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper
+            to not mark symbols marked with such attributes as unused
+            (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="F:socket4net.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used</summary>
+        </member>
+        <member name="F:socket4net.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member</summary>
+        </member>
+        <member name="F:socket4net.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:socket4net.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type</summary>
+        </member>
+        <member name="T:socket4net.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly
+            when marked with <see cref="T:socket4net.Annotations.MeansImplicitUseAttribute"/>
+            or <see cref="T:socket4net.Annotations.UsedImplicitlyAttribute"/>
+            </summary>
+        </member>
+        <member name="F:socket4net.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used</summary>
+        </member>
+        <member name="F:socket4net.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used</summary>
+        </member>
+        <member name="T:socket4net.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.InstantHandleAttribute">
+            <summary>
+            Tells code analysis engine if the parameter is completely handled
+            when the invoked method is on stack. If the parameter is a delegate,
+            indicates that delegate is executed while the method is executed.
+            If the parameter is an enumerable, indicates that it is enumerated
+            while the method is executed
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>
+            </summary>
+            <example><code>
+            [Pure] private int Multiply(int x, int y) { return x * y; }
+            public void Foo() {
+              const int a = 2, b = 2;
+              Multiply(a, b); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.PathReferenceAttribute">
+            <summary>
+            Indicates that a parameter is a path to a file or a folder
+            within a web project. Path can be relative or absolute,
+            starting from web root (~)
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcActionAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC action. If applied to a method, the MVC action name is calculated
+            implicitly from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcAreaAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcControllerAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC controller. If applied to a method,
+            the MVC controller name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcMasterAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC Master.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcModelTypeAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC model type.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, Object)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcPartialViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC partial view. If applied to a method,
+            the MVC partial view name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcSupressViewErrorAttribute">
+            <summary>
+            ASP.NET MVC attribute. Allows disabling all inspections
+            for MVC views within a class or a method.
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcDisplayTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcEditorTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+            Use this attribute for custom wrappers similar to
+            <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC view. If applied to a method, the MVC view name is calculated implicitly
+            from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(Object)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.Annotations.AspMvcActionSelectorAttribute">
+            <summary>
+            ASP.NET MVC attribute. When applied to a parameter of an attribute,
+            indicates that this parameter is an MVC action name
+            </summary>
+            <example><code>
+            [ActionName("Foo")]
+            public ActionResult Login(string returnUrl) {
+              ViewBag.ReturnUrl = Url.Action("Foo"); // OK
+              return RedirectToAction("Bar"); // Error: Cannot resolve action
+            }
+            </code></example>
+        </member>
+        <member name="T:socket4net.Annotations.RazorSectionAttribute">
+            <summary>
+            Razor attribute. Indicates that a parameter or a method is a Razor section.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
+            </summary>
+        </member>
+        <member name="T:socket4net.CoroutineScheduler">
+            <summary>
+                协程调度器
+            </summary>
+        </member>
+        <member name="T:socket4net.TimerWrapper">
+            <summary>
+            基于socket4net逻辑服务的定时器
+            </summary>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Create``1(socket4net.UniqueObjArg{`1},System.Boolean)">
+            <summary>
+                创建
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Create(System.Type,socket4net.UniqueObjArg{`1},System.Boolean)">
+            <summary>
+                非泛型创建
+            </summary>
+            <param name="type"></param>
+            <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Create``1(System.Type,socket4net.UniqueObjArg{`1},System.Boolean)">
+            <summary>
+                非泛型创建，并cast成T
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="type"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.CreateDefault``1(socket4net.UniqueObjArg{`1},System.Boolean)">
+            <summary>
+                创建默认
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.CreateDefault(System.Type,socket4net.UniqueObjArg{`1},System.Boolean)">
+            <summary>
+                非泛型创建默认
+            </summary>
+            <param name="type"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.CreateDefault``1(System.Type,socket4net.UniqueObjArg{`1},System.Boolean)">
+            <summary>
+                非泛型创建默认，并cast成T
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="type"></param>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.UniqueMgr`2">
+            <summary>
+                对象管理器
+                对象之间以id唯一区分
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="T:socket4net.GlobalVarPool">
+            <summary>
+                全局变量池
+            </summary>
+        </member>
+        <member name="T:socket4net.IPeer">
+            <summary>
+            终端
+            对服务器、客户端的抽象
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.AutoReconnectEnabled">
+            <summary>
+                是否在断开连接之后自动重连
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.ReconnectRetryDelay">
+            <summary>
+                重连重试延时
+            </summary>
+        </member>
+        <member name="T:socket4net.NetProto">
+            <summary>
+            网络包协议
+            二进制流格式：Length(2 Byte) + Body(Length Byte) + ... + Length(2 Byte) + Body(Length Byte)
+            
+            注意：本层仅负责打包一个个完整的Body
+                      上层为Body提供反序列化方式（protobuf）
+            </summary>
+        </member>
+        <member name="T:socket4net.Response">
+            <summary>
+                响应
+            </summary>
+        </member>
+        <member name="T:socket4net.CircularBuffer">
+            <summary>
+            循环buffer
+            </summary>
+        </member>
+        <member name="M:socket4net.CircularBuffer.Read(System.Byte[]@,System.UInt16,System.UInt16)">
+            <summary>
+            头部读取
+            </summary>
+            <param name="offset"></param>
+            <param name="len"></param>
+            <param name="buf"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.CircularBuffer.MoveByWrite(System.UInt16)">
+            <summary>
+            写入数据至缓存之后须移动Tail（尾部写入）
+            </summary>
+            <param name="len"></param>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Buffer">
+            <summary>
+            buffer
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Capacity">
+            <summary>
+            容量
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Head">
+            <summary>
+            头
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Tail">
+            <summary>
+            尾
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.ReadableSize">
+            <summary>
+            可读大小
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.WritableSize">
+            <summary>
+            可写大小
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Overload">
+            <summary>
+            buffer快满了？
+            </summary>
+        </member>
+        <member name="T:socket4net.Packer">
+            <summary>
+            拆包
+            非线程安全，需要上层来确保始终在某个线程运行
+            </summary>
+        </member>
+        <member name="M:socket4net.Session.Dispatch(System.Byte[])">
+            <summary>
+            分包
+            在LogicService线程分发
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="P:socket4net.Session.ReceiveBufSize">
+            <summary>
+            指定接收buffer长度
+            </summary>
+        </member>
+        <member name="P:socket4net.Session.PackageMaxSize">
+            <summary>
+            限制包大小
+            </summary>
+        </member>
+        <member name="T:socket4net.ERpc">
+            <summary>
+            Rpc类型
+            C->S or S->C
+            </summary>
+        </member>
+        <member name="F:socket4net.ERpc.Push">
+            <summary>
+            通知
+            无需等待对端响应
+            </summary>
+        </member>
+        <member name="F:socket4net.ERpc.Request">
+            <summary>
+            请求
+            需要等待对端响应才能完成本次Rpc
+            </summary>
+        </member>
+        <member name="F:socket4net.ERpc.Response">
+            <summary>
+            响应Request
+            </summary>
+        </member>
+        <member name="M:socket4net.DispatchableSession.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.ISession})">
+            <summary>
+            多播
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <param name="sessions"></param>
+        </member>
+        <member name="M:socket4net.DispatchableSession.Broadcast``1(``0)">
+            <summary>
+            广播
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+        </member>
+        <member name="T:socket4net.IService">
+            <summary>
+            提供单线程服务
+            </summary>
+        </member>
+        <member name="T:socket4net.INetService">
+            <summary>
+            网络服务接口
+            </summary>
+        </member>
+        <member name="T:socket4net.ILogicService">
+            <summary>
+            逻辑服务接口
+            定时器在逻辑服务调度
+            </summary>
+        </member>
+        <member name="T:socket4net.AutoLogicService">
+            <summary>
+                自动逻辑服务
+                定时器刷新以及Jobs队列的刷新完全由本模块自理
+            </summary>
+        </member>
+        <member name="T:socket4net.LogicServiceBase">
+            <summary>
+                逻辑服务
+                1、可将多线程任务转换为单线程任务
+                2、提供定时调度、协程调度服务
+            </summary>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.Perform(System.Action)">
+            <summary>
+            在本服务执行该Action
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.Perform``1(System.Action{``0},``0)">
+            <summary>
+            在本服务执行该Action
+            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.Enqueue(socket4net.IJob)">
+            <summary>
+                External(e.g. the TCP socket thread) call this method to push
+                a work item into the working queue. The work item must not
+                be null.
+            </summary>
+            <param name="w">the work item object, must not be null</param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.Enqueue``1(System.Action{``0},``0)">
+            <summary>
+                External(e.g. the TCP socket thread) call this method to push
+                a work item into the working queue.
+            </summary>
+            <param name="proc">the working procedure</param>
+            <param name="param">additional parameter that passed to working procedure</param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.Enqueue(System.Action)">
+            <summary>
+            入队
+            </summary>
+            <param name="proc"></param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.CalcPerformance">
+            <summary>
+            计算性能
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.Scheduler">
+            <summary>
+                定时器调度器
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.CoroutineScheduler">
+            <summary>
+                协程调度器
+            </summary>
+        </member>
+        <member name="E:socket4net.LogicServiceBase.Idle">
+            <summary>
+                Idle event, call by working thread
+                every period.
+                <remarks>
+                    generally the working thread
+                    call the event every period, but if it's too busy
+                    because the working item consumes too much time,
+                    the calling period may grater than the original period
+                </remarks>
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.QueueCapacity">
+            <summary>
+                Specify the capacity of the working item queue.
+                <remarks>
+                    when the items count in working queue reach the capacity
+                    of the queue, all producer will block until there is one or more slot being free
+                </remarks>
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.Period">
+            <summary>
+                Specify the working period of the working thread in milliseconds.
+                That is, every period,the working thread loop back to the working
+                procedure's top. and, the Idle event is called.
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.WiElapsed">
+            <summary>
+                A time counter that count the work items consume how much time
+                in one working thread's loop. It maybe grater than the working period,
+                which indicates the work items consume too much time.
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.IdleCallbackElapsed">
+            <summary>
+                A time counter that count the Idle event callbacks consume how much
+                time in one working thread's loop. This value should be less than period.
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.Jobs">
+            <summary>
+                Specify the work items count currently in working queue.
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.ExcutedJobsPerSec">
+            <summary>
+            性能指标
+            每秒执行的Job
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.Capacity">
+            <summary>
+            Job队列容量
+            由上层指定
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.ElapsedMilliseconds">
+            <summary>
+                Get the elapsed milliseconds since the instance been constructed
+            </summary>
+        </member>
+        <member name="M:socket4net.AutoLogicService.Enqueue(socket4net.IJob)">
+            <summary>
+            External(e.g. the TCP socket thread) call this method to push
+            a work item into the working queue. The work item must not
+            be null.
+            </summary>
+            <param name="w">the work item object, must not be null</param>
+        </member>
+        <member name="M:socket4net.AutoLogicService.DoStartup">
+            <summary>
+            do actually startup job
+            </summary>
+        </member>
+        <member name="M:socket4net.AutoLogicService.WorkingProcedure">
+            <summary>
+            working thread's working procedure
+            </summary>
+        </member>
+        <member name="P:socket4net.AutoLogicService.Jobs">
+            <summary>
+            Specify the work items count currently in working queue.
+            </summary>
+        </member>
+        <member name="T:socket4net.PassiveLogicService">
+            <summary>
+                被动逻辑服务
+                即：需要上层驱动本服务定时器、Job队列的更新
+            </summary>
+        </member>
+        <member name="T:socket4net.NetService">
+            <summary>
+            网络服务线程（网络数据读写）
+            </summary>
+        </member>
+        <member name="T:socket4net.Timer">
+            <summary>
+            A timer class base on Linux style timer scheduler.
+            </summary>
+        </member>
+        <member name="M:socket4net.Timer.#ctor(System.String,System.UInt32,System.UInt32)">
+            <summary>
+            Construct a new timer object.
+            </summary>
+            <param name="service"></param>
+            <param name="name">the timer's name</param>
+            <param name="dueTime">when to begin this timer, in milliseconds.
+            zero means start immediately</param>
+            <param name="period">the period of this timer, , in milliseconds.
+            zero means the timer is schedule once only</param>
+        </member>
+        <member name="M:socket4net.Timer.#ctor(System.String,System.UInt32)">
+            <summary>
+            Construct a new timer object.
+            </summary>
+            <param name="service"></param>
+            <param name="name">the timer's name</param>
+            <param name="dueTime">when to begin this timer, in milliseconds.
+            zero means start immediately</param>
+        </member>
+        <member name="M:socket4net.Timer.Trigger">
+            <summary>
+            Call the timer's callback events.
+            This method is called by <c>TimerScheduler</c> class only.
+            </summary>
+        </member>
+        <member name="M:socket4net.Timer.Start">
+            <summary>
+            Start the timer.
+            </summary>
+        </member>
+        <member name="M:socket4net.Timer.Stop">
+            <summary>
+            Stop the timer.
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.Name">
+            <summary>
+            Time's name
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.DueTime">
+            <summary>
+            When to start the timer, in milliseconds.
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.Period">
+            <summary>
+            The timer period, in milliseconds.
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.IsPeriod">
+            <summary>
+            Indicate it's a period timer or not.
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.IsStarted">
+            <summary>
+            Indicate whether the timer is start or not.
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.State">
+            <summary>
+            User define parameter.
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.Expires">
+            <summary>
+            The expire time.
+            this property only be used by <c>TimerScheduler</c> class.
+            </summary>
+        </member>
+        <member name="P:socket4net.Timer.Entry">
+            <summary>
+            When timer is started, it's put in queue, this property is
+            the queue entry for this timer object.
+            this property only be used by <c>TimerScheduler</c> class.
+            </summary>
+        </member>
+        <member name="E:socket4net.Timer.Arrived">
+            <summary>
+            When timer is trigger, this event will be called.
+            </summary>
+        </member>
+        <member name="T:socket4net.QueueEntry">
+            <summary>
+            Queue entry class
+            </summary>
+        </member>
+        <member name="M:socket4net.QueueEntry.#ctor(socket4net.Timer)">
+            <summary>
+            Construct a new entry object with a timer object.
+            </summary>
+            <param name="t">a non-null timer object</param>
+        </member>
+        <member name="M:socket4net.QueueEntry.#ctor">
+            <summary>
+            Construct a new head entry. That is, it's Prev/Next properties
+            are point to itself.
+            </summary>
+        </member>
+        <member name="M:socket4net.QueueEntry.QueueTail(socket4net.QueueEntry)">
+            <summary>
+            Queue the entry object into a queue specify by 'h'
+            </summary>
+            <param name="h">the entry object, must be a head entry object</param>
+        </member>
+        <member name="M:socket4net.QueueEntry.DeQueue">
+            <summary>
+            Dequeue the entry object
+            </summary>
+        </member>
+        <member name="M:socket4net.QueueEntry.Discard">
+            <summary>
+            UnBinding the timer object
+            </summary>
+        </member>
+        <member name="P:socket4net.QueueEntry.Prev">
+            <summary>
+            The Preview entry object
+            </summary>
+        </member>
+        <member name="P:socket4net.QueueEntry.Next">
+            <summary>
+            The next entry object
+            </summary>
+        </member>
+        <member name="P:socket4net.QueueEntry.Timer">
+            <summary>
+            The timer object
+            </summary>
+        </member>
+        <member name="T:socket4net.TimerConstant">
+            <summary>
+            Define the constant variable used by <c>TimerScheduler</c> class
+            </summary>
+        </member>
+        <member name="T:socket4net.TVN">
+            <summary>
+            Timer vector class.
+            </summary>
+        </member>
+        <member name="T:socket4net.TVR">
+            <summary>
+            Timer vector class.
+            It's a specific type of <c>TVN</c>, it's vector size
+            is different from <c>TVN</c>.
+            </summary>
+        </member>
+        <member name="T:socket4net.TimerScheduler">
+            <summary>
+            A Linux style timer scheduler
+            </summary>
+        </member>
+        <member name="F:socket4net.TimerScheduler._timerJiffies">
+            <summary>
+            This field used to store how many milliseconds
+            elapsed since this scheduler been constructed.
+            All timer's expire time is calculated base on this field.
+            </summary>
+        </member>
+        <member name="F:socket4net.TimerScheduler._runningTimer">
+            <summary>
+            When scheduler is trigger a timer, this field store the timer object.
+            </summary>
+        </member>
+        <member name="F:socket4net.TimerScheduler._TV1">
+            <summary>
+            The first class of timers vector, their expire time will less than 256 milliseconds.
+            </summary>
+        </member>
+        <member name="F:socket4net.TimerScheduler._TV2">
+            <summary>
+            The second class of timers vector, their expire time will grater than 255 milliseconds
+            and less than 16384(1 left shit 14) milliseconds
+            </summary>
+        </member>
+        <member name="F:socket4net.TimerScheduler._TV3">
+            <summary>
+            The second class of timers vector, their expire time will grater than 16384 milliseconds
+            and less than 1048576(1 left shit 20) milliseconds
+            </summary>
+        </member>
+        <member name="F:socket4net.TimerScheduler._TV4">
+            <summary>
+            The second class of timers vector, their expire time will grater than 1048576 milliseconds
+            and less than 67108864(1 left shit 26) milliseconds
+            </summary>
+        </member>
+        <member name="F:socket4net.TimerScheduler._TV5">
+            <summary>
+            The second class of timers vector, their expire time will grater than 67108864 milliseconds
+            and less than uint.Max(1 left shit 32) milliseconds
+            if the expires is grater then uint.Max, it will be truncated.
+            </summary>
+        </member>
+        <member name="M:socket4net.TimerScheduler.RunTimer">
+            <summary>
+            <c>StaService</c>'s Idle event call this method
+            to check all expired timers.
+            </summary>
+        </member>
+        <member name="M:socket4net.TimerScheduler.Add(socket4net.Timer)">
+            <summary>
+            Put a timer object in scheduler's queue.
+            </summary>
+            <param name="t">the timer object</param>
+        </member>
+        <member name="M:socket4net.TimerScheduler.Remove(socket4net.Timer)">
+            <summary>
+            remove a timer object from scheduler's queue.
+            </summary>
+            <param name="t">the timer object</param>
+        </member>
+        <member name="M:socket4net.TimerScheduler.Cascade(socket4net.TVN,System.Int32)">
+            <summary>
+            Cascade a timers vector
+            </summary>
+            <param name="tv">the timers vector</param>
+            <param name="index">which queue to cascade</param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.TimerScheduler.Cascade">
+            <summary>
+            Cascade all timers vectors
+            </summary>
+        </member>
+        <member name="M:socket4net.TimerScheduler.InternalAdd(socket4net.QueueEntry)">
+            <summary>
+            Queue an entry object into a suitable timer queue.
+            </summary>
+            <param name="e">the entry object</param>
+        </member>
+    </members>
+</doc>

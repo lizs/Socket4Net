@@ -247,7 +247,6 @@ namespace socket4net
 
             if (!_isSending)
             {
-                GlobalVarPool.Ins.NetService.OnWriteCompleted(data.Length);
                 SendNext();
             }
         }
@@ -263,8 +262,6 @@ namespace socket4net
                     Close(SessionCloseReason.WriteError);
                     return;
                 }
-
-                GlobalVarPool.Ins.NetService.OnWriteCompleted(e.BytesTransferred);
 
                 if (_sendingQueue.Count > 0)
                     SendNext();
@@ -314,8 +311,6 @@ namespace socket4net
 
             if (_receiveBuffer.Overload)
                 _receiveBuffer.Reset();
-
-            GlobalVarPool.Ins.NetService.OnReadCompleted(_receiveAsyncEventArgs.BytesTransferred, packagesCnt);
 
             while (_packer.Packages.Count > 0)
             {

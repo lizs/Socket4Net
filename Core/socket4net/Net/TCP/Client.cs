@@ -27,16 +27,26 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-#if NET45
-
-#endif
-
 namespace socket4net
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IClient : IPeer
     {
+        /// <summary>
+        ///     Reconnect to server
+        /// </summary>
         void Reconnect();
+
+        /// <summary>
+        ///     Connect to server
+        /// </summary>
         void Connect();
+
+        /// <summary>
+        ///     If client is connected to server
+        /// </summary>
         bool Connected { get; }
     }
     
@@ -51,14 +61,40 @@ namespace socket4net
         public bool AutoReconnectEnabled { get; private set; }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TSession"></typeparam>
     public class Client<TSession> : Obj, IClient
         where TSession : class, ISession, new()
     {
-        public const uint ReconnectDefaultDelay = 1000;
+        /// <summary>
+        ///     Default reconnect retry delay time
+        /// </summary>
+        public const uint ReconnectDelay = 1000;
+        /// <summary>
+        ///     Default reconnect retry max delay time
+        /// </summary>
         public const uint ReconnectMaxDelay = 32 * 1000;
+
+        /// <summary>
+        ///     Raised when a session closed
+        /// </summary>
         public event Action<ISession, SessionCloseReason> EventSessionClosed;
+
+        /// <summary>
+        ///     Raised when a session established
+        /// </summary>
         public event Action<ISession> EventSessionEstablished;
+
+        /// <summary>
+        ///     Raised when Peer closing
+        /// </summary>
         public event Action EventPeerClosing;
+
+        /// <summary>
+        ///     Raised when error catched
+        /// </summary>
         public event Action<string> EventErrorCatched;
 
         public override string Name
@@ -89,7 +125,7 @@ namespace socket4net
             {
                 _connected = value;
                 ReconnectRetryDelay = _connected
-                    ? ReconnectDefaultDelay
+                    ? ReconnectDelay
                     : Math.Min(ReconnectMaxDelay, ReconnectRetryDelay*2);
             }
         }
@@ -120,7 +156,7 @@ namespace socket4net
         private Socket _underlineSocket;
         private SocketAsyncEventArgs _connectEvent;
         private bool _connected;
-        private uint _reconnectRetryDelay = ReconnectDefaultDelay;
+        private uint _reconnectRetryDelay = ReconnectDelay;
 
         protected override void OnInit(ObjArg arg)
         {

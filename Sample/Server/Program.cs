@@ -23,7 +23,6 @@
 //   * */
 #endregion
 using System;
-using CustomLog;
 using socket4net;
 
 namespace Sample
@@ -33,8 +32,7 @@ namespace Sample
         static void Main(string[] args)
         {
             // 创建并启动Launcher
-            var arg = new LauncherArg(new Log4Net("log4net.config", "Server"));
-            Obj.New<Launcher>(arg, true);
+            Obj.New<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动服务器
             var server = Obj.New<Server<ChatSession>>(new ServerArg(null, "127.0.0.1", 9527), true);

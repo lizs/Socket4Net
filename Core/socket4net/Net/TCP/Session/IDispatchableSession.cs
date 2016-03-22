@@ -13,7 +13,7 @@ namespace socket4net
     public interface IDispatchableSession : ISession
     {
         /// <summary>
-        /// ¶à²¥
+        ///     Push message to clients specified by 'sessions'
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
@@ -21,7 +21,7 @@ namespace socket4net
         void MultiCast<T>(T proto, IEnumerable<ISession> sessions) where T : IDataProtocol;
         
         /// <summary>
-        /// ¹ã²¥
+        ///     Push message to all the clients
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
@@ -32,10 +32,30 @@ namespace socket4net
         Task<bool> HandlePush(IDataProtocol ps);
         Task<NetResult> RequestAsync<T>(T proto) where T : IDataProtocol;
 #else
+        /// <summary>
+        /// </summary>
+        /// <param name="rq"></param>
+        /// <param name="cb"></param>
         void HandleRequest(IDataProtocol rq, Action<NetResult> cb);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ps"></param>
+        /// <param name="cb"></param>
         void HandlePush(IDataProtocol ps, Action<bool> cb);
 #endif
+
+        /// <summary>
+        /// </summary>
+        /// <param name="proto"></param>
+        /// <param name="cb"></param>
+        /// <typeparam name="T"></typeparam>
         void RequestAsync<T>(T proto, Action<bool, byte[]> cb) where T : IDataProtocol;
+
+        /// <summary>
+        /// </summary>
+        /// <param name="proto"></param>
+        /// <typeparam name="T"></typeparam>
         void Push<T>(T proto) where T : IDataProtocol;
     }
 }

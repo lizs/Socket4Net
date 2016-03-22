@@ -26,6 +26,9 @@ using System;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     socket4net's default logger
+    /// </summary>
     public class DefaultLogger : ILog
     {
         public void Debug(object message)
@@ -33,19 +36,9 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void Debug(string format, object arg0)
+        public void Debug(string format, params object[] args)
         {
-            Console.WriteLine(format, arg0);
-        }
-
-        public void Debug(string format, object arg0, object arg1)
-        {
-            Console.WriteLine(format, arg0, arg1);
-        }
-
-        public void Debug(string format, object arg0, object arg1, object arg2)
-        {
-            Console.WriteLine(format, arg0, arg1, arg2);
+            Console.WriteLine(format, args);
         }
 
         public void Error(object message)
@@ -53,19 +46,9 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void Error(string format, object arg0)
+        public void Error(string format, params object[] args)
         {
-            Console.WriteLine(format, arg0);
-        }
-
-        public void Error(string format, object arg0, object arg1)
-        {
-            Console.WriteLine(format, arg0, arg1);
-        }
-
-        public void Error(string format, object arg0, object arg1, object arg2)
-        {
-            Console.WriteLine(format, arg0, arg1, arg2);
+            Console.WriteLine(format, args);
         }
 
         public void Fatal(object message)
@@ -73,19 +56,9 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void Fatal(string format, object arg0)
+        public void Fatal(string format, params object[] args)
         {
-            Console.WriteLine(format, arg0);
-        }
-
-        public void Fatal(string format, object arg0, object arg1)
-        {
-            Console.WriteLine(format, arg0, arg1);
-        }
-
-        public void Fatal(string format, object arg0, object arg1, object arg2)
-        {
-            Console.WriteLine(format, arg0, arg1, arg2);
+            Console.WriteLine(format, args);
         }
 
         public void Info(object message)
@@ -93,39 +66,19 @@ namespace socket4net
             Console.WriteLine(message);
         }
 
-        public void Info(string format, object arg0)
+        public void Info(string format, params object[] args)
         {
-            Console.WriteLine(format, arg0);
+            Console.WriteLine(format, args);
         }
-
-        public void Info(string format, object arg0, object arg1)
-        {
-            Console.WriteLine(format, arg0, arg1);
-        }
-
-        public void Info(string format, object arg0, object arg1, object arg2)
-        {
-            Console.WriteLine(format, arg0, arg1, arg2);
-        }
-
+       
         public void Warn(object message)
         {
             Console.WriteLine(message);
         }
 
-        public void Warn(string format, object arg0)
+        public void Warn(string format, params object[] args)
         {
-            Console.WriteLine(format, arg0);
-        }
-
-        public void Warn(string format, object arg0, object arg1)
-        {
-            Console.WriteLine(format, arg0, arg1);
-        }
-
-        public void Warn(string format, object arg0, object arg1, object arg2)
-        {
-            Console.WriteLine(format, arg0, arg1, arg2);
+            Console.WriteLine(format, args);
         }
 
         public void Exception(string msg, Exception e)

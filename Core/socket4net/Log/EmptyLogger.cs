@@ -27,7 +27,7 @@ using System;
 namespace socket4net
 {
     /// <summary>
-    ///     空日志
+    ///     Empty logger
     /// </summary>
     public class EmptyLogger : ILog
     {
@@ -35,15 +35,7 @@ namespace socket4net
         {
         }
 
-        public void Debug(string format, object arg0)
-        {
-        }
-
-        public void Debug(string format, object arg0, object arg1)
-        {
-        }
-
-        public void Debug(string format, object arg0, object arg1, object arg2)
+        public void Debug(string format, params object[] args)
         {
         }
 
@@ -51,15 +43,7 @@ namespace socket4net
         {
         }
 
-        public void Error(string format, object arg0)
-        {
-        }
-
-        public void Error(string format, object arg0, object arg1)
-        {
-        }
-
-        public void Error(string format, object arg0, object arg1, object arg2)
+        public void Error(string format, params object[] args)
         {
         }
 
@@ -67,15 +51,7 @@ namespace socket4net
         {
         }
 
-        public void Fatal(string format, object arg0)
-        {
-        }
-
-        public void Fatal(string format, object arg0, object arg1)
-        {
-        }
-
-        public void Fatal(string format, object arg0, object arg1, object arg2)
+        public void Fatal(string format, params object[] args)
         {
         }
 
@@ -83,15 +59,7 @@ namespace socket4net
         {
         }
 
-        public void Info(string format, object arg0)
-        {
-        }
-
-        public void Info(string format, object arg0, object arg1)
-        {
-        }
-
-        public void Info(string format, object arg0, object arg1, object arg2)
+        public void Info(string format, params object[] args)
         {
         }
 
@@ -99,23 +67,11 @@ namespace socket4net
         {
         }
 
-        public void Warn(string format, object arg0)
-        {
-        }
-
-        public void Warn(string format, object arg0, object arg1)
-        {
-        }
-
-        public void Warn(string format, object arg0, object arg1, object arg2)
+        public void Warn(string format, params object[] args)
         {
         }
 
         public void Exception(string msg, Exception e)
-        {
-        }
-
-        public void Exception(Exception e)
         {
         }
 

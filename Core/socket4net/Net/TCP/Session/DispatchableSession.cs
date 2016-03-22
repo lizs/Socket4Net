@@ -31,6 +31,10 @@ using System.Threading.Tasks;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     Dispatchable session
+    ///     Messages received from peer are dispatched here
+    /// </summary>
     public abstract class DispatchableSession : Session, IDispatchableSession
     {
         private ushort _serial;
@@ -38,6 +42,9 @@ namespace socket4net
             = new ConcurrentDictionary<ushort, Action<bool, byte[]>>();
 
         private Func<byte[], IDataProtocol> _dataParser = data => PiSerializer.Deserialize<DefaultDataProtocol>(data);
+        /// <summary>
+        ///     Get/Set custom data parser
+        /// </summary>
         protected Func<byte[], IDataProtocol> DataParser
         {
             get { return _dataParser; }

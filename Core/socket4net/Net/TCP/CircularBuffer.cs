@@ -29,6 +29,10 @@ namespace socket4net
     /// </summary>
     public class CircularBuffer
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="capacity"></param>
         public CircularBuffer(ushort capacity)
         {
             Capacity = capacity;
@@ -36,32 +40,43 @@ namespace socket4net
         }
 
         /// <summary>
-        /// buffer
+        ///     buffer
         /// </summary>
         public byte[] Buffer { get; private set; }
-        /// <summary>
-        /// 容量
-        /// </summary>
-        public ushort Capacity { get; private set; }
-        /// <summary>
-        /// 头
-        /// </summary>
-        public ushort Head { get; private set; }
-        /// <summary>
-        /// 尾
-        /// </summary>
-        public ushort Tail { get; private set; }
-        /// <summary>
-        /// 可读大小
-        /// </summary>
-        public ushort ReadableSize { get { return (ushort)(Tail - Head); } }
-        /// <summary>
-        /// 可写大小
-        /// </summary>
-        public ushort WritableSize { get { return (ushort)(Capacity - Tail); } }
 
         /// <summary>
-        /// 头部读取
+        ///     Capacity
+        /// </summary>
+        public ushort Capacity { get; private set; }
+
+        /// <summary>
+        ///     Head
+        /// </summary>
+        public ushort Head { get; private set; }
+
+        /// <summary>
+        ///     Tail
+        /// </summary>
+        public ushort Tail { get; private set; }
+
+        /// <summary>
+        ///    Readable buffer size
+        /// </summary>
+        public ushort ReadableSize
+        {
+            get { return (ushort) (Tail - Head); }
+        }
+
+        /// <summary>
+        ///    Writable buffer size
+        /// </summary>
+        public ushort WritableSize
+        {
+            get { return (ushort) (Capacity - Tail); }
+        }
+
+        /// <summary>
+        ///     Read data from head
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="len"></param>
@@ -81,6 +96,11 @@ namespace socket4net
             return true;
         }
 
+        /// <summary>
+        ///     Move head by 'len'
+        /// </summary>
+        /// <param name="len"></param>
+        /// <returns></returns>
         public bool MoveByRead(ushort len)
         {
             if (ReadableSize < len) return false;
@@ -89,7 +109,7 @@ namespace socket4net
         }
 
         /// <summary>
-        /// 写入数据至缓存之后须移动Tail（尾部写入）
+        ///     Move tail by 'len'
         /// </summary>
         /// <param name="len"></param>
         public bool MoveByWrite(ushort len)
@@ -105,9 +125,12 @@ namespace socket4net
         }
 
         /// <summary>
-        /// buffer快满了？
+        ///     Indicate if buffer is full
         /// </summary>
-        public bool Overload { get { return WritableSize < .2f * Capacity; } }
+        public bool Overload
+        {
+            get { return WritableSize < .2f*Capacity; }
+        }
 
         public void Reset()
         {

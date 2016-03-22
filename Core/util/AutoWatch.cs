@@ -28,11 +28,18 @@ using System.Diagnostics;
 namespace socket4net
 {
     /// <summary>
-    ///     自动计时器
+    ///     Automatic time watcher
     /// </summary>
     public class AutoWatch : IDisposable
     {
         private readonly Stopwatch _watch = new Stopwatch();
+
+        /// <summary>
+        ///     constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="threhold"></param>
+        /// <param name="handler"></param>
         public AutoWatch(string name, long threhold = 50, Action<string, long> handler = null)
         {
             Name = name;
@@ -41,8 +48,20 @@ namespace socket4net
             _watch.Start();
         }
 
+        /// <summary>
+        ///     Watcher name
+        /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        ///     Wather threhold 
+        ///     Warnning will be raised when elapsed ms > threhold
+        /// </summary>
         public long Threhold { get; private set; }
+
+        /// <summary>
+        ///     Callback when this watch disposed
+        /// </summary>
         public Action<string, long> Handler { get; private set; }
 
         public void Dispose()
@@ -55,6 +74,9 @@ namespace socket4net
                 Handler(Name, _watch.ElapsedMilliseconds);
         }
 
+        /// <summary>
+        ///     Get elapsed ms since this watch constructed
+        /// </summary>
         public long ElapsedMilliseconds { get { return _watch.ElapsedMilliseconds; } }
     }
 }

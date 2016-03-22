@@ -28,30 +28,88 @@ using System.Net;
 namespace socket4net
 {
     /// <summary>
+    ///     Peer abstract
     /// 终端
     /// 对服务器、客户端的抽象
     /// </summary>
     public interface IPeer : IObj
     {
+        /// <summary>
+        /// 
+        /// </summary>
         string Ip { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         ushort Port { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         IPAddress Address { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         EndPoint EndPoint { get; }
 
+        /// <summary>
+        ///     Get session manager
+        /// </summary>
         SessionMgr SessionMgr { get; }
         
+        /// <summary>
+        ///     Get logic service
+        /// </summary>
         ILogicService LogicService { get; }
+
+        /// <summary>
+        ///     Get net service
+        /// </summary>
         INetService NetService { get; }
 
+        /// <summary>
+        ///     Raised when a session closed
+        /// </summary>
         event Action<ISession, SessionCloseReason> EventSessionClosed;
+
+        /// <summary>
+        ///     Raised when a session established
+        /// </summary>
         event Action<ISession> EventSessionEstablished;
-        event Action<string> EventErrorCatched;
+
+        /// <summary>
+        ///     Raised when Peer closing
+        /// </summary>
         event Action EventPeerClosing;
+
+        /// <summary>
+        ///     Raised when error catched
+        /// </summary>
+        event Action<string> EventErrorCatched;
         
+        /// <summary>
+        ///     Excute 'action' in logic service
+        /// </summary>
+        /// <param name="action"></param>
         void PerformInLogic(Action action);
+
+        /// <summary>
+        ///     Excute 'action' in logic service
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="param"></param>
         void PerformInLogic<TParam>(Action<TParam> action, TParam param);
 
+        /// <summary>
+        ///     Excute 'action' in net service
+        /// </summary>
+        /// <param name="action"></param>
         void PerformInNet(Action action);
+
+        /// <summary>
+        ///     Excute 'action' in net service
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="param"></param>
         void PerformInNet<TParam>(Action<TParam> action, TParam param);
     }
 }

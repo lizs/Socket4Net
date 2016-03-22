@@ -27,6 +27,9 @@ using System;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     Obj argument for service
+    /// </summary>
     public class ServiceArg : ObjArg
     {
         public ServiceArg(IObj owner, int capacity, int period) : base(owner)
@@ -35,50 +38,79 @@ namespace socket4net
             Period = period;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int Capacity { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int Period { get; private set; }
     }
 
     /// <summary>
-    /// 提供单线程服务
+    ///  STA service
     /// </summary>
     public interface IService : IObj
     {
+        /// <summary>
+        ///     Jobs queued upper bound
+        /// </summary>
         int Capacity { get; }
+
+        /// <summary>
+        ///     Period for waiting concurrent collection's item take
+        /// </summary>
         int Period { get; }
 
+        /// <summary>
+        ///     Send action to be excuted in current service
+        /// </summary>
+        /// <param name="action"></param>
         void Perform(Action action);
-        void Perform<T>(Action<T> action, T param);
 
-        // performance
-        int Jobs { get; }
-        int ExcutedJobsPerSec { get; }
+        /// <summary>
+        ///     Send action to be excuted in current service
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="param"></param>
+        /// <typeparam name="T"></typeparam>
+        void Perform<T>(Action<T> action, T param);
     }
 
     /// <summary>
-    /// 网络服务接口
+    ///     net work service
     /// </summary>
     public interface INetService : IService
     {
-        // performance 4 net
-        void OnReadCompleted(int len, ushort cnt);
-        void OnWriteCompleted(int len);
-
-        int ReadBytesPerSec { get; }
-        int WriteBytesPerSec { get; }
-        int ReadPackagesPerSec { get; }
-        int WritePackagesPerSec { get; }
     }
 
     /// <summary>
-    /// 逻辑服务接口
-    /// 定时器在逻辑服务调度
+    ///     Logic service
+    ///     Timer schedule is running on Logic service
     /// </summary>
     public interface ILogicService : IService
     {
+        /// <summary>
+        ///     Idle event
+        ///     Raised when no more jobs in a frame
+        /// </summary>
         event Action Idle;
+
+        /// <summary>
+        ///     Timer scheduler
+        /// </summary>
         TimerScheduler Scheduler { get; }
+
+        /// <summary>
+        ///     Coroutine scheduler
+        /// </summary>
         CoroutineScheduler CoroutineScheduler { get; }
+
+        /// <summary>
+        ///     Elapsed ms since process started
+        /// </summary>
         long ElapsedMilliseconds { get; }
     }
 }

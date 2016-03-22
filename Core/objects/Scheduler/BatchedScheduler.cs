@@ -32,11 +32,21 @@ namespace socket4net
     public class BatchedScheduler : Scheduler
     {
         private readonly IFlushable _flushable;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
         public BatchedScheduler(IFlushable target)
         {
             _flushable = target;
         }
 
+        /// <summary>
+        ///     Internal invoker for Obj
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="delay"></param>
+        /// <param name="period"></param>
         public override void InterlnalInvokeRepeating(Action action, uint delay, uint period)
         {
             CancelInvoke(action);
@@ -53,6 +63,12 @@ namespace socket4net
             timer.Start();
         }
 
+        /// <summary>
+        ///     Internal invoker for Obj
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="delay"></param>
+        /// <param name="period"></param>
         public override void InterlnalInvoke(Action action, uint delay)
         {
             CancelInvoke(action);

@@ -29,6 +29,10 @@ using System.Threading.Tasks;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     Client with dispatchable session
+    /// </summary>
+    /// <typeparam name="TSession"></typeparam>
     public class DispatchalbeClient<TSession> : Client<TSession>
         where TSession : class, IDispatchableSession, new()
     {

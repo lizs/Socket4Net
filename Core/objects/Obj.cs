@@ -23,185 +23,344 @@
 //   * */
 #endregion
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 
 namespace socket4net
 {
     /// <summary>
-    ///     接口仅作代码组织用
+    ///     Arguments used to initialize an Obj
     /// </summary>
-    public interface IObj
-    {
-        /// <summary>
-        ///     实例动态Id
-        /// </summary>
-        int InstanceId { get; }
-
-        /// <summary>
-        ///     名字
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        ///     调度优先级（类似Unity中的Layer）
-        /// </summary>
-        int Priority { get; }
-
-        /// <summary>
-        ///     比较
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        int CompareTo(IObj other);
-
-        void Init(ObjArg arg);
-        void Born();
-        void Start();
-        void Destroy();
-
-        /// <summary>
-        ///     获取根
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        T GetAncestor<T>() where T : class ,IObj;
-    }
-
     public class ObjArg
     {
+        /// <summary>
+        ///     Owner of to be initialized Obj
+        /// </summary>
         public IObj Owner { get; private set; }
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="owner"></param>
         public ObjArg(IObj owner)
         {
             Owner = owner;
         }
 
+        /// <summary>
+        ///     Empty obj argument
+        /// </summary>
         public static ObjArg Empty
         {
             get { return new EmptyArg(); }
         }
 
+        /// <summary>
+        ///     Cast this arg to T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T As<T>() where T : ObjArg
         {
             if (!(this is T))
-                throw new ArgumentException("ObjArg 类型非" + typeof(T).Name);
+                throw new ArgumentException("ObjArg's type isn't " + typeof(T).Name);
 
             return (T) this;
         }
     }
 
     /// <summary>
-    ///     空参数
+    ///     Empty obj argument
     /// </summary>
     public class EmptyArg : ObjArg
     {
+        /// <summary>
+        ///     Constructor
+        /// </summary>
         public EmptyArg() : base(null)
         {
         }
     }
 
-    public partial class Obj : IObj
+    /// <summary>
+    ///     Interface Obj
+    /// </summary>
+    public interface IObj
     {
         /// <summary>
-        ///     实例动态id
-        ///     仅运行时唯一
+        ///     Obj instance id
+        ///     Unique only before current process dead
         /// </summary>
-        public int InstanceId { get; private set; }
+        int InstanceId { get; }
 
         /// <summary>
-        ///     名字
+        ///     Owner
         /// </summary>
+        IObj Owner { get; }
+
+        /// <summary>
+        ///     name
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        ///     Schedule priority
+        ///     Just like Unity's layer
+        /// </summary>
+        int Priority { get; }
+
+        /// <summary>
+        ///     Owner description
+        /// </summary>
+        string OwnerDescription { get; }
+
+        /// <summary>
+        ///     If initialized
+        /// </summary>
+        bool Initialized { get; }
+
+        /// <summary>
+        ///     If started
+        /// </summary>
+        bool Started { get; }
+
+        /// <summary>
+        ///     If destroyed
+        /// </summary>
+        bool Destroyed { get; }
+
+        /// <summary>
+        ///     If IObj's 'Born' invoked 
+        /// </summary>
+        bool Fresh { get; }
+
+        /// <summary>
+        ///     comparer
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        int CompareTo(IObj other);
+
+        /// <summary>
+        ///     Initialize
+        /// </summary>
+        /// <param name="arg"></param>
+        void Init(ObjArg arg);
+
+        /// <summary>
+        ///     Born
+        ///     Obj only born once during it's life circle
+        /// </summary>
+        void Born();
+
+        /// <summary>
+        ///     Run
+        /// </summary>
+        void Start();
+
+        /// <summary>
+        ///     Destroy
+        /// </summary>
+        void Destroy();
+
+        /// <summary>
+        ///     Get obj's ancestor
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T GetAncestor<T>() where T : class ,IObj;
+
+        /// <summary>
+        ///     Get user data
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T GetUserData<T>();
+
+        /// <summary>
+        ///     Set user data
+        /// </summary>
+        /// <param name="obj"></param>
+        void SetUserData(object obj);
+
+        #region Coroutine interfaces
+        /// <summary>
+        ///     Create an IEnumerator used in Coroutine scheduler
+        ///     to waiting for 'n' ms
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        IEnumerator WaitFor(uint n);
+
+        /// <summary>
+        ///     Stop 'coroutine'
+        /// </summary>
+        /// <param name="coroutine"></param>
+        void StopCoroutine(Coroutine coroutine);
+
+        /// <summary>
+        ///     Start 'fun' as an coroutine
+        /// </summary>
+        /// <param name="fun"></param>
+        /// <returns></returns>
+        Coroutine StartCoroutine(Func<IEnumerator> fun);
+
+        /// <summary>
+        ///     Start 'fun' as an coroutine
+        /// </summary>
+        /// <param name="fun"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        Coroutine StartCoroutine(Func<object[], IEnumerator> fun, params object[] args);
+        #endregion
+
+        #region Timer interfaces
+        /// <summary>
+        ///     clear timers attached on this obj
+        /// </summary>
+        void ClearTimers();
+
+        /// <summary>
+        ///     Excute 'action' after 'delay' ms for every 'period' ms
+        /// </summary>
+        void InvokeRepeating(Action action, uint delay, uint period);
+
+        /// <summary>
+        ///     Excute 'action' after 'delay' ms
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="delay"></param>
+        void Invoke(Action action, uint delay);
+
+        /// <summary>
+        ///     Excute 'action' when 'when'
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="when"></param>
+        void Invoke(Action action, DateTime when);
+
+        /// <summary>
+        ///     Excute 'action' every 'hour:min:s'
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="hour"></param>
+        /// <param name="min"></param>
+        /// <param name="s"></param>
+        void Invoke(Action action, int hour, int min, int s);
+
+        /// <summary>
+        ///     Excute 'action' everyday's 'time' clock
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="time"></param>
+        void Invoke(Action action, TimeSpan time);
+
+        /// <summary>
+        ///     Cancel 'action'
+        /// </summary>
+        /// <param name="action"></param>
+        void CancelInvoke(Action action);
+
+#if NET45
+        /// <summary>
+        ///     Excute 'action' everyday's 'times' clock
+        /// </summary>
+        Task<bool> InvokeAsync(Action action, params TimeSpan[] times);
+
+        /// <summary>
+        ///     Excute 'action' when 'whens'
+        /// </summary>
+        Task<bool> InvokeAsync(Action action, params DateTime[] whens);
+
+        /// <summary>
+        ///     Excute 'action' everyday's 'time' clock
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="time"></param>
+        Task<bool> InvokeAsync(Action action, TimeSpan time);
+
+        /// <summary>
+        ///     Excute 'action' when 'when'
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="when"></param>
+        Task<bool> InvokeAsync(Action action, DateTime when);
+
+        /// <summary>
+        ///     Excute 'action' after 'delay' ms
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="delay"></param>
+        Task<bool> InvokeAsync(Action action, uint delay);
+#endif
+        #endregion
+    }
+
+    public partial class Obj : IObj
+    {
+        private object _userData;
+        public int InstanceId { get; private set; }
+
         public virtual string Name
         {
             get { return GetType().FullName; }
         }
 
-        /// <summary>
-        ///     调度优先级（类似Unity中的Layer）
-        /// </summary>
         public virtual int Priority
         {
             get { return 0; }
         }
 
-        /// <summary>
-        /// 附带自定义数据
-        /// </summary>
-        protected object UserData { get; set; }
         public T GetUserData<T>()
         {
-            return (T) UserData;
+            return (T)_userData;
         }
 
-        /// <summary>
-        /// 设置自定义数据
-        /// </summary>
-        /// <param name="obj"></param>
         public void SetUserData(object obj)
         {
-            UserData = obj;
+            _userData = obj;
         }
 
         /// <summary>
-        ///     赋予运行时实例id
+        ///     Constructor
+        ///     InstanceId is assigned here
         /// </summary>
         protected Obj()
         {
             InstanceId = GenInstanceId();
         }
 
-        /// <summary>
-        ///     拥有者
-        /// </summary>
         public IObj Owner { get; private set; }
 
         /// <summary>
-        ///     拥有者描述
+        ///     Owner description
         /// </summary>
         public string OwnerDescription
         {
             get { return Owner != null ? Owner.Name : "null"; }
         }
 
-        /// <summary>
-        ///     是否已初始化
-        /// </summary>
         public bool Initialized { get; private set; }
 
-        /// <summary>
-        ///     是否已启动
-        /// </summary>
         public bool Started { get; private set; }
 
-        /// <summary>
-        ///     是否已销毁
-        /// </summary>
         public bool Destroyed { get; private set; }
 
-        /// <summary>
-        ///     是否新生
-        /// </summary>
         public bool Fresh { get; private set; }
 
-        /// <summary>
-        ///     根据优先级比较两对象
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
         public virtual int CompareTo(IObj other)
         {
             return Priority.CompareTo(other.Priority);
         }
 
-        /// <summary>
-        ///     重写ToString
-        /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             return Name;
         }
 
         /// <summary>
-        ///     创建对象
+        ///     Create an obj of type 'T' with arg
+        ///     If 'start' == true, Obj will be started after initialized
         /// </summary>
         /// <returns></returns>
         public static T New<T>(ObjArg arg, bool start = false) where T : IObj, new()
@@ -214,25 +373,25 @@ namespace socket4net
         }
 
         /// <summary>
-        ///     非泛型创建
+        ///     Create an obj of 'type' with arg
+        ///     If 'start' == true, Obj will be started after initialized
         /// </summary>
         /// <returns></returns>
-        public static Obj New(Type objType, ObjArg arg, bool start = false)
+        public static Obj New(Type type, ObjArg arg, bool start = false)
         {
-            return ObjFactory.Create(objType, arg, start);
+            return ObjFactory.Create(type, arg, start);
         }
 
         /// <summary>
-        ///     非泛型创建
+        ///     Create an obj of 'type' with arg and return 'obj as T'
+        ///     If 'start' == true, Obj will be started after initialized
         /// </summary>
-        public static T New<T>(Type objType, ObjArg arg, bool start = false) where T : class, IObj
+        /// <returns></returns>
+        public static T New<T>(Type type, ObjArg arg, bool start = false) where T : class, IObj
         {
-            return New(objType, arg, start) as T;
+            return New(type, arg, start) as T;
         }
 
-        /// <summary>
-        ///     初始
-        /// </summary>
         public void Init(ObjArg arg)
         {
             if(Initialized)
@@ -243,9 +402,6 @@ namespace socket4net
             Initialized = true;
         }
         
-        /// <summary>
-        ///     启动
-        /// </summary>
         public void Start()
         {
             if(!Initialized)
@@ -261,12 +417,15 @@ namespace socket4net
             Started = true;
         }
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected virtual void OnStart()
         {
         }
-        
+
         /// <summary>
-        ///     销毁
+        ///     Invoked when obj destroyed
         /// </summary>
         public void Destroy()
         {
@@ -280,9 +439,6 @@ namespace socket4net
             Destroyed = true;
         }
 
-        /// <summary>
-        ///     重置
-        /// </summary>
         public void Born()
         {
             if (Fresh)
@@ -295,15 +451,13 @@ namespace socket4net
             Fresh = true;
         }
 
+        /// <summary>
+        ///     Invoked when obj born
+        /// </summary>
         protected virtual void OnBorn()
         {
         }
 
-        /// <summary>
-        ///     获取指定类型的根（递归获取）
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         public T GetAncestor<T>() where T : class, IObj
         {
             if (this is T) return (this as T);
@@ -312,11 +466,8 @@ namespace socket4net
             return owner ?? Owner.GetAncestor<T>();
         }
 
-        /// <summary>
-        ///     实例id种子
-        /// </summary>
         private static int _seed;
-        protected static int GenInstanceId()
+        private static int GenInstanceId()
         {
             return ++_seed;
         }

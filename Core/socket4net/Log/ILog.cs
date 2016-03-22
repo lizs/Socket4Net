@@ -26,30 +26,71 @@ using System;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     Logger interface
+    /// </summary>
     public interface ILog
     {
+        /// <summary>
+        ///     Log as debug level
+        /// </summary>
         void Debug(object message);
-        void Debug(string format, object arg0);
-        void Debug(string format, object arg0, object arg1);
-        void Debug(string format, object arg0, object arg1, object arg2);
+
+        /// <summary>
+        ///     Log as debug level
+        /// </summary>
+        void Debug(string format, params object[] args);
+
+        /// <summary>
+        ///     Log as error level
+        /// </summary>
         void Error(object message);
-        void Error(string format, object arg0);
-        void Error(string format, object arg0, object arg1);
-        void Error(string format, object arg0, object arg1, object arg2);
+
+        /// <summary>
+        ///     Log as error level
+        /// </summary>
+        void Error(string format, params object[] args);
+
+        /// <summary>
+        ///     Log as fatal level
+        /// </summary>
         void Fatal(object message);
-        void Fatal(string format, object arg0);
-        void Fatal(string format, object arg0, object arg1);
-        void Fatal(string format, object arg0, object arg1, object arg2);
+
+        /// <summary>
+        ///     Log as fatal level
+        /// </summary>
+        void Fatal(string format, params object[] args);
+
+        /// <summary>
+        ///     Log as information level
+        /// </summary>
         void Info(object message);
-        void Info(string format, object arg0);
-        void Info(string format, object arg0, object arg1);
-        void Info(string format, object arg0, object arg1, object arg2);
+
+        /// <summary>
+        ///     Log as information level
+        /// </summary>
+        void Info(string format, params object[] args);
+
+        /// <summary>
+        ///     Log as warnning level
+        /// </summary>
         void Warn(object message);
-        void Warn(string format, object arg0);
-        void Warn(string format, object arg0, object arg1);
-        void Warn(string format, object arg0, object arg1, object arg2);
+
+        /// <summary>
+        ///     Log as warnning level
+        /// </summary>
+        void Warn(string format, params object[] args);
+
+        /// <summary>
+        ///     Log exception
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="e"></param>
         void Exception(string msg, Exception e);
 
+        /// <summary>
+        ///     Destroy logger
+        /// </summary>
         void Shutdown();
     }
 }

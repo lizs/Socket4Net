@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FC49DBBC-1976-4301-A090-73BF1B94F0F6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>socket4net</RootNamespace>
+    <AssemblyName>socket4net</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET35</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\socket4net.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET45</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NET45</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET45</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\objects\Scheduler\BatchedScheduler.cs" />
+    <Compile Include="..\objects\ObjSchedule.cs" />
+    <Compile Include="..\objects\Scheduler\Flusher.cs" />
+    <Compile Include="..\socket4net\Concurrent\ConcurrentDictionary.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Session\DefaultDataProtocol.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Session\IDispatchableSession.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Session\IDataProtocol.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Session\ISession.cs" />
+    <Compile Include="..\util\Convertor.cs" />
+    <Compile Include="..\util\Uid.cs" />
+    <Compile Include="..\util\TaskHelper.cs" />
+    <Compile Include="..\socket4net\Coroutine\Coroutine.cs" />
+    <Compile Include="..\socket4net\Log\DefaultLogger.cs" />
+    <Compile Include="..\socket4net\Log\EmptyLogger.cs" />
+    <Compile Include="..\socket4net\Log\ILog.cs" />
+    <Compile Include="..\socket4net\Log\Logger.cs" />
+    <Compile Include="..\objects\Mgr.cs" />
+    <Compile Include="..\objects\Obj.cs" />
+    <Compile Include="..\objects\UniqueObj.cs" />
+    <Compile Include="..\objects\ObjFactory.cs" />
+    <Compile Include="..\objects\Scheduler\Scheduler.cs" />
+    <Compile Include="..\util\AutoWatch.cs" />
+    <Compile Include="..\util\Enumerable.cs" />
+    <Compile Include="..\util\Pair.cs" />
+    <Compile Include="..\util\PiSerializer.cs" />
+    <Compile Include="..\Launcher.cs" />
+    <Compile Include="..\Properties\Annotations.cs" />
+    <Compile Include="..\socket4net\Coroutine\CoroutineScheduler.cs" />
+    <Compile Include="..\socket4net\Net\TCP\PeerArg.cs" />
+    <Compile Include="..\socket4net\Schedule\TimerWrapper.cs" />
+    <Compile Include="..\objects\UniqueMgr.cs" />
+    <Compile Include="..\GlobalVarPool.cs" />
+    <Compile Include="..\Properties\AssemblyInfo.cs" />
+    <Compile Include="..\socket4net\Net\TCP\DispatchalbeClient.cs" />
+    <Compile Include="..\socket4net\Net\TCP\SocketExt.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Proto\NetProto.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Proto\RpcProto.cs" />
+    <Compile Include="..\socket4net\Concurrent\BlockingCollection.cs" />
+    <Compile Include="..\socket4net\Concurrent\ConcurrentQueue.cs" />
+    <Compile Include="..\socket4net\Net\TCP\CircularBuffer.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Client.cs" />
+    <Compile Include="..\socket4net\Net\TCP\IPeer.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Packer.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Server.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Session\Session.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Session\SessionMgr.cs" />
+    <Compile Include="..\socket4net\Net\TCP\NetResult.cs" />
+    <Compile Include="..\socket4net\Net\TCP\Session\DispatchableSession.cs" />
+    <Compile Include="..\socket4net\Service\IService.cs" />
+    <Compile Include="..\socket4net\Service\Job.cs" />
+    <Compile Include="..\socket4net\Service\AutoLogicService.cs" />
+    <Compile Include="..\socket4net\Service\PassiveLogicService.cs" />
+    <Compile Include="..\socket4net\Service\LogicServiceBase.cs" />
+    <Compile Include="..\socket4net\Service\NetService.cs" />
+    <Compile Include="..\socket4net\Schedule\Timer.cs" />
+    <Compile Include="..\socket4net\Schedule\TimerScheduler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)*.dll" "$(SolutionDir)Publish/net35"
+copy "$(TargetDir)*.pdb" "$(SolutionDir)Publish/net35"
+copy "$(TargetDir)*.xml" "$(SolutionDir)Publish/net35"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
