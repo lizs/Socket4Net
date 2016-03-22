@@ -33,6 +33,7 @@ All messages are dispatched in the `DispatchableSession`, it has two abstract me
 you need implement them in your custom session.
 for example:
 ```C#
+    // for .net45
     public class ChatSession : DispatchableSession
     {
         public override Task<bool> HandlePush(IDataProtocol ps)
@@ -47,6 +48,26 @@ for example:
             var more = ps as DefaultDataProtocol;
             // do your custom handle
             return Task.FromResult(NetResult.Success);
+        }
+    }
+    
+    // for .net35
+    public class ChatSession : DispatchableSession
+    {
+        public override void HandlePush(IDataProtocol ps, Action<bool> cb)
+        {
+            var more = ps as DefaultDataProtocol;
+            // do your custom handle
+            var result = true/* your custom handle result*/;
+            cb(result);
+        }
+    
+        public override void HandleRequest(IDataProtocol rq, Action<NetResult> cb)
+        {
+            var more = ps as DefaultDataProtocol;
+            // do your custom handle
+            var result = NetResult.Success/* your custom handle result*/;
+            cb(result);
         }
     }
 ```
