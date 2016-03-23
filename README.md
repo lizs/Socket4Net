@@ -6,6 +6,12 @@ A C# asynchronous socket library.
 * cross-platform(.net/mono)
 * efficient
 
+##Getting socket4net
+To install socket4net, run the following command in the Package Manager Console
+```
+PM > Install-Package socket4net
+```
+
 ##requirements
 > protobuf-net
 
