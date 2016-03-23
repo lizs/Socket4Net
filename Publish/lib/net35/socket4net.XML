@@ -143,37 +143,6 @@
             </summary>
             <param name="action"></param>
         </member>
-        <member name="M:socket4net.IObj.InvokeAsync(System.Action,System.TimeSpan[])">
-            <summary>
-                Excute 'action' everyday's 'times' clock
-            </summary>
-        </member>
-        <member name="M:socket4net.IObj.InvokeAsync(System.Action,System.DateTime[])">
-            <summary>
-                Excute 'action' when 'whens'
-            </summary>
-        </member>
-        <member name="M:socket4net.IObj.InvokeAsync(System.Action,System.TimeSpan)">
-            <summary>
-                Excute 'action' everyday's 'time' clock
-            </summary>
-            <param name="action"></param>
-            <param name="time"></param>
-        </member>
-        <member name="M:socket4net.IObj.InvokeAsync(System.Action,System.DateTime)">
-            <summary>
-                Excute 'action' when 'when'
-            </summary>
-            <param name="action"></param>
-            <param name="when"></param>
-        </member>
-        <member name="M:socket4net.IObj.InvokeAsync(System.Action,System.UInt32)">
-            <summary>
-                Excute 'action' after 'delay' ms
-            </summary>
-            <param name="action"></param>
-            <param name="delay"></param>
-        </member>
         <member name="P:socket4net.IObj.InstanceId">
             <summary>
                 Obj instance id
@@ -277,17 +246,6 @@
             </summary>
             <param name="action"></param>
         </member>
-        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.TimeSpan[])">
-            <summary>
-                每日的times时间点执行action
-            </summary>
-            
-        </member>
-        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.DateTime[])">
-            <summary>
-                在whens指定的时间点执行action
-            </summary>
-        </member>
         <member name="M:socket4net.Obj.#ctor">
             <summary>
                 Constructor
@@ -357,6 +315,14 @@
             <param name="delay"></param>
             <param name="period"></param>
         </member>
+        <member name="T:socket4net.ConcurrentDictionary`2">
+            <summary>
+            并发字典
+            兼容.net3.5
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
         <member name="T:socket4net.IDataProtocol">
             <summary>
                 数据协议
@@ -387,6 +353,12 @@
             </summary>
             <param name="pack"></param>
         </member>
+        <member name="M:socket4net.ISession.Dispatch(System.Byte[])">
+            <summary>
+                Dispatch data
+            </summary>
+            <param name="data"></param>
+        </member>
         <member name="P:socket4net.ISession.UnderlineSocket">
             <summary>
                 Socket attached to this session
@@ -416,6 +388,18 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="proto"></param>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.HandleRequest(socket4net.IDataProtocol,System.Action{socket4net.NetResult})">
+            <summary>
+            </summary>
+            <param name="rq"></param>
+            <param name="cb"></param>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.HandlePush(socket4net.IDataProtocol,System.Action{System.Boolean})">
+            <summary>
+            </summary>
+            <param name="ps"></param>
+            <param name="cb"></param>
         </member>
         <member name="M:socket4net.IDispatchableSession.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
             <summary>
@@ -473,16 +457,6 @@
             <typeparam name="T"></typeparam>
             <param name="input"></param>
             <returns></returns>
-        </member>
-        <member name="M:socket4net.TaskHelper.ExcuteAsync``1(System.Func{``0})">
-            <summary>
-                异步执行
-            </summary>
-        </member>
-        <member name="M:socket4net.TaskHelper.ExcuteAsync``2(``0,System.Func{``0,``1})">
-            <summary>
-                异步执行
-            </summary>
         </member>
         <member name="T:socket4net.Coroutine">
             <summary>
@@ -724,7 +698,7 @@
             <param name="value">值</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])" -->
+        <!-- 对于成员“M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])”忽略有格式错误的 XML 注释 -->
         <member name="M:socket4net.PiSerializer.Deserialize(System.Type,System.Byte[])">
             <summary>
                 非泛型方式的反序列化
@@ -1484,14 +1458,6 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="proto"></param>
-        </member>
-        <member name="M:socket4net.DispatchableSession.RequestAsync(System.UInt16,socket4net.NetPackage)">
-            <summary>
-                异步请求（按请求序列号回调结果）
-            </summary>
-            <param name="serial"></param>
-            <param name="pack"></param>
-            <returns></returns>
         </member>
         <member name="P:socket4net.DispatchableSession.DataParser">
             <summary>

@@ -24,7 +24,9 @@
 #endregion
 using System;
 using System.Collections;
+#if NET45
 using System.Threading.Tasks;
+#endif
 
 namespace socket4net
 {

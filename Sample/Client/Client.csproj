@@ -60,10 +60,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.dll" "$(SolutionDir)Publish/sample/client"
-copy "$(TargetDir)*.pdb" "$(SolutionDir)Publish/sample/client"
-copy "$(TargetDir)*.xml" "$(SolutionDir)Publish/sample/client"
-copy "$(TargetDir)*.exe" "$(SolutionDir)Publish/sample/client"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -724,7 +724,7 @@
             <param name="value">值</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])" -->
+        <!-- 对于成员“M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])”忽略有格式错误的 XML 注释 -->
         <member name="M:socket4net.PiSerializer.Deserialize(System.Type,System.Byte[])">
             <summary>
                 非泛型方式的反序列化

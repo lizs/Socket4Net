@@ -148,9 +148,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.dll" "$(SolutionDir)Publish/net35"
-copy "$(TargetDir)*.pdb" "$(SolutionDir)Publish/net35"
-copy "$(TargetDir)*.xml" "$(SolutionDir)Publish/net35"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Publish/lib/net35"
+copy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Publish/lib/net35"
+copy "$(TargetDir)$(TargetName).xml" "$(SolutionDir)Publish/lib/net35"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
