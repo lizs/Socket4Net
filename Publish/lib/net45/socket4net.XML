@@ -341,7 +341,7 @@
             </summary>
             <param name="target"></param>
         </member>
-        <member name="M:socket4net.BatchedScheduler.InterlnalInvokeRepeating(System.Action,System.UInt32,System.UInt32)">
+        <member name="M:socket4net.BatchedScheduler.InternalInvokeRepeating(System.Action,System.UInt32,System.UInt32)">
             <summary>
                 Internal invoker for Obj
             </summary>
@@ -349,7 +349,7 @@
             <param name="delay"></param>
             <param name="period"></param>
         </member>
-        <member name="M:socket4net.BatchedScheduler.InterlnalInvoke(System.Action,System.UInt32)">
+        <member name="M:socket4net.BatchedScheduler.InternalInvoke(System.Action,System.UInt32)">
             <summary>
                 Internal invoker for Obj
             </summary>
@@ -724,7 +724,7 @@
             <param name="value">值</param>
             <returns></returns>
         </member>
-        <!-- 对于成员“M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])" -->
         <member name="M:socket4net.PiSerializer.Deserialize(System.Type,System.Byte[])">
             <summary>
                 非泛型方式的反序列化

@@ -110,7 +110,7 @@ namespace socket4net
         public void InvokeRepeating(Action action, uint delay, uint period)
         {
             if (_cheduler != null)
-                _cheduler.InvokeRepeating(action, delay, period);
+                _cheduler.InternalInvokeRepeating(action, delay, period);
             else
                 Logger.Ins.Warn("Scheduler is null fo {0}", Name);
         }
@@ -123,7 +123,7 @@ namespace socket4net
         public void Invoke(Action action, uint delay)
         {
             if (_cheduler != null)
-                _cheduler.Invoke(action, delay);
+                _cheduler.InternalInvoke(action, delay);
             else
                 Logger.Ins.Warn("Scheduler is null fo {0}", Name);
         }
@@ -148,7 +148,7 @@ namespace socket4net
                 return;
             }
 
-            _cheduler.Invoke(action, (uint)delay);
+            _cheduler.InternalInvoke(action, (uint)delay);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace socket4net
         public void CancelInvoke(Action action)
         {
             if (_cheduler != null)
-                _cheduler.CancelInvoke(action);
+                _cheduler.InternalCancelInvoke(action);
             else
                 Logger.Ins.Warn("Scheduler is null fo {0}", Name);
         }
@@ -298,7 +298,7 @@ namespace socket4net
             try
             {
                 if (_cheduler != null)
-                    _cheduler.Invoke(() =>
+                    _cheduler.InternalInvoke(() =>
                     {
                         action();
                         tcs.SetResult(true);

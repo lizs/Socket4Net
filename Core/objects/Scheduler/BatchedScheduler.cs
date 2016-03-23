@@ -47,7 +47,7 @@ namespace socket4net
         /// <param name="action"></param>
         /// <param name="delay"></param>
         /// <param name="period"></param>
-        public override void InterlnalInvokeRepeating(Action action, uint delay, uint period)
+        public override void InternalInvokeRepeating(Action action, uint delay, uint period)
         {
             CancelInvoke(action);
 
@@ -69,7 +69,7 @@ namespace socket4net
         /// <param name="action"></param>
         /// <param name="delay"></param>
         /// <param name="period"></param>
-        public override void InterlnalInvoke(Action action, uint delay)
+        public override void InternalInvoke(Action action, uint delay)
         {
             CancelInvoke(action);
 

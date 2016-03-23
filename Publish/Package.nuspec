@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>socket4net</id>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <authors>lizs</authors>
     <owners>lizs</owners>
     <licenseUrl>https://github.com/lizs/Socket4Net</licenseUrl>
     <projectUrl>https://github.com/lizs/Socket4Net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Efficient, easy to use and cross platform(mono/.net)</description>
-    <releaseNotes>A C# asyn socket library.</releaseNotes>
+    <description>A C# asyn socket library.</description>
+    <releaseNotes>Fix invoke bug</releaseNotes>
     <copyright>Copyright @ lizs lizs4ever@163.com 2016</copyright>
     <tags>socket</tags>
     <dependencies>

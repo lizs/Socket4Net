@@ -38,7 +38,7 @@ namespace Sample
             Obj.New<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动客户端
-            _chatClient = Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527), true); 
+            _chatClient = Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527, true), true); 
 
             Test();
 

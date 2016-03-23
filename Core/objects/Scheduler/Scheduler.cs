@@ -45,25 +45,25 @@ namespace socket4net
             Timers.Clear();
         }
 
-        public virtual void InterlnalInvokeRepeating(Action action, uint delay, uint period)
+        public virtual void InternalInvokeRepeating(Action action, uint delay, uint period)
         {
-            CancelInvoke(action);
+            InternalCancelInvoke(action);
 
             var timer = TimerWrapper.New(Name, action, delay, period);
             Timers.Add(action, timer);
             timer.Start();
         }
 
-        public virtual void InterlnalInvoke(Action action, uint delay)
+        public virtual void InternalInvoke(Action action, uint delay)
         {
-            CancelInvoke(action);
+            InternalCancelInvoke(action);
 
             var timer = TimerWrapper.New(Name, action, delay);
             Timers.Add(action, timer);
             timer.Start();
         }
 
-        public void InterlnalCancelInvoke(Action action)
+        public void InternalCancelInvoke(Action action)
         {
             if (!Timers.ContainsKey(action)) return;
 
