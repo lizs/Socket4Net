@@ -36,6 +36,9 @@ namespace socket4net
     /// </summary>
     public abstract partial class Obj
     {
+        /// <summary>
+        ///     
+        /// </summary>
         public const uint MillisecondsPerDay = 24 * 60 * 60 * 1000;
         private Scheduler _cheduler;
 
@@ -78,6 +81,10 @@ namespace socket4net
 
         #endregion
 
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected virtual void OnInit(ObjArg arg)
         {
             Owner = arg.Owner;
@@ -86,6 +93,9 @@ namespace socket4net
             _cheduler = flushableAncestor != null ? new BatchedScheduler(flushableAncestor) : new Scheduler();
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected virtual void OnDestroy()
         {
             // 销毁定时器

@@ -26,25 +26,47 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 #if NET45
 using System.Threading.Tasks;
 #endif
 
 namespace socket4net
 {
+    /// <summary>
+    ///  session arguments
+    /// </summary>
     public class SessionArg : UniqueObjArg<long>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="key"></param>
+        /// <param name="underlineSock"></param>
         public SessionArg(IPeer owner, long key, Socket underlineSock) : base(owner, key)
         {
             UnderlineSocket = underlineSock;
         }
 
+        /// <summary>
+        ///     under line socket associated to the target session
+        /// </summary>
         public Socket UnderlineSocket { get; private set; }
     }
 
+    /// <summary>
+    ///     Session
+    /// </summary>
     public abstract class Session : UniqueObj<long>, ISession
     {
+        /// <summary>
+        ///     default maximum network package size
+        /// </summary>
         public const ushort DefaultPackageMaxSize = 4 * 1024;
+        /// <summary>
+        ///     default receive buffer size
+        /// </summary>
         public const ushort DefaultReceiveBufferSize = 4 * 1024;
         protected const ushort HeaderSize = sizeof(ushort);
 
@@ -58,6 +80,10 @@ namespace socket4net
         }
 
         public Socket UnderlineSocket { get; private set; }
+
+        /// <summary>
+        ///     Host peer this session belongs to
+        /// </summary>
         public IPeer HostPeer { get { return Owner as IPeer; } }
 
         /// <summary>
@@ -88,7 +114,15 @@ namespace socket4net
         private CircularBuffer _receiveBuffer;
         private Packer _packer;
 
-        private bool _closed;
+        /// <summary>
+        ///     Session already closed
+        /// </summary>
+        public bool Closed
+        {
+            get { return _closedFlag == 1; }
+        }
+
+        private int _closedFlag;
         private ushort _receiveBufferSize = DefaultReceiveBufferSize;
         private ushort _packageMaxSize = DefaultPackageMaxSize;
 
@@ -126,8 +160,8 @@ namespace socket4net
 
         public virtual void Close(SessionCloseReason reason)
         {
-            if (_closed) return;
-            _closed = true;
+            if (Closed) return;
+            Interlocked.Exchange(ref _closedFlag, 1);
 
             _sendingQueue.Clear();
 
@@ -147,7 +181,7 @@ namespace socket4net
             HostPeer.SessionMgr.RemoveSession(Id, reason);
         }
 
-        protected byte[][] Split(byte[] data, ushort maxLen)
+        private static byte[][] Split(byte[] data, ushort maxLen)
         {
             if (data == null) return new byte[][] { };
             if (data.Length <= maxLen) return new[] { data };
@@ -178,7 +212,7 @@ namespace socket4net
 
         private void Send(byte[] data)
         {
-            if (_closed || data == null || data.Length == 0) return;
+            if (Closed || data == null || data.Length == 0) return;
             var encoded = Encoder(data);
 
             var segments = Split(encoded, PackageMaxSize);
@@ -206,7 +240,7 @@ namespace socket4net
 
         private void SendImp(byte[] data)
         {
-            if (_closed) return;
+            if (Closed) return;
 
             if (_isSending)
             {
@@ -220,7 +254,7 @@ namespace socket4net
 
         private void SendNext()
         {
-            if (_closed) return;
+            if (Closed) return;
 
             if (_sendingQueue.Count > 0)
             {
@@ -239,10 +273,12 @@ namespace socket4net
             catch (ObjectDisposedException e)
             {
                 Logger.Ins.Warn("Socket already closed! detail : {0}", e.StackTrace);
+                return;
             }
             catch
             {
                 Close(SessionCloseReason.WriteError);
+                return;
             }
 
             if (!_isSending)
@@ -253,16 +289,16 @@ namespace socket4net
 
         private void OnSendCompleted(object sender, SocketAsyncEventArgs e)
         {
-            if (_closed) return;
+            if (Closed) return;
+
+            if (e.SocketError != SocketError.Success)
+            {
+                Close(SessionCloseReason.WriteError);
+                return;
+            }
 
             HostPeer.PerformInNet(() =>
             {
-                if (e.SocketError != SocketError.Success)
-                {
-                    Close(SessionCloseReason.WriteError);
-                    return;
-                }
-
                 if (_sendingQueue.Count > 0)
                     SendNext();
                 else
@@ -287,7 +323,7 @@ namespace socket4net
 
         private void ProcessReceive()
         {
-            if (_closed) return;
+            if (Closed) return;
 
             if (_receiveAsyncEventArgs.SocketError != SocketError.Success)
             {
@@ -329,7 +365,7 @@ namespace socket4net
 
         private void ReceiveNext()
         {
-            if (_closed) return;
+            if (Closed) return;
 
             _receiveAsyncEventArgs.SetBuffer(_receiveBuffer.Buffer, _receiveBuffer.Tail, _receiveBuffer.WritableSize);
             _receiveAsyncEventArgs.UserToken = _receiveBuffer;
@@ -341,18 +377,15 @@ namespace socket4net
 
         private void OnReceiveCompleted(object sender, SocketAsyncEventArgs e)
         {
-            if (_closed) return;
+            if (Closed) return;
 
-            HostPeer.PerformInNet(() =>
+            if (e.SocketError != SocketError.Success)
             {
-                if (e.SocketError != SocketError.Success)
-                {
-                    Close(SessionCloseReason.ReadError);
-                    return;
-                }
+                Close(SessionCloseReason.ReadError);
+                return;
+            }
 
-                ProcessReceive();
-            });
+            HostPeer.PerformInNet(ProcessReceive);
         }
     }
 }
