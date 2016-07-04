@@ -23,8 +23,7 @@
 //   * */
 #endregion
 
-using System.Security.Cryptography;
-using System.Text;
+using System;
 using Proto;
 using socket4net;
 using System.Threading.Tasks;
@@ -33,22 +32,6 @@ namespace Sample
 {
     public class ChatSession : DispatchableSession
     {
-        private DES _des;
-        private readonly byte[] _desKey = Encoding.Default.GetBytes("12345678");
-        protected override void OnInit(ObjArg arg)
-        {
-            base.OnInit(arg);
-
-            // 设置加密、解密方法
-            _des = DES.Create();
-
-            var encryptor = _des.CreateEncryptor(_desKey, _desKey);
-            Encoder = bytes => encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
-
-            var decryptor = _des.CreateDecryptor(_desKey, _desKey);
-            Decoder = bytes => decryptor.TransformFinalBlock(bytes, 0, bytes.Length);
-        }
-
         public override Task<NetResult> HandleRequest(IDataProtocol rq)
         {
             var more = rq as DefaultDataProtocol;
@@ -89,6 +72,10 @@ namespace Sample
 
                     return Task.FromResult(true);
                 }
+                case EOps.Reqeust:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return Task.FromResult(false);

@@ -42,14 +42,14 @@ namespace Sample
         {
             base.OnInit(arg);
 
-            // 设置加密、解密方法
-            _des = DES.Create();
+            //// 设置加密、解密方法
+            //_des = DES.Create();
 
-            var encryptor = _des.CreateEncryptor(_desKey, _desKey);
-            Encoder = bytes => encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
+            //var encryptor = _des.CreateEncryptor(_desKey, _desKey);
+            //Encoder = bytes => encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
 
-            var decryptor = _des.CreateDecryptor(_desKey, _desKey);
-            Decoder = bytes => decryptor.TransformFinalBlock(bytes, 0, bytes.Length);
+            //var decryptor = _des.CreateDecryptor(_desKey, _desKey);
+            //Decoder = bytes => decryptor.TransformFinalBlock(bytes, 0, bytes.Length);
         }
         
 #if NET45
@@ -74,6 +74,21 @@ namespace Sample
             return Task.FromResult(false);
         }
 #else
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            InvokeRepeating(Broadcast, 1000, 5 * 1000);
+        }
+
+        private void Broadcast()
+        {
+            Push(new DefaultDataProtocol
+            {
+                Ops = (short)EOps.Push,
+                Data = PiSerializer.Serialize(new PushProto { Message = "Hello socket4net!" })
+            });
+        }
 
         public override void HandleRequest(IDataProtocol rq, Action<NetResult> cb)
         {

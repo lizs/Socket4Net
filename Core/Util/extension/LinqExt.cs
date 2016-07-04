@@ -22,13 +22,24 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace socket4net
 {
-    public static class Enumerable
+    /// <summary>
+    ///     extension for LINQ
+    /// </summary>
+    public static class LinqExt
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="enumerable"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
         {
             if (enumerable == null)
@@ -39,6 +50,38 @@ namespace socket4net
                 return collection.Count == 0;
 
             return !enumerable.Any();
+        }
+
+        /// <summary>
+        ///     分组,对分
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="parts"></param>
+        /// <returns></returns>
+        public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> input, int parts)
+        {
+            return input.Select((item, index) => new { index, item })
+                       .GroupBy(x => x.index % parts)
+                       .Select(x => x.Select(y => y.item));
+        }
+
+        /// <summary>
+        ///     get next random item from input
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static T NextRand<T>(this IEnumerable<T> input)
+        {
+            if (input.IsNullOrEmpty())
+            {
+                throw new Exception("IEnumerable为空，无法随机");
+            }
+
+            var cnt = input.Count();
+            var idx = Rand.Next(cnt);
+            return input.ElementAt(idx);
         }
     }
 }

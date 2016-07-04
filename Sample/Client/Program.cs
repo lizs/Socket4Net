@@ -23,6 +23,7 @@
 //   * */
 #endregion
 using System;
+using System.Collections.Generic;
 using Proto;
 using socket4net;
 
@@ -38,12 +39,18 @@ namespace Sample
             Obj.New<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动客户端
-            _chatClient = Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527, true), true); 
+            var clients = new List<Obj>();
+            var cnt = args.IsNullOrEmpty() ? 1000 : int.Parse(args[0]);
+            for (int i = 0; i < cnt; i++)
+            {
+                clients.Add(Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527, true), true));
+            }
 
-            Test();
-
-            // 销毁客户端
-            _chatClient.Destroy();
+            Console.ReadLine();
+            foreach (var client in clients)
+            {
+                client.Destroy();
+            }
 
             // 销毁Launcher
             Launcher.Ins.Destroy();

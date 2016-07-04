@@ -221,6 +221,11 @@
                 If IObj's 'Born' invoked 
             </summary>
         </member>
+        <member name="F:socket4net.Obj.MillisecondsPerDay">
+            <summary>
+                
+            </summary>
+        </member>
         <member name="M:socket4net.Obj.WaitFor(System.UInt32)">
             <summary>
                 产生一个在逻辑线程等待n毫秒的枚举器
@@ -228,6 +233,17 @@
             </summary>
             <param name="n"></param>
             <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.Obj.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
         </member>
         <member name="M:socket4net.Obj.ClearTimers">
             <summary>
@@ -357,6 +373,11 @@
             <param name="delay"></param>
             <param name="period"></param>
         </member>
+        <member name="T:socket4net.DefaultDataProtocol">
+            <summary>
+            socket4net's default data protocol
+            </summary>
+        </member>
         <member name="T:socket4net.IDataProtocol">
             <summary>
                 数据协议
@@ -466,6 +487,11 @@
                 Replaced
             </summary>
         </member>
+        <member name="T:socket4net.Assert">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:socket4net.Convertor.To``1(System.String)">
             <summary>
                 转成数字或枚举
@@ -473,6 +499,62 @@
             <typeparam name="T"></typeparam>
             <param name="input"></param>
             <returns></returns>
+        </member>
+        <member name="T:socket4net.DictionaryExt">
+            <summary>
+                extension for dictionary
+            </summary>
+        </member>
+        <member name="T:socket4net.ListExt">
+            <summary>
+            extension for list
+            </summary>
+        </member>
+        <member name="T:socket4net.Rand">
+            <summary>
+                random num generator
+            </summary>
+        </member>
+        <member name="M:socket4net.Rand.Next(System.Int32[])">
+            <summary>
+                在总长为Sum(input)的线段中随机一个点
+                返回随机点所在的区间索引
+            
+                例如：
+                    Next(1, 3, 6)
+                    长度为10的线段，以1/3/6为长度连续划分为3段，亦即[0,1),[1,4),[4,10)
+                若Next(10)=5，此时5落在第3段，所以返回2
+                若Next(10)=1, 则返回0
+                若Next(10)=2, 则返回1
+                等...
+            </summary>
+            <param name="input"></param>
+        </member>
+        <member name="M:socket4net.Rand.Next(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                [min, max)区间内随机cnt个不重数
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="cnt"></param>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.Add`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.Multiply`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.Treble`3">
+            <summary>
+            用于解析诸如 1 2 4 + 3 3 5 + 7 6 9 这种类型的string
+            </summary>
         </member>
         <member name="M:socket4net.TaskHelper.ExcuteAsync``1(System.Func{``0})">
             <summary>
@@ -675,6 +757,36 @@
             <summary>
                 Get elapsed ms since this watch constructed
             </summary>
+        </member>
+        <member name="T:socket4net.LinqExt">
+            <summary>
+                extension for LINQ
+            </summary>
+        </member>
+        <member name="M:socket4net.LinqExt.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            
+            </summary>
+            <param name="enumerable"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.LinqExt.Split``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+                分组,对分
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <param name="parts"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.LinqExt.NextRand``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+                get next random item from input
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <returns></returns>
         </member>
         <member name="T:socket4net.Value">
             <summary>
@@ -1424,12 +1536,50 @@
             非线程安全，需要上层来确保始终在某个线程运行
             </summary>
         </member>
+        <member name="T:socket4net.SessionArg">
+            <summary>
+             session arguments
+            </summary>
+        </member>
+        <member name="M:socket4net.SessionArg.#ctor(socket4net.IPeer,System.Int64,System.Net.Sockets.Socket)">
+            <summary>
+            
+            </summary>
+            <param name="owner"></param>
+            <param name="key"></param>
+            <param name="underlineSock"></param>
+        </member>
+        <member name="P:socket4net.SessionArg.UnderlineSocket">
+            <summary>
+                under line socket associated to the target session
+            </summary>
+        </member>
+        <member name="T:socket4net.Session">
+            <summary>
+                Session
+            </summary>
+        </member>
+        <member name="F:socket4net.Session.DefaultPackageMaxSize">
+            <summary>
+                default maximum network package size
+            </summary>
+        </member>
+        <member name="F:socket4net.Session.DefaultReceiveBufferSize">
+            <summary>
+                default receive buffer size
+            </summary>
+        </member>
         <member name="M:socket4net.Session.Dispatch(System.Byte[])">
             <summary>
             分包
             在LogicService线程分发
             </summary>
             <param name="data"></param>
+        </member>
+        <member name="P:socket4net.Session.HostPeer">
+            <summary>
+                Host peer this session belongs to
+            </summary>
         </member>
         <member name="P:socket4net.Session.ReceiveBufSize">
             <summary>
@@ -1439,6 +1589,11 @@
         <member name="P:socket4net.Session.PackageMaxSize">
             <summary>
             限制包大小
+            </summary>
+        </member>
+        <member name="P:socket4net.Session.Closed">
+            <summary>
+                Session already closed
             </summary>
         </member>
         <member name="T:socket4net.ERpc">

@@ -2,6 +2,9 @@ using ProtoBuf;
 
 namespace socket4net
 {
+    /// <summary>
+    /// socket4net's default data protocol
+    /// </summary>
     [ProtoContract]
     public class DefaultDataProtocol : IDataProtocol
     {

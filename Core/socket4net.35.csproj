@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ED0BB4A5-50C0-410F-A55F-94C842C744AC}</ProjectGuid>
+    <ProjectGuid>{ACB13EEA-90C3-4257-86D0-CE4EEC2FD9F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>socket4net</RootNamespace>
     <AssemblyName>socket4net</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET35</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -76,6 +76,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.XML" />
@@ -84,12 +88,27 @@
     <Compile Include="objects\Scheduler\BatchedScheduler.cs" />
     <Compile Include="objects\ObjSchedule.cs" />
     <Compile Include="objects\Scheduler\Flusher.cs" />
+    <Compile Include="objects\SlicedObj.cs" />
     <Compile Include="socket4net\Concurrent\ConcurrentDictionary.cs" />
     <Compile Include="socket4net\Net\TCP\Session\DefaultDataProtocol.cs" />
     <Compile Include="socket4net\Net\TCP\Session\IDispatchableSession.cs" />
     <Compile Include="socket4net\Net\TCP\Session\IDataProtocol.cs" />
     <Compile Include="socket4net\Net\TCP\Session\ISession.cs" />
+    <Compile Include="util\Assert.cs" />
     <Compile Include="util\Convertor.cs" />
+    <Compile Include="util\extension\DictionaryExt.cs" />
+    <Compile Include="util\extension\LinqExt.cs" />
+    <Compile Include="util\extension\ListExt.cs" />
+    <Compile Include="util\extension\Rand.cs" />
+    <Compile Include="util\numeric\Add.cs" />
+    <Compile Include="util\numeric\Compare.cs" />
+    <Compile Include="util\numeric\Equals.cs" />
+    <Compile Include="util\numeric\GreaterThan.cs" />
+    <Compile Include="util\numeric\LessThan.cs" />
+    <Compile Include="util\numeric\Multiply.cs" />
+    <Compile Include="util\numeric\Subtract.cs" />
+    <Compile Include="util\struct\IParsableFromString.cs" />
+    <Compile Include="util\struct\Treble.cs" />
     <Compile Include="util\Uid.cs" />
     <Compile Include="util\TaskHelper.cs" />
     <Compile Include="socket4net\Coroutine\Coroutine.cs" />
@@ -103,8 +122,7 @@
     <Compile Include="objects\ObjFactory.cs" />
     <Compile Include="objects\Scheduler\Scheduler.cs" />
     <Compile Include="util\AutoWatch.cs" />
-    <Compile Include="util\Enumerable.cs" />
-    <Compile Include="util\Pair.cs" />
+    <Compile Include="util\struct\Pair.cs" />
     <Compile Include="util\PiSerializer.cs" />
     <Compile Include="Launcher.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -140,7 +158,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)$(OutDir)*.dll" "$(SolutionDir)Publish"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Publish/lib/net35"
+copy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Publish/lib/net35"
+copy "$(TargetDir)$(TargetName).xml" "$(SolutionDir)Publish/lib/net35"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -149,5 +169,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(SolutionDir)common_for_dll.props" />
 </Project>

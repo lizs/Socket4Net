@@ -49,9 +49,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\proj.net35\socket4net-35.csproj">
-      <Project>{fc49dbbc-1976-4301-a090-73bf1b94f0f6}</Project>
-      <Name>socket4net-35</Name>
+    <ProjectReference Include="..\..\Core\socket4net.35.csproj">
+      <Project>{acb13eea-90c3-4257-86d0-ce4eec2fd9f7}</Project>
+      <Name>socket4net.35</Name>
     </ProjectReference>
     <ProjectReference Include="..\Proto\Proto.csproj">
       <Project>{b4af3b64-7884-4864-b007-dd3b59a084d5}</Project>

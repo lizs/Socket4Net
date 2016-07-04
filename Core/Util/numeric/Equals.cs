@@ -22,34 +22,33 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
-using ProtoBuf;
+using System;
+using System.Linq.Expressions;
 
 namespace socket4net
 {
-    [ProtoContract]
-    public class Pair<TFirst, TSecond>
+    public static class Equals<T>
     {
-        public Pair() { }
-
-        public Pair(TFirst key, TSecond value)
+        private static bool _compiled;
+        private static Func<T, T, bool> _function;
+        public static Func<T, T, bool> Function
         {
-            Key = key;
-            Value = value;
+            get
+            {
+                if (_compiled) return _function;
+                _function = Compile();
+                _compiled = true;
+                return _function;
+            }
         }
-        
-        [ProtoMember(1)]
-        public TFirst Key { get; set; }
-        [ProtoMember(2)]
-        public TSecond Value { get; set; }
 
-        public override string ToString()
+        private static Func<T, T, bool> Compile()
         {
-            return string.Format("{0}:{1}", Key, Value);
-        }
-    }
+            var px = Expression.Parameter(typeof(T), "x");
+            var py = Expression.Parameter(typeof(T), "y");
+            var equalExp = Expression.Equal(px, py);
 
-    [ProtoContract]
-    public class Pair<T> : Pair<T, T>
-    {
+            return Expression.Lambda<Func<T, T, bool>>(equalExp, new[] { px, py }).Compile();
+        }
     }
 }
