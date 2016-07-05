@@ -97,6 +97,7 @@
     <Compile Include="util\Assert.cs" />
     <Compile Include="util\Convertor.cs" />
     <Compile Include="util\extension\DictionaryExt.cs" />
+    <Compile Include="util\extension\FileExt.cs" />
     <Compile Include="util\extension\ListExt.cs" />
     <Compile Include="util\extension\Rand.cs" />
     <Compile Include="util\extension\StringExt.cs" />

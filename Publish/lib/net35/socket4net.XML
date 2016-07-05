@@ -555,6 +555,11 @@
                 extension for dictionary
             </summary>
         </member>
+        <member name="T:socket4net.FileSys">
+            <summary>
+                extension for file system
+            </summary>
+        </member>
         <member name="T:socket4net.ListExt">
             <summary>
             extension for list

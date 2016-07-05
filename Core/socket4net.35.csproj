@@ -97,6 +97,7 @@
     <Compile Include="util\Assert.cs" />
     <Compile Include="util\Convertor.cs" />
     <Compile Include="util\extension\DictionaryExt.cs" />
+    <Compile Include="util\extension\FileExt.cs" />
     <Compile Include="util\extension\LinqExt.cs" />
     <Compile Include="util\extension\ListExt.cs" />
     <Compile Include="util\extension\Rand.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="util\numeric\Multiply.cs" />
     <Compile Include="util\numeric\Subtract.cs" />
     <Compile Include="util\struct\Indefinite.cs" />
+    <Compile Include="util\struct\Stack.cs" />
     <Compile Include="util\struct\Treble.cs" />
     <Compile Include="util\Uid.cs" />
     <Compile Include="util\TaskHelper.cs" />
