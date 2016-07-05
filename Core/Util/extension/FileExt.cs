@@ -13,31 +13,97 @@ namespace socket4net
         public static IEnumerable<string> EnumerateFiles(
             string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
         {
+            try
+            {
 #if NET45
-            return Directory.EnumerateFiles(dir, searchPattern, searchOption);
+                return Directory.EnumerateFiles(dir, searchPattern, searchOption).Select(x=>x.Replace("\\", "/"));
 #else
-            return Directory.GetFiles(dir, searchPattern, searchOption);
+                return Directory.GetFiles(dir, searchPattern, searchOption).Select(x=>x.Replace("\\", "/"));
 #endif
+            }
+            catch (Exception e)
+            {
+                Logger.Ins.Exception("EnumerateFiles", e);
+                return new string[]{};
+            }
         }
 
         public static IEnumerable<string> EnumerateDirectories(
             string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
         {
+            try
+            {
 #if NET45
-            return Directory.EnumerateDirectories(dir, searchPattern, searchOption);
+                return Directory.EnumerateDirectories(dir, searchPattern, searchOption).Select(x=>x.Replace("\\", "/"));
 #else
-            return Directory.GetDirectories(dir, searchPattern, searchOption);
+                return Directory.GetDirectories(dir, searchPattern, searchOption).Select(x => x.Replace("\\", "/"));
 #endif
+            }
+            catch (Exception e)
+            {
+                Logger.Ins.Exception("EnumerateDirectories", e);
+                return new string[] { };
+            }
         }
 
         public static IEnumerable<string> EnumerateFilesAndDirectories(
             string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
         {
+            try
+            {
 #if NET45
-            return Directory.EnumerateFileSystemEntries(dir, searchPattern, searchOption);
+                return Directory.EnumerateFileSystemEntries(dir, searchPattern, searchOption).Select(x=>x.Replace("\\", "/"));
 #else
-            return EnumerateDirectories(dir, searchPattern, searchOption).Concat(EnumerateFiles(dir, searchPattern, searchOption));
+                return EnumerateDirectories(dir, searchPattern, searchOption).Concat(EnumerateFiles(dir, searchPattern, searchOption)).Select(x => x.Replace("\\", "/"));
 #endif
+            }
+            catch (Exception e)
+            {
+                Logger.Ins.Exception("EnumerateFilesAndDirectories", e);
+                return new string[] { };
+            }
+        }
+
+        public static IEnumerable<string> EnumerateFilesRelative(
+            string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            return EnumerateFiles(dir, searchPattern, searchOption).Select(x => x.Replace(dir, ""));
+        }
+
+        public static IEnumerable<string> EnumerateDirectoriesRelative(
+            string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            return EnumerateDirectories(dir, searchPattern, searchOption).Select(x => x.Replace(dir, ""));
+        }
+
+        public static IEnumerable<string> EnumerateFilesAndDirectoriesRelative(
+            string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            return EnumerateFilesAndDirectories(dir, searchPattern, searchOption).Select(x => x.Replace(dir, ""));
+        }
+
+        public static IEnumerable<string> EnumerateFilesRelativeWithoutExt(
+            string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            return EnumerateFilesRelative(dir, searchPattern, searchOption).Select(x => x.Replace(Path.GetExtension(x), "")).Select(x => x.Replace(dir, ""));
+        }
+
+        public static IEnumerable<string> EnumerateFilesFull(
+            string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            return EnumerateFiles(dir, searchPattern, searchOption).Select(x => GetFullPath(x).Replace("\\", "/"));
+        }
+
+        public static IEnumerable<string> EnumerateDirectoriesFull(
+            string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            return EnumerateDirectories(dir, searchPattern, searchOption).Select(x => GetFullPath(x).Replace("\\", "/"));
+        }
+
+        public static IEnumerable<string> EnumerateFilesAndDirectoriesFull(
+            string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
+        {
+            return EnumerateFilesAndDirectories(dir, searchPattern, searchOption).Select(x => GetFullPath(x).Replace("\\", "/"));
         }
 
         public static void Copy(string source, string dest, bool overwrite)
