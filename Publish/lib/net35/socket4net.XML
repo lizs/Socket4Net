@@ -494,10 +494,18 @@
         </member>
         <member name="M:socket4net.Convertor.To``1(System.String)">
             <summary>
-                转成数字或枚举
+                generic parse an object from string
             </summary>
             <typeparam name="T"></typeparam>
             <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.To(System.String,System.Type)">
+            <summary>
+                non-generic convertor
+            </summary>
+            <param name="input"></param>
+            <param name="type"></param>
             <returns></returns>
         </member>
         <member name="T:socket4net.DictionaryExt">
@@ -538,6 +546,11 @@
             <param name="max"></param>
             <param name="cnt"></param>
             <returns></returns>
+        </member>
+        <member name="T:socket4net.FileExt">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:socket4net.Add`1">
             <summary>

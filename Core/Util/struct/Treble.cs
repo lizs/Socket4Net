@@ -5,7 +5,7 @@ namespace socket4net
 {
     public class Treble<T> : Treble<T, T, T>
     {
-        public Treble() { }
+        public Treble(string str) : base(str) { }
 
         public Treble(T one, T two, T three)
             : base(one, two, three)
@@ -19,18 +19,13 @@ namespace socket4net
     [ProtoContract]
     public class Treble<T1, T2, T3> : IParsableFromString
     {
-        public Treble() { }
+        public Treble(string str) { Parse(str); }
 
         public Treble(T1 one, T2 two, T3 three)
         {
             One = one;
             Two = two;
             Three = three;
-        }
-
-        public Treble(string str)
-        {
-            Parse(str);
         }
 
         [ProtoMember(1)]
@@ -40,7 +35,7 @@ namespace socket4net
         [ProtoMember(3)]
         public T3 Three { get; set; }
 
-        public void Parse(string str)
+        private void Parse(string str)
         {
             var x = str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (x.Length != 3)

@@ -99,6 +99,7 @@
     <Compile Include="util\extension\DictionaryExt.cs" />
     <Compile Include="util\extension\ListExt.cs" />
     <Compile Include="util\extension\Rand.cs" />
+    <Compile Include="util\FileExt.cs" />
     <Compile Include="util\numeric\Add.cs" />
     <Compile Include="util\numeric\Compare.cs" />
     <Compile Include="util\numeric\Equals.cs" />
@@ -106,7 +107,7 @@
     <Compile Include="util\numeric\LessThan.cs" />
     <Compile Include="util\numeric\Multiply.cs" />
     <Compile Include="util\numeric\Subtract.cs" />
-    <Compile Include="util\struct\IParsableFromString.cs" />
+    <Compile Include="util\struct\Indefinite.cs" />
     <Compile Include="util\struct\Pair.cs" />
     <Compile Include="util\struct\Treble.cs" />
     <Compile Include="util\Uid.cs" />

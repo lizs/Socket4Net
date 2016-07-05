@@ -492,12 +492,62 @@
             
             </summary>
         </member>
+        <member name="T:socket4net.IParsableFromString">
+            <summary>
+                
+            </summary>
+        </member>
+        <member name="T:socket4net.Convertor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.Convertor.GetDefault(System.Type)">
+            <summary>
+                get default value for type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.GetEmptyList(System.Type)">
+            <summary>
+                get an empty list
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="M:socket4net.Convertor.To``1(System.String)">
             <summary>
-                转成数字或枚举
+                generic parse an object from string
             </summary>
             <typeparam name="T"></typeparam>
             <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.To(System.String,System.Type)">
+            <summary>
+                non-generic convertor
+            </summary>
+            <param name="str"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.ToList``1(System.String,System.Char[])">
+            <summary>
+                parse string to list
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.ToList(System.String,System.Type,System.Char[])">
+            <summary>
+                parse string to list
+            </summary>
+            <param name="strInput"></param>
+            <param name="type"></param>
+            <param name="separator"></param>
             <returns></returns>
         </member>
         <member name="T:socket4net.DictionaryExt">
@@ -539,6 +589,11 @@
             <param name="cnt"></param>
             <returns></returns>
         </member>
+        <member name="T:socket4net.FileExt">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:socket4net.Add`1">
             <summary>
             
@@ -550,6 +605,11 @@
             
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.Indefinite`1">
+            <summary>
+            不确定个数
+            </summary>
         </member>
         <member name="T:socket4net.Treble`3">
             <summary>

@@ -24,6 +24,8 @@
 #endregion
 
 using System;
+using System.ComponentModel;
+using System.Globalization;
 using ProtoBuf;
 
 namespace socket4net
@@ -31,7 +33,10 @@ namespace socket4net
     [ProtoContract]
     public class Pair<TFirst, TSecond> : IParsableFromString
     {
-        public Pair() { }
+        public Pair(string str)
+        {
+            Parse(str);
+        }
 
         public Pair(TFirst key, TSecond value)
         {
@@ -49,12 +54,12 @@ namespace socket4net
             return string.Format("{0}:{1}", Key, Value);
         }
 
-        public void Parse(string str)
+        private void Parse(string str)
         {
             var x = str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (x.Length != 3)
+            if (x.Length != 2)
             {
-                throw new IndexOutOfRangeException("[Treble # ParseFromString]:数组大小需要为3");
+                throw new IndexOutOfRangeException("[Pair # ParseFromString]:数组大小需要为2");
             }
 
             Key = x[0].To<TFirst>();
@@ -65,7 +70,7 @@ namespace socket4net
     [ProtoContract]
     public class Pair<T> : Pair<T, T>
     {
-        public Pair()
+        public Pair(string str) : base(str)
         { }
         public Pair(T key, T value)
             : base(key, value)
