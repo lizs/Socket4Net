@@ -91,7 +91,7 @@ namespace socket4net
                 return ToList(str, args[0], '+');
             }
 
-            if (string.IsNullOrWhiteSpace(str))
+            if (str.IsNullOrWhiteSpace())
                 return GetDefault(type);
 
             if (typeof(IParsableFromString).IsAssignableFrom(type))
@@ -138,7 +138,7 @@ namespace socket4net
         public static IList ToList(string strInput, Type type, params char[] separator)
         {
             var lst = GetEmptyList(type);
-            if (string.IsNullOrWhiteSpace(strInput))
+            if (strInput.IsNullOrWhiteSpace())
                 return lst;
 
             var arr = strInput.Split(separator, StringSplitOptions.RemoveEmptyEntries);
