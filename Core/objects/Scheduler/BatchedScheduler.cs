@@ -47,7 +47,7 @@ namespace socket4net
         /// <param name="action"></param>
         /// <param name="delay"></param>
         /// <param name="period"></param>
-        public override void InternalInvokeRepeating(Action action, uint delay, uint period)
+        public override void InvokeRepeatingImp(Action action, uint delay, uint period)
         {
             CancelInvoke(action);
 
@@ -59,7 +59,7 @@ namespace socket4net
                 }
             },
                 delay, period);
-            Timers.Add(action, timer);
+            AddTimer(action, timer);
             timer.Start();
         }
 
@@ -68,8 +68,7 @@ namespace socket4net
         /// </summary>
         /// <param name="action"></param>
         /// <param name="delay"></param>
-        /// <param name="period"></param>
-        public override void InternalInvoke(Action action, uint delay)
+        public override void InvokeImp(Action action, uint delay)
         {
             CancelInvoke(action);
 
@@ -81,7 +80,7 @@ namespace socket4net
                     action();
                 }
             }, delay);
-            Timers.Add(action, timer);
+            AddTimer(action, timer);
             timer.Start();
         }
     }

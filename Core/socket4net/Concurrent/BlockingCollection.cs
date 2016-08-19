@@ -30,13 +30,10 @@ using System.Threading;
 
 namespace socket4net
 {
-    // Summary:
-    //     Provides blocking and bounding capabilities for thread-safe collections that
+    /// <summary> Provides blocking and bounding capabilities for thread-safe collections that
     //     implement System.Collections.Concurrent.IProducerConsumerCollection<T>.
-    //
-    // Type parameters:
-    //   T:
-    //     The type of elements in the collection.
+    // </summary>
+    // <typeparam name="T"></typeparam>
     public class BlockingCollection<T> : IEnumerable<T>, ICollection, IDisposable
     {
         #region Not implemented
@@ -57,13 +54,18 @@ namespace socket4net
         public bool IsSynchronized { get; private set; }
         #endregion
 
-        public int Count
-        {
-            get { return _queue.Count; }
-        }
+        /// <summary>获取 <see cref="T:System.Collections.ICollection" /> 中包含的元素数。</summary>
+        /// <returns>
+        /// <see cref="T:System.Collections.ICollection" /> 中包含的元素数。</returns>
+        /// <filterpriority>2</filterpriority>
+        public int Count => _queue.Count;
 
         private readonly object _syncRoot = new object();
-        public object SyncRoot { get { return _syncRoot; } }
+
+        /// <summary>获取可用于同步 <see cref="T:System.Collections.ICollection" /> 访问的对象。</summary>
+        /// <returns>可用于同步对 <see cref="T:System.Collections.ICollection" /> 的访问的对象。</returns>
+        /// <filterpriority>2</filterpriority>
+        public object SyncRoot => _syncRoot;
 
         private ConcurrentQueue<T> _queue;
 

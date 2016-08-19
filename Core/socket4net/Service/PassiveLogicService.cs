@@ -55,12 +55,9 @@ namespace socket4net
             Logger.Ins.Debug("Logic service stopped!");
         }
 
-        public override int Jobs
-        {
-            get { return _jobs.Count; }
-        }
+        public override int Jobs => _jobs.Count;
 
-        public override void Enqueue(IJob w)
+        internal override void Enqueue(IJob w)
         {
             _jobs.Enqueue(w);
         }

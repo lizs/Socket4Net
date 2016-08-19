@@ -9,14 +9,1021 @@
                 Batch定时器调度器
             </summary>
         </member>
+        <member name="M:socket4net.BatchedScheduler.#ctor(socket4net.IFlushable)">
+            <summary>
+            
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="M:socket4net.BatchedScheduler.InvokeRepeatingImp(System.Action,System.UInt32,System.UInt32)">
+            <summary>
+                Internal invoker for Obj
+            </summary>
+            <param name="action"></param>
+            <param name="delay"></param>
+            <param name="period"></param>
+        </member>
+        <member name="M:socket4net.BatchedScheduler.InvokeImp(System.Action,System.UInt32)">
+            <summary>
+                Internal invoker for Obj
+            </summary>
+            <param name="action"></param>
+            <param name="delay"></param>
+        </member>
         <member name="T:socket4net.Obj">
             <summary>
                 对象基类
             </summary>
         </member>
+        <member name="F:socket4net.Obj.MillisecondsPerDay">
+            <summary>
+                
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.Obj.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.ClearTimers">
+            <summary>
+                clear timers attached on this obj
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.InvokeRepeating(System.Action,System.UInt32,System.UInt32)">
+            <summary>
+                Excute 'action' after 'delay' ms for every 'period' ms
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.UInt32)">
+            <summary>
+                Excute 'action' after 'delay' ms
+            </summary>
+            <param name="action"></param>
+            <param name="delay"></param>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.DateTime)">
+            <summary>
+                Excute 'action' when 'when'
+            </summary>
+            <param name="action"></param>
+            <param name="when"></param>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Excute 'action' every 'hour:min:s'
+            </summary>
+            <param name="action"></param>
+            <param name="hour"></param>
+            <param name="min"></param>
+            <param name="s"></param>
+        </member>
+        <member name="M:socket4net.Obj.Invoke(System.Action,System.TimeSpan)">
+            <summary>
+                Excute 'action' everyday's 'time' clock
+            </summary>
+            <param name="action"></param>
+            <param name="time"></param>
+        </member>
+        <member name="M:socket4net.Obj.CancelInvoke(System.Action)">
+            <summary>
+                取消action的调度
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.TimeSpan[])">
+            <summary>
+                每日的times时间点执行action
+            </summary>
+            
+        </member>
+        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.DateTime[])">
+            <summary>
+                在whens指定的时间点执行action
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.socket4net#IObj#InstanceId">
+            <summary>
+                Obj instance id
+                Unique only before current process dead
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Name">
+            <summary>
+                name
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Priority">
+            <summary>
+                Schedule priority
+                Just like Unity's layer
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.#ctor">
+            <summary>
+                Constructor
+                InstanceId is assigned here
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Owner">
+            <summary>
+                Owner
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.OwnerDescription">
+            <summary>
+                Owner description
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Initialized">
+            <summary>
+                If initialized
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Started">
+            <summary>
+                If started
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Destroyed">
+            <summary>
+                If destroyed
+            </summary>
+        </member>
+        <member name="P:socket4net.Obj.Fresh">
+            <summary>
+                If IObj's 'Born' invoked 
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.CompareTo(socket4net.IObj)">
+            <summary>
+                comparer
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.ToString">
+            <summary>Returns a string that represents the current object.</summary>
+            <returns>A string that represents the current object.</returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:socket4net.Obj.New``1(socket4net.ObjArg,System.Boolean)">
+            <summary>
+                Create an obj of type 'T' with arg
+                If 'start' == true, Obj will be started after initialized
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.New(System.Type,socket4net.ObjArg,System.Boolean)">
+            <summary>
+                Create an obj of 'type' with arg
+                If 'start' == true, Obj will be started after initialized
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.New``1(System.Type,socket4net.ObjArg,System.Boolean)">
+            <summary>
+                Create an obj of 'type' with arg and return 'obj as T'
+                If 'start' == true, Obj will be started after initialized
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.Init(socket4net.ObjArg)">
+            <summary>
+                Initialize
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.Obj.Start">
+            <summary>
+                Run
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Destroy">
+            <summary>
+                Destroy
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.Born">
+            <summary>
+                Born
+                Obj only born once during it's life circle
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.OnBorn">
+            <summary>
+                Invoked when obj born
+            </summary>
+        </member>
+        <member name="M:socket4net.Obj.GetAncestor``1">
+            <summary>
+                Get obj's ancestor
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.IFlushable">
+            <summary>
+                interface of flushable object
+            </summary>
+        </member>
+        <member name="M:socket4net.IFlushable.Flush">
+            <summary>
+                do flush operations
+            </summary>
+        </member>
+        <member name="T:socket4net.Flusher">
+            <summary>
+               auto flush in an "using" statement
+            </summary>
+        </member>
+        <member name="M:socket4net.Flusher.#ctor(socket4net.IFlushable)">
+            <summary>
+            
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="T:socket4net.SlicedObj">
+            <summary>
+                sliced object
+            </summary>
+        </member>
+        <member name="E:socket4net.SlicedObj.EventProgressChanged">
+            <summary>
+                event raised when progress changed
+            </summary>
+        </member>
+        <member name="E:socket4net.SlicedObj.EventFailed">
+            <summary>
+                event raised when process failed
+            </summary>
+        </member>
+        <member name="E:socket4net.SlicedObj.EventCompleted">
+            <summary>
+                event raised when process completed
+            </summary>
+        </member>
+        <member name="P:socket4net.SlicedObj.Percent">
+            <summary>
+               get process percentage
+            </summary>
+        </member>
+        <member name="P:socket4net.SlicedObj.Progress">
+            <summary>
+                get process progress
+            </summary>
+        </member>
+        <member name="P:socket4net.SlicedObj.Steps">
+            <summary>
+                get sliced steps
+            </summary>
+        </member>
+        <member name="P:socket4net.SlicedObj.IsDone">
+            <summary>
+                specify wether processing is done
+            </summary>
+        </member>
+        <member name="P:socket4net.SlicedObj.Failed">
+            <summary>
+                specify wether processing is failed
+            </summary>
+        </member>
+        <member name="M:socket4net.SlicedObj.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="T:socket4net.DefaultDataProtocol">
+            <summary>
+            socket4net's default data protocol
+            </summary>
+        </member>
+        <member name="P:socket4net.DefaultDataProtocol.Ops">
+            <summary>
+                operation id
+            </summary>
+        </member>
+        <member name="P:socket4net.DefaultDataProtocol.Data">
+            <summary>
+                operation data
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultDataProtocol.ToString">
+            <summary>Returns a string that represents the current object.</summary>
+            <returns>A string that represents the current object.</returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:socket4net.IDispatchableSession">
+            <summary>
+                diapatchable session
+                dispath request/push by DispatchProto
+            </summary>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.ISession})">
+            <summary>
+                Push message to clients specified by 'sessions'
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <param name="sessions"></param>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.Broadcast``1(``0)">
+            <summary>
+                Push message to all the clients
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <param name="cb"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.IDispatchableSession.Push``1(``0)">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.IDataProtocol">
+            <summary>
+                数据协议
+                网络数据按照该协议解析
+            </summary>
+        </member>
+        <member name="T:socket4net.SessionCloseReason">
+            <summary>
+                Session closed reason
+            </summary>
+        </member>
+        <member name="F:socket4net.SessionCloseReason.ClosedByMyself">
+            <summary>
+                By me
+            </summary>
+        </member>
+        <member name="F:socket4net.SessionCloseReason.ClosedByRemotePeer">
+            <summary>
+                By peer
+            </summary>
+        </member>
+        <member name="F:socket4net.SessionCloseReason.ReadError">
+            <summary>
+                Read error
+            </summary>
+        </member>
+        <member name="F:socket4net.SessionCloseReason.WriteError">
+            <summary>
+                Write error
+            </summary>
+        </member>
+        <member name="F:socket4net.SessionCloseReason.PackError">
+            <summary>
+                Pack error
+                That's mean data can't packaged by DataParser or data is much too huge
+            </summary>
+        </member>
+        <member name="F:socket4net.SessionCloseReason.Replaced">
+            <summary>
+                Replaced
+            </summary>
+        </member>
+        <member name="T:socket4net.ISession">
+            <summary>
+                Session
+                Indicate a link between client and server
+            </summary>
+        </member>
+        <member name="P:socket4net.ISession.UnderlineSocket">
+            <summary>
+                Socket attached to this session
+            </summary>
+        </member>
+        <member name="P:socket4net.ISession.ReceiveBufSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.ISession.PackageMaxSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.ISession.Close(socket4net.SessionCloseReason)">
+            <summary>
+                Close this session
+            </summary>
+            <param name="reason"></param>
+        </member>
+        <member name="M:socket4net.ISession.InternalSend(socket4net.NetPackage)">
+            <summary>
+                Send message to peer
+            </summary>
+            <param name="pack"></param>
+        </member>
+        <member name="T:socket4net.Assert">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:socket4net.IParsableFromString">
+            <summary>
+                
+            </summary>
+        </member>
+        <member name="T:socket4net.Convertor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.Convertor.GetDefault(System.Type)">
+            <summary>
+                get default value for type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.GetEmptyList(System.Type)">
+            <summary>
+                get an empty list
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.To``1(System.String)">
+            <summary>
+                generic parse an object from string
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.To(System.String,System.Type)">
+            <summary>
+                non-generic convertor
+            </summary>
+            <param name="str"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.ToList``1(System.String,System.Char[])">
+            <summary>
+                parse string to list
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Convertor.ToList(System.String,System.Type,System.Char[])">
+            <summary>
+                parse string to list
+            </summary>
+            <param name="strInput"></param>
+            <param name="type"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.DictionaryExt">
+            <summary>
+                extension for dictionary
+            </summary>
+        </member>
+        <member name="T:socket4net.FileSys">
+            <summary>
+                extension for file system
+            </summary>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateFiles(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+            
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.ListExt">
+            <summary>
+            extension for list
+            </summary>
+        </member>
+        <member name="T:socket4net.Rand">
+            <summary>
+                random num generator
+            </summary>
+        </member>
+        <member name="M:socket4net.Rand.Next(System.Int32[])">
+            <summary>
+                在总长为Sum(input)的线段中随机一个点
+                返回随机点所在的区间索引
+            
+                例如：
+                    Next(1, 3, 6)
+                    长度为10的线段，以1/3/6为长度连续划分为3段，亦即[0,1),[1,4),[4,10)
+                若Next(10)=5，此时5落在第3段，所以返回2
+                若Next(10)=1, 则返回0
+                若Next(10)=2, 则返回1
+                等...
+            </summary>
+            <param name="input"></param>
+        </member>
+        <member name="M:socket4net.Rand.Next(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                [min, max)区间内随机cnt个不重数
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="cnt"></param>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.FileExt">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:socket4net.Add`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.Multiply`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.Indefinite`1">
+            <summary>
+            不确定个数
+            </summary>
+        </member>
+        <member name="T:socket4net.Pair`2">
+            <summary>
+                pair
+            </summary>
+            <typeparam name="TFirst"></typeparam>
+            <typeparam name="TSecond"></typeparam>
+        </member>
+        <member name="M:socket4net.Pair`2.#ctor(System.String)">
+            <summary>
+                constructor
+            </summary>
+            <param name="str"></param>
+        </member>
+        <member name="M:socket4net.Pair`2.#ctor(`0,`1)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="P:socket4net.Pair`2.Key">
+            <summary>
+                first element of pair
+            </summary>
+        </member>
+        <member name="P:socket4net.Pair`2.Value">
+            <summary>
+             second element of pair
+            </summary>
+        </member>
+        <member name="M:socket4net.Pair`2.ToString">
+            <summary>Returns a string that represents the current object.</summary>
+            <returns>A string that represents the current object.</returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:socket4net.Pair`1">
+            <summary>
+                generic pair
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.Pair`1.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="str"></param>
+        </member>
+        <member name="M:socket4net.Pair`1.#ctor(`0,`0)">
+            <summary>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:socket4net.Treble`3">
+            <summary>
+            用于解析诸如 1 2 4 + 3 3 5 + 7 6 9 这种类型的string
+            </summary>
+        </member>
+        <member name="M:socket4net.TaskHelper.ExcuteAsync``1(System.Func{``0})">
+            <summary>
+                异步执行
+            </summary>
+        </member>
+        <member name="M:socket4net.TaskHelper.ExcuteAsync``2(``0,System.Func{``0,``1})">
+            <summary>
+                异步执行
+            </summary>
+        </member>
+        <member name="T:socket4net.Coroutine">
+            <summary>
+                协程
+            </summary>
+        </member>
+        <member name="M:socket4net.Coroutine.Update">
+            <summary>
+                每帧执行一次
+            </summary>
+            <returns>false表示协程未完毕，反之协程已完毕</returns>
+        </member>
+        <member name="M:socket4net.Coroutine.Process(System.Collections.IEnumerator)">
+            <summary>
+                处理枚举器
+            </summary>
+            <param name="enumerator"></param>
+            <returns>
+                False表示当前无任务
+                True表示还有任务需处理
+            </returns>
+        </member>
+        <member name="T:socket4net.DefaultLogger">
+            <summary>
+                socket4net's default logger
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Debug(System.Object)">
+            <summary>
+                Log as debug level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Debug(System.String,System.Object[])">
+            <summary>
+                Log as debug level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Error(System.Object)">
+            <summary>
+                Log as error level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Error(System.String,System.Object[])">
+            <summary>
+                Log as error level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Fatal(System.Object)">
+            <summary>
+                Log as fatal level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Fatal(System.String,System.Object[])">
+            <summary>
+                Log as fatal level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Info(System.Object)">
+            <summary>
+                Log as information level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Info(System.String,System.Object[])">
+            <summary>
+                Log as information level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Warn(System.Object)">
+            <summary>
+                Log as warnning level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Warn(System.String,System.Object[])">
+            <summary>
+                Log as warnning level
+            </summary>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Exception(System.String,System.Exception)">
+            <summary>
+                Log exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:socket4net.DefaultLogger.Shutdown">
+            <summary>
+                Destroy logger
+            </summary>
+        </member>
+        <member name="T:socket4net.EmptyLogger">
+            <summary>
+                Empty logger
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Debug(System.Object)">
+            <summary>
+                Log as debug level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Debug(System.String,System.Object[])">
+            <summary>
+                Log as debug level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Error(System.Object)">
+            <summary>
+                Log as error level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Error(System.String,System.Object[])">
+            <summary>
+                Log as error level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Fatal(System.Object)">
+            <summary>
+                Log as fatal level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Fatal(System.String,System.Object[])">
+            <summary>
+                Log as fatal level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Info(System.Object)">
+            <summary>
+                Log as information level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Info(System.String,System.Object[])">
+            <summary>
+                Log as information level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Warn(System.Object)">
+            <summary>
+                Log as warnning level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Warn(System.String,System.Object[])">
+            <summary>
+                Log as warnning level
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Exception(System.String,System.Exception)">
+            <summary>
+                Log exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:socket4net.EmptyLogger.Shutdown">
+            <summary>
+                Destroy logger
+            </summary>
+        </member>
+        <member name="T:socket4net.ILog">
+            <summary>
+                Logger interface
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Debug(System.Object)">
+            <summary>
+                Log as debug level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Debug(System.String,System.Object[])">
+            <summary>
+                Log as debug level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Error(System.Object)">
+            <summary>
+                Log as error level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Error(System.String,System.Object[])">
+            <summary>
+                Log as error level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Fatal(System.Object)">
+            <summary>
+                Log as fatal level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Fatal(System.String,System.Object[])">
+            <summary>
+                Log as fatal level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Info(System.Object)">
+            <summary>
+                Log as information level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Info(System.String,System.Object[])">
+            <summary>
+                Log as information level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Warn(System.Object)">
+            <summary>
+                Log as warnning level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Warn(System.String,System.Object[])">
+            <summary>
+                Log as warnning level
+            </summary>
+        </member>
+        <member name="M:socket4net.ILog.Exception(System.String,System.Exception)">
+            <summary>
+                Log exception
+            </summary>
+            <param name="msg"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:socket4net.ILog.Shutdown">
+            <summary>
+                Destroy logger
+            </summary>
+        </member>
+        <member name="T:socket4net.Mgr`1">
+            <summary>
+                对象管理器
+            </summary>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="M:socket4net.Mgr`1.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.Mgr`1.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.Mgr`1.OnBorn">
+            <summary>
+                Invoked when obj born
+            </summary>
+        </member>
+        <member name="M:socket4net.Mgr`1.GetEnumerator">
+            <summary>返回一个循环访问集合的枚举数。</summary>
+            <returns>可用于循环访问集合的 <see cref="T:System.Collections.Generic.IEnumerator`1" />。</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:socket4net.Mgr`1.Destroy``1">
+            <summary>
+             destroy all the elements of type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.Mgr`1.Destroy``1(System.Predicate{``0})">
+            <summary>
+             destroy all the elements of type "T" that satisfied the "condition"
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.Mgr`1.Get``1">
+            <summary>
+             get all the elements of type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Mgr`1.Get``1(System.Predicate{``0})">
+            <summary>
+             get all the elements of type "T" that satisfied the "condition"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Mgr`1.GetReverse``1">
+            <summary>
+             get all the elements of type "T" as reverse order
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Mgr`1.GetFirst``1">
+            <summary>
+             get the first element of type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Mgr`1.Create``1(socket4net.ObjArg,System.Boolean)">
+            <summary>
+                create object of type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.ObjArg">
+            <summary>
+                Arguments used to initialize an Obj
+            </summary>
+        </member>
+        <member name="P:socket4net.ObjArg.Owner">
+            <summary>
+                Owner of to be initialized Obj
+            </summary>
+        </member>
+        <member name="M:socket4net.ObjArg.#ctor(socket4net.IObj)">
+            <summary>
+                Constructor
+            </summary>
+            <param name="owner"></param>
+        </member>
+        <member name="P:socket4net.ObjArg.Empty">
+            <summary>
+                Empty obj argument
+            </summary>
+        </member>
+        <member name="M:socket4net.ObjArg.As``1">
+            <summary>
+                Cast this arg to T
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.EmptyArg">
+            <summary>
+                Empty obj argument
+            </summary>
+        </member>
+        <member name="M:socket4net.EmptyArg.#ctor">
+            <summary>
+                Constructor
+            </summary>
+        </member>
         <member name="T:socket4net.IObj">
             <summary>
                 Interface Obj
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.InstanceId">
+            <summary>
+                Obj instance id
+                Unique only before current process dead
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Owner">
+            <summary>
+                Owner
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Name">
+            <summary>
+                name
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Priority">
+            <summary>
+                Schedule priority
+                Just like Unity's layer
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.OwnerDescription">
+            <summary>
+                Owner description
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Initialized">
+            <summary>
+                If initialized
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Started">
+            <summary>
+                If started
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Destroyed">
+            <summary>
+                If destroyed
+            </summary>
+        </member>
+        <member name="P:socket4net.IObj.Fresh">
+            <summary>
+                If IObj's 'Born' invoked 
             </summary>
         </member>
         <member name="M:socket4net.IObj.CompareTo(socket4net.IObj)">
@@ -174,603 +1181,33 @@
             <param name="action"></param>
             <param name="delay"></param>
         </member>
-        <member name="P:socket4net.IObj.InstanceId">
+        <member name="T:socket4net.UniqueObjArg`1">
             <summary>
-                Obj instance id
-                Unique only before current process dead
+                unique object arguments
             </summary>
+            <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:socket4net.IObj.Owner">
+        <member name="P:socket4net.UniqueObjArg`1.Key">
             <summary>
-                Owner
+             unique key
             </summary>
         </member>
-        <member name="P:socket4net.IObj.Name">
+        <member name="M:socket4net.UniqueObjArg`1.#ctor(socket4net.IObj,`0)">
             <summary>
-                name
-            </summary>
-        </member>
-        <member name="P:socket4net.IObj.Priority">
-            <summary>
-                Schedule priority
-                Just like Unity's layer
-            </summary>
-        </member>
-        <member name="P:socket4net.IObj.OwnerDescription">
-            <summary>
-                Owner description
-            </summary>
-        </member>
-        <member name="P:socket4net.IObj.Initialized">
-            <summary>
-                If initialized
-            </summary>
-        </member>
-        <member name="P:socket4net.IObj.Started">
-            <summary>
-                If started
-            </summary>
-        </member>
-        <member name="P:socket4net.IObj.Destroyed">
-            <summary>
-                If destroyed
-            </summary>
-        </member>
-        <member name="P:socket4net.IObj.Fresh">
-            <summary>
-                If IObj's 'Born' invoked 
-            </summary>
-        </member>
-        <member name="F:socket4net.Obj.MillisecondsPerDay">
-            <summary>
-                
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.WaitFor(System.UInt32)">
-            <summary>
-                产生一个在逻辑线程等待n毫秒的枚举器
-                用在协程中
-            </summary>
-            <param name="n"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Obj.OnInit(socket4net.ObjArg)">
-            <summary>
-               internal called when an Obj is initialized
-            </summary>
-            <param name="arg"></param>
-        </member>
-        <member name="M:socket4net.Obj.OnDestroy">
-            <summary>
-               internal called when an Obj is to be destroyed
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.ClearTimers">
-            <summary>
-                清理调度器
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.InvokeRepeating(System.Action,System.UInt32,System.UInt32)">
-            <summary>
-                延时delay，以period为周期重复执行action
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.Invoke(System.Action,System.UInt32)">
-            <summary>
-                延时delay，执行action
-            </summary>
-            <param name="action"></param>
-            <param name="delay"></param>
-        </member>
-        <member name="M:socket4net.Obj.Invoke(System.Action,System.DateTime)">
-            <summary>
-                在when时间点执行action
-            </summary>
-            <param name="action"></param>
-            <param name="when"></param>
-        </member>
-        <member name="M:socket4net.Obj.Invoke(System.Action,System.Int32,System.Int32,System.Int32)">
-            <summary>
-                每天 hour:min:s 执行action
-                如：每天20:15执行action，此时 hour == 20 min == 15 s == 0
-            </summary>
-            <param name="action"></param>
-            <param name="hour"></param>
-            <param name="min"></param>
-            <param name="s"></param>
-        </member>
-        <member name="M:socket4net.Obj.Invoke(System.Action,System.TimeSpan)">
-            <summary>
-                每天 time 执行action
-                注：time并非间隔
-            </summary>
-            <param name="action"></param>
-            <param name="time"></param>
-        </member>
-        <member name="M:socket4net.Obj.CancelInvoke(System.Action)">
-            <summary>
-                取消action的调度
-            </summary>
-            <param name="action"></param>
-        </member>
-        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.TimeSpan[])">
-            <summary>
-                每日的times时间点执行action
-            </summary>
-            
-        </member>
-        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.DateTime[])">
-            <summary>
-                在whens指定的时间点执行action
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.#ctor">
-            <summary>
-                Constructor
-                InstanceId is assigned here
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.New``1(socket4net.ObjArg,System.Boolean)">
-            <summary>
-                Create an obj of type 'T' with arg
-                If 'start' == true, Obj will be started after initialized
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Obj.New(System.Type,socket4net.ObjArg,System.Boolean)">
-            <summary>
-                Create an obj of 'type' with arg
-                If 'start' == true, Obj will be started after initialized
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Obj.New``1(System.Type,socket4net.ObjArg,System.Boolean)">
-            <summary>
-                Create an obj of 'type' with arg and return 'obj as T'
-                If 'start' == true, Obj will be started after initialized
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Obj.OnStart">
-            <summary>
-                Invoked when obj started
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.Destroy">
-            <summary>
-                Invoked when obj destroyed
-            </summary>
-        </member>
-        <member name="M:socket4net.Obj.OnBorn">
-            <summary>
-                Invoked when obj born
-            </summary>
-        </member>
-        <member name="P:socket4net.Obj.OwnerDescription">
-            <summary>
-                Owner description
-            </summary>
-        </member>
-        <member name="M:socket4net.BatchedScheduler.#ctor(socket4net.IFlushable)">
-            <summary>
-            
-            </summary>
-            <param name="target"></param>
-        </member>
-        <member name="M:socket4net.BatchedScheduler.InternalInvokeRepeating(System.Action,System.UInt32,System.UInt32)">
-            <summary>
-                Internal invoker for Obj
-            </summary>
-            <param name="action"></param>
-            <param name="delay"></param>
-            <param name="period"></param>
-        </member>
-        <member name="M:socket4net.BatchedScheduler.InternalInvoke(System.Action,System.UInt32)">
-            <summary>
-                Internal invoker for Obj
-            </summary>
-            <param name="action"></param>
-            <param name="delay"></param>
-            <param name="period"></param>
-        </member>
-        <member name="T:socket4net.DefaultDataProtocol">
-            <summary>
-            socket4net's default data protocol
-            </summary>
-        </member>
-        <member name="T:socket4net.IDataProtocol">
-            <summary>
-                数据协议
-                网络数据按照该协议解析
-            </summary>
-        </member>
-        <member name="T:socket4net.IDispatchableSession">
-            <summary>
-                diapatchable session
-                dispath request/push by DispatchProto
-            </summary>
-        </member>
-        <member name="T:socket4net.ISession">
-            <summary>
-                Session
-                Indicate a link between client and server
-            </summary>
-        </member>
-        <member name="M:socket4net.ISession.Close(socket4net.SessionCloseReason)">
-            <summary>
-                Close this session
-            </summary>
-            <param name="reason"></param>
-        </member>
-        <member name="M:socket4net.ISession.InternalSend(socket4net.NetPackage)">
-            <summary>
-                Send message to peer
-            </summary>
-            <param name="pack"></param>
-        </member>
-        <member name="P:socket4net.ISession.UnderlineSocket">
-            <summary>
-                Socket attached to this session
-            </summary>
-        </member>
-        <member name="P:socket4net.ISession.ReceiveBufSize">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:socket4net.ISession.PackageMaxSize">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:socket4net.IDispatchableSession.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.ISession})">
-            <summary>
-                Push message to clients specified by 'sessions'
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="proto"></param>
-            <param name="sessions"></param>
-        </member>
-        <member name="M:socket4net.IDispatchableSession.Broadcast``1(``0)">
-            <summary>
-                Push message to all the clients
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="proto"></param>
-        </member>
-        <member name="M:socket4net.IDispatchableSession.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
-            <summary>
-            </summary>
-            <param name="proto"></param>
-            <param name="cb"></param>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:socket4net.IDispatchableSession.Push``1(``0)">
-            <summary>
-            </summary>
-            <param name="proto"></param>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:socket4net.SessionCloseReason">
-            <summary>
-                Session closed reason
-            </summary>
-        </member>
-        <member name="F:socket4net.SessionCloseReason.ClosedByMyself">
-            <summary>
-                By me
-            </summary>
-        </member>
-        <member name="F:socket4net.SessionCloseReason.ClosedByRemotePeer">
-            <summary>
-                By peer
-            </summary>
-        </member>
-        <member name="F:socket4net.SessionCloseReason.ReadError">
-            <summary>
-                Read error
-            </summary>
-        </member>
-        <member name="F:socket4net.SessionCloseReason.WriteError">
-            <summary>
-                Write error
-            </summary>
-        </member>
-        <member name="F:socket4net.SessionCloseReason.PackError">
-            <summary>
-                Pack error
-                That's mean data can't packaged by DataParser or data is much too huge
-            </summary>
-        </member>
-        <member name="F:socket4net.SessionCloseReason.Replaced">
-            <summary>
-                Replaced
-            </summary>
-        </member>
-        <member name="T:socket4net.Assert">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:socket4net.IParsableFromString">
-            <summary>
-                
-            </summary>
-        </member>
-        <member name="T:socket4net.Convertor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:socket4net.Convertor.GetDefault(System.Type)">
-            <summary>
-                get default value for type
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Convertor.GetEmptyList(System.Type)">
-            <summary>
-                get an empty list
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Convertor.To``1(System.String)">
-            <summary>
-                generic parse an object from string
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Convertor.To(System.String,System.Type)">
-            <summary>
-                non-generic convertor
-            </summary>
-            <param name="str"></param>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Convertor.ToList``1(System.String,System.Char[])">
-            <summary>
-                parse string to list
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="input"></param>
-            <param name="separator"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Convertor.ToList(System.String,System.Type,System.Char[])">
-            <summary>
-                parse string to list
-            </summary>
-            <param name="strInput"></param>
-            <param name="type"></param>
-            <param name="separator"></param>
-            <returns></returns>
-        </member>
-        <member name="T:socket4net.DictionaryExt">
-            <summary>
-                extension for dictionary
-            </summary>
-        </member>
-        <member name="T:socket4net.FileSys">
-            <summary>
-                extension for file system
-            </summary>
-        </member>
-        <member name="T:socket4net.ListExt">
-            <summary>
-            extension for list
-            </summary>
-        </member>
-        <member name="T:socket4net.Rand">
-            <summary>
-                random num generator
-            </summary>
-        </member>
-        <member name="M:socket4net.Rand.Next(System.Int32[])">
-            <summary>
-                在总长为Sum(input)的线段中随机一个点
-                返回随机点所在的区间索引
-            
-                例如：
-                    Next(1, 3, 6)
-                    长度为10的线段，以1/3/6为长度连续划分为3段，亦即[0,1),[1,4),[4,10)
-                若Next(10)=5，此时5落在第3段，所以返回2
-                若Next(10)=1, 则返回0
-                若Next(10)=2, 则返回1
-                等...
-            </summary>
-            <param name="input"></param>
-        </member>
-        <member name="M:socket4net.Rand.Next(System.Int32,System.Int32,System.Int32)">
-            <summary>
-                [min, max)区间内随机cnt个不重数
-            </summary>
-            <param name="min"></param>
-            <param name="max"></param>
-            <param name="cnt"></param>
-            <returns></returns>
-        </member>
-        <member name="T:socket4net.FileExt">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:socket4net.Add`1">
-            <summary>
-            
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:socket4net.Multiply`1">
-            <summary>
-            
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="T:socket4net.Indefinite`1">
-            <summary>
-            不确定个数
-            </summary>
-        </member>
-        <member name="T:socket4net.Treble`3">
-            <summary>
-            用于解析诸如 1 2 4 + 3 3 5 + 7 6 9 这种类型的string
-            </summary>
-        </member>
-        <member name="M:socket4net.TaskHelper.ExcuteAsync``1(System.Func{``0})">
-            <summary>
-                异步执行
-            </summary>
-        </member>
-        <member name="M:socket4net.TaskHelper.ExcuteAsync``2(``0,System.Func{``0,``1})">
-            <summary>
-                异步执行
-            </summary>
-        </member>
-        <member name="T:socket4net.Coroutine">
-            <summary>
-                协程
-            </summary>
-        </member>
-        <member name="M:socket4net.Coroutine.Update">
-            <summary>
-                每帧执行一次
-            </summary>
-            <returns>false表示协程未完毕，反之协程已完毕</returns>
-        </member>
-        <member name="M:socket4net.Coroutine.Process(System.Collections.IEnumerator)">
-            <summary>
-                处理枚举器
-            </summary>
-            <param name="enumerator"></param>
-            <returns>
-                False表示当前无任务
-                True表示还有任务需处理
-            </returns>
-        </member>
-        <member name="T:socket4net.DefaultLogger">
-            <summary>
-                socket4net's default logger
-            </summary>
-        </member>
-        <member name="T:socket4net.ILog">
-            <summary>
-                Logger interface
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Debug(System.Object)">
-            <summary>
-                Log as debug level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Debug(System.String,System.Object[])">
-            <summary>
-                Log as debug level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Error(System.Object)">
-            <summary>
-                Log as error level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Error(System.String,System.Object[])">
-            <summary>
-                Log as error level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Fatal(System.Object)">
-            <summary>
-                Log as fatal level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Fatal(System.String,System.Object[])">
-            <summary>
-                Log as fatal level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Info(System.Object)">
-            <summary>
-                Log as information level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Info(System.String,System.Object[])">
-            <summary>
-                Log as information level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Warn(System.Object)">
-            <summary>
-                Log as warnning level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Warn(System.String,System.Object[])">
-            <summary>
-                Log as warnning level
-            </summary>
-        </member>
-        <member name="M:socket4net.ILog.Exception(System.String,System.Exception)">
-            <summary>
-                Log exception
-            </summary>
-            <param name="msg"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:socket4net.ILog.Shutdown">
-            <summary>
-                Destroy logger
-            </summary>
-        </member>
-        <member name="T:socket4net.EmptyLogger">
-            <summary>
-                Empty logger
-            </summary>
-        </member>
-        <member name="T:socket4net.Mgr`1">
-            <summary>
-                对象管理器
-            </summary>
-            <typeparam name="TValue"></typeparam>
-        </member>
-        <member name="T:socket4net.ObjArg">
-            <summary>
-                Arguments used to initialize an Obj
-            </summary>
-        </member>
-        <member name="M:socket4net.ObjArg.#ctor(socket4net.IObj)">
-            <summary>
-                Constructor
+                constructor
             </summary>
             <param name="owner"></param>
+            <param name="key"></param>
         </member>
-        <member name="M:socket4net.ObjArg.As``1">
+        <member name="T:socket4net.IUniqueObj`1">
             <summary>
-                Cast this arg to T
+                interface of unique object
             </summary>
-            <typeparam name="T"></typeparam>
-            <returns></returns>
+            <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:socket4net.ObjArg.Owner">
+        <member name="P:socket4net.IUniqueObj`1.Id">
             <summary>
-                Owner of to be initialized Obj
-            </summary>
-        </member>
-        <member name="P:socket4net.ObjArg.Empty">
-            <summary>
-                Empty obj argument
-            </summary>
-        </member>
-        <member name="T:socket4net.EmptyArg">
-            <summary>
-                Empty obj argument
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyArg.#ctor">
-            <summary>
-                Constructor
+                unique key
             </summary>
         </member>
         <member name="T:socket4net.UniqueObj`1">
@@ -779,15 +1216,93 @@
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
+        <member name="M:socket4net.UniqueObj`1.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
         <member name="P:socket4net.UniqueObj`1.Id">
             <summary>
-                唯一Id
+                unique key
             </summary>
         </member>
         <member name="P:socket4net.UniqueObj`1.Name">
             <summary>
-                名字
+                name
             </summary>
+        </member>
+        <member name="T:socket4net.ObjFactory">
+            <summary>
+                objects factory
+            </summary>
+        </member>
+        <member name="M:socket4net.ObjFactory.Create(System.Type,socket4net.ObjArg,System.Boolean)">
+            <summary>
+                create object of type "type"
+            </summary>
+            <param name="type"></param>
+            <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ObjFactory.Create``1(socket4net.ObjArg,System.Boolean)">
+            <summary>
+                create object of type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ObjFactory.ClearCtorCache">
+            <summary>
+                clear the constructors cache
+            </summary>
+        </member>
+        <member name="T:socket4net.Scheduler">
+            <summary>
+                timer scheduler
+            </summary>
+        </member>
+        <member name="M:socket4net.Scheduler.AddTimer(System.Action,socket4net.TimerWrapper)">
+            <summary>
+                add timer 
+                used internal
+            </summary>
+            <param name="action"></param>
+            <param name="timer"></param>
+        </member>
+        <member name="M:socket4net.Scheduler.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.Scheduler.Clear">
+            <summary>
+                clear the timers maintained by me
+            </summary>
+        </member>
+        <member name="M:socket4net.Scheduler.InvokeRepeatingImp(System.Action,System.UInt32,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="action"></param>
+            <param name="delay"></param>
+            <param name="period"></param>
+        </member>
+        <member name="M:socket4net.Scheduler.InvokeImp(System.Action,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="action"></param>
+            <param name="delay"></param>
+        </member>
+        <member name="M:socket4net.Scheduler.CancelInvokeImp(System.Action)">
+            <summary>
+                
+            </summary>
+            <param name="action"></param>
         </member>
         <member name="T:socket4net.AutoWatch">
             <summary>
@@ -901,21 +1416,93 @@
             <param name="value">值</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])" -->
+        <member name="M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])">
+            <summary>
+                反序列化为值
+            </summary>
+            <typeparam name="T">List<string/> ...</typeparam>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
         <member name="M:socket4net.PiSerializer.Deserialize(System.Type,System.Byte[])">
             <summary>
                 非泛型方式的反序列化
                 仅用于pb实例
             </summary>
         </member>
+        <member name="T:socket4net.LauncherArg">
+            <summary>
+                launcher arguments
+            </summary>
+        </member>
+        <member name="M:socket4net.LauncherArg.#ctor(System.Boolean,socket4net.ILog,System.Nullable{System.Guid},System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="monitorEnabled"></param>
+            <param name="logger"></param>
+            <param name="id"></param>
+            <param name="passiveLogicServiceEnabled"></param>
+        </member>
+        <member name="P:socket4net.LauncherArg.PassiveLogicServiceEnabled">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.LauncherArg.Logger">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.LauncherArg.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.LauncherArg.Default">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.LauncherArg.MonitorEnabled">
+            <summary>
+                performance monitor enabled
+            </summary>
+        </member>
+        <member name="T:socket4net.Launcher">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Launcher.Ins">
+            <summary>
+                get launcher singlton instance
+            </summary>
+        </member>
         <member name="P:socket4net.Launcher.LogicService">
             <summary>
-                逻辑服务
+                get logic service
             </summary>
         </member>
         <member name="P:socket4net.Launcher.NetService">
             <summary>
-                网络服务
+                get network service
+            </summary>
+        </member>
+        <member name="M:socket4net.Launcher.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.Launcher.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.Launcher.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
             </summary>
         </member>
         <member name="T:socket4net.Annotations.CanBeNullAttribute">
@@ -1283,6 +1870,29 @@
                 协程调度器
             </summary>
         </member>
+        <member name="T:socket4net.PeerArg">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.PeerArg.#ctor(socket4net.IObj,System.String,System.UInt16)">
+            <summary>
+            
+            </summary>
+            <param name="parent"></param>
+            <param name="ip"></param>
+            <param name="port"></param>
+        </member>
+        <member name="P:socket4net.PeerArg.Ip">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.PeerArg.Port">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:socket4net.TimerWrapper">
             <summary>
             基于socket4net逻辑服务的定时器
@@ -1313,6 +1923,7 @@
             <typeparam name="T"></typeparam>
             <param name="type"></param>
             <param name="arg"></param>
+            <param name="start"></param>
             <returns></returns>
         </member>
         <member name="M:socket4net.UniqueMgr`3.CreateDefault``1(socket4net.UniqueObjArg{`1},System.Boolean)">
@@ -1321,6 +1932,7 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="arg"></param>
+            <param name="start"></param>
             <returns></returns>
         </member>
         <member name="M:socket4net.UniqueMgr`3.CreateDefault(System.Type,socket4net.UniqueObjArg{`1},System.Boolean)">
@@ -1329,6 +1941,7 @@
             </summary>
             <param name="type"></param>
             <param name="arg"></param>
+            <param name="start"></param>
             <returns></returns>
         </member>
         <member name="M:socket4net.UniqueMgr`3.CreateDefault``1(System.Type,socket4net.UniqueObjArg{`1},System.Boolean)">
@@ -1338,6 +1951,14 @@
             <typeparam name="T"></typeparam>
             <param name="type"></param>
             <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Add(`2)">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
             <returns></returns>
         </member>
         <member name="T:socket4net.UniqueMgr`2">
@@ -1353,11 +1974,220 @@
                 全局变量池
             </summary>
         </member>
+        <member name="F:socket4net.GlobalVarPool.NameOfLogicService">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:socket4net.GlobalVarPool.NameOfNetService">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:socket4net.GlobalVarPool.NameOfLogger">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:socket4net.GlobalVarPool.NameOfMonitor">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:socket4net.GlobalVarPool.Ins">
+            <summary>
+                get the singlton instance of the global variables pool
+            </summary>
+        </member>
+        <member name="M:socket4net.GlobalVarPool.Get``1(System.String)">
+            <summary>
+                get the value of "key" as "T"
+            </summary>
+            <param name="key"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.GlobalVarPool.Set``1(System.String,``0)">
+            <summary>
+                set value
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="var"></param>
+        </member>
+        <member name="P:socket4net.GlobalVarPool.LogicService">
+            <summary>
+                get logic service
+            </summary>
+        </member>
+        <member name="P:socket4net.GlobalVarPool.NetService">
+            <summary>
+                get network service
+            </summary>
+        </member>
+        <member name="P:socket4net.GlobalVarPool.Logger">
+            <summary>
+                get logger
+            </summary>
+        </member>
+        <member name="P:socket4net.GlobalVarPool.Monitor">
+            <summary>
+                get monitor
+            </summary>
+        </member>
         <member name="T:socket4net.DispatchalbeClient`1">
             <summary>
                 Client with dispatchable session
             </summary>
             <typeparam name="TSession"></typeparam>
+        </member>
+        <member name="T:socket4net.NetProto">
+            <summary>
+            网络包协议
+            二进制流格式：Length(2 Byte) + Body(Length Byte) + ... + Length(2 Byte) + Body(Length Byte)
+            
+            注意：本层仅负责打包一个个完整的Body
+                      上层为Body提供反序列化方式（protobuf）
+            </summary>
+        </member>
+        <member name="T:socket4net.Response">
+            <summary>
+                响应
+            </summary>
+        </member>
+        <member name="T:socket4net.NetPackage">
+            <summary>
+                network package
+            </summary>
+        </member>
+        <member name="P:socket4net.NetPackage.Type">
+            <summary>
+                rpc type
+                push/request/response
+            </summary>
+        </member>
+        <member name="P:socket4net.NetPackage.Serial">
+            <summary>
+                rpc serial number
+            </summary>
+        </member>
+        <member name="P:socket4net.NetPackage.Data">
+            <summary>
+                rpc data
+            </summary>
+        </member>
+        <member name="P:socket4net.NetPackage.Success">
+            <summary>
+                
+            </summary>
+        </member>
+        <member name="M:socket4net.NetPackage.ToString">
+            <summary>Returns a string that represents the current object.</summary>
+            <returns>A string that represents the current object.</returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:socket4net.CircularBuffer">
+            <summary>
+            循环buffer
+            </summary>
+        </member>
+        <member name="M:socket4net.CircularBuffer.#ctor(System.UInt16)">
+            <summary>
+            
+            </summary>
+            <param name="capacity"></param>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Buffer">
+            <summary>
+                buffer
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Capacity">
+            <summary>
+                Capacity
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Head">
+            <summary>
+                Head
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Tail">
+            <summary>
+                Tail
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.ReadableSize">
+            <summary>
+               Readable buffer size
+            </summary>
+        </member>
+        <member name="P:socket4net.CircularBuffer.WritableSize">
+            <summary>
+               Writable buffer size
+            </summary>
+        </member>
+        <member name="M:socket4net.CircularBuffer.Read(System.Byte[]@,System.UInt16,System.UInt16)">
+            <summary>
+                Read data from head
+            </summary>
+            <param name="offset"></param>
+            <param name="len"></param>
+            <param name="buf"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.CircularBuffer.MoveByRead(System.UInt16)">
+            <summary>
+                Move head by 'len'
+            </summary>
+            <param name="len"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.CircularBuffer.MoveByWrite(System.UInt16)">
+            <summary>
+                Move tail by 'len'
+            </summary>
+            <param name="len"></param>
+        </member>
+        <member name="P:socket4net.CircularBuffer.Overload">
+            <summary>
+                Indicate if buffer is full
+            </summary>
+        </member>
+        <member name="T:socket4net.IClient">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.IClient.Reconnect">
+            <summary>
+                Reconnect to server
+            </summary>
+        </member>
+        <member name="M:socket4net.IClient.Connect">
+            <summary>
+                Connect to server
+            </summary>
+        </member>
+        <member name="P:socket4net.IClient.Connected">
+            <summary>
+                If client is connected to server
+            </summary>
+        </member>
+        <member name="T:socket4net.ClientArg">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.ClientArg.#ctor(socket4net.IObj,System.String,System.UInt16,System.Boolean)">
+            <summary>
+            constructor
+            </summary>
+            <param name="parent"></param>
+            <param name="ip"></param>
+            <param name="port"></param>
+            <param name="autoReconnectEnabled"></param>
+        </member>
+        <member name="P:socket4net.ClientArg.AutoReconnectEnabled">
+            <summary>
+             wether auto reconnect enabled
+            </summary>
         </member>
         <member name="T:socket4net.Client`1">
             <summary>
@@ -1365,9 +2195,173 @@
             </summary>
             <typeparam name="TSession"></typeparam>
         </member>
-        <member name="T:socket4net.IClient">
+        <member name="F:socket4net.Client`1.ReconnectDelay">
+            <summary>
+                Default reconnect retry delay time
+            </summary>
+        </member>
+        <member name="F:socket4net.Client`1.ReconnectMaxDelay">
+            <summary>
+                Default reconnect retry max delay time
+            </summary>
+        </member>
+        <member name="E:socket4net.Client`1.EventSessionClosed">
+            <summary>
+                Raised when a session closed
+            </summary>
+        </member>
+        <member name="E:socket4net.Client`1.EventSessionEstablished">
+            <summary>
+                Raised when a session established
+            </summary>
+        </member>
+        <member name="E:socket4net.Client`1.EventPeerClosing">
+            <summary>
+                Raised when Peer closing
+            </summary>
+        </member>
+        <member name="E:socket4net.Client`1.EventErrorCatched">
+            <summary>
+                Raised when error catched
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.Name">
+            <summary>
+                name
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.Ip">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.Port">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.Address">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.EndPoint">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.SessionMgr">
+            <summary>
+                Get session manager
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.LogicService">
+            <summary>
+                Get logic service
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.NetService">
+            <summary>
+                Get net service
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.Connected">
+            <summary>
+                If client is connected to server
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.AutoReconnectEnabled">
+            <summary>
+                是否在断开连接之后自动重连
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.ReconnectRetryDelay">
+            <summary>
+                重连重试延时
+            </summary>
+        </member>
+        <member name="P:socket4net.Client`1.Session">
+            <summary>
+                get the underline session
+            </summary>
+        </member>
+        <member name="M:socket4net.Client`1.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.Client`1.OnConnected(socket4net.ISession)">
+            <summary>
+                invoked when session established
+            </summary>
+            <param name="session"></param>
+        </member>
+        <member name="M:socket4net.Client`1.OnDisconnected(socket4net.ISession,socket4net.SessionCloseReason)">
+            <summary>
+            invoked when session closed
+            </summary>
+            <param name="session"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:socket4net.Client`1.OnError(System.String)">
+            <summary>
+            invoked when session error occured
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:socket4net.Client`1.SetAddress(System.String,System.UInt16)">
+            <summary>
+            set the target server ip/port 
+            </summary>
+            <param name="ip"></param>
+            <param name="port"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Client`1.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.Client`1.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.Client`1.PerformInLogic(System.Action)">
+            <summary>
+                Excute 'action' in logic service
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.Client`1.PerformInLogic``1(System.Action{``0},``0)">
+            <summary>
+                Excute 'action' in logic service
+            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
+        </member>
+        <member name="M:socket4net.Client`1.PerformInNet(System.Action)">
+            <summary>
+                Excute 'action' in net service
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.Client`1.PerformInNet``1(System.Action{``0},``0)">
+            <summary>
+                Excute 'action' in net service
+            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
+        </member>
+        <member name="M:socket4net.Client`1.Reconnect">
+            <summary>
+                Reconnect to server
+            </summary>
+        </member>
+        <member name="M:socket4net.Client`1.Connect">
+            <summary>
+                Connect to server
             </summary>
         </member>
         <member name="T:socket4net.IPeer">
@@ -1376,32 +2370,6 @@
             终端
             对服务器、客户端的抽象
             </summary>
-        </member>
-        <member name="M:socket4net.IPeer.PerformInLogic(System.Action)">
-            <summary>
-                Excute 'action' in logic service
-            </summary>
-            <param name="action"></param>
-        </member>
-        <member name="M:socket4net.IPeer.PerformInLogic``1(System.Action{``0},``0)">
-            <summary>
-                Excute 'action' in logic service
-            </summary>
-            <param name="action"></param>
-            <param name="param"></param>
-        </member>
-        <member name="M:socket4net.IPeer.PerformInNet(System.Action)">
-            <summary>
-                Excute 'action' in net service
-            </summary>
-            <param name="action"></param>
-        </member>
-        <member name="M:socket4net.IPeer.PerformInNet``1(System.Action{``0},``0)">
-            <summary>
-                Excute 'action' in net service
-            </summary>
-            <param name="action"></param>
-            <param name="param"></param>
         </member>
         <member name="P:socket4net.IPeer.Ip">
             <summary>
@@ -1458,148 +2426,178 @@
                 Raised when error catched
             </summary>
         </member>
-        <member name="M:socket4net.IClient.Reconnect">
+        <member name="M:socket4net.IPeer.PerformInLogic(System.Action)">
             <summary>
-                Reconnect to server
+                Excute 'action' in logic service
             </summary>
+            <param name="action"></param>
         </member>
-        <member name="M:socket4net.IClient.Connect">
+        <member name="M:socket4net.IPeer.PerformInLogic``1(System.Action{``0},``0)">
             <summary>
-                Connect to server
+                Excute 'action' in logic service
             </summary>
+            <param name="action"></param>
+            <param name="param"></param>
         </member>
-        <member name="P:socket4net.IClient.Connected">
+        <member name="M:socket4net.IPeer.PerformInNet(System.Action)">
             <summary>
-                If client is connected to server
+                Excute 'action' in net service
             </summary>
+            <param name="action"></param>
         </member>
-        <member name="F:socket4net.Client`1.ReconnectDelay">
+        <member name="M:socket4net.IPeer.PerformInNet``1(System.Action{``0},``0)">
             <summary>
-                Default reconnect retry delay time
+                Excute 'action' in net service
             </summary>
-        </member>
-        <member name="F:socket4net.Client`1.ReconnectMaxDelay">
-            <summary>
-                Default reconnect retry max delay time
-            </summary>
-        </member>
-        <member name="E:socket4net.Client`1.EventSessionClosed">
-            <summary>
-                Raised when a session closed
-            </summary>
-        </member>
-        <member name="E:socket4net.Client`1.EventSessionEstablished">
-            <summary>
-                Raised when a session established
-            </summary>
-        </member>
-        <member name="E:socket4net.Client`1.EventPeerClosing">
-            <summary>
-                Raised when Peer closing
-            </summary>
-        </member>
-        <member name="E:socket4net.Client`1.EventErrorCatched">
-            <summary>
-                Raised when error catched
-            </summary>
-        </member>
-        <member name="P:socket4net.Client`1.AutoReconnectEnabled">
-            <summary>
-                是否在断开连接之后自动重连
-            </summary>
-        </member>
-        <member name="P:socket4net.Client`1.ReconnectRetryDelay">
-            <summary>
-                重连重试延时
-            </summary>
-        </member>
-        <member name="T:socket4net.NetProto">
-            <summary>
-            网络包协议
-            二进制流格式：Length(2 Byte) + Body(Length Byte) + ... + Length(2 Byte) + Body(Length Byte)
-            
-            注意：本层仅负责打包一个个完整的Body
-                      上层为Body提供反序列化方式（protobuf）
-            </summary>
-        </member>
-        <member name="T:socket4net.Response">
-            <summary>
-                响应
-            </summary>
-        </member>
-        <member name="T:socket4net.CircularBuffer">
-            <summary>
-            循环buffer
-            </summary>
-        </member>
-        <member name="M:socket4net.CircularBuffer.#ctor(System.UInt16)">
-            <summary>
-            
-            </summary>
-            <param name="capacity"></param>
-        </member>
-        <member name="M:socket4net.CircularBuffer.Read(System.Byte[]@,System.UInt16,System.UInt16)">
-            <summary>
-                Read data from head
-            </summary>
-            <param name="offset"></param>
-            <param name="len"></param>
-            <param name="buf"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.CircularBuffer.MoveByRead(System.UInt16)">
-            <summary>
-                Move head by 'len'
-            </summary>
-            <param name="len"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.CircularBuffer.MoveByWrite(System.UInt16)">
-            <summary>
-                Move tail by 'len'
-            </summary>
-            <param name="len"></param>
-        </member>
-        <member name="P:socket4net.CircularBuffer.Buffer">
-            <summary>
-                buffer
-            </summary>
-        </member>
-        <member name="P:socket4net.CircularBuffer.Capacity">
-            <summary>
-                Capacity
-            </summary>
-        </member>
-        <member name="P:socket4net.CircularBuffer.Head">
-            <summary>
-                Head
-            </summary>
-        </member>
-        <member name="P:socket4net.CircularBuffer.Tail">
-            <summary>
-                Tail
-            </summary>
-        </member>
-        <member name="P:socket4net.CircularBuffer.ReadableSize">
-            <summary>
-               Readable buffer size
-            </summary>
-        </member>
-        <member name="P:socket4net.CircularBuffer.WritableSize">
-            <summary>
-               Writable buffer size
-            </summary>
-        </member>
-        <member name="P:socket4net.CircularBuffer.Overload">
-            <summary>
-                Indicate if buffer is full
-            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
         </member>
         <member name="T:socket4net.Packer">
             <summary>
             拆包
             非线程安全，需要上层来确保始终在某个线程运行
             </summary>
+        </member>
+        <member name="T:socket4net.ServerArg">
+            <summary>
+                
+            </summary>
+        </member>
+        <member name="M:socket4net.ServerArg.#ctor(socket4net.IObj,System.String,System.UInt16)">
+            <summary>
+            
+            </summary>
+            <param name="parent"></param>
+            <param name="ip"></param>
+            <param name="port"></param>
+        </member>
+        <member name="T:socket4net.Server`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="TSession"></typeparam>
+        </member>
+        <member name="P:socket4net.Server`1.Port">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Server`1.Ip">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Server`1.Address">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Server`1.EndPoint">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.Server`1.Name">
+            <summary>
+                name
+            </summary>
+        </member>
+        <member name="P:socket4net.Server`1.LogicService">
+            <summary>
+                Get logic service
+            </summary>
+        </member>
+        <member name="P:socket4net.Server`1.NetService">
+            <summary>
+                Get net service
+            </summary>
+        </member>
+        <member name="P:socket4net.Server`1.SessionMgr">
+            <summary>
+                回话管理器
+                线程安全
+            </summary>
+        </member>
+        <member name="E:socket4net.Server`1.EventSessionClosed">
+            <summary>
+                Raised when a session closed
+            </summary>
+        </member>
+        <member name="E:socket4net.Server`1.EventSessionEstablished">
+            <summary>
+                Raised when a session established
+            </summary>
+        </member>
+        <member name="E:socket4net.Server`1.EventErrorCatched">
+            <summary>
+                Raised when error catched
+            </summary>
+        </member>
+        <member name="E:socket4net.Server`1.EventPeerClosing">
+            <summary>
+                Raised when Peer closing
+            </summary>
+        </member>
+        <member name="M:socket4net.Server`1.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.Server`1.OnConnected(socket4net.ISession)">
+            <summary>
+                session established
+            </summary>
+            <param name="session"></param>
+        </member>
+        <member name="M:socket4net.Server`1.OnDisconnected(socket4net.ISession,socket4net.SessionCloseReason)">
+            <summary>
+            session closed
+            </summary>
+            <param name="session"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:socket4net.Server`1.OnError(System.String)">
+            <summary>
+            error occured
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:socket4net.Server`1.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.Server`1.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.Server`1.socket4net#IPeer#PerformInLogic(System.Action)">
+            <summary>
+                Excute 'action' in logic service
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.Server`1.PerformInLogic``1(System.Action{``0},``0)">
+            <summary>
+                Excute 'action' in logic service
+            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
+        </member>
+        <member name="M:socket4net.Server`1.PerformInNet(System.Action)">
+            <summary>
+                Excute 'action' in net service
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.Server`1.PerformInNet``1(System.Action{``0},``0)">
+            <summary>
+                Excute 'action' in net service
+            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
         </member>
         <member name="T:socket4net.SessionArg">
             <summary>
@@ -1634,13 +2632,6 @@
                 default receive buffer size
             </summary>
         </member>
-        <member name="M:socket4net.Session.Dispatch(System.Byte[])">
-            <summary>
-            分包
-            在LogicService线程分发
-            </summary>
-            <param name="data"></param>
-        </member>
         <member name="P:socket4net.Session.HostPeer">
             <summary>
                 Host peer this session belongs to
@@ -1659,6 +2650,41 @@
         <member name="P:socket4net.Session.Closed">
             <summary>
                 Session already closed
+            </summary>
+        </member>
+        <member name="M:socket4net.Session.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.Session.Dispatch(System.Byte[])">
+            <summary>
+            分包
+            在LogicService线程分发
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:socket4net.Session.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.Session.Close(socket4net.SessionCloseReason)">
+            <summary>
+                Close this session
+            </summary>
+            <param name="reason"></param>
+        </member>
+        <member name="M:socket4net.Session.InternalSend(socket4net.NetPackage)">
+            <summary>
+                Send message to peer
+            </summary>
+            <param name="pack"></param>
+        </member>
+        <member name="M:socket4net.Session.OnStart">
+            <summary>
+                Invoked when obj started
             </summary>
         </member>
         <member name="T:socket4net.ERpc">
@@ -1684,11 +2710,106 @@
             响应Request
             </summary>
         </member>
+        <member name="T:socket4net.NetResult">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.NetResult.#ctor(System.Boolean,System.Byte[])">
+            <summary>
+            
+            </summary>
+            <param name="item1"></param>
+            <param name="item2"></param>
+        </member>
+        <member name="M:socket4net.NetResult.ToString">
+            <summary>Returns a string that represents the current object.</summary>
+            <returns>A string that represents the current object.</returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:socket4net.NetResult.op_Implicit(socket4net.NetResult)~System.Boolean">
+            <summary>
+            
+            </summary>
+            <param name="rt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.NetResult.op_Implicit(System.Boolean)~socket4net.NetResult">
+            <summary>
+            
+            </summary>
+            <param name="ret"></param>
+            <returns></returns>
+        </member>
+        <member name="P:socket4net.NetResult.Success">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:socket4net.NetResult.Failure">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.NetResult.MakeSuccess(System.Byte[])">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.NetResult.MakeSuccess``1(``0)">
+            <summary>
+            
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.NetResult.MakeFailure``1(``0)">
+            <summary>
+            
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.NetResult`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.NetResult`1.#ctor(System.Boolean,System.Byte[])">
+            <summary>
+            
+            </summary>
+            <param name="item1"></param>
+            <param name="item2"></param>
+        </member>
+        <member name="M:socket4net.NetResult`1.#ctor(System.Boolean,`0)">
+            <summary>
+            
+            </summary>
+            <param name="item1"></param>
+            <param name="proto"></param>
+        </member>
         <member name="T:socket4net.DispatchableSession">
             <summary>
                 Dispatchable session
                 Messages received from peer are dispatched here
             </summary>
+        </member>
+        <member name="P:socket4net.DispatchableSession.DataParser">
+            <summary>
+                Get/Set custom data parser
+            </summary>
+        </member>
+        <member name="M:socket4net.DispatchableSession.Close(socket4net.SessionCloseReason)">
+            <summary>
+                Close this session
+            </summary>
+            <param name="reason"></param>
         </member>
         <member name="M:socket4net.DispatchableSession.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.ISession})">
             <summary>
@@ -1705,6 +2826,20 @@
             <typeparam name="T"></typeparam>
             <param name="proto"></param>
         </member>
+        <member name="M:socket4net.DispatchableSession.HandleRequest(socket4net.IDataProtocol)">
+            <summary>
+                handle request
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DispatchableSession.HandlePush(socket4net.IDataProtocol)">
+            <summary>
+                handle push
+            </summary>
+            <param name="ps"></param>
+            <returns></returns>
+        </member>
         <member name="M:socket4net.DispatchableSession.RequestAsync(System.UInt16,socket4net.NetPackage)">
             <summary>
                 异步请求（按请求序列号回调结果）
@@ -1713,10 +2848,25 @@
             <param name="pack"></param>
             <returns></returns>
         </member>
-        <member name="P:socket4net.DispatchableSession.DataParser">
+        <member name="M:socket4net.DispatchableSession.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
             <summary>
-                Get/Set custom data parser
             </summary>
+            <param name="proto"></param>
+            <param name="cb"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.DispatchableSession.Push``1(``0)">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.DispatchableSession.Dispatch(System.Byte[])">
+            <summary>
+            分包
+            在LogicService线程分发
+            </summary>
+            <param name="data"></param>
         </member>
         <member name="T:socket4net.ServiceArg">
             <summary>
@@ -1738,6 +2888,16 @@
              STA service
             </summary>
         </member>
+        <member name="P:socket4net.IService.Capacity">
+            <summary>
+                Jobs queued upper bound
+            </summary>
+        </member>
+        <member name="P:socket4net.IService.Period">
+            <summary>
+                Period for waiting concurrent collection's item take
+            </summary>
+        </member>
         <member name="M:socket4net.IService.Perform(System.Action)">
             <summary>
                 Send action to be excuted in current service
@@ -1751,16 +2911,6 @@
             <param name="action"></param>
             <param name="param"></param>
             <typeparam name="T"></typeparam>
-        </member>
-        <member name="P:socket4net.IService.Capacity">
-            <summary>
-                Jobs queued upper bound
-            </summary>
-        </member>
-        <member name="P:socket4net.IService.Period">
-            <summary>
-                Period for waiting concurrent collection's item take
-            </summary>
         </member>
         <member name="T:socket4net.INetService">
             <summary>
@@ -1800,11 +2950,67 @@
                 定时器刷新以及Jobs队列的刷新完全由本模块自理
             </summary>
         </member>
+        <member name="M:socket4net.AutoLogicService.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.AutoLogicService.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="E:socket4net.AutoLogicService.Idle">
+            <summary>
+                Idle event, call by working thread
+                every period.
+                <remarks>
+                    generally the working thread
+                    call the event every period, but if it's too busy
+                    because the working item consumes too much time,
+                    the calling period may grater than the original period
+                </remarks>
+            </summary>
+        </member>
+        <member name="P:socket4net.AutoLogicService.Jobs">
+            <summary>
+            Specify the work items count currently in working queue.
+            </summary>
+        </member>
+        <member name="M:socket4net.AutoLogicService.Enqueue(socket4net.IJob)">
+            <summary>
+            External(e.g. the TCP socket thread) call this method to push
+            a work item into the working queue. The work item must not
+            be null.
+            </summary>
+            <param name="w">the work item object, must not be null</param>
+        </member>
+        <member name="M:socket4net.AutoLogicService.DoStartup">
+            <summary>
+            do actually startup job
+            </summary>
+        </member>
+        <member name="M:socket4net.AutoLogicService.WorkingProcedure">
+            <summary>
+            working thread's working procedure
+            </summary>
+        </member>
+        <member name="T:socket4net.PassiveLogicService">
+            <summary>
+                被动逻辑服务
+                即：需要上层驱动本服务定时器、Job队列的更新
+            </summary>
+        </member>
         <member name="T:socket4net.LogicServiceBase">
             <summary>
                 逻辑服务
                 1、可将多线程任务转换为单线程任务
                 2、提供定时调度、协程调度服务
+            </summary>
+        </member>
+        <member name="P:socket4net.LogicServiceBase.Scheduler">
+            <summary>
+                定时器调度器
             </summary>
         </member>
         <member name="M:socket4net.LogicServiceBase.Perform(System.Action)">
@@ -1819,38 +3025,6 @@
             </summary>
             <param name="action"></param>
             <param name="param"></param>
-        </member>
-        <member name="M:socket4net.LogicServiceBase.Enqueue(socket4net.IJob)">
-            <summary>
-                External(e.g. the TCP socket thread) call this method to push
-                a work item into the working queue. The work item must not
-                be null.
-            </summary>
-            <param name="w">the work item object, must not be null</param>
-        </member>
-        <member name="M:socket4net.LogicServiceBase.Enqueue``1(System.Action{``0},``0)">
-            <summary>
-                External(e.g. the TCP socket thread) call this method to push
-                a work item into the working queue.
-            </summary>
-            <param name="proc">the working procedure</param>
-            <param name="param">additional parameter that passed to working procedure</param>
-        </member>
-        <member name="M:socket4net.LogicServiceBase.Enqueue(System.Action)">
-            <summary>
-            入队
-            </summary>
-            <param name="proc"></param>
-        </member>
-        <member name="M:socket4net.LogicServiceBase.CalcPerformance">
-            <summary>
-            计算性能
-            </summary>
-        </member>
-        <member name="P:socket4net.LogicServiceBase.Scheduler">
-            <summary>
-                定时器调度器
-            </summary>
         </member>
         <member name="P:socket4net.LogicServiceBase.CoroutineScheduler">
             <summary>
@@ -1920,39 +3094,109 @@
                 Get the elapsed milliseconds since the instance been constructed
             </summary>
         </member>
-        <member name="M:socket4net.AutoLogicService.Enqueue(socket4net.IJob)">
+        <member name="M:socket4net.LogicServiceBase.Enqueue(socket4net.IJob)">
             <summary>
-            External(e.g. the TCP socket thread) call this method to push
-            a work item into the working queue. The work item must not
-            be null.
+                External(e.g. the TCP socket thread) call this method to push
+                a work item into the working queue. The work item must not
+                be null.
             </summary>
             <param name="w">the work item object, must not be null</param>
         </member>
-        <member name="M:socket4net.AutoLogicService.DoStartup">
+        <member name="M:socket4net.LogicServiceBase.Enqueue``1(System.Action{``0},``0)">
             <summary>
-            do actually startup job
+                External(e.g. the TCP socket thread) call this method to push
+                a work item into the working queue.
+            </summary>
+            <param name="proc">the working procedure</param>
+            <param name="param">additional parameter that passed to working procedure</param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.Enqueue(System.Action)">
+            <summary>
+            入队
+            </summary>
+            <param name="proc"></param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.CalcPerformance">
+            <summary>
+            计算性能
             </summary>
         </member>
-        <member name="M:socket4net.AutoLogicService.WorkingProcedure">
+        <member name="M:socket4net.LogicServiceBase.OnInit(socket4net.ObjArg)">
             <summary>
-            working thread's working procedure
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.LogicServiceBase.OnStart">
+            <summary>
+                Invoked when obj started
             </summary>
         </member>
-        <member name="P:socket4net.AutoLogicService.Jobs">
+        <member name="M:socket4net.LogicServiceBase.OnDestroy">
             <summary>
-            Specify the work items count currently in working queue.
+               internal called when an Obj is to be destroyed
             </summary>
         </member>
-        <member name="T:socket4net.PassiveLogicService">
+        <member name="T:socket4net.PerformanceMonitor">
             <summary>
-                被动逻辑服务
-                即：需要上层驱动本服务定时器、Job队列的更新
+                performance monitor
             </summary>
+        </member>
+        <member name="M:socket4net.PerformanceMonitor.RecordRead(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="len"></param>
         </member>
         <member name="T:socket4net.NetService">
             <summary>
             网络服务线程（网络数据读写）
             </summary>
+        </member>
+        <member name="P:socket4net.NetService.Jobs">
+            <summary>
+                get processing jobs count
+            </summary>
+        </member>
+        <member name="P:socket4net.NetService.Capacity">
+            <summary>
+                Jobs queued upper bound
+            </summary>
+        </member>
+        <member name="P:socket4net.NetService.Period">
+            <summary>
+                Period for waiting concurrent collection's item take
+            </summary>
+        </member>
+        <member name="M:socket4net.NetService.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.NetService.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.NetService.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.NetService.Perform(System.Action)">
+            <summary>
+                Send action to be excuted in current service
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:socket4net.NetService.Perform``1(System.Action{``0},``0)">
+            <summary>
+                Send action to be excuted in current service
+            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
+            <typeparam name="T"></typeparam>
         </member>
         <member name="T:socket4net.Timer">
             <summary>
@@ -1963,7 +3207,6 @@
             <summary>
             Construct a new timer object.
             </summary>
-            <param name="service"></param>
             <param name="name">the timer's name</param>
             <param name="dueTime">when to begin this timer, in milliseconds.
             zero means start immediately</param>
@@ -1974,26 +3217,9 @@
             <summary>
             Construct a new timer object.
             </summary>
-            <param name="service"></param>
             <param name="name">the timer's name</param>
             <param name="dueTime">when to begin this timer, in milliseconds.
             zero means start immediately</param>
-        </member>
-        <member name="M:socket4net.Timer.Trigger">
-            <summary>
-            Call the timer's callback events.
-            This method is called by <c>TimerScheduler</c> class only.
-            </summary>
-        </member>
-        <member name="M:socket4net.Timer.Start">
-            <summary>
-            Start the timer.
-            </summary>
-        </member>
-        <member name="M:socket4net.Timer.Stop">
-            <summary>
-            Stop the timer.
-            </summary>
         </member>
         <member name="P:socket4net.Timer.Name">
             <summary>
@@ -2013,6 +3239,12 @@
         <member name="P:socket4net.Timer.IsPeriod">
             <summary>
             Indicate it's a period timer or not.
+            </summary>
+        </member>
+        <member name="M:socket4net.Timer.Trigger">
+            <summary>
+            Call the timer's callback events.
+            This method is called by <c>TimerScheduler</c> class only.
             </summary>
         </member>
         <member name="P:socket4net.Timer.IsStarted">
@@ -2043,6 +3275,16 @@
             When timer is trigger, this event will be called.
             </summary>
         </member>
+        <member name="M:socket4net.Timer.Start">
+            <summary>
+            Start the timer.
+            </summary>
+        </member>
+        <member name="M:socket4net.Timer.Stop">
+            <summary>
+            Stop the timer.
+            </summary>
+        </member>
         <member name="T:socket4net.QueueEntry">
             <summary>
             Queue entry class
@@ -2058,6 +3300,21 @@
             <summary>
             Construct a new head entry. That is, it's Prev/Next properties
             are point to itself.
+            </summary>
+        </member>
+        <member name="P:socket4net.QueueEntry.Prev">
+            <summary>
+            The Preview entry object
+            </summary>
+        </member>
+        <member name="P:socket4net.QueueEntry.Next">
+            <summary>
+            The next entry object
+            </summary>
+        </member>
+        <member name="P:socket4net.QueueEntry.Timer">
+            <summary>
+            The timer object
             </summary>
         </member>
         <member name="M:socket4net.QueueEntry.QueueTail(socket4net.QueueEntry)">
@@ -2076,32 +3333,17 @@
             UnBinding the timer object
             </summary>
         </member>
-        <member name="P:socket4net.QueueEntry.Prev">
-            <summary>
-            The Preview entry object
-            </summary>
-        </member>
-        <member name="P:socket4net.QueueEntry.Next">
-            <summary>
-            The next entry object
-            </summary>
-        </member>
-        <member name="P:socket4net.QueueEntry.Timer">
-            <summary>
-            The timer object
-            </summary>
-        </member>
         <member name="T:socket4net.TimerConstant">
             <summary>
             Define the constant variable used by <c>TimerScheduler</c> class
             </summary>
         </member>
-        <member name="T:socket4net.TVN">
+        <member name="T:socket4net.Tvn">
             <summary>
             Timer vector class.
             </summary>
         </member>
-        <member name="T:socket4net.TVR">
+        <member name="T:socket4net.Tvr">
             <summary>
             Timer vector class.
             It's a specific type of <c>TVN</c>, it's vector size
@@ -2112,6 +3354,21 @@
             <summary>
             A Linux style timer scheduler
             </summary>
+        </member>
+        <member name="P:socket4net.TimerScheduler.HostService">
+            <summary>
+            get the logic service where this scheduler hosted
+            </summary>
+        </member>
+        <member name="M:socket4net.TimerScheduler.#ctor(socket4net.ILogicService)">
+            <summary>
+            
+            </summary>
+            <param name="service"></param>
+        </member>
+        <member name="M:socket4net.TimerScheduler.Dispose">
+            <summary>执行与释放或重置非托管资源相关的应用程序定义的任务。</summary>
+            <filterpriority>2</filterpriority>
         </member>
         <member name="F:socket4net.TimerScheduler._timerJiffies">
             <summary>
@@ -2125,30 +3382,30 @@
             When scheduler is trigger a timer, this field store the timer object.
             </summary>
         </member>
-        <member name="F:socket4net.TimerScheduler._TV1">
+        <member name="F:socket4net.TimerScheduler._tv1">
             <summary>
             The first class of timers vector, their expire time will less than 256 milliseconds.
             </summary>
         </member>
-        <member name="F:socket4net.TimerScheduler._TV2">
+        <member name="F:socket4net.TimerScheduler._tv2">
             <summary>
             The second class of timers vector, their expire time will grater than 255 milliseconds
             and less than 16384(1 left shit 14) milliseconds
             </summary>
         </member>
-        <member name="F:socket4net.TimerScheduler._TV3">
+        <member name="F:socket4net.TimerScheduler._tv3">
             <summary>
             The second class of timers vector, their expire time will grater than 16384 milliseconds
             and less than 1048576(1 left shit 20) milliseconds
             </summary>
         </member>
-        <member name="F:socket4net.TimerScheduler._TV4">
+        <member name="F:socket4net.TimerScheduler._tv4">
             <summary>
             The second class of timers vector, their expire time will grater than 1048576 milliseconds
             and less than 67108864(1 left shit 26) milliseconds
             </summary>
         </member>
-        <member name="F:socket4net.TimerScheduler._TV5">
+        <member name="F:socket4net.TimerScheduler._tv5">
             <summary>
             The second class of timers vector, their expire time will grater than 67108864 milliseconds
             and less than uint.Max(1 left shit 32) milliseconds
@@ -2173,7 +3430,7 @@
             </summary>
             <param name="t">the timer object</param>
         </member>
-        <member name="M:socket4net.TimerScheduler.Cascade(socket4net.TVN,System.Int32)">
+        <member name="M:socket4net.TimerScheduler.Cascade(socket4net.Tvn,System.Int32)">
             <summary>
             Cascade a timers vector
             </summary>
@@ -2191,6 +3448,11 @@
             Queue an entry object into a suitable timer queue.
             </summary>
             <param name="e">the entry object</param>
+        </member>
+        <member name="P:Pi.Common.Numeric.Compare`1.Function">
+            <summary>
+                get the compiled function
+            </summary>
         </member>
     </members>
 </doc>

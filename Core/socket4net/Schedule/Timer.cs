@@ -36,7 +36,6 @@ namespace socket4net
         /// <summary>
         /// Construct a new timer object.
         /// </summary>
-        /// <param name="service"></param>
         /// <param name="name">the timer's name</param>
         /// <param name="dueTime">when to begin this timer, in milliseconds.
         /// zero means start immediately</param>
@@ -51,7 +50,6 @@ namespace socket4net
         /// <summary>
         /// Construct a new timer object.
         /// </summary>
-        /// <param name="service"></param>
         /// <param name="name">the timer's name</param>
         /// <param name="dueTime">when to begin this timer, in milliseconds.
         /// zero means start immediately</param>
@@ -92,10 +90,7 @@ namespace socket4net
         /// <summary>
         /// Indicate it's a period timer or not.
         /// </summary>
-        public bool IsPeriod
-        {
-            get { return Period > 0; }
-        }
+        public bool IsPeriod => Period > 0;
 
         /// <summary>
         /// Call the timer's callback events.
@@ -119,10 +114,7 @@ namespace socket4net
         /// <summary>
         /// Indicate whether the timer is start or not.
         /// </summary>
-        public bool IsStarted
-        {
-            get { return Entry != null; }
-        }
+        public bool IsStarted => Entry != null;
 
         /// <summary>
         /// User define parameter.

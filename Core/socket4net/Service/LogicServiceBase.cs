@@ -129,10 +129,7 @@ namespace socket4net
         /// <summary>
         ///     Get the elapsed milliseconds since the instance been constructed
         /// </summary>
-        public long ElapsedMilliseconds
-        {
-            get { return Watch.ElapsedMilliseconds; }
-        }
+        public long ElapsedMilliseconds => Watch.ElapsedMilliseconds;
 
         /// <summary>
         ///     External(e.g. the TCP socket thread) call this method to push
@@ -140,7 +137,7 @@ namespace socket4net
         ///     be null.
         /// </summary>
         /// <param name="w">the work item object, must not be null</param>
-        public abstract void Enqueue(IJob w);
+        internal abstract void Enqueue(IJob w);
 
         /// <summary>
         ///     External(e.g. the TCP socket thread) call this method to push
@@ -148,7 +145,7 @@ namespace socket4net
         /// </summary>
         /// <param name="proc">the working procedure</param>
         /// <param name="param">additional parameter that passed to working procedure</param>
-        public void Enqueue<T>(Action<T> proc, T param)
+        protected void Enqueue<T>(Action<T> proc, T param)
         {
             var w = new Job<T>(proc, param);
             Enqueue(w);
@@ -158,7 +155,7 @@ namespace socket4net
         /// 入队
         /// </summary>
         /// <param name="proc"></param>
-        public void Enqueue(Action proc)
+        protected void Enqueue(Action proc)
         {
             var job = new Job(proc);
             Enqueue(job);
@@ -180,6 +177,10 @@ namespace socket4net
             }
         }
 
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
@@ -188,6 +189,9 @@ namespace socket4net
             Period = arg.As<ServiceArg>().Period;
         }
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -197,6 +201,9 @@ namespace socket4net
             CoroutineScheduler.Start();
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();

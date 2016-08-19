@@ -28,7 +28,7 @@ namespace socket4net
         {
             _inner = new List<T>(capacity);
         }
-        public int Count { get { return _inner.Count; } }
+        public int Count => _inner.Count;
 
         public void Clear()
         {

@@ -31,50 +31,88 @@ namespace socket4net
     /// </summary>
     public class EmptyLogger : ILog
     {
+        /// <summary>
+        ///     Log as debug level
+        /// </summary>
         public void Debug(object message)
         {
         }
 
+        /// <summary>
+        ///     Log as debug level
+        /// </summary>
         public void Debug(string format, params object[] args)
         {
         }
 
+        /// <summary>
+        ///     Log as error level
+        /// </summary>
         public void Error(object message)
         {
         }
 
+        /// <summary>
+        ///     Log as error level
+        /// </summary>
         public void Error(string format, params object[] args)
         {
         }
 
+        /// <summary>
+        ///     Log as fatal level
+        /// </summary>
         public void Fatal(object message)
         {
         }
 
+        /// <summary>
+        ///     Log as fatal level
+        /// </summary>
         public void Fatal(string format, params object[] args)
         {
         }
 
+        /// <summary>
+        ///     Log as information level
+        /// </summary>
         public void Info(object message)
         {
         }
 
+        /// <summary>
+        ///     Log as information level
+        /// </summary>
         public void Info(string format, params object[] args)
         {
         }
 
+        /// <summary>
+        ///     Log as warnning level
+        /// </summary>
         public void Warn(object message)
         {
         }
 
+        /// <summary>
+        ///     Log as warnning level
+        /// </summary>
         public void Warn(string format, params object[] args)
         {
         }
 
+        /// <summary>
+        ///     Log exception
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="e"></param>
         public void Exception(string msg, Exception e)
         {
         }
 
+        /// <summary>
+        ///     Destroy logger
+        /// </summary>
         public void Shutdown()
         {
         }

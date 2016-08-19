@@ -27,21 +27,40 @@ using ProtoBuf;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     network package
+    /// </summary>
     [ProtoContract]
     public class NetPackage
     {
+        /// <summary>
+        ///     rpc type
+        ///     push/request/response
+        /// </summary>
         [ProtoMember(1)]
         public ERpc Type { get; set; }
 
+        /// <summary>
+        ///     rpc serial number
+        /// </summary>
         [ProtoMember(2)]
         public ushort Serial { get; set; }
 
+        /// <summary>
+        ///     rpc data
+        /// </summary>
         [ProtoMember(3)]
         public byte[] Data { get; set; }
 
+        /// <summary>
+        ///     
+        /// </summary>
         [ProtoMember(4)]
         public bool Success { get; set; }
 
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
             var sb = new StringBuilder();

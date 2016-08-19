@@ -35,7 +35,8 @@ namespace Sample
             Obj.New<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动服务器
-            var server = Obj.New<Server<ChatSession>>(new ServerArg(null, "127.0.0.1", 9527), true);
+            var port = args.IsNullOrEmpty() ? (ushort)9527 : ushort.Parse(args[0]);
+            var server = Obj.New<Server<ChatSession>>(new ServerArg(null, "127.0.0.1", port), true);
 
             Console.WriteLine("Press any key to exit!");
             Console.ReadKey();

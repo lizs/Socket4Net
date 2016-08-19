@@ -74,35 +74,24 @@ namespace socket4net
         protected Func<byte[], byte[]> Encoder = bytes => bytes;
         protected Func<byte[], byte[]> Decoder = bytes => bytes; 
 
-        public override string Name
-        {
-            get { return string.Format("{0}:{1}", GetType().Name, Id); }
-        }
+        public override string Name => $"{GetType().Name}:{Id}";
 
         public Socket UnderlineSocket { get; private set; }
 
         /// <summary>
         ///     Host peer this session belongs to
         /// </summary>
-        public IPeer HostPeer { get { return Owner as IPeer; } }
+        public IPeer HostPeer => Owner as IPeer;
 
         /// <summary>
         /// 指定接收buffer长度
         /// </summary>
-        public ushort ReceiveBufSize
-        {
-            get { return _receiveBufferSize; }
-            protected set { _receiveBufferSize = value; }
-        }
+        public ushort ReceiveBufSize { get; protected set; } = DefaultReceiveBufferSize;
 
         /// <summary>
         /// 限制包大小
         /// </summary>
-        public ushort PackageMaxSize
-        {
-            get { return _packageMaxSize; }
-            protected set { _packageMaxSize = value; }
-        }
+        public ushort PackageMaxSize { get; protected set; } = DefaultPackageMaxSize;
 
         // 发送相关
         private bool _isSending;
@@ -117,15 +106,14 @@ namespace socket4net
         /// <summary>
         ///     Session already closed
         /// </summary>
-        public bool Closed
-        {
-            get { return _closedFlag == 1; }
-        }
+        public bool Closed => _closedFlag == 1;
 
         private int _closedFlag;
-        private ushort _receiveBufferSize = DefaultReceiveBufferSize;
-        private ushort _packageMaxSize = DefaultPackageMaxSize;
 
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
@@ -152,12 +140,19 @@ namespace socket4net
         public abstract Task Dispatch(byte[] data);
 #endif
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
             Close(SessionCloseReason.ClosedByMyself);
         }
 
+        /// <summary>
+        ///     Close this session
+        /// </summary>
+        /// <param name="reason"></param>
         public virtual void Close(SessionCloseReason reason)
         {
             if (Closed) return;
@@ -205,6 +200,10 @@ namespace socket4net
             return segments;
         }
 
+        /// <summary>
+        ///     Send message to peer
+        /// </summary>
+        /// <param name="pack"></param>
         public void InternalSend(NetPackage pack)
         {
             Send(PiSerializer.Serialize(pack));
@@ -297,6 +296,7 @@ namespace socket4net
                 return;
             }
 
+            PerformanceMonitor.Ins.RecordWrite(e.BytesTransferred);
             HostPeer.PerformInNet(() =>
             {
                 if (_sendingQueue.Count > 0)
@@ -311,6 +311,9 @@ namespace socket4net
             ReceiveNext();
         }
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -379,6 +382,7 @@ namespace socket4net
         {
             if (Closed) return;
 
+            PerformanceMonitor.Ins.RecordRead(e.BytesTransferred);
             if (e.SocketError != SocketError.Success)
             {
                 Close(SessionCloseReason.ReadError);

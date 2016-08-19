@@ -24,12 +24,16 @@
 #endregion
 namespace socket4net
 {
+    /// <summary>
+    ///     link to logger singlton
+    /// </summary>
     public static class Logger
     {
         private static ILog _ins;
-        public static ILog Ins
-        {
-            get { return _ins ?? (_ins = GlobalVarPool.Ins.Logger); }
-        }
+
+        /// <summary>
+        ///     instance
+        /// </summary>
+        public static ILog Ins => _ins ?? (_ins = GlobalVarPool.Ins.Logger);
     }
 }

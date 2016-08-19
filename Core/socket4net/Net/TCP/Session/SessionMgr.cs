@@ -45,10 +45,7 @@ namespace socket4net
 
     public class SessionMgr : UniqueMgr<ConcurrentDictionary<long, ISession>, long, ISession> 
     {
-        public IPeer Peer
-        {
-            get { return Owner as IPeer; }
-        }
+        public IPeer Peer => Owner as IPeer;
 
         private Action<ISession> _openCb;
         private Action<ISession, SessionCloseReason> _closeCb;

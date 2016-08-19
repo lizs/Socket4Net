@@ -44,36 +44,30 @@ namespace socket4net
 
         #region 协程
 
-        /// <summary>
-        ///     产生一个在逻辑线程等待n毫秒的枚举器
-        ///     用在协程中
-        /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        public IEnumerator WaitFor(uint n)
+        IEnumerator IObj.WaitFor(uint n)
         {
             var meet = false;
-            Invoke(() => { meet = true; }, n);
+            (this as IObj).Invoke(() => { meet = true; }, n);
 
             while (!meet)
                 yield return true;
 
             yield return false;
         }
-
-        public void StopCoroutine(Coroutine coroutine)
+        
+        void IObj.StopCoroutine(Coroutine coroutine)
         {
             var scheduler = GlobalVarPool.Ins.LogicService.CoroutineScheduler;
             scheduler.InternalStopCoroutine(coroutine);
         }
 
-        public Coroutine StartCoroutine(Func<IEnumerator> fun)
+        Coroutine IObj.StartCoroutine(Func<IEnumerator> fun)
         {
             var scheduler = GlobalVarPool.Ins.LogicService.CoroutineScheduler;
             return scheduler.InternalStartCoroutine(fun);
         }
 
-        public Coroutine StartCoroutine(Func<object[], IEnumerator> fun, params object[] args)
+        Coroutine IObj.StartCoroutine(Func<object[], IEnumerator> fun, params object[] args)
         {
             var scheduler = GlobalVarPool.Ins.LogicService.CoroutineScheduler;
             return scheduler.InternalStartCoroutine(fun, args);
@@ -89,7 +83,7 @@ namespace socket4net
         {
             Owner = arg.Owner;
 
-            var flushableAncestor = GetAncestor<IFlushable>();
+            var flushableAncestor = (this as IObj).GetAncestor<IFlushable>();
             _cheduler = flushableAncestor != null ? new BatchedScheduler(flushableAncestor) : new Scheduler();
         }
 
@@ -99,47 +93,45 @@ namespace socket4net
         protected virtual void OnDestroy()
         {
             // 销毁定时器
-            if (_cheduler != null)
-                _cheduler.Destroy();
+            (_cheduler as IObj)?.Destroy();
         }
 
         #region 定时调度
 
         /// <summary>
-        ///     清理调度器
+        ///     clear timers attached on this obj
         /// </summary>
         public void ClearTimers()
         {
-            if (_cheduler != null)
-                _cheduler.Clear();
+            _cheduler?.Clear();
         }
 
         /// <summary>
-        ///     延时delay，以period为周期重复执行action
+        ///     Excute 'action' after 'delay' ms for every 'period' ms
         /// </summary>
         public void InvokeRepeating(Action action, uint delay, uint period)
         {
             if (_cheduler != null)
-                _cheduler.InternalInvokeRepeating(action, delay, period);
+                _cheduler.InvokeRepeatingImp(action, delay, period);
             else
                 Logger.Ins.Warn("Scheduler is null fo {0}", Name);
         }
 
         /// <summary>
-        ///     延时delay，执行action
+        ///     Excute 'action' after 'delay' ms
         /// </summary>
         /// <param name="action"></param>
         /// <param name="delay"></param>
         public void Invoke(Action action, uint delay)
         {
             if (_cheduler != null)
-                _cheduler.InternalInvoke(action, delay);
+                _cheduler.InvokeImp(action, delay);
             else
                 Logger.Ins.Warn("Scheduler is null fo {0}", Name);
         }
 
         /// <summary>
-        ///     在when时间点执行action
+        ///     Excute 'action' when 'when'
         /// </summary>
         /// <param name="action"></param>
         /// <param name="when"></param>
@@ -158,12 +150,11 @@ namespace socket4net
                 return;
             }
 
-            _cheduler.InternalInvoke(action, (uint)delay);
+            _cheduler.InvokeImp(action, (uint) delay);
         }
 
         /// <summary>
-        ///     每天 hour:min:s 执行action
-        ///     如：每天20:15执行action，此时 hour == 20 min == 15 s == 0
+        ///     Excute 'action' every 'hour:min:s'
         /// </summary>
         /// <param name="action"></param>
         /// <param name="hour"></param>
@@ -171,12 +162,11 @@ namespace socket4net
         /// <param name="s"></param>
         public void Invoke(Action action, int hour, int min, int s)
         {
-            Invoke(action, new TimeSpan(0, hour, min, s));
+            (this as IObj).Invoke(action, new TimeSpan(0, hour, min, s));
         }
 
         /// <summary>
-        ///     每天 time 执行action
-        ///     注：time并非间隔
+        ///     Excute 'action' everyday's 'time' clock
         /// </summary>
         /// <param name="action"></param>
         /// <param name="time"></param>
@@ -200,9 +190,9 @@ namespace socket4net
                 actionTime = actionTime.AddDays(1);
 
             var delay = (uint)(actionTime - now).TotalMilliseconds;
-            InvokeRepeating(action, delay, MillisecondsPerDay);
+            (this as IObj).InvokeRepeating(action, delay, MillisecondsPerDay);
         }
-
+        
         /// <summary>
         ///     取消action的调度
         /// </summary>
@@ -210,7 +200,7 @@ namespace socket4net
         public void CancelInvoke(Action action)
         {
             if (_cheduler != null)
-                _cheduler.InternalCancelInvoke(action);
+                _cheduler.CancelInvokeImp(action);
             else
                 Logger.Ins.Warn("Scheduler is null fo {0}", Name);
         }
@@ -308,7 +298,7 @@ namespace socket4net
             try
             {
                 if (_cheduler != null)
-                    _cheduler.InternalInvoke(() =>
+                    _cheduler.InvokeImp(() =>
                     {
                         action();
                         tcs.SetResult(true);

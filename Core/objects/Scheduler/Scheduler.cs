@@ -28,48 +28,80 @@ using System.Linq;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     timer scheduler
+    /// </summary>
     public class Scheduler : Obj
     {
-        protected readonly Dictionary<Action, TimerWrapper> Timers = new Dictionary<Action, TimerWrapper>();
+        private readonly Dictionary<Action, TimerWrapper> _timers = new Dictionary<Action, TimerWrapper>();
 
+        /// <summary>
+        ///     add timer 
+        ///     used internal
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="timer"></param>
+        protected void AddTimer(Action action, TimerWrapper timer) => _timers.Add(action, timer);
+
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
             Clear();
         }
 
+        /// <summary>
+        ///     clear the timers maintained by me
+        /// </summary>
         public void Clear()
         {
-            foreach (var timer in Timers.Select(x => x.Value))
+            foreach (var timer in _timers.Select(x => x.Value))
                 timer.Stop();
-            Timers.Clear();
+            _timers.Clear();
         }
 
-        public virtual void InternalInvokeRepeating(Action action, uint delay, uint period)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="delay"></param>
+        /// <param name="period"></param>
+        public virtual void InvokeRepeatingImp(Action action, uint delay, uint period)
         {
-            InternalCancelInvoke(action);
+            CancelInvokeImp(action);
 
             var timer = TimerWrapper.New(Name, action, delay, period);
-            Timers.Add(action, timer);
+            _timers.Add(action, timer);
             timer.Start();
         }
 
-        public virtual void InternalInvoke(Action action, uint delay)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="delay"></param>
+        public virtual void InvokeImp(Action action, uint delay)
         {
-            InternalCancelInvoke(action);
+            CancelInvokeImp(action);
 
             var timer = TimerWrapper.New(Name, action, delay);
-            Timers.Add(action, timer);
+            _timers.Add(action, timer);
             timer.Start();
         }
 
-        public void InternalCancelInvoke(Action action)
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="action"></param>
+        public void CancelInvokeImp(Action action)
         {
-            if (!Timers.ContainsKey(action)) return;
+            if (!_timers.ContainsKey(action)) return;
 
-            var timer = Timers[action];
+            var timer = _timers[action];
             timer.Stop();
-            Timers.Remove(action);
+            _timers.Remove(action);
         }
     }
 }

@@ -2,21 +2,38 @@
 
 namespace socket4net
 {
+    /// <summary>
+    ///     sliced object
+    /// </summary>
     public abstract class SlicedObj : Obj
     {
+        /// <summary>
+        ///     event raised when progress changed
+        /// </summary>
         public event Action<int, int> EventProgressChanged;
+
+        /// <summary>
+        ///     event raised when process failed
+        /// </summary>
         public event Action<string> EventFailed;
+
+        /// <summary>
+        ///     event raised when process completed
+        /// </summary>
         public event Action EventCompleted;
 
         private bool _isDone;
         private bool _failed;
-        int _progress;
+        private int _progress;
 
-        public float Percent
-        {
-            get { return Progress / (float)Steps; }
-        }
+        /// <summary>
+        ///    get process percentage
+        /// </summary>
+        public float Percent => Progress / (float)Steps;
 
+        /// <summary>
+        ///     get process progress
+        /// </summary>
         public int Progress
         {
             get { return _progress; }
@@ -25,18 +42,18 @@ namespace socket4net
                 if (value == _progress) return;
 
                 _progress = value;
-                if (EventProgressChanged != null)
-                    EventProgressChanged(Steps, Progress);
+                EventProgressChanged?.Invoke(Steps, Progress);
             }
         }
 
-        private int _steps = 1;
-        public int Steps
-        {
-            get { return _steps; }
-            protected set { _steps = value; }
-        }
+        /// <summary>
+        ///     get sliced steps
+        /// </summary>
+        public int Steps { get; protected set; } = 1;
 
+        /// <summary>
+        ///     specify wether processing is done
+        /// </summary>
         public bool IsDone
         {
             get { return _isDone; }
@@ -44,11 +61,14 @@ namespace socket4net
             {
                 if (value == _isDone) return;
                 _isDone = value;
-                if (_isDone && EventCompleted != null)
-                    EventCompleted();
+                if (_isDone)
+                    EventCompleted?.Invoke();
             }
         }
 
+        /// <summary>
+        ///     specify wether processing is failed
+        /// </summary>
         public bool Failed
         {
             get { return _failed; }
@@ -57,11 +77,14 @@ namespace socket4net
                 if (_failed == value) return;
                 _failed = value;
 
-                if (_failed && EventFailed != null)
-                    EventFailed("");
+                if (_failed)
+                    EventFailed?.Invoke("");
             }
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();

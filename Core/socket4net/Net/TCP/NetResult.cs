@@ -47,57 +47,110 @@ namespace socket4net
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class NetResult : Pair<bool, byte[]>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
         public NetResult(bool item1, byte[] item2)
             : base(item1, item2)
         {
         }
 
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
             return Key.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rt"></param>
+        /// <returns></returns>
         public static implicit operator bool(NetResult rt)
         {
             return rt.Key;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ret"></param>
+        /// <returns></returns>
         public static implicit operator NetResult(bool ret)
         {
             return ret ? Success : Failure;
         }
 
-        public static NetResult Success
-        {
-            get { return new NetResult(true, null); }
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static NetResult Success => new NetResult(true, null);
 
-        public static NetResult Failure
-        {
-            get { return new NetResult(false, null); }
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static NetResult Failure => new NetResult(false, null);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static NetResult MakeSuccess(byte[] data)
         {
             return new NetResult(true, data);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="proto"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static NetResult MakeSuccess<T>(T proto)
         {
             return new NetResult(true, PiSerializer.Serialize(proto));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="proto"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static NetResult MakeFailure<T>(T proto)
         {
             return new NetResult(false, PiSerializer.Serialize(proto));
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class NetResult<T> : NetResult
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
         public NetResult(bool item1, byte[] item2) : base(item1, item2) { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="proto"></param>
         public NetResult(bool item1, T proto) : base(item1, PiSerializer.Serialize(proto)) { }
     }
 }

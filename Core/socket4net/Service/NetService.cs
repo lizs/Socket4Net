@@ -31,6 +31,59 @@ using System.Collections.Concurrent;
 namespace socket4net
 {
     /// <summary>
+    ///     performance monitor
+    /// </summary>
+    public class PerformanceMonitor : Obj
+    {
+        public static PerformanceMonitor Ins => GlobalVarPool.Ins.Monitor;
+
+        public int ExcutedJobsPerSec { get; private set; }
+        public int ReadBytesPerSec { get; private set; }
+        public int WriteBytesPerSec { get; private set; }
+        public int ReadPackagesPerSec { get; private set; }
+        public int WritePackagesPerSec { get; private set; }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            InvokeRepeating(Refresh, 0, 1000);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="len"></param>
+        public void RecordRead(int len)
+        {
+            ReadBytesPerSec += len;
+            ++ReadPackagesPerSec;
+        }
+
+        public void RecordWrite(int len)
+        {
+            WriteBytesPerSec += len;
+            ++WritePackagesPerSec;
+        }
+
+        public void RecordJob()
+        {
+            ++ExcutedJobsPerSec;
+        }
+
+        private void Refresh()
+        {
+            Logger.Ins.Debug(
+                $"Jobs : {ExcutedJobsPerSec}/s\tWriteBytes : {WriteBytesPerSec/1024}KB/s\tWritePackages : {WritePackagesPerSec}/s\tReadBytes : {ReadBytesPerSec/1024}KB/s\tReadPackages : {ReadPackagesPerSec}/s");
+
+            ExcutedJobsPerSec = 0;
+            WriteBytesPerSec = 0;
+            WritePackagesPerSec = 0;
+            ReadBytesPerSec = 0;
+            ReadPackagesPerSec = 0;
+        }
+    }
+
+    /// <summary>
     /// 网络服务线程（网络数据读写）
     /// </summary>
     public class NetService : Obj, INetService
@@ -39,31 +92,26 @@ namespace socket4net
         private Thread _wokerThread;
         private bool _stopping;
 
-        public int Jobs { get { return _jobs.Count; } }
-        public int ExcutedJobsPerSec { get; private set; }
+        /// <summary>
+        ///     get processing jobs count
+        /// </summary>
+        public int Jobs => _jobs.Count;
+        
+        /// <summary>
+        ///     Jobs queued upper bound
+        /// </summary>
         public int Capacity { get; set; }
 
-        private int _period = 10;
-        public int Period
-        {
-            get { return _period; }
-            set { _period = value; }
-        }
+        /// <summary>
+        ///     Period for waiting concurrent collection's item take
+        /// </summary>
+        public int Period { get; set; } = 10;
 
-        public int ReadBytesPerSec { get; private set; }
-        public int WriteBytesPerSec { get; private set; }
-        public int ReadPackagesPerSec { get; private set; }
-        public int WritePackagesPerSec { get; private set; }
 
-        private int _previousCalcTime;
-        private int _excutedJobsPerSec;
-
-        private int _readBytesPerSec;
-        private int _readPackagesPerSec;
-
-        private int _writeBytesPerSec;
-        private int _writePackagesPerSec;
-
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
@@ -72,6 +120,9 @@ namespace socket4net
             Period = arg.As<ServiceArg>().Period;
         }
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -82,6 +133,9 @@ namespace socket4net
             Logger.Ins.Debug("Net service started!");
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -90,11 +144,21 @@ namespace socket4net
             Logger.Ins.Debug("Net service stopped!");
         }
 
+        /// <summary>
+        ///     Send action to be excuted in current service
+        /// </summary>
+        /// <param name="action"></param>
         public void Perform(Action action)
         {
             Enqueue(action);
         }
 
+        /// <summary>
+        ///     Send action to be excuted in current service
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="param"></param>
+        /// <typeparam name="T"></typeparam>
         public void Perform<T>(Action<T> action, T param)
         {
             Enqueue(action, param);
@@ -120,8 +184,7 @@ namespace socket4net
                     if (_jobs.TryTake(out job, Period))
                     {
                         job.Do();
-
-                        CalcPerformance();
+                        PerformanceMonitor.Ins.RecordJob();
                     }
                 }
                 catch (Exception e)
@@ -141,40 +204,6 @@ namespace socket4net
             catch (Exception e)
             {
                 Logger.Ins.Error("{0} : {1}", e.Message, e.StackTrace);
-            }
-        }
-
-        public void OnReadCompleted(int len, ushort cnt)
-        {
-            _readBytesPerSec += len;
-            ++_readPackagesPerSec;
-        }
-
-        public void OnWriteCompleted(int len)
-        {
-            _writeBytesPerSec += len;
-            ++_writePackagesPerSec;
-        }
-
-        private void CalcPerformance()
-        {
-            var delta = (Environment.TickCount - _previousCalcTime) / 1000.0f;
-            if (delta < 1.0f)
-                ++_excutedJobsPerSec;
-            else
-            {
-                ExcutedJobsPerSec = (int)(_excutedJobsPerSec / delta);
-                WriteBytesPerSec = (int)(_writeBytesPerSec / delta);
-                WritePackagesPerSec = (int)(_writePackagesPerSec / delta);
-                ReadBytesPerSec = (int)(_readBytesPerSec / delta);
-                ReadPackagesPerSec = (int)(_readPackagesPerSec / delta);
-
-                _previousCalcTime = Environment.TickCount;
-                _excutedJobsPerSec = 0;
-                _writeBytesPerSec = 0;
-                _writePackagesPerSec = 0;
-                _readBytesPerSec = 0;
-                _readPackagesPerSec = 0;
             }
         }
     }

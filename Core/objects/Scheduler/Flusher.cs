@@ -26,20 +26,33 @@ using System;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     interface of flushable object
+    /// </summary>
     public interface IFlushable : IObj
     {
+        /// <summary>
+        ///     do flush operations
+        /// </summary>
         void Flush();
     }
 
+    /// <summary>
+    ///    auto flush in an "using" statement
+    /// </summary>
     public class Flusher : IDisposable
     {
         private IFlushable _target;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
         public Flusher(IFlushable target)
         {
             _target = target;
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             if (_target == null) return;
 

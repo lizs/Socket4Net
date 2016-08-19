@@ -33,10 +33,13 @@ namespace socket4net
     ///     对象管理器
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
-    public class Mgr<TValue> : Obj, IEnumerable<TValue> where TValue : Obj
+    public class Mgr<TValue> : Obj, IEnumerable<TValue> where TValue : class, IObj
     {
         private readonly List<TValue> _items = new List<TValue>();
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -46,6 +49,9 @@ namespace socket4net
             _items.Clear();
         }
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -53,6 +59,9 @@ namespace socket4net
                 item.Start();
         }
 
+        /// <summary>
+        ///     Invoked when obj born
+        /// </summary>
         protected override void OnBorn()
         {
             base.OnBorn();
@@ -60,6 +69,9 @@ namespace socket4net
                 item.Born();
         }
 
+        /// <summary>返回一个循环访问集合的枚举数。</summary>
+        /// <returns>可用于循环访问集合的 <see cref="T:System.Collections.Generic.IEnumerator`1" />。</returns>
+        /// <filterpriority>1</filterpriority>
         public IEnumerator<TValue> GetEnumerator()
         {
             return _items.GetEnumerator();
@@ -70,6 +82,10 @@ namespace socket4net
             return GetEnumerator();
         }
         
+        /// <summary>
+        ///  destroy all the elements of type "T"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public void Destroy<T>() where T : TValue
         {
             var victims = Get<T>();
@@ -78,34 +94,66 @@ namespace socket4net
                 obj.Destroy();
         }
 
-        public void Destroy<T>(Predicate<T> condition) where T : TValue
+        /// <summary>
+        ///  destroy all the elements of type "T" that satisfied the "condition"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void Destroy<T>(Predicate<T> condition) where T : class, TValue
         {
-            var victims = Get<T>(condition);
-            _items.RemoveAll(x => x is T && condition(x as T));
+            var victims = Get(condition);
+            _items.RemoveAll(x => x is T && condition((T) x));
             foreach (var obj in victims)
                 obj.Destroy();
         }
 
+        /// <summary>
+        ///  get all the elements of type "T"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public List<T> Get<T>() where T : TValue
         {
             return this.OfType<T>().ToList(); 
         }
 
+        /// <summary>
+        ///  get all the elements of type "T" that satisfied the "condition"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public List<T> Get<T>(Predicate<T> condition) where T : TValue
         {
             return this.OfType<T>().Where(x=>condition(x)).ToList();
         }
 
+        /// <summary>
+        ///  get all the elements of type "T" as reverse order
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public List<T> GetReverse<T>() where T : TValue
         {
             return this.OfType<T>().Reverse().ToList();
         }
 
+        /// <summary>
+        ///  get the first element of type "T"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T GetFirst<T>() where T : TValue
         {
             return Get<T>().FirstOrDefault();
         }
 
+        /// <summary>
+        ///     create object of type "T"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
         public T Create<T>(ObjArg arg, bool start) where T : class, TValue, new()
         {
             var ret = New<T>(arg, start);

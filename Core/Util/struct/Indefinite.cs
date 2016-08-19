@@ -20,8 +20,8 @@ namespace socket4net
             set { _members = value; }
         }
 
-        public T First { get { return _members[0]; } }
-        public T Last { get { return _members[_members.Count - 1]; } }
+        public T First => _members[0];
+        public T Last => _members[_members.Count - 1];
 
         public List<T> Range(int offset, int length)
         {

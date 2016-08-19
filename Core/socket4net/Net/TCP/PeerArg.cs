@@ -24,8 +24,17 @@
 #endregion
 namespace socket4net
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PeerArg : ObjArg
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
         public PeerArg(IObj parent, string ip, ushort port)
             : base(parent)
         {
@@ -33,7 +42,13 @@ namespace socket4net
             Port = port;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string Ip { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public ushort Port { get; private set; }
     }
 }

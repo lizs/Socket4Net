@@ -32,43 +32,91 @@ using System.Collections.Concurrent;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     
+    /// </summary>
     public class ServerArg : PeerArg
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
         public ServerArg(IObj parent, string ip, ushort port)
             : base(parent, ip, port)
         {
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TSession"></typeparam>
     public class Server<TSession> : Obj, IPeer
         where TSession : class, ISession, new()
     {
         private const int DefaultBacktrace = 10;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public ushort Port { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string Ip { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public IPAddress Address { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public EndPoint EndPoint { get; private set; }
 
-        public override string Name
-        {
-            get { return string.Format("{0}:{1}", Ip, Port); }
-        }
+        /// <summary>
+        ///     name
+        /// </summary>
+        public override string Name => $"{Ip}:{Port}";
 
-        public ILogicService LogicService
-        {
-            get { return Launcher.Ins.LogicService; }
-        }
+        /// <summary>
+        ///     Get logic service
+        /// </summary>
+        public ILogicService LogicService => Launcher.Ins.LogicService;
 
-        public INetService NetService
-        {
-            get { return Launcher.Ins.NetService; }
-        }
+        /// <summary>
+        ///     Get net service
+        /// </summary>
+        public INetService NetService => Launcher.Ins.NetService;
 
+        /// <summary>
+        ///     回话管理器
+        ///     线程安全
+        /// </summary>
         public SessionMgr SessionMgr { get; private set; }
 
+        /// <summary>
+        ///     Raised when a session closed
+        /// </summary>
         public event Action<ISession, SessionCloseReason> EventSessionClosed;
+
+        /// <summary>
+        ///     Raised when a session established
+        /// </summary>
         public event Action<ISession> EventSessionEstablished;
+
+        /// <summary>
+        ///     Raised when error catched
+        /// </summary>
         public event Action<string> EventErrorCatched;
+
+        /// <summary>
+        ///     Raised when Peer closing
+        /// </summary>
         public event Action EventPeerClosing;
 
         private Socket _listener;
@@ -79,6 +127,10 @@ namespace socket4net
         private Thread _sessionFactoryWorker;
         private bool _quit;
 
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
@@ -97,33 +149,47 @@ namespace socket4net
             
             SessionMgr = New<SessionMgr>(new SessionMgrArg(this, session =>
                 {
-                    if (EventSessionEstablished != null)
-                        EventSessionEstablished(session as TSession);
+                    EventSessionEstablished?.Invoke(session as TSession);
                     OnConnected(session);
                 },
                 (session, reason) =>
                 {
-                    if (EventSessionClosed != null)
-                        EventSessionClosed(session as TSession, reason);
+                    EventSessionClosed?.Invoke(session as TSession, reason);
                     OnDisconnected(session, reason);
                 }));
         }
 
+        /// <summary>
+        ///     session established
+        /// </summary>
+        /// <param name="session"></param>
         protected virtual void OnConnected(ISession session)
         {
             Logger.Ins.Info("{0}:{1} connected!", Name, session.Name);
         }
 
+        /// <summary>
+        /// session closed
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="reason"></param>
         protected virtual void OnDisconnected(ISession session, SessionCloseReason reason)
         {
             Logger.Ins.Info("{0}:{1} disconnected by {2}", Name, session.Name, reason);
         }
 
+        /// <summary>
+        /// error occured
+        /// </summary>
+        /// <param name="msg"></param>
         protected virtual void OnError(string msg)
         {
             Logger.Ins.Error("{0}:{1}", Name, msg);
         }
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -135,7 +201,7 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                OnError(string.Format("Server start failed, detail {0} : {1}", e.Message, e.StackTrace));
+                OnError($"Server start failed, detail {e.Message} : {e.StackTrace}");
                 return;
             }
 
@@ -152,6 +218,9 @@ namespace socket4net
             Logger.Ins.Debug("Server started on {0}:{1}", Ip, Port);
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -160,41 +229,55 @@ namespace socket4net
             EventSessionClosed = null;
             EventSessionEstablished = null;
 
-            if (EventPeerClosing != null)
-                EventPeerClosing();
-
+            EventPeerClosing?.Invoke();
             SessionMgr.Destroy();
 
             _listener.Close();
-            if (_acceptEvent != null)
-                _acceptEvent.Dispose();
+            _acceptEvent?.Dispose();
 
             _quit = true;
             _socketAcceptedEvent.Set();
 #if NET45
             _socketAcceptedEvent.Dispose();
 #endif
-            if (_sessionFactoryWorker != null)
-                _sessionFactoryWorker.Join();
+            _sessionFactoryWorker?.Join();
 
             Logger.Ins.Info("Server stopped!");
         }
 
-        public void PerformInLogic(Action action)
+        /// <summary>
+        ///     Excute 'action' in logic service
+        /// </summary>
+        /// <param name="action"></param>
+        void IPeer.PerformInLogic(Action action)
         {
             LogicService.Perform(action);
         }
 
+        /// <summary>
+        ///     Excute 'action' in logic service
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="param"></param>
         public void PerformInLogic<TParam>(Action<TParam> action, TParam param)
         {
             LogicService.Perform(action, param);
         }
 
+        /// <summary>
+        ///     Excute 'action' in net service
+        /// </summary>
+        /// <param name="action"></param>
         public void PerformInNet(Action action)
         {
             NetService.Perform(action);
         }
 
+        /// <summary>
+        ///     Excute 'action' in net service
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="param"></param>
         public void PerformInNet<TParam>(Action<TParam> action, TParam param)
         {
             NetService.Perform(action, param);
@@ -222,7 +305,6 @@ namespace socket4net
 
         private void ProcessAccept(Socket sock, SocketError error)
         {
-            SocketAsyncEventArgs e;
             if (error != SocketError.Success)
             {
                 Logger.Ins.Error("Listener down!");
@@ -248,11 +330,10 @@ namespace socket4net
             }
             catch (Exception e)
             {
-                var msg = string.Format("Accept failed, detail {0} : {1}", e.Message, e.StackTrace);
+                var msg = $"Accept failed, detail {e.Message} : {e.StackTrace}";
                 OnError(msg);
 
-                if (EventErrorCatched != null)
-                    EventErrorCatched(msg);
+                EventErrorCatched?.Invoke(msg);
 
                 AcceptNext();
             }

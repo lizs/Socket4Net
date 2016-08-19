@@ -78,7 +78,7 @@ namespace Sample
         protected override void OnStart()
         {
             base.OnStart();
-            InvokeRepeating(Broadcast, 1000, 5 * 1000);
+            InvokeRepeating(Broadcast, 1000, (uint)Rand.Next(3 * 1000, 10 * 1000));
         }
 
         private void Broadcast()
@@ -103,7 +103,7 @@ namespace Sample
                 case EOps.Push:
                     {
                         var proto = PiSerializer.Deserialize<PushProto>(more.Data);
-                        Logger.Ins.Info(proto.Message);
+                        //Logger.Ins.Info(proto.Message);
                         cb(true);
                         return;
                     }

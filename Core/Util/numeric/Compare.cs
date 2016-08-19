@@ -31,6 +31,10 @@ namespace Pi.Common.Numeric
     {
         private static bool _compiled;
         private static Func<T, T, int> _function;
+
+        /// <summary>
+        ///     get the compiled function
+        /// </summary>
         public static Func<T, T, int> Function
         {
             get
@@ -48,7 +52,7 @@ namespace Pi.Common.Numeric
             var py = Expression.Parameter(typeof(T), "y");
             var addExp = Expression.Equal(px, py);
 
-            return Expression.Lambda<Func<T, T, int>>(addExp, new[] { px, py }).Compile();
+            return Expression.Lambda<Func<T, T, int>>(addExp, px, py).Compile();
         }
     }
 }

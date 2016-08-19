@@ -40,10 +40,7 @@ namespace socket4net
             _procedure = proc;
         }
 
-        public Action Procedure
-        {
-            get { return _procedure; }
-        }
+        public Action Procedure => _procedure;
 
         public void Do()
         {
@@ -62,15 +59,9 @@ namespace socket4net
             _param = param;
         }
         
-        public Action<T> Procedure
-        {
-            get { return _procedure; }
-        }
+        public Action<T> Procedure => _procedure;
 
-        public T Param
-        {
-            get { return _param; }
-        }
+        public T Param => _param;
 
         public void Do()
         {

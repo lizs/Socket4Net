@@ -99,7 +99,7 @@ namespace socket4net
         public int Count { get; private set; }
 
         private readonly object _syncRoot = new object();
-        public object SyncRoot { get { return _syncRoot; } }
+        public object SyncRoot => _syncRoot;
 
         private readonly Queue<T> _queue = new Queue<T>();
 

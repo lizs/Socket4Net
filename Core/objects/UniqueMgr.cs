@@ -127,9 +127,7 @@ namespace socket4net
 
             var ret = New<T>(arg, start);
             Add(ret);
-
-            if (EventObjCreated != null)
-                EventObjCreated(ret);
+            EventObjCreated?.Invoke(ret);
 
             return ret;
         }
@@ -141,7 +139,7 @@ namespace socket4net
         /// <param name="arg"></param>
         /// <param name="start"></param>
         /// <returns></returns>
-        public Obj Create(Type type, UniqueObjArg<TKey> arg, bool start = false)
+        public IObj Create(Type type, UniqueObjArg<TKey> arg, bool start = false)
         {
             if (Exist(arg.Key)) return null;
             if (!type.IsSubclassOf(typeof(TValue))) return null;
@@ -149,10 +147,7 @@ namespace socket4net
             var ret = New(type, arg, start);
             var obj = ret as TValue;
             Add(obj);
-
-            if (EventObjCreated != null)
-                EventObjCreated(obj);
-
+            EventObjCreated?.Invoke(obj);
             return ret;
         }
 
@@ -162,6 +157,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         /// <param name="type"></param>
         /// <param name="arg"></param>
+        /// <param name="start"></param>
         /// <returns></returns>
         public T Create<T>(Type type, UniqueObjArg<TKey> arg, bool start = false) where T : class, TValue
         {
@@ -176,6 +172,7 @@ namespace socket4net
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
+        /// <param name="start"></param>
         /// <returns></returns>
         public T CreateDefault<T>(UniqueObjArg<TKey> arg, bool start) where T : class, TValue, new()
         {
@@ -184,9 +181,7 @@ namespace socket4net
             var ret = Create<T>(arg, start);
             ret.Born();
             Add(ret);
-
-            if (EventDefaultObjCreated != null)
-                EventDefaultObjCreated(ret);
+            EventDefaultObjCreated?.Invoke(ret);
 
             return ret;
         }
@@ -196,8 +191,9 @@ namespace socket4net
         /// </summary>
         /// <param name="type"></param>
         /// <param name="arg"></param>
+        /// <param name="start"></param>
         /// <returns></returns>
-        public Obj CreateDefault(Type type, UniqueObjArg<TKey> arg, bool start)
+        public IObj CreateDefault(Type type, UniqueObjArg<TKey> arg, bool start)
         {
             if (Exist(arg.Key)) return null;
             if (!type.IsSubclassOf(typeof(TValue))) return null;
@@ -207,9 +203,7 @@ namespace socket4net
 
             var obj = ret as TValue;
             Add(obj);
-
-            if (EventDefaultObjCreated != null)
-                EventDefaultObjCreated(obj);
+            EventDefaultObjCreated?.Invoke(obj);
 
             return ret;
         }
@@ -220,6 +214,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         /// <param name="type"></param>
         /// <param name="arg"></param>
+        /// <param name="start"></param>
         /// <returns></returns>
         public T CreateDefault<T>(Type type, UniqueObjArg<TKey> arg, bool start) where T : class, TValue
         {
@@ -289,15 +284,9 @@ namespace socket4net
 
         #region get
 
-        public int Count
-        {
-            get { return Items.Count; }
-        }
+        public int Count => Items.Count;
 
-        public TValue this[TKey key]
-        {
-            get { return Get(key); }
-        }
+        public TValue this[TKey key] => Get(key);
 
         public bool Exist(TKey key)
         {
@@ -362,6 +351,11 @@ namespace socket4net
         }
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected bool Add(TValue item)
         {
             if (Items.ContainsKey(item.Id)) return false;

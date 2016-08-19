@@ -77,10 +77,8 @@ namespace socket4net
             private set;
         }
 
-        public bool IsHead
-        {
-            get { return Timer == null; }
-        }
+        public bool IsHead => Timer == null;
+
         /// <summary>
         /// Queue the entry object into a queue specify by 'h'
         /// </summary>
@@ -116,40 +114,34 @@ namespace socket4net
     /// <summary>
     /// Define the constant variable used by <c>TimerScheduler</c> class
     /// </summary>
-    static class TimerConstant
+    internal static class TimerConstant
     {
-        public const int TVN_BITS = 6;
-        public const int TVN_SIZE = (1 << TVN_BITS);
-        public const int TVR_BITS = 8;
-        public const int TVR_SIZE = (1 << TVR_BITS);
-        public const int TVN_MASK = (TVN_SIZE - 1);
-        public const int TVR_MASK = (TVR_SIZE - 1);
+        public const int TvnBits = 6;
+        public const int TvnSize = (1 << TvnBits);
+        public const int TvrBits = 8;
+        public const int TvrSize = (1 << TvrBits);
+        public const int TvnMask = (TvnSize - 1);
+        public const int TvrMask = (TvrSize - 1);
     }
 
     /// <summary>
     /// Timer vector class.
     /// </summary>
-    class TVN
+    internal class Tvn
     {
-        public TVN()
+        public Tvn()
         {
-            for (var i = 0; i < TimerConstant.TVN_SIZE; ++i)
+            for (var i = 0; i < TimerConstant.TvnSize; ++i)
             {
                 _vector[i] = new QueueEntry();
             }
         }
 
         private readonly QueueEntry[] _vector
-            = new QueueEntry[TimerConstant.TVN_SIZE];
-        public QueueEntry this[int index]
-        {
-            get { return _vector[index]; }
-        }
+            = new QueueEntry[TimerConstant.TvnSize];
+        public QueueEntry this[int index] => _vector[index];
 
-        public QueueEntry[] TV
-        {
-            get { return _vector; }
-        }
+        public QueueEntry[] TV => _vector;
     }
 
     /// <summary>
@@ -157,27 +149,21 @@ namespace socket4net
     /// It's a specific type of <c>TVN</c>, it's vector size
     /// is different from <c>TVN</c>.
     /// </summary>
-    class TVR
+    internal class Tvr
     {
-        public TVR()
+        public Tvr()
         {
-            for (var i = 0; i < TimerConstant.TVR_SIZE; ++i)
+            for (var i = 0; i < TimerConstant.TvrSize; ++i)
             {
                 _vector[i] = new QueueEntry();
             }
         }
         private readonly QueueEntry[] _vector
-            = new QueueEntry[TimerConstant.TVR_SIZE];
+            = new QueueEntry[TimerConstant.TvrSize];
 
-        public QueueEntry this[int index]
-        {
-            get { return _vector[index]; }
-        }
+        public QueueEntry this[int index] => _vector[index];
 
-        public QueueEntry[] TV
-        {
-            get { return _vector; }
-        }
+        public QueueEntry[] TV => _vector;
     }
 
     /// <summary>
@@ -185,8 +171,15 @@ namespace socket4net
     /// </summary>
     public class TimerScheduler : IDisposable
     {
-        public ILogicService HostService { get; private set; }
+        /// <summary>
+        /// get the logic service where this scheduler hosted
+        /// </summary>
+        public ILogicService HostService { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="service"></param>
         public TimerScheduler(ILogicService service)
         {
             HostService = service;
@@ -195,6 +188,8 @@ namespace socket4net
             _timerJiffies = service.ElapsedMilliseconds;
         }
 
+        /// <summary>执行与释放或重置非托管资源相关的应用程序定义的任务。</summary>
+        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
             HostService.Idle -= RunTimer;
@@ -216,28 +211,28 @@ namespace socket4net
         /// <summary>
         /// The first class of timers vector, their expire time will less than 256 milliseconds.
         /// </summary>
-        private TVR _TV1 = new TVR();
+        private readonly Tvr _tv1 = new Tvr();
         /// <summary>
         /// The second class of timers vector, their expire time will grater than 255 milliseconds
         /// and less than 16384(1 left shit 14) milliseconds
         /// </summary>
-        private TVN _TV2 = new TVN();
+        private readonly Tvn _tv2 = new Tvn();
         /// <summary>
         /// The second class of timers vector, their expire time will grater than 16384 milliseconds
         /// and less than 1048576(1 left shit 20) milliseconds
         /// </summary>
-        private TVN _TV3 = new TVN();
+        private readonly Tvn _tv3 = new Tvn();
         /// <summary>
         /// The second class of timers vector, their expire time will grater than 1048576 milliseconds
         /// and less than 67108864(1 left shit 26) milliseconds
         /// </summary>
-        private TVN _TV4 = new TVN();
+        private readonly Tvn _tv4 = new Tvn();
         /// <summary>
         /// The second class of timers vector, their expire time will grater than 67108864 milliseconds
         /// and less than uint.Max(1 left shit 32) milliseconds
         /// if the expires is grater then uint.Max, it will be truncated.
         /// </summary>
-        private TVN _TV5 = new TVN();
+        private readonly Tvn _tv5 = new Tvn();
         
         /// <summary>
         /// <c>StaService</c>'s Idle event call this method
@@ -248,7 +243,7 @@ namespace socket4net
             var jiffes = HostService.ElapsedMilliseconds; 
             while (jiffes - _timerJiffies >= 0)
             {
-                var index = (int)(_timerJiffies & TimerConstant.TVR_MASK);
+                var index = (int)(_timerJiffies & TimerConstant.TvrMask);
                 if (index == 0)
                 {
                     Cascade();
@@ -256,7 +251,7 @@ namespace socket4net
 
                 ++_timerJiffies;
 
-                var h = _TV1[index];
+                var h = _tv1[index];
                 while (h.Next != h)
                 {
                     var e = h.Next;
@@ -324,7 +319,7 @@ namespace socket4net
         /// <param name="tv">the timers vector</param>
         /// <param name="index">which queue to cascade</param>
         /// <returns></returns>
-        private int Cascade(TVN tv, int index)
+        private int Cascade(Tvn tv, int index)
         {
             var t = tv[index];
 
@@ -342,13 +337,13 @@ namespace socket4net
         /// </summary>
         private void Cascade()
         {
-            if (Cascade(_TV2, (int)((_timerJiffies >> (TimerConstant.TVR_BITS)) & TimerConstant.TVN_MASK)) == 0)
+            if (Cascade(_tv2, (int)((_timerJiffies >> (TimerConstant.TvrBits)) & TimerConstant.TvnMask)) == 0)
             {
-                if (Cascade(_TV3, (int)((_timerJiffies >> (TimerConstant.TVR_BITS + TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK)) == 0)
+                if (Cascade(_tv3, (int)((_timerJiffies >> (TimerConstant.TvrBits + TimerConstant.TvnBits)) & TimerConstant.TvnMask)) == 0)
                 {
-                    if (Cascade(_TV4, (int)((_timerJiffies >> (TimerConstant.TVR_BITS + 2 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK)) == 0)
+                    if (Cascade(_tv4, (int)((_timerJiffies >> (TimerConstant.TvrBits + 2 * TimerConstant.TvnBits)) & TimerConstant.TvnMask)) == 0)
                     {
-                        Cascade(_TV5, (int)((_timerJiffies >> (TimerConstant.TVR_BITS + 3 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK));
+                        Cascade(_tv5, (int)((_timerJiffies >> (TimerConstant.TvrBits + 3 * TimerConstant.TvnBits)) & TimerConstant.TvnMask));
                     }
                 }
             }
@@ -366,33 +361,33 @@ namespace socket4net
             QueueEntry[] tv;
             if (idx < 0)
             {
-                ti = (int)(_timerJiffies & TimerConstant.TVR_MASK);
-                tv = _TV1.TV;
+                ti = (int)(_timerJiffies & TimerConstant.TvrMask);
+                tv = _tv1.TV;
             }
-            else if (idx < TimerConstant.TVR_SIZE)
+            else if (idx < TimerConstant.TvrSize)
             {
-                ti = (int)(expires & TimerConstant.TVR_MASK);
-                tv = _TV1.TV;
+                ti = (int)(expires & TimerConstant.TvrMask);
+                tv = _tv1.TV;
             }
-            else if (idx < (1 << (TimerConstant.TVR_BITS + TimerConstant.TVN_BITS)))
+            else if (idx < (1 << (TimerConstant.TvrBits + TimerConstant.TvnBits)))
             {
-                ti = (int)((expires >> TimerConstant.TVR_BITS) & TimerConstant.TVN_MASK);
-                tv = _TV2.TV;
+                ti = (int)((expires >> TimerConstant.TvrBits) & TimerConstant.TvnMask);
+                tv = _tv2.TV;
             }
-            else if (idx < (1 << (TimerConstant.TVR_BITS + 2 * TimerConstant.TVN_BITS)))
+            else if (idx < (1 << (TimerConstant.TvrBits + 2 * TimerConstant.TvnBits)))
             {
-                ti = (int)((expires >> (TimerConstant.TVR_BITS + TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK);
-                tv = _TV3.TV;
+                ti = (int)((expires >> (TimerConstant.TvrBits + TimerConstant.TvnBits)) & TimerConstant.TvnMask);
+                tv = _tv3.TV;
             }
-            else if (idx < (1 << (TimerConstant.TVR_BITS + 3 * TimerConstant.TVN_BITS)))
+            else if (idx < (1 << (TimerConstant.TvrBits + 3 * TimerConstant.TvnBits)))
             {
-                ti = (int)((expires >> (TimerConstant.TVR_BITS + 2 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK);
-                tv = _TV4.TV;
+                ti = (int)((expires >> (TimerConstant.TvrBits + 2 * TimerConstant.TvnBits)) & TimerConstant.TvnMask);
+                tv = _tv4.TV;
             }
             else
             {
-                ti = (int)((expires >> (TimerConstant.TVR_BITS + 3 * TimerConstant.TVN_BITS)) & TimerConstant.TVN_MASK);
-                tv = _TV5.TV;
+                ti = (int)((expires >> (TimerConstant.TvrBits + 3 * TimerConstant.TvnBits)) & TimerConstant.TvnMask);
+                tv = _tv5.TV;
             }
 
             var h = tv[ti];

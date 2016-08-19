@@ -52,10 +52,7 @@ namespace socket4net
         /// <summary>
         ///     Empty obj argument
         /// </summary>
-        public static ObjArg Empty
-        {
-            get { return new EmptyArg(); }
-        }
+        public static ObjArg Empty => new EmptyArg();
 
         /// <summary>
         ///     Cast this arg to T
@@ -301,24 +298,31 @@ namespace socket4net
     public partial class Obj : IObj
     {
         private object _userData;
-        public int InstanceId { get; private set; }
+        private int InstanceId { get; }
 
-        public virtual string Name
-        {
-            get { return GetType().FullName; }
-        }
+        /// <summary>
+        ///     Obj instance id
+        ///     Unique only before current process dead
+        /// </summary>
+        int IObj.InstanceId => InstanceId;
 
-        public virtual int Priority
-        {
-            get { return 0; }
-        }
+        /// <summary>
+        ///     name
+        /// </summary>
+        public virtual string Name => GetType().FullName;
 
-        public T GetUserData<T>()
+        /// <summary>
+        ///     Schedule priority
+        ///     Just like Unity's layer
+        /// </summary>
+        public virtual int Priority => 0;
+
+        T IObj.GetUserData<T>()
         {
             return (T)_userData;
         }
 
-        public void SetUserData(object obj)
+        void IObj.SetUserData(object obj)
         {
             _userData = obj;
         }
@@ -332,29 +336,49 @@ namespace socket4net
             InstanceId = GenInstanceId();
         }
 
-        public IObj Owner { get; private set; }
+        /// <summary>
+        ///     Owner
+        /// </summary>
+        public IObj Owner { get; set; }
 
         /// <summary>
         ///     Owner description
         /// </summary>
-        public string OwnerDescription
-        {
-            get { return Owner != null ? Owner.Name : "null"; }
-        }
+        public string OwnerDescription => Owner != null ? Owner.Name : "null";
 
+        /// <summary>
+        ///     If initialized
+        /// </summary>
         public bool Initialized { get; private set; }
 
+        /// <summary>
+        ///     If started
+        /// </summary>
         public bool Started { get; private set; }
 
+        /// <summary>
+        ///     If destroyed
+        /// </summary>
         public bool Destroyed { get; private set; }
 
+        /// <summary>
+        ///     If IObj's 'Born' invoked 
+        /// </summary>
         public bool Fresh { get; private set; }
 
+        /// <summary>
+        ///     comparer
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public virtual int CompareTo(IObj other)
         {
             return Priority.CompareTo(other.Priority);
         }
 
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
             return Name;
@@ -379,7 +403,7 @@ namespace socket4net
         ///     If 'start' == true, Obj will be started after initialized
         /// </summary>
         /// <returns></returns>
-        public static Obj New(Type type, ObjArg arg, bool start = false)
+        public static IObj New(Type type, ObjArg arg, bool start = false)
         {
             return ObjFactory.Create(type, arg, start);
         }
@@ -394,6 +418,10 @@ namespace socket4net
             return New(type, arg, start) as T;
         }
 
+        /// <summary>
+        ///     Initialize
+        /// </summary>
+        /// <param name="arg"></param>
         public void Init(ObjArg arg)
         {
             if(Initialized)
@@ -403,7 +431,10 @@ namespace socket4net
             OnInit(arg);
             Initialized = true;
         }
-        
+
+        /// <summary>
+        ///     Run
+        /// </summary>
         public void Start()
         {
             if(!Initialized)
@@ -427,7 +458,7 @@ namespace socket4net
         }
 
         /// <summary>
-        ///     Invoked when obj destroyed
+        ///     Destroy
         /// </summary>
         public void Destroy()
         {
@@ -441,6 +472,10 @@ namespace socket4net
             Destroyed = true;
         }
 
+        /// <summary>
+        ///     Born
+        ///     Obj only born once during it's life circle
+        /// </summary>
         public void Born()
         {
             if (Fresh)
@@ -460,6 +495,11 @@ namespace socket4net
         {
         }
 
+        /// <summary>
+        ///     Get obj's ancestor
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T GetAncestor<T>() where T : class, IObj
         {
             if (this is T) return (this as T);

@@ -26,46 +26,75 @@ using System;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     launcher arguments
+    /// </summary>
     public class LauncherArg : ObjArg
     {
-        public LauncherArg(ILog logger = null, Guid? id = null, bool passiveLogicServiceEnabled = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="monitorEnabled"></param>
+        /// <param name="logger"></param>
+        /// <param name="id"></param>
+        /// <param name="passiveLogicServiceEnabled"></param>
+        public LauncherArg(bool monitorEnabled = true, ILog logger = null, Guid? id = null, bool passiveLogicServiceEnabled = false)
             : base(null)
         {
             Logger = logger;
             PassiveLogicServiceEnabled = passiveLogicServiceEnabled;
             Id = id ?? new Guid();
+            MonitorEnabled = monitorEnabled;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool PassiveLogicServiceEnabled { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public ILog Logger { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public Guid Id { get; private set; }
 
-        public static LauncherArg Default
-        {
-            get { return new LauncherArg(); }
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static LauncherArg Default => new LauncherArg();
+
+        /// <summary>
+        ///     performance monitor enabled
+        /// </summary>
+        public bool MonitorEnabled { get; private set; }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Launcher : Obj
     {
+        /// <summary>
+        ///     get launcher singlton instance
+        /// </summary>
         public static Launcher Ins { get; private set; }
 
         /// <summary>
-        ///     逻辑服务
+        ///     get logic service
         /// </summary>
-        public ILogicService LogicService
-        {
-            get { return GlobalVarPool.Ins.LogicService; }
-        }
+        public ILogicService LogicService => GlobalVarPool.Ins.LogicService;
 
         /// <summary>
-        ///     网络服务
+        ///     get network service
         /// </summary>
-        public INetService NetService
-        {
-            get { return GlobalVarPool.Ins.NetService; }
-        }
+        public INetService NetService => GlobalVarPool.Ins.NetService;
 
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
@@ -89,15 +118,30 @@ namespace socket4net
             // net service
             var netService = New<NetService>(serviceArg);
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfNetService, netService);
+
+            if (more.MonitorEnabled)
+            {
+                var monitor = New<PerformanceMonitor>(ObjArg.Empty);
+                GlobalVarPool.Ins.Set(GlobalVarPool.NameOfMonitor, monitor);
+            }
         }
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
             NetService.Start();
             LogicService.Start();
+
+            if (PerformanceMonitor.Ins != null)
+                PerformanceMonitor.Ins.Start();
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -105,6 +149,9 @@ namespace socket4net
             NetService.Destroy();
             LogicService.Destroy();
             Logger.Ins.Shutdown();
+
+            if(PerformanceMonitor.Ins != null)
+                PerformanceMonitor.Ins.Destroy();
 
             Ins = null;
         }

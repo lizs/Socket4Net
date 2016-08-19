@@ -31,23 +31,52 @@ namespace socket4net
     /// </summary>
     public class GlobalVarPool
     {
+        /// <summary>
+        /// </summary>
         public const string NameOfLogicService = "LogicService";
+
+        /// <summary>
+        /// </summary>
         public const string NameOfNetService = "NetService";
+
+        /// <summary>
+        /// </summary>
         public const string NameOfLogger = "Logger";
-        
+
+        /// <summary>
+        /// </summary>
+        public const string NameOfMonitor = "Monitor";
+
         private GlobalVarPool(){}
         private static GlobalVarPool _ins;
-        public static GlobalVarPool Ins { get { return _ins ?? (_ins = new GlobalVarPool()); } }
+
+        /// <summary>
+        ///     get the singlton instance of the global variables pool
+        /// </summary>
+        public static GlobalVarPool Ins => _ins ?? (_ins = new GlobalVarPool());
 
         private readonly Dictionary<string, object> _vars = new Dictionary<string, object>();
+
+        /// <summary>
+        ///     get the value of "key" as "T"
+        /// </summary>
+        /// <param name="key"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T Get<T>(string key)
         {
             if (_vars.ContainsKey(key))
-                return (T)_vars[key];
+                return (T) _vars[key];
 
             return default(T);
         }
 
+        /// <summary>
+        ///     set value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="var"></param>
         public void Set<T>(string key, T var)
         {
             _vars[key] = var;
@@ -58,21 +87,28 @@ namespace socket4net
         }
 
         private ILogicService _logicService;
-        public ILogicService LogicService
-        {
-            get { return _logicService ?? (_logicService = Get<ILogicService>(NameOfLogicService)); }
-        }
-
         private INetService _netService;
-        public INetService NetService
-        {
-            get { return _netService ?? (_netService = Get<INetService>(NameOfNetService)); }
-        }
-
         private ILog _logger;
-        public ILog Logger
-        {
-            get { return _logger ?? (_logger = Get<ILog>(NameOfLogger)); }
-        }
+        private PerformanceMonitor _monitor;
+
+        /// <summary>
+        ///     get logic service
+        /// </summary>
+        public ILogicService LogicService => _logicService ?? (_logicService = Get<ILogicService>(NameOfLogicService));
+
+        /// <summary>
+        ///     get network service
+        /// </summary>
+        public INetService NetService => _netService ?? (_netService = Get<INetService>(NameOfNetService));
+
+        /// <summary>
+        ///     get logger
+        /// </summary>
+        public ILog Logger => _logger ?? (_logger = Get<ILog>(NameOfLogger));
+        
+        /// <summary>
+        ///     get monitor
+        /// </summary>
+        public PerformanceMonitor Monitor => _monitor ?? (_monitor = Get<PerformanceMonitor>(NameOfMonitor));
     }
 }

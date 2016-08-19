@@ -40,7 +40,7 @@ namespace Sample
 
             // 创建并启动客户端
             var clients = new List<Obj>();
-            var cnt = args.IsNullOrEmpty() ? 1000 : int.Parse(args[0]);
+            var cnt = args.IsNullOrEmpty() ? 300 : int.Parse(args[0]);
             for (int i = 0; i < cnt; i++)
             {
                 clients.Add(Obj.New<Client<ChatSession>>(new ClientArg(null, "127.0.0.1", 9527, true), true));

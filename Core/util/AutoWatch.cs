@@ -70,13 +70,12 @@ namespace socket4net
             if (_watch.ElapsedMilliseconds > Threhold)
                 Logger.Ins.Warn("{0} : {1} ms", Name, _watch.ElapsedMilliseconds);
 
-            if (Handler != null)
-                Handler(Name, _watch.ElapsedMilliseconds);
+            Handler?.Invoke(Name, _watch.ElapsedMilliseconds);
         }
 
         /// <summary>
         ///     Get elapsed ms since this watch constructed
         /// </summary>
-        public long ElapsedMilliseconds { get { return _watch.ElapsedMilliseconds; } }
+        public long ElapsedMilliseconds => _watch.ElapsedMilliseconds;
     }
 }

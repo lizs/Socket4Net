@@ -52,10 +52,7 @@ namespace socket4net
             }
         }
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
         public TValue this[TKey key]
         {

@@ -163,7 +163,7 @@ namespace socket4net
         /// <summary>
         ///     反序列化为值
         /// </summary>
-        /// <typeparam name="T">List<string> ...</typeparam>
+        /// <typeparam name="T">List<string/> ...</typeparam>
         /// <param name="data"></param>
         /// <returns></returns>
         public static T DeserializeValue<T>(byte[] data)

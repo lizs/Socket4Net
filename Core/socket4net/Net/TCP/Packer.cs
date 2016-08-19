@@ -28,7 +28,7 @@ using System.Linq;
 
 namespace socket4net
 {
-    public enum PackerError
+    internal enum PackerError
     {
         Success,
         Running,
@@ -39,7 +39,7 @@ namespace socket4net
     /// 拆包
     /// 非线程安全，需要上层来确保始终在某个线程运行
     /// </summary>
-    public class Packer
+    internal class Packer
     {
         public Packer(ushort packMaxSize)
         {
@@ -82,38 +82,38 @@ namespace socket4net
             switch (error)
             {
                 case PackerError.Success:
+                {
+                    packagesCnt++;
+                    if (_segmentCount > 1)
                     {
-                        packagesCnt++;
-                        if (_segmentCount > 1)
+                        if (_arrivedSegmentsCount < _segmentCount)
                         {
-                            if (_arrivedSegmentsCount < _segmentCount)
-                            {
-                                _segments[_arrivedSegmentsCount++] = _body;
-                            }
-
-                            if(_arrivedSegmentsCount == _segmentCount)
-                            {
-                                var len = _segments.Select(x => x.Length).Sum(x => x);
-                                var body = new byte[len];
-                                var offset = 0;
-                                for (var i = 0; i < _segmentCount; i++)
-                                {
-                                    Buffer.BlockCopy(_segments[i], 0, body, offset, _segments[i].Length);
-                                    offset += _segments[i].Length;
-                                }
-
-                                Packages.Enqueue(body);
-                                ResetSegments();
-                            }
+                            _segments[_arrivedSegmentsCount++] = _body;
                         }
-                        else
-                            Packages.Enqueue(_body);
 
-                        Reset();
+                        if (_arrivedSegmentsCount == _segmentCount)
+                        {
+                            var len = _segments.Select(x => x.Length).Sum(x => x);
+                            var body = new byte[len];
+                            var offset = 0;
+                            for (var i = 0; i < _segmentCount; i++)
+                            {
+                                Buffer.BlockCopy(_segments[i], 0, body, offset, _segments[i].Length);
+                                offset += _segments[i].Length;
+                            }
 
-                        return Process(buffer, ref packagesCnt);
+                            Packages.Enqueue(body);
+                            ResetSegments();
+                        }
                     }
+                    else
+                        Packages.Enqueue(_body);
 
+                    Reset();
+
+                    return Process(buffer, ref packagesCnt);
+                }
+                    
                 default:
                     return error;
             }
@@ -141,7 +141,7 @@ namespace socket4net
             var one = buffer.Buffer[buffer.Head];
             var two = buffer.Buffer[buffer.Head + 1];
 
-            _packageLen = (ushort)(two << 8 | one);
+            _packageLen = (ushort) (two << 8 | one);
             if (_packageLen > PackageMaxSize)
             {
                 Logger.Ins.Warn("Processing buffer size : {0} bytes,  bigger than {1} bytes!", _packageLen, PackageMaxSize);
@@ -168,7 +168,7 @@ namespace socket4net
 
         private PackerError ProcessBody(CircularBuffer buffer)
         {
-            var extractLen = Math.Min((ushort)(_packageLen - _alreadyExtractedLen), buffer.ReadableSize);
+            var extractLen = Math.Min((ushort) (_packageLen - _alreadyExtractedLen), buffer.ReadableSize);
 
             Buffer.BlockCopy(buffer.Buffer, buffer.Head, _body, _alreadyExtractedLen, extractLen);
 

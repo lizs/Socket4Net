@@ -41,15 +41,10 @@ namespace socket4net
         private readonly ConcurrentDictionary<ushort, Action<bool, byte[]>> _requestPool
             = new ConcurrentDictionary<ushort, Action<bool, byte[]>>();
 
-        private Func<byte[], IDataProtocol> _dataParser = data => PiSerializer.Deserialize<DefaultDataProtocol>(data);
         /// <summary>
         ///     Get/Set custom data parser
         /// </summary>
-        protected Func<byte[], IDataProtocol> DataParser
-        {
-            get { return _dataParser; }
-            set { _dataParser = value; }
-        }
+        protected Func<byte[], IDataProtocol> DataParser { get; set; } = data => PiSerializer.Deserialize<DefaultDataProtocol>(data);
 
         private static NetPackage PackRequest<T>(T proto) where T : IDataProtocol
         {
@@ -61,6 +56,10 @@ namespace socket4net
             return new NetPackage { Type = ERpc.Push, Data = PiSerializer.Serialize(proto) };
         }
 
+        /// <summary>
+        ///     Close this session
+        /// </summary>
+        /// <param name="reason"></param>
         public override void Close(SessionCloseReason reason)
         {
             base.Close(reason);
@@ -99,15 +98,35 @@ namespace socket4net
         }
 
 #if NET45
+        /// <summary>
+        ///     handle request
+        /// </summary>
+        /// <param name="rq"></param>
+        /// <returns></returns>
         public abstract Task<NetResult> HandleRequest(IDataProtocol rq);
+
+        /// <summary>
+        ///     handle push
+        /// </summary>
+        /// <param name="ps"></param>
+        /// <returns></returns>
         public abstract Task<bool> HandlePush(IDataProtocol ps);
 #else
+        /// <summary>
+        /// </summary>
+        /// <param name="rq"></param>
+        /// <param name="cb"></param>
         public abstract void HandleRequest(IDataProtocol rq, Action<NetResult> cb);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ps"></param>
+        /// <param name="cb"></param>
         public abstract void HandlePush(IDataProtocol ps, Action<bool> cb);
 #endif
 
 #if NET45
-        public async Task<NetResult> RequestAsync<T>(T proto) where T : IDataProtocol
+        async Task<NetResult> IDispatchableSession.RequestAsync<T>(T proto)
         {
             var pack = PackRequest(proto);
             pack.Serial = ++_serial;
@@ -143,6 +162,11 @@ namespace socket4net
         }
 #endif
 
+        /// <summary>
+        /// </summary>
+        /// <param name="proto"></param>
+        /// <param name="cb"></param>
+        /// <typeparam name="T"></typeparam>
         public void RequestAsync<T>(T proto, Action<bool, byte[]> cb) where T : IDataProtocol
         {
             var pack = PackRequest(proto);
@@ -158,14 +182,28 @@ namespace socket4net
             InternalSend(pack);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="proto"></param>
+        /// <typeparam name="T"></typeparam>
         public void Push<T>(T proto) where T : IDataProtocol
         {
             InternalSend(PackPush(proto));
         }
-        
+
 #if NET35
+        /// <summary>
+        /// 分包
+        /// 在LogicService线程分发
+        /// </summary>
+        /// <param name="data"></param>
         public override void Dispatch(byte[] data)
 #else
+        /// <summary>
+        /// 分包
+        /// 在LogicService线程分发
+        /// </summary>
+        /// <param name="data"></param>
         public override async Task Dispatch(byte[] data)
 #endif
         {

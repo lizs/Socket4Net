@@ -22,6 +22,9 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+
+using System.Diagnostics;
+
 namespace socket4net
 {
     /// <summary>
@@ -62,18 +65,12 @@ namespace socket4net
         /// <summary>
         ///    Readable buffer size
         /// </summary>
-        public ushort ReadableSize
-        {
-            get { return (ushort) (Tail - Head); }
-        }
+        public ushort ReadableSize => (ushort) (Tail - Head);
 
         /// <summary>
         ///    Writable buffer size
         /// </summary>
-        public ushort WritableSize
-        {
-            get { return (ushort) (Capacity - Tail); }
-        }
+        public ushort WritableSize => (ushort) (Capacity - Tail);
 
         /// <summary>
         ///     Read data from head
@@ -127,10 +124,7 @@ namespace socket4net
         /// <summary>
         ///     Indicate if buffer is full
         /// </summary>
-        public bool Overload
-        {
-            get { return WritableSize < .2f*Capacity; }
-        }
+        public bool Overload => WritableSize < .2f*Capacity;
 
         public void Reset()
         {

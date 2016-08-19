@@ -24,10 +24,22 @@
 #endregion
 namespace socket4net
 {
+    /// <summary>
+    ///     unique object arguments
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
     public abstract class UniqueObjArg<TKey> : ObjArg
     {
-        public TKey Key { get; private set; }
+        /// <summary>
+        ///  unique key
+        /// </summary>
+        public TKey Key { get; }
 
+        /// <summary>
+        ///     constructor
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="key"></param>
         protected UniqueObjArg(IObj owner, TKey key)
             : base(owner)
         {
@@ -35,8 +47,15 @@ namespace socket4net
         }
     }
 
+    /// <summary>
+    ///     interface of unique object
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
     public interface IUniqueObj<out TKey> : IObj
     {
+        /// <summary>
+        ///     unique key
+        /// </summary>
         TKey Id { get; }
     }
 
@@ -46,6 +65,10 @@ namespace socket4net
     /// <typeparam name="TKey"></typeparam>
     public abstract class UniqueObj<TKey> : Obj, IUniqueObj<TKey>
     {
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
@@ -55,16 +78,13 @@ namespace socket4net
         }
 
         /// <summary>
-        ///     唯一Id
+        ///     unique key
         /// </summary>
         public TKey Id { get; protected set; }
 
         /// <summary>
-        ///     名字
+        ///     name
         /// </summary>
-        public override string Name
-        {
-            get { return string.Format("{0}:{1}", base.Name, Id); }
-        }
+        public override string Name => $"{base.Name}:{Id}";
     }
 }

@@ -40,6 +40,9 @@ namespace socket4net
         private Thread _workingThread;
         private BlockingCollection<IJob> _workingQueue;
 
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -55,6 +58,9 @@ namespace socket4net
             Logger.Ins.Debug("Auto logic service started!");
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -71,23 +77,30 @@ namespace socket4net
             Logger.Ins.Debug("auto-LogicService stopped!");
         }
 
+        /// <summary>
+        ///     Idle event, call by working thread
+        ///     every period.
+        ///     <remarks>
+        ///         generally the working thread
+        ///         call the event every period, but if it's too busy
+        ///         because the working item consumes too much time,
+        ///         the calling period may grater than the original period
+        ///     </remarks>
+        /// </summary>
         public override event Action Idle;
 
         /// <summary>
         /// Specify the work items count currently in working queue.
         /// </summary>
-        public override int Jobs
-        {
-            get { return _workingQueue.Count; }
-        }
-        
+        public override int Jobs => _workingQueue.Count;
+
         /// <summary>
         /// External(e.g. the TCP socket thread) call this method to push
         /// a work item into the working queue. The work item must not
         /// be null.
         /// </summary>
         /// <param name="w">the work item object, must not be null</param>
-        public override void Enqueue(IJob w)
+        internal override void Enqueue(IJob w)
         {
             _workingQueue.Add(w);
         }
@@ -161,7 +174,7 @@ namespace socket4net
                 }
                 catch (Exception ex)
                 {
-                    Logger.Ins.Fatal(string.Format("{0} : {1}", ex.Message, ex.StackTrace));
+                    Logger.Ins.Fatal($"{ex.Message} : {ex.StackTrace}");
                 }
 
                 IdleCallbackElapsed = Watch.ElapsedMilliseconds - t2;

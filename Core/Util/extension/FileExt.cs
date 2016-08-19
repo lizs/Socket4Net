@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace socket4net
 {
@@ -10,6 +11,36 @@ namespace socket4net
     /// </summary>
     public static class FileSys
     {
+        /// <summary>
+        ///     read as text
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string Read(string path)
+        {
+            try
+            {
+                using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var br = new StreamReader(fs, Encoding.UTF8))
+                {
+                    var bytes = br.ReadToEnd();
+                    return bytes;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Ins.Error("{0}:{1}", e.Message, e.StackTrace);
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="searchPattern"></param>
+        /// <param name="searchOption"></param>
+        /// <returns></returns>
         public static IEnumerable<string> EnumerateFiles(
             string dir, string searchPattern, SearchOption searchOption = SearchOption.AllDirectories)
         {
@@ -170,10 +201,7 @@ namespace socket4net
             set { System.Environment.CurrentDirectory = value; }
         }
 
-        public static string NewLine
-        {
-            get { return System.Environment.NewLine; }
-        }
+        public static string NewLine => System.Environment.NewLine;
 
         public static DateTime GetLastWriteTime(string file)
         {
@@ -273,10 +301,7 @@ namespace socket4net
             return dir.Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static string WorkingDirectory
-        {
-            get { return AppDomain.CurrentDomain.BaseDirectory; }
-        }
+        public static string WorkingDirectory => AppDomain.CurrentDomain.BaseDirectory;
     }
 }
 
