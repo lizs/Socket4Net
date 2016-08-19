@@ -50,9 +50,7 @@ namespace socket4net
             var session = Session;
             if (session == null)
             {
-                if (cb != null)
-                    cb(false, null);
-
+                cb?.Invoke(false, null);
                 return;
             }
 
@@ -62,10 +60,7 @@ namespace socket4net
         public void Push<T>(T proto) where T : IDataProtocol
         {
             var session = Session;
-            if (session == null)
-                return;
-
-            session.Push(proto);
+            session?.Push(proto);
         }
     }
 }
