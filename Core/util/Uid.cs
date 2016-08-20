@@ -28,10 +28,13 @@ namespace socket4net
 {
     public static class Uid
     {
-        public static long New()
+        /// <summary>
+        ///     create an guid
+        /// </summary>
+        /// <returns></returns>
+        public static string New()
         {
-            var buffer = Guid.NewGuid().ToByteArray();
-            return BitConverter.ToInt64(buffer, 0);
+            return Guid.NewGuid().ToString("N");
         }
     }
 }

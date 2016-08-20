@@ -103,7 +103,6 @@
     <Compile Include="util\extension\ListExt.cs" />
     <Compile Include="util\extension\Rand.cs" />
     <Compile Include="util\extension\StringExt.cs" />
-    <Compile Include="util\FileExt.cs" />
     <Compile Include="util\numeric\Add.cs" />
     <Compile Include="util\numeric\Compare.cs" />
     <Compile Include="util\numeric\Equals.cs" />

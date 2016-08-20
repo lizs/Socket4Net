@@ -36,7 +36,10 @@ namespace socket4net
     public class PassiveLogicService : LogicServiceBase
     {
         private readonly ConcurrentQueue<IJob> _jobs = new ConcurrentQueue<IJob>();
-        
+
+        /// <summary>
+        ///     Invoked when obj started
+        /// </summary>
         protected override void OnStart()
         {
             base.OnStart();
@@ -46,6 +49,9 @@ namespace socket4net
             Logger.Ins.Debug("Passive logic service started!");
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -55,6 +61,9 @@ namespace socket4net
             Logger.Ins.Debug("Logic service stopped!");
         }
 
+        /// <summary>
+        ///     Specify the work items count currently in working queue.
+        /// </summary>
         public override int Jobs => _jobs.Count;
 
         internal override void Enqueue(IJob w)
@@ -62,12 +71,14 @@ namespace socket4net
             _jobs.Enqueue(w);
         }
 
+        /// <summary>
+        ///     passive logic service need update timer manual
+        /// </summary>
         public void UpdateTimer()
         {
             try
             {
-                if (Idle != null)
-                    Idle();
+                Idle?.Invoke();
             }
             catch (Exception e)
             {
@@ -75,6 +86,9 @@ namespace socket4net
             }
         }
 
+        /// <summary>
+        ///     passive logic service need update queue manual
+        /// </summary>
         public void UpdateQueue()
         {
             if (StopWorking)
@@ -112,6 +126,16 @@ namespace socket4net
             }
         }
 
+        /// <summary>
+        ///     Idle event, call by working thread
+        ///     every period.
+        ///     <remarks>
+        ///         generally the working thread
+        ///         call the event every period, but if it's too busy
+        ///         because the working item consumes too much time,
+        ///         the calling period may grater than the original period
+        ///     </remarks>
+        /// </summary>
         public override event Action Idle;
     }
 }

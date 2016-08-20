@@ -64,7 +64,7 @@ namespace socket4net
         /// <summary>
         ///     Get net service
         /// </summary>
-        INetService NetService { get; }
+        ITcpService TcpService { get; }
 
         /// <summary>
         ///     Raised when a session closed

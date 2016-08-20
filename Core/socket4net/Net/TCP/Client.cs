@@ -148,7 +148,7 @@ namespace socket4net
         /// <summary>
         ///     Get net service
         /// </summary>
-        public INetService NetService => Launcher.Ins.NetService;
+        public ITcpService TcpService => Launcher.Ins.TcpService;
 
         /// <summary>
         ///     If client is connected to server
@@ -353,7 +353,7 @@ namespace socket4net
         /// <param name="action"></param>
         public void PerformInNet(Action action)
         {
-            NetService.Perform(action);
+            TcpService.Perform(action);
         }
 
         /// <summary>
@@ -363,7 +363,7 @@ namespace socket4net
         /// <param name="param"></param>
         public void PerformInNet<TParam>(Action<TParam> action, TParam param)
         {
-            NetService.Perform(action, param);
+            TcpService.Perform(action, param);
         }
 
         /// <summary>

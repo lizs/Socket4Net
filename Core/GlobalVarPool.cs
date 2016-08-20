@@ -37,7 +37,11 @@ namespace socket4net
 
         /// <summary>
         /// </summary>
-        public const string NameOfNetService = "NetService";
+        public const string NameOfTcpService = "TcpService";
+
+        /// <summary>
+        /// </summary>
+        public const string NameOfWsService = "WsService";
 
         /// <summary>
         /// </summary>
@@ -82,12 +86,12 @@ namespace socket4net
             _vars[key] = var;
             if (key == NameOfLogicService)
                 _logicService = null;
-            if (key == NameOfNetService)
-                _netService = null;
+            if (key == NameOfTcpService)
+                _tcpService = null;
         }
 
         private ILogicService _logicService;
-        private INetService _netService;
+        private ITcpService _tcpService;
         private ILog _logger;
         private PerformanceMonitor _monitor;
 
@@ -99,7 +103,7 @@ namespace socket4net
         /// <summary>
         ///     get network service
         /// </summary>
-        public INetService NetService => _netService ?? (_netService = Get<INetService>(NameOfNetService));
+        public ITcpService TcpService => _tcpService ?? (_tcpService = Get<ITcpService>(NameOfTcpService));
 
         /// <summary>
         ///     get logger

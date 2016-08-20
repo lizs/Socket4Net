@@ -39,17 +39,24 @@ namespace socket4net
             CloseCallback = closeCb;
         }
 
-        public Action<ISession> OpenCallback { get; private set; }
-        public Action<ISession, SessionCloseReason> CloseCallback { get; private set; }
+        public Action<ISession> OpenCallback { get; }
+        public Action<ISession, SessionCloseReason> CloseCallback { get; }
     }
 
-    public class SessionMgr : UniqueMgr<ConcurrentDictionary<long, ISession>, long, ISession> 
+    /// <summary>
+    ///     session manager
+    /// </summary>
+    public class SessionMgr : UniqueMgr<ConcurrentDictionary<string, ISession>, string, ISession> 
     {
         public IPeer Peer => Owner as IPeer;
 
         private Action<ISession> _openCb;
         private Action<ISession, SessionCloseReason> _closeCb;
-        
+
+        /// <summary>
+        ///    internal called when an Obj is initialized
+        /// </summary>
+        /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
         {
             base.OnInit(arg);
@@ -59,15 +66,22 @@ namespace socket4net
             _closeCb = more.CloseCallback;
         }
 
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            Clear();
+            CloseAll();
 
             _openCb = null;
             _closeCb = null;
         }
 
+        /// <summary>
+        ///     add session
+        /// </summary>
+        /// <param name="session"></param>
         public void AddSession(ISession session)
         {
             if (Items.TryAdd(session.Id, session))
@@ -82,7 +96,12 @@ namespace socket4net
                 Logger.Ins.Warn("Insert session failed for id : " + session.Id);
         }
         
-        public void RemoveSession(long id, SessionCloseReason reason)
+        /// <summary>
+        ///     remove session
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        public void RemoveSession(string id, SessionCloseReason reason)
         {
             ISession session;
             if (Items.TryRemove(id, out session))
@@ -100,7 +119,10 @@ namespace socket4net
                 Logger.Ins.Warn("Remove session failed for id :  cause of it doesn't exist" + id);
         }
 
-        public void Clear()
+        /// <summary>
+        ///     close all sessions
+        /// </summary>
+        public void CloseAll()
         {
             foreach (var session in this.ToArray())
             {

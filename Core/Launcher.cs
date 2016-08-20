@@ -38,13 +38,15 @@ namespace socket4net
         /// <param name="logger"></param>
         /// <param name="id"></param>
         /// <param name="passiveLogicServiceEnabled"></param>
-        public LauncherArg(bool monitorEnabled = true, ILog logger = null, Guid? id = null, bool passiveLogicServiceEnabled = false)
+        /// <param name="tcpEnabled"></param>
+        public LauncherArg(bool monitorEnabled = true, ILog logger = null, Guid? id = null, bool passiveLogicServiceEnabled = false, bool tcpEnabled = false)
             : base(null)
         {
             Logger = logger;
             PassiveLogicServiceEnabled = passiveLogicServiceEnabled;
             Id = id ?? new Guid();
             MonitorEnabled = monitorEnabled;
+            TcpEnabled = tcpEnabled;
         }
 
         /// <summary>
@@ -69,6 +71,10 @@ namespace socket4net
         ///     performance monitor enabled
         /// </summary>
         public bool MonitorEnabled { get; private set; }
+        /// <summary>
+        ///  if tcp enabled
+        /// </summary>
+        public bool TcpEnabled { get; private set; }
     }
 
     /// <summary>
@@ -89,7 +95,7 @@ namespace socket4net
         /// <summary>
         ///     get network service
         /// </summary>
-        public INetService NetService => GlobalVarPool.Ins.NetService;
+        public ITcpService TcpService => GlobalVarPool.Ins.TcpService;
 
         /// <summary>
         ///    internal called when an Obj is initialized
@@ -115,10 +121,13 @@ namespace socket4net
                 : (ILogicService)New<AutoLogicService>(serviceArg);
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogicService, logicService);
 
-            // net service
-            var netService = New<NetService>(serviceArg);
-            GlobalVarPool.Ins.Set(GlobalVarPool.NameOfNetService, netService);
-
+            // tcp service
+            if (more.TcpEnabled)
+            {
+                var tcpService = New<TcpService>(serviceArg);
+                GlobalVarPool.Ins.Set(GlobalVarPool.NameOfTcpService, tcpService);
+            }
+            
             if (more.MonitorEnabled)
             {
                 var monitor = New<PerformanceMonitor>(ObjArg.Empty);
@@ -132,11 +141,9 @@ namespace socket4net
         protected override void OnStart()
         {
             base.OnStart();
-            NetService.Start();
+            TcpService?.Start();
             LogicService.Start();
-
-            if (PerformanceMonitor.Ins != null)
-                PerformanceMonitor.Ins.Start();
+            PerformanceMonitor.Ins?.Start();
         }
 
         /// <summary>
@@ -146,12 +153,10 @@ namespace socket4net
         {
             base.OnDestroy();
 
-            NetService.Destroy();
+            TcpService?.Destroy();
             LogicService.Destroy();
             Logger.Ins.Shutdown();
-
-            if(PerformanceMonitor.Ins != null)
-                PerformanceMonitor.Ins.Destroy();
+            PerformanceMonitor.Ins?.Destroy();
 
             Ins = null;
         }

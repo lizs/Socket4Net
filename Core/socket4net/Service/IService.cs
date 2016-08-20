@@ -82,7 +82,7 @@ namespace socket4net
     /// <summary>
     ///     net work service
     /// </summary>
-    public interface INetService : IService
+    public interface ITcpService : IService
     {
     }
 

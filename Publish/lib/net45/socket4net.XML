@@ -433,6 +433,226 @@
             </summary>
             <param name="pack"></param>
         </member>
+        <member name="T:socket4net.PerformanceMonitor">
+            <summary>
+                performance monitor
+            </summary>
+        </member>
+        <member name="M:socket4net.PerformanceMonitor.RecordRead(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="len"></param>
+        </member>
+        <member name="T:socket4net.WebsocketClient">
+            <summary>
+                websocket client
+            </summary>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnClose">
+            <summary>
+            Occurs when the WebSocket connection has been closed.
+            </summary>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnError">
+            <summary>
+            Occurs when the <see cref="T:WebSocketSharp.WebSocket"/> gets an error.
+            </summary>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnMessage">
+            <summary>
+            Occurs when the <see cref="T:WebSocketSharp.WebSocket"/> receives a message.
+            </summary>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnOpen">
+            <summary>
+            Occurs when the WebSocket connection has been established.
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.#ctor(WebSocketSharp.WebSocket)">
+            <summary>
+                initialize client with a websocket
+            </summary>
+            <param name="ws"></param>
+        </member>
+        <member name="F:socket4net.WebsocketClient._websocket">
+            <summary>
+             underline websocket
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.Send(System.Byte[])">
+            <summary>
+            
+            </summary>
+            <param name="bytes"></param>
+        </member>
+        <member name="M:socket4net.WebsocketClient.OnRequest(socket4net.IDataProtocol)">
+            <summary>
+                handle request
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketClient.OnPush(socket4net.IDataProtocol)">
+            <summary>
+                handle push
+            </summary>
+            <param name="ps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketClient.RequestAsync``1(``0)">
+            <summary>
+                request an data protocol asynchronous
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketClient.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <param name="cb"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.WebsocketClient.Push``1(``0)">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.WebsocketSession">
+            <summary>
+                websocket session abstraction
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnMessage(WebSocketSharp.MessageEventArgs)">
+            <summary>
+                Called when the <see cref="T:WebSocketSharp.WebSocket" /> used in the current session receives a message.
+            </summary>
+            <param name="e">
+                A <see cref="T:WebSocketSharp.MessageEventArgs" /> that represents the event data passed to
+                a <see cref="!:WebSocket.OnMessage" /> event.
+            </param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnError(WebSocketSharp.ErrorEventArgs)">
+            <summary>
+                Called when the <see cref="T:WebSocketSharp.WebSocket" /> used in a session gets an error.
+            </summary>
+            <param name="e">
+                A <see cref="T:WebSocketSharp.ErrorEventArgs" /> that represents the event data passed to
+                a <see cref="E:WebSocketSharp.WebSocket.OnError" /> event.
+            </param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnOpen">
+            <summary>
+            Called when the WebSocket connection used in a session has been established.
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnClose(WebSocketSharp.CloseEventArgs)">
+            <summary>
+            Called when the WebSocket connection used in a session has been closed.
+            </summary>
+            <param name="e">
+            A <see cref="T:WebSocketSharp.CloseEventArgs"/> that represents the event data passed to
+            a <see cref="E:WebSocketSharp.WebSocket.OnClose"/> event.
+            </param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnMessage(System.String)">
+            <summary>
+                string handler
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:socket4net.WebsocketSession.BroadcastAsync(System.Byte[],System.Action)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="cb"></param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.BroadcastAsync(System.Byte[])">
+            <summary>
+                asynchronous broadcast bytes
+                thread safe
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketSession.BroadcastAsync``1(``0)">
+            <summary>
+                asynchronous broadcast a proto
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketSession.SendAsync(System.Byte[])">
+            <summary>
+                send bytes asynchronous
+                thread safe
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketSession.socket4net#IWebsocketDelegateHost#SendAsync(System.Byte[],System.Action{System.Boolean})">
+            <summary>
+                explicit implementation
+            </summary>
+            <param name="data"></param>
+            <param name="cb"></param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.socket4net#IWebsocketDelegateHost#Send(System.Byte[])">
+            <summary>
+                explicit implementation
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnRequest(socket4net.IDataProtocol)">
+            <summary>
+                handle request
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnPush(socket4net.IDataProtocol)">
+            <summary>
+                handle push
+            </summary>
+            <param name="ps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketSession.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.WebsocketSession})">
+            <summary>
+                multicast
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <param name="sessions"></param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.RequestAsync``1(``0)">
+            <summary>
+                request an data protocol asynchronous
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketSession.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <param name="cb"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.WebsocketSession.Push``1(``0)">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:socket4net.Assert">
             <summary>
             
@@ -506,6 +726,13 @@
                 extension for file system
             </summary>
         </member>
+        <member name="M:socket4net.FileSys.Read(System.String)">
+            <summary>
+                read as text
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
         <member name="M:socket4net.FileSys.EnumerateFiles(System.String,System.String,System.IO.SearchOption)">
             <summary>
             
@@ -548,11 +775,6 @@
             <param name="max"></param>
             <param name="cnt"></param>
             <returns></returns>
-        </member>
-        <member name="T:socket4net.FileExt">
-            <summary>
-            
-            </summary>
         </member>
         <member name="T:socket4net.Add`1">
             <summary>
@@ -627,6 +849,12 @@
             <summary>
             用于解析诸如 1 2 4 + 3 3 5 + 7 6 9 这种类型的string
             </summary>
+        </member>
+        <member name="M:socket4net.Uid.New">
+            <summary>
+                create an guid
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:socket4net.TaskHelper.ExcuteAsync``1(System.Func{``0})">
             <summary>
@@ -858,6 +1086,16 @@
         <member name="M:socket4net.ILog.Shutdown">
             <summary>
                 Destroy logger
+            </summary>
+        </member>
+        <member name="T:socket4net.Logger">
+            <summary>
+                link to logger singlton
+            </summary>
+        </member>
+        <member name="P:socket4net.Logger.Ins">
+            <summary>
+                instance
             </summary>
         </member>
         <member name="T:socket4net.Mgr`1">
@@ -1435,7 +1673,7 @@
                 launcher arguments
             </summary>
         </member>
-        <member name="M:socket4net.LauncherArg.#ctor(System.Boolean,socket4net.ILog,System.Nullable{System.Guid},System.Boolean)">
+        <member name="M:socket4net.LauncherArg.#ctor(System.Boolean,socket4net.ILog,System.Nullable{System.Guid},System.Boolean,System.Boolean)">
             <summary>
             
             </summary>
@@ -1443,6 +1681,7 @@
             <param name="logger"></param>
             <param name="id"></param>
             <param name="passiveLogicServiceEnabled"></param>
+            <param name="tcpEnabled"></param>
         </member>
         <member name="P:socket4net.LauncherArg.PassiveLogicServiceEnabled">
             <summary>
@@ -1469,6 +1708,11 @@
                 performance monitor enabled
             </summary>
         </member>
+        <member name="P:socket4net.LauncherArg.TcpEnabled">
+            <summary>
+             if tcp enabled
+            </summary>
+        </member>
         <member name="T:socket4net.Launcher">
             <summary>
             
@@ -1484,7 +1728,7 @@
                 get logic service
             </summary>
         </member>
-        <member name="P:socket4net.Launcher.NetService">
+        <member name="P:socket4net.Launcher.TcpService">
             <summary>
                 get network service
             </summary>
@@ -1954,6 +2198,47 @@
             <param name="start"></param>
             <returns></returns>
         </member>
+        <member name="M:socket4net.UniqueMgr`3.DestroyAll">
+            <summary>
+                destory all items
+            </summary>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Destroy(System.Predicate{`2})">
+            <summary>
+                destroy items that match "condition"
+            </summary>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Destroy``1">
+            <summary>
+                destroy all items of type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Destroy``1(System.Predicate{``0})">
+            <summary>
+                destroy items of type "T" that match "condition"
+            </summary>
+            <param name="condition"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Destroy(`1)">
+            <summary>
+                destroy item specified by "key"
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.UniqueMgr`3.Destroy(`2)">
+            <summary>
+                destroy item specified by "value"
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="M:socket4net.UniqueMgr`3.Add(`2)">
             <summary>
             
@@ -1978,7 +2263,11 @@
             <summary>
             </summary>
         </member>
-        <member name="F:socket4net.GlobalVarPool.NameOfNetService">
+        <member name="F:socket4net.GlobalVarPool.NameOfTcpService">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:socket4net.GlobalVarPool.NameOfWsService">
             <summary>
             </summary>
         </member>
@@ -2016,7 +2305,7 @@
                 get logic service
             </summary>
         </member>
-        <member name="P:socket4net.GlobalVarPool.NetService">
+        <member name="P:socket4net.GlobalVarPool.TcpService">
             <summary>
                 get network service
             </summary>
@@ -2260,7 +2549,7 @@
                 Get logic service
             </summary>
         </member>
-        <member name="P:socket4net.Client`1.NetService">
+        <member name="P:socket4net.Client`1.TcpService">
             <summary>
                 Get net service
             </summary>
@@ -2401,7 +2690,7 @@
                 Get logic service
             </summary>
         </member>
-        <member name="P:socket4net.IPeer.NetService">
+        <member name="P:socket4net.IPeer.TcpService">
             <summary>
                 Get net service
             </summary>
@@ -2507,7 +2796,7 @@
                 Get logic service
             </summary>
         </member>
-        <member name="P:socket4net.Server`1.NetService">
+        <member name="P:socket4net.Server`1.TcpService">
             <summary>
                 Get net service
             </summary>
@@ -2604,7 +2893,7 @@
              session arguments
             </summary>
         </member>
-        <member name="M:socket4net.SessionArg.#ctor(socket4net.IPeer,System.Int64,System.Net.Sockets.Socket)">
+        <member name="M:socket4net.SessionArg.#ctor(socket4net.IPeer,System.String,System.Net.Sockets.Socket)">
             <summary>
             
             </summary>
@@ -2630,6 +2919,16 @@
         <member name="F:socket4net.Session.DefaultReceiveBufferSize">
             <summary>
                 default receive buffer size
+            </summary>
+        </member>
+        <member name="P:socket4net.Session.Name">
+            <summary>
+                name
+            </summary>
+        </member>
+        <member name="P:socket4net.Session.UnderlineSocket">
+            <summary>
+                Socket attached to this session
             </summary>
         </member>
         <member name="P:socket4net.Session.HostPeer">
@@ -2685,6 +2984,40 @@
         <member name="M:socket4net.Session.OnStart">
             <summary>
                 Invoked when obj started
+            </summary>
+        </member>
+        <member name="T:socket4net.SessionMgr">
+            <summary>
+                session manager
+            </summary>
+        </member>
+        <member name="M:socket4net.SessionMgr.OnInit(socket4net.ObjArg)">
+            <summary>
+               internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.SessionMgr.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.SessionMgr.AddSession(socket4net.ISession)">
+            <summary>
+                add session
+            </summary>
+            <param name="session"></param>
+        </member>
+        <member name="M:socket4net.SessionMgr.RemoveSession(System.String,socket4net.SessionCloseReason)">
+            <summary>
+                remove session
+            </summary>
+            <param name="id"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:socket4net.SessionMgr.CloseAll">
+            <summary>
+                close all sessions
             </summary>
         </member>
         <member name="T:socket4net.ERpc">
@@ -2912,7 +3245,7 @@
             <param name="param"></param>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="T:socket4net.INetService">
+        <member name="T:socket4net.ITcpService">
             <summary>
                 net work service
             </summary>
@@ -2999,6 +3332,43 @@
             <summary>
                 被动逻辑服务
                 即：需要上层驱动本服务定时器、Job队列的更新
+            </summary>
+        </member>
+        <member name="M:socket4net.PassiveLogicService.OnStart">
+            <summary>
+                Invoked when obj started
+            </summary>
+        </member>
+        <member name="M:socket4net.PassiveLogicService.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="P:socket4net.PassiveLogicService.Jobs">
+            <summary>
+                Specify the work items count currently in working queue.
+            </summary>
+        </member>
+        <member name="M:socket4net.PassiveLogicService.UpdateTimer">
+            <summary>
+                passive logic service need update timer manual
+            </summary>
+        </member>
+        <member name="M:socket4net.PassiveLogicService.UpdateQueue">
+            <summary>
+                passive logic service need update queue manual
+            </summary>
+        </member>
+        <member name="E:socket4net.PassiveLogicService.Idle">
+            <summary>
+                Idle event, call by working thread
+                every period.
+                <remarks>
+                    generally the working thread
+                    call the event every period, but if it's too busy
+                    because the working item consumes too much time,
+                    the calling period may grater than the original period
+                </remarks>
             </summary>
         </member>
         <member name="T:socket4net.LogicServiceBase">
@@ -3137,60 +3507,49 @@
                internal called when an Obj is to be destroyed
             </summary>
         </member>
-        <member name="T:socket4net.PerformanceMonitor">
-            <summary>
-                performance monitor
-            </summary>
-        </member>
-        <member name="M:socket4net.PerformanceMonitor.RecordRead(System.Int32)">
-            <summary>
-            
-            </summary>
-            <param name="len"></param>
-        </member>
-        <member name="T:socket4net.NetService">
+        <member name="T:socket4net.TcpService">
             <summary>
             网络服务线程（网络数据读写）
             </summary>
         </member>
-        <member name="P:socket4net.NetService.Jobs">
+        <member name="P:socket4net.TcpService.Jobs">
             <summary>
                 get processing jobs count
             </summary>
         </member>
-        <member name="P:socket4net.NetService.Capacity">
+        <member name="P:socket4net.TcpService.Capacity">
             <summary>
                 Jobs queued upper bound
             </summary>
         </member>
-        <member name="P:socket4net.NetService.Period">
+        <member name="P:socket4net.TcpService.Period">
             <summary>
                 Period for waiting concurrent collection's item take
             </summary>
         </member>
-        <member name="M:socket4net.NetService.OnInit(socket4net.ObjArg)">
+        <member name="M:socket4net.TcpService.OnInit(socket4net.ObjArg)">
             <summary>
                internal called when an Obj is initialized
             </summary>
             <param name="arg"></param>
         </member>
-        <member name="M:socket4net.NetService.OnStart">
+        <member name="M:socket4net.TcpService.OnStart">
             <summary>
                 Invoked when obj started
             </summary>
         </member>
-        <member name="M:socket4net.NetService.OnDestroy">
+        <member name="M:socket4net.TcpService.OnDestroy">
             <summary>
                internal called when an Obj is to be destroyed
             </summary>
         </member>
-        <member name="M:socket4net.NetService.Perform(System.Action)">
+        <member name="M:socket4net.TcpService.Perform(System.Action)">
             <summary>
                 Send action to be excuted in current service
             </summary>
             <param name="action"></param>
         </member>
-        <member name="M:socket4net.NetService.Perform``1(System.Action{``0},``0)">
+        <member name="M:socket4net.TcpService.Perform``1(System.Action{``0},``0)">
             <summary>
                 Send action to be excuted in current service
             </summary>
@@ -3448,6 +3807,159 @@
             Queue an entry object into a suitable timer queue.
             </summary>
             <param name="e">the entry object</param>
+        </member>
+        <member name="T:socket4net.IWebsocketDelegateHost">
+            <summary>
+                websocket delegate host
+            </summary>
+        </member>
+        <member name="T:socket4net.IWebsocketDelegateServerHost">
+            <summary>
+                websocket delegate server host
+            </summary>
+        </member>
+        <member name="T:socket4net.WebsocketDelegate`1">
+            <summary>
+                websocket session delegate
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.#ctor(`0)">
+            <summary>
+            
+            </summary>
+            <param name="host"></param>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.OnMessage(WebSocketSharp.MessageEventArgs)">
+            <summary>
+                Called when the <see cref="T:WebSocketSharp.WebSocket" /> used in the current session receives a message.
+            </summary>
+            <param name="e">
+                A <see cref="T:WebSocketSharp.MessageEventArgs" /> that represents the event data passed to
+                a <see cref="!:WebSocket.OnMessage" /> event.
+            </param>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.OnError(WebSocketSharp.ErrorEventArgs)">
+            <summary>
+                Called when the <see cref="T:WebSocketSharp.WebSocket" /> used in a session gets an error.
+            </summary>
+            <param name="e">
+                A <see cref="T:WebSocketSharp.ErrorEventArgs" /> that represents the event data passed to
+                a <see cref="E:WebSocketSharp.WebSocket.OnError" /> event.
+            </param>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.OnClose(WebSocketSharp.CloseEventArgs)">
+            <summary>
+            Called when the WebSocket connection used in a session has been closed.
+            </summary>
+            <param name="e">
+            A <see cref="T:WebSocketSharp.CloseEventArgs"/> that represents the event data passed to
+            a <see cref="E:WebSocketSharp.WebSocket.OnClose"/> event.
+            </param>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.OnMessage(System.String)">
+            <summary>
+                string handler
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.OnMessage(System.Byte[])">
+            <summary>
+                bytes handler
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.BroadcastAsync(System.Byte[])">
+            <summary>
+                asynchronous broadcast bytes
+                thread safe
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.BroadcastAsync``1(``0)">
+            <summary>
+                asynchronous broadcast a proto
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.SendAsync(System.Byte[])">
+            <summary>
+                send bytes asynchronous
+                thread safe
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.SendAsync``1(``0)">
+            <summary>
+                send a proto asynchronous
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:socket4net.WebsocketDelegate`1.DataParser">
+            <summary>
+                Get/Set custom data parser
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.OnRequest(socket4net.IDataProtocol)">
+            <summary>
+                handle request
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.OnPush(socket4net.IDataProtocol)">
+            <summary>
+                handle push
+            </summary>
+            <param name="ps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.WebsocketSession})">
+            <summary>
+            多播
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <param name="sessions"></param>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync``1(``0)">
+            <summary>
+                request an data protocol asynchronous
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <param name="cb"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.Push``1(``0)">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync(System.UInt16,socket4net.NetPackage)">
+            <summary>
+                request asynchronous
+                ordered by "serial"
+            </summary>
+            <param name="serial"></param>
+            <param name="pack"></param>
+            <returns></returns>
         </member>
         <member name="P:Pi.Common.Numeric.Compare`1.Function">
             <summary>

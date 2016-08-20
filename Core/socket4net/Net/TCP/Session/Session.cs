@@ -36,7 +36,7 @@ namespace socket4net
     /// <summary>
     ///  session arguments
     /// </summary>
-    public class SessionArg : UniqueObjArg<long>
+    public class SessionArg : UniqueObjArg<string>
     {
         /// <summary>
         /// 
@@ -44,7 +44,7 @@ namespace socket4net
         /// <param name="owner"></param>
         /// <param name="key"></param>
         /// <param name="underlineSock"></param>
-        public SessionArg(IPeer owner, long key, Socket underlineSock) : base(owner, key)
+        public SessionArg(IPeer owner, string key, Socket underlineSock) : base(owner, key)
         {
             UnderlineSocket = underlineSock;
         }
@@ -58,7 +58,7 @@ namespace socket4net
     /// <summary>
     ///     Session
     /// </summary>
-    public abstract class Session : UniqueObj<long>, ISession
+    public abstract class Session : UniqueObj<string>, ISession
     {
         /// <summary>
         ///     default maximum network package size
@@ -72,10 +72,16 @@ namespace socket4net
 
         // 默认加密、解密方法（默认不加密）
         protected Func<byte[], byte[]> Encoder = bytes => bytes;
-        protected Func<byte[], byte[]> Decoder = bytes => bytes; 
+        protected Func<byte[], byte[]> Decoder = bytes => bytes;
 
+        /// <summary>
+        ///     name
+        /// </summary>
         public override string Name => $"{GetType().Name}:{Id}";
 
+        /// <summary>
+        ///     Socket attached to this session
+        /// </summary>
         public Socket UnderlineSocket { get; private set; }
 
         /// <summary>

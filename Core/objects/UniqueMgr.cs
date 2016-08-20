@@ -36,12 +36,12 @@ namespace socket4net
         }
     }
 
-    public enum EContainerOps
-    {
-        Invalid,
-        Add,
-        Remove,
-    }
+    //public enum EContainerOps
+    //{
+    //    Invalid,
+    //    Add,
+    //    Remove,
+    //}
 
     public class UniqueMgr<TContainer, TKey, TValue> : Obj, IEnumerable<TValue> 
         where TContainer : IDictionary<TKey, TValue>, new()
@@ -227,12 +227,20 @@ namespace socket4net
 
         #region Ïú»Ù
 
+        /// <summary>
+        ///     destory all items
+        /// </summary>
         public void DestroyAll()
         {
             var keys = Items.Keys.ToList();
             keys.ForEach(k => Destroy(k));
         }
 
+        /// <summary>
+        ///     destroy items that match "condition"
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public List<TKey> Destroy(Predicate<TValue> condition)
         {
             var victims = Remove(condition);
@@ -243,6 +251,11 @@ namespace socket4net
             return keys;
         }
 
+        /// <summary>
+        ///     destroy all items of type "T"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public List<TKey> Destroy<T>() where T : TValue
         {
             var victims = Remove<T>();
@@ -253,6 +266,12 @@ namespace socket4net
             return keys;
         }
 
+        /// <summary>
+        ///     destroy items of type "T" that match "condition"
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public List<TKey> Destroy<T>(Predicate<T> condition) where T : TValue
         {
             var victims = Remove(condition);
@@ -263,18 +282,27 @@ namespace socket4net
             return keys;
         }
 
+        /// <summary>
+        ///     destroy item specified by "key"
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool Destroy(TKey key)
         {
             var obj = Remove(key);
             if (obj == null) return false;
 
             obj.Destroy();
-            if (EventObjDestroyed != null)
-                EventObjDestroyed(key, obj.GetType());
+            EventObjDestroyed?.Invoke(key, obj.GetType());
 
             return true;
         }
 
+        /// <summary>
+        ///     destroy item specified by "value"
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool Destroy(TValue value)
         {
             return Destroy(value.Id);

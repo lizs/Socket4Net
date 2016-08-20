@@ -43,7 +43,7 @@ namespace socket4net
     ///     Session
     ///     Indicate a link between client and server
     /// </summary>
-    public interface ISession : IUniqueObj<long>
+    public interface ISession : IUniqueObj<string>
     {
         /// <summary>
         ///     Socket attached to this session
