@@ -9,7 +9,7 @@ namespace socket4net
     /// <summary>
     ///     websocket session abstraction
     /// </summary>
-    public abstract class WebsocketSession : WebSocketBehavior, IWebsocketDelegateHost
+    public abstract class WebsocketSession : WebSocketBehavior, IWebsocketDelegateServerHost
     {
         private WebsocketDelegate<WebsocketSession> _delegate;
         private WebsocketDelegate<WebsocketSession> SessionDelegate => _delegate ?? (_delegate = new WebsocketDelegate<WebsocketSession>(this));
@@ -80,7 +80,12 @@ namespace socket4net
         /// <param name="cb"></param>
         public void BroadcastAsync(byte[] data, Action cb)
         {
-            Sessions.BroadcastAsync(data, cb);
+            Sessions.BroadcastAsync(data, () =>
+            {
+                var sessionsCnt = Sessions.Count;
+                PerformanceMonitor.Ins.RecordWrite(sessionsCnt * data.Length, sessionsCnt);
+                cb();
+            });
         }
         
         /// <summary>
@@ -123,11 +128,7 @@ namespace socket4net
         /// <param name="cb"></param>
         void IWebsocketDelegateHost.SendAsync(byte[] data, Action<bool> cb)
         {
-            SendAsync(data, b =>
-            {
-                if(b)
-                    PerformanceMonitor.Ins.RecordWrite(data.Length);
-            });
+            SendAsync(data, cb);
         }
 
         /// <summary>
@@ -137,7 +138,6 @@ namespace socket4net
         void IWebsocketDelegateHost.Send(byte[] data)
         {
             Send(data);
-            PerformanceMonitor.Ins.RecordWrite(data.Length);
         }
 
         void IWebsocketDelegateHost.Close()
@@ -161,7 +161,7 @@ namespace socket4net
         /// </summary>
         /// <param name="rq"></param>
         /// <returns></returns>
-        protected virtual Task<NetResult> OnRequest(IDataProtocol rq)
+        public virtual Task<NetResult> OnRequest(IDataProtocol rq)
         {
             return Task.FromResult(NetResult.Failure);
         }
@@ -171,7 +171,7 @@ namespace socket4net
         /// </summary>
         /// <param name="ps"></param>
         /// <returns></returns>
-        protected virtual Task<bool> OnPush(IDataProtocol ps)
+        public virtual Task<bool> OnPush(IDataProtocol ps)
         {
             return Task.FromResult(false);
         }

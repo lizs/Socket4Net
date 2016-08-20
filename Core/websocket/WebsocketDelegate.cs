@@ -16,12 +16,14 @@ namespace socket4net
         void Close();
         void SendAsync(byte[] bytes, Action<bool> cb);
         void Send(byte[] bytes);
+        Task<NetResult> OnRequest(IDataProtocol dp);
+        Task<bool> OnPush(IDataProtocol dp);
     }
 
     /// <summary>
     ///     websocket delegate server host
     /// </summary>
-    public interface IWebsocketDelegateServerHost
+    public interface IWebsocketDelegateServerHost : IWebsocketDelegateHost
     {
         void BroadcastAsync(byte[] bytes, Action cb);
     }
@@ -59,20 +61,12 @@ namespace socket4net
                 if (e.IsBinary)
                 {
                     PerformanceMonitor.Ins.RecordRead(e.RawData.Length);
-                    var ret = await OnMessage(e.RawData);
-                    if (!ret)
-                    {
-                        Logger.Ins.Error("Handle msg failed!");
-                    }
+                    await OnMessage(e.RawData);
                 }
                 else if (e.IsText)
                 {
                     PerformanceMonitor.Ins.RecordRead(e.Data.Length);
-                    var ret = await OnMessage(e.Data);
-                    if (!ret)
-                    {
-                        Logger.Ins.Error("Handle msg failed!");
-                    }
+                    await OnMessage(e.Data);
                 }
                 else
                 {
@@ -125,9 +119,8 @@ namespace socket4net
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        private Task<NetResult> OnMessage(string data)
+        private async Task OnMessage(string data)
         {
-            return Task.FromResult(NetResult.Failure);
         }
 
         /// <summary>
@@ -136,7 +129,7 @@ namespace socket4net
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        private async Task<NetResult> OnMessage(byte[] data)
+        private async Task OnMessage(byte[] data)
         {
             var pack = PiSerializer.Deserialize<NetPackage>(data);
 
@@ -147,7 +140,7 @@ namespace socket4net
                         try
                         {
                             var rq = DataParser(pack.Data);
-                            var rp = await OnRequest(rq);
+                            var rp = await _host.OnRequest(rq);
                             if (rp == null)
                                 await Response(false, null, pack.Serial);
                             else
@@ -192,7 +185,7 @@ namespace socket4net
                         try
                         {
                             var ps = DataParser(pack.Data);
-                            var success = await OnPush(ps);
+                            var success = await _host.OnPush(ps);
                             if (!success)
                                 Logger.Ins.Error("Handle push {0} failed!", ps);
                         }
@@ -209,8 +202,6 @@ namespace socket4net
                     _host.Close();
                     break;
             }
-
-            return NetResult.Failure;
         }
 
         /// <summary>
@@ -242,7 +233,7 @@ namespace socket4net
         /// <returns></returns>
         public async Task<NetResult> BroadcastAsync<T>(T proto) where T : IDataProtocol
         {
-            var data = PiSerializer.Serialize(proto);
+            var data = PiSerializer.Serialize(PackPush(proto));
             return await BroadcastAsync(data);
         }
 
@@ -256,7 +247,13 @@ namespace socket4net
         {
             return await TaskHelper.WrapCallback<byte[], NetResult>(data, (bytes, cb) =>
             {
-                _host.SendAsync(bytes, complete => cb(complete ? NetResult.Success : NetResult.Failure));
+                _host.SendAsync(bytes, complete =>
+                {
+                    if(complete)
+                        PerformanceMonitor.Ins.RecordWrite(bytes.Length);
+
+                    cb(complete ? NetResult.Success : NetResult.Failure);
+                });
             });
         }
 
@@ -279,26 +276,6 @@ namespace socket4net
         /// </summary>
         protected Func<byte[], IDataProtocol> DataParser { get; set; } = data => PiSerializer.Deserialize<DefaultDataProtocol>(data);
         
-        /// <summary>
-        ///     handle request
-        /// </summary>
-        /// <param name="rq"></param>
-        /// <returns></returns>
-        protected virtual Task<NetResult> OnRequest(IDataProtocol rq)
-        {
-            return Task.FromResult(NetResult.Failure);
-        }
-
-        /// <summary>
-        ///     handle push
-        /// </summary>
-        /// <param name="ps"></param>
-        /// <returns></returns>
-        protected virtual Task<bool> OnPush(IDataProtocol ps)
-        {
-            return Task.FromResult(false);
-        }
-
         /// <summary>
         /// 多播
         /// </summary>
@@ -375,7 +352,10 @@ namespace socket4net
 
             //  call back in logic service
             Action<bool, byte[]> cb =
-                (b, bytes) => GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetResult(new NetResult(b, bytes)));
+                (b, bytes) => GlobalVarPool.Ins.LogicService.Perform(() =>
+                {
+                    tcs.SetResult(new NetResult(b, bytes));
+                });
 
             // callback pool
             if (!_requestPool.TryAdd(serial, cb))
@@ -386,15 +366,16 @@ namespace socket4net
 
             // send
             var sendRet = await SendAsync(PiSerializer.Serialize(pack));
-            if (sendRet) return await tcs.Task;
+            if (!sendRet)
+            {
+                Action<bool, byte[]> _;
+                _requestPool.TryRemove(serial, out _);
+                _ = _ ?? cb;
 
-            // send failed
-            Action<bool, byte[]> _;
-            _requestPool.TryRemove(serial, out _);
-            _ = _ ?? cb;
+                _(false, null);
+            }
 
-            _(false, null);
-            return NetResult.Failure;
+            return await tcs.Task;
         }
 
         private async Task<NetResult> Response(bool success, byte[] data, ushort serial)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebSocketSharp;
 
@@ -82,7 +81,10 @@ namespace socket4net
 
         public void SendAsync(byte[] bytes, Action<bool> cb)
         {
-            _websocket?.SendAsync(bytes, cb);
+            _websocket?.SendAsync(bytes, b =>
+            {
+                cb?.Invoke(b);
+            });
         }
 
         /// <summary>
@@ -105,7 +107,7 @@ namespace socket4net
         /// </summary>
         /// <param name="rq"></param>
         /// <returns></returns>
-        protected virtual Task<NetResult> OnRequest(IDataProtocol rq)
+        public virtual Task<NetResult> OnRequest(IDataProtocol rq)
         {
             return Task.FromResult(NetResult.Failure);
         }
@@ -115,7 +117,7 @@ namespace socket4net
         /// </summary>
         /// <param name="ps"></param>
         /// <returns></returns>
-        protected virtual Task<bool> OnPush(IDataProtocol ps)
+        public virtual Task<bool> OnPush(IDataProtocol ps)
         {
             return Task.FromResult(false);
         }

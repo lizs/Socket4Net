@@ -46,6 +46,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\x86\Debug\socket4net.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -88,6 +89,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="objects\ObjWrapper.cs" />
     <Compile Include="objects\Scheduler\BatchedScheduler.cs" />
     <Compile Include="objects\ObjSchedule.cs" />
     <Compile Include="objects\Scheduler\Flusher.cs" />
@@ -164,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\websocket-sharp\websocket-sharp\websocket-sharp.csproj">
-      <Project>{B357BAC7-529E-4D81-A0D2-71041B19C8DE}</Project>
+      <Project>{b357bac7-529e-4d81-a0d2-71041b19c8de}</Project>
       <Name>websocket-sharp</Name>
     </ProjectReference>
   </ItemGroup>
