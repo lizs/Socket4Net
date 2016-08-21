@@ -107,9 +107,9 @@ namespace socket4net
         /// </summary>
         /// <param name="rq"></param>
         /// <returns></returns>
-        public virtual Task<NetResult> OnRequest(IDataProtocol rq)
+        public virtual Task<RpcResult> OnRequest(IDataProtocol rq)
         {
-            return Task.FromResult(NetResult.Failure);
+            return Task.FromResult(RpcResult.Failure);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
         /// <returns></returns>
-        public async Task<NetResult> RequestAsync<T>(T proto) where T : IDataProtocol
+        public async Task<RpcResult> RequestAsync<T>(T proto) where T : IDataProtocol
         {
             return await SessionDelegate.RequestAsync(proto);
         }
@@ -147,7 +147,7 @@ namespace socket4net
         /// </summary>
         /// <param name="proto"></param>
         /// <typeparam name="T"></typeparam>
-        public async Task<NetResult> Push<T>(T proto) where T : IDataProtocol
+        public async Task<RpcResult> Push<T>(T proto) where T : IDataProtocol
         {
             return await SessionDelegate.Push(proto);
         }

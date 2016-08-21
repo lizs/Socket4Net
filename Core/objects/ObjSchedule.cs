@@ -57,19 +57,19 @@ namespace socket4net
         
         void IObj.StopCoroutine(Coroutine coroutine)
         {
-            var scheduler = GlobalVarPool.Ins.LogicService.CoroutineScheduler;
+            var scheduler = GlobalVarPool.Ins.Service.CoroutineScheduler;
             scheduler.InternalStopCoroutine(coroutine);
         }
 
         Coroutine IObj.StartCoroutine(Func<IEnumerator> fun)
         {
-            var scheduler = GlobalVarPool.Ins.LogicService.CoroutineScheduler;
+            var scheduler = GlobalVarPool.Ins.Service.CoroutineScheduler;
             return scheduler.InternalStartCoroutine(fun);
         }
 
         Coroutine IObj.StartCoroutine(Func<object[], IEnumerator> fun, params object[] args)
         {
-            var scheduler = GlobalVarPool.Ins.LogicService.CoroutineScheduler;
+            var scheduler = GlobalVarPool.Ins.Service.CoroutineScheduler;
             return scheduler.InternalStartCoroutine(fun, args);
         }
 

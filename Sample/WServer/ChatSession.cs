@@ -7,7 +7,7 @@ namespace WServer
 {
     public class ChatSession : WebsocketSession
     {
-        public override async Task<NetResult> OnRequest(IDataProtocol rq)
+        public override async Task<RpcResult> OnRequest(IDataProtocol rq)
         {
             var more = rq as DefaultDataProtocol;
 
@@ -16,14 +16,14 @@ namespace WServer
                 case EOps.Reqeust:
                 {
                     var proto = PiSerializer.Deserialize<RequestProto>(more.Data);
-                    return NetResult.MakeSuccess(new ResponseProto
+                    return RpcResult.MakeSuccess(new ResponseProto
                     {
                         Message = $"Response from server : {proto.Message}"
                     });
                 }
 
                 default:
-                    return NetResult.Failure;
+                    return RpcResult.Failure;
             }
         }
 
@@ -48,7 +48,7 @@ namespace WServer
                 }
 
                 default:
-                    return NetResult.Failure;
+                    return RpcResult.Failure;
             }
         }
     }

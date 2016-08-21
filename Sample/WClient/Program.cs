@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Proto;
 using socket4net;
 using socket4net.objects;
 using WebSocketSharp;
-using Logger = socket4net.Logger;
 
 namespace WClient
 {
@@ -33,7 +29,7 @@ namespace WClient
             }
         }
 
-        public override Task<NetResult> OnRequest(IDataProtocol rq)
+        public override Task<RpcResult> OnRequest(IDataProtocol rq)
         {
             return base.OnRequest(rq);
         }
@@ -45,8 +41,8 @@ namespace WClient
         {
             base.OnStart();
             Object.ConnectAsync();
-            InvokeRepeating(Broadcast, 1000, (uint)Rand.Next(3 * 1000, 10 * 1000));
-            //InvokeRepeating(Request, 1000, (uint)Rand.Next(3 * 1000, 10 * 1000));
+            InvokeRepeating(Broadcast, (uint)Rand.Next(3 * 1000, 10 * 1000), (uint)Rand.Next(5 * 1000, 10 * 1000));
+            InvokeRepeating(Request, (uint)Rand.Next(3 * 1000, 10 * 1000), 200);
         }
 
         private async void Broadcast()

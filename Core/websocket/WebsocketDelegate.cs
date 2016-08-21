@@ -13,10 +13,35 @@ namespace socket4net
     /// </summary>
     public interface IWebsocketDelegateHost
     {
+        /// <summary>
+        ///     close session
+        /// </summary>
         void Close();
+
+        /// <summary>
+        ///     send async
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="cb"></param>
         void SendAsync(byte[] bytes, Action<bool> cb);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="bytes"></param>
         void Send(byte[] bytes);
-        Task<NetResult> OnRequest(IDataProtocol dp);
+
+        /// <summary>
+        ///     request handler
+        /// </summary>
+        /// <param name="dp"></param>
+        /// <returns></returns>
+        Task<RpcResult> OnRequest(IDataProtocol dp);
+
+        /// <summary>
+        ///     push handler
+        /// </summary>
+        /// <param name="dp"></param>
+        /// <returns></returns>
         Task<bool> OnPush(IDataProtocol dp);
     }
 
@@ -25,6 +50,11 @@ namespace socket4net
     /// </summary>
     public interface IWebsocketDelegateServerHost : IWebsocketDelegateHost
     {
+        /// <summary>
+        ///     broadcast async
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="cb"></param>
         void BroadcastAsync(byte[] bytes, Action cb);
     }
 
@@ -56,7 +86,7 @@ namespace socket4net
         /// </param>
         public void OnMessage(MessageEventArgs e)
         {
-            GlobalVarPool.Ins.LogicService.Perform(async () =>
+            GlobalVarPool.Ins.Service.Perform(async () =>
             {
                 if (e.IsBinary)
                 {
@@ -121,6 +151,7 @@ namespace socket4net
         /// <exception cref="NotImplementedException"></exception>
         private async Task OnMessage(string data)
         {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -131,7 +162,7 @@ namespace socket4net
         /// <exception cref="NotImplementedException"></exception>
         private async Task OnMessage(byte[] data)
         {
-            var pack = PiSerializer.Deserialize<NetPackage>(data);
+            var pack = PiSerializer.Deserialize<RpcPackage>(data);
 
             switch (pack.Type)
             {
@@ -210,17 +241,17 @@ namespace socket4net
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public async Task<NetResult> BroadcastAsync(byte[] data)
+        public async Task<RpcResult> BroadcastAsync(byte[] data)
         {
             var serverHost = (IWebsocketDelegateServerHost) _host;
             if(serverHost == null)
-                return NetResult.Failure;
+                return RpcResult.Failure;
 
-            return await TaskHelper.WrapCallback<byte[], NetResult>(data, (bytes, cb) =>
+            return await TaskHelper.WrapCallback<byte[], RpcResult>(data, (bytes, cb) =>
             {
                 serverHost.BroadcastAsync(bytes, () =>
                 {
-                    cb(NetResult.Success);
+                    cb(RpcResult.Success);
                 });
             });
         }
@@ -231,7 +262,7 @@ namespace socket4net
         /// <param name="proto"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<NetResult> BroadcastAsync<T>(T proto) where T : IDataProtocol
+        public async Task<RpcResult> BroadcastAsync<T>(T proto) where T : IDataProtocol
         {
             var data = PiSerializer.Serialize(PackPush(proto));
             return await BroadcastAsync(data);
@@ -243,16 +274,16 @@ namespace socket4net
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public async Task<NetResult> SendAsync(byte[] data)
+        public async Task<RpcResult> SendAsync(byte[] data)
         {
-            return await TaskHelper.WrapCallback<byte[], NetResult>(data, (bytes, cb) =>
+            return await TaskHelper.WrapCallback<byte[], RpcResult>(data, (bytes, cb) =>
             {
                 _host.SendAsync(bytes, complete =>
                 {
                     if(complete)
                         PerformanceMonitor.Ins.RecordWrite(bytes.Length);
 
-                    cb(complete ? NetResult.Success : NetResult.Failure);
+                    cb(complete ? RpcResult.Success : RpcResult.Failure);
                 });
             });
         }
@@ -263,7 +294,7 @@ namespace socket4net
         /// <param name="proto"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<NetResult> SendAsync<T>(T proto) where T : IDataProtocol
+        public async Task<RpcResult> SendAsync<T>(T proto) where T : IDataProtocol
         {
             var data = PiSerializer.Serialize(proto);
             return await SendAsync(data);
@@ -297,7 +328,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
         /// <returns></returns>
-        public async Task<NetResult> RequestAsync<T>(T proto) where T : IDataProtocol
+        public async Task<RpcResult> RequestAsync<T>(T proto) where T : IDataProtocol
         {
             var pack = PackRequest(proto);
             pack.Serial = GenerateSerial();
@@ -329,7 +360,7 @@ namespace socket4net
         /// </summary>
         /// <param name="proto"></param>
         /// <typeparam name="T"></typeparam>
-        public async Task<NetResult> Push<T>(T proto) where T : IDataProtocol
+        public async Task<RpcResult> Push<T>(T proto) where T : IDataProtocol
         {
             return await SendAsync(PiSerializer.Serialize(PackPush(proto)));
         }
@@ -346,22 +377,22 @@ namespace socket4net
         /// <param name="serial"></param>
         /// <param name="pack"></param>
         /// <returns></returns>
-        private async Task<NetResult> RequestAsync(ushort serial, NetPackage pack)
+        private async Task<RpcResult> RequestAsync(ushort serial, RpcPackage pack)
         {
-            var tcs = new TaskCompletionSource<NetResult>();
+            var tcs = new TaskCompletionSource<RpcResult>();
 
             //  call back in logic service
             Action<bool, byte[]> cb =
-                (b, bytes) => GlobalVarPool.Ins.LogicService.Perform(() =>
+                (b, bytes) => GlobalVarPool.Ins.Service.Perform(() =>
                 {
-                    tcs.SetResult(new NetResult(b, bytes));
+                    tcs.SetResult(new RpcResult(b, bytes));
                 });
 
             // callback pool
             if (!_requestPool.TryAdd(serial, cb))
             {
                 Logger.Ins.Error("Request of serial {0} already processing!", serial);
-                return NetResult.Failure;
+                return RpcResult.Failure;
             }
 
             // send
@@ -378,9 +409,9 @@ namespace socket4net
             return await tcs.Task;
         }
 
-        private async Task<NetResult> Response(bool success, byte[] data, ushort serial)
+        private async Task<RpcResult> Response(bool success, byte[] data, ushort serial)
         {
-            var pack = new NetPackage
+            var pack = new RpcPackage
             {
                 Type = ERpc.Response,
                 Serial = serial,
@@ -390,13 +421,13 @@ namespace socket4net
 
             return await SendAsync(PiSerializer.Serialize(pack));
         }
-        private static NetPackage PackRequest<T>(T proto) where T : IDataProtocol
+        private static RpcPackage PackRequest<T>(T proto) where T : IDataProtocol
         {
-            return new NetPackage { Type = ERpc.Request, Data = PiSerializer.Serialize(proto) };
+            return new RpcPackage { Type = ERpc.Request, Data = PiSerializer.Serialize(proto) };
         }
-        private static NetPackage PackPush<T>(T proto) where T : IDataProtocol
+        private static RpcPackage PackPush<T>(T proto) where T : IDataProtocol
         {
-            return new NetPackage { Type = ERpc.Push, Data = PiSerializer.Serialize(proto) };
+            return new RpcPackage { Type = ERpc.Push, Data = PiSerializer.Serialize(proto) };
         }
     }
 }

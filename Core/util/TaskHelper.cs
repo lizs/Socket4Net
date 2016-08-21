@@ -120,11 +120,11 @@ namespace socket4net
                 try
                 {
                     var ret = fun();
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetResult(ret));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetResult(ret));
                 }
                 catch (Exception ex)
                 {
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetException(ex));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetException(ex));
                 }
             });
 
@@ -142,11 +142,11 @@ namespace socket4net
                 try
                 {
                     var ret = fun(arg1);
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetResult(ret));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetResult(ret));
                 }
                 catch (Exception ex)
                 {
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetException(ex));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetException(ex));
                 }
             });
 
@@ -162,11 +162,11 @@ namespace socket4net
                 try
                 {
                     var ret = fun(arg1, arg2);
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetResult(ret));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetResult(ret));
                 }
                 catch (Exception ex)
                 {
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetException(ex));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetException(ex));
                 }
             });
 
@@ -182,11 +182,11 @@ namespace socket4net
                 try
                 {
                     var ret = fun(arg1, arg2, arg3);
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetResult(ret));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetResult(ret));
                 }
                 catch (Exception ex)
                 {
-                    GlobalVarPool.Ins.LogicService.Perform(() => tcs.SetException(ex));
+                    GlobalVarPool.Ins.Service.Perform(() => tcs.SetException(ex));
                 }
             });
 
@@ -203,12 +203,12 @@ namespace socket4net
                 try
                 {
                     var ret = await fun();
-                    GlobalVarPool.Ins.LogicService.Perform(() => cb(ret));
+                    GlobalVarPool.Ins.Service.Perform(() => cb(ret));
                 }
                 catch (Exception ex)
                 {
                     Logger.Ins.Error("ExcuteTaskAndReturnByCallback 失败，{0}:{1}", ex.Message, ex.StackTrace);
-                    GlobalVarPool.Ins.LogicService.Perform(() => cb(default(TResult)));
+                    GlobalVarPool.Ins.Service.Perform(() => cb(default(TResult)));
                 }
             });
         }
@@ -221,12 +221,12 @@ namespace socket4net
                 try
                 {
                     var ret = await fun(arg1);
-                    GlobalVarPool.Ins.LogicService.Perform(() => cb(ret));
+                    GlobalVarPool.Ins.Service.Perform(() => cb(ret));
                 }
                 catch (Exception ex)
                 {
                     Logger.Ins.Error("ExcuteTaskAndReturnByCallback 失败，{0}:{1}", ex.Message, ex.StackTrace);
-                    GlobalVarPool.Ins.LogicService.Perform(() => cb(default(TResult)));
+                    GlobalVarPool.Ins.Service.Perform(() => cb(default(TResult)));
                 }
             });
         }
@@ -239,12 +239,12 @@ namespace socket4net
                 try
                 {
                     var ret = await fun(arg1, arg2);
-                    GlobalVarPool.Ins.LogicService.Perform(() => cb(ret));
+                    GlobalVarPool.Ins.Service.Perform(() => cb(ret));
                 }
                 catch (Exception ex)
                 {
                     Logger.Ins.Error("ExcuteTaskAndReturnByCallback 失败，{0}:{1}", ex.Message, ex.StackTrace);
-                    GlobalVarPool.Ins.LogicService.Perform(() => cb(default(TResult)));
+                    GlobalVarPool.Ins.Service.Perform(() => cb(default(TResult)));
                 }
             });
         }

@@ -37,26 +37,19 @@ namespace socket4net
         /// <param name="monitorEnabled"></param>
         /// <param name="logger"></param>
         /// <param name="id"></param>
-        /// <param name="passiveLogicServiceEnabled"></param>
-        /// <param name="tcpEnabled"></param>
-        public LauncherArg(bool monitorEnabled = true, ILog logger = null, Guid? id = null, bool passiveLogicServiceEnabled = false, bool tcpEnabled = false)
+        public LauncherArg(bool monitorEnabled = true, ILog logger = null, Guid? id = null)
             : base(null)
         {
             Logger = logger;
-            PassiveLogicServiceEnabled = passiveLogicServiceEnabled;
             Id = id ?? new Guid();
             MonitorEnabled = monitorEnabled;
-            TcpEnabled = tcpEnabled;
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public ILog Logger { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool PassiveLogicServiceEnabled { get; private set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public ILog Logger { get; private set; }
         /// <summary>
         /// 
         /// </summary>
@@ -70,11 +63,7 @@ namespace socket4net
         /// <summary>
         ///     performance monitor enabled
         /// </summary>
-        public bool MonitorEnabled { get; private set; }
-        /// <summary>
-        ///  if tcp enabled
-        /// </summary>
-        public bool TcpEnabled { get; private set; }
+        public bool MonitorEnabled { get; }
     }
 
     /// <summary>
@@ -90,13 +79,8 @@ namespace socket4net
         /// <summary>
         ///     get logic service
         /// </summary>
-        public ILogicService LogicService => GlobalVarPool.Ins.LogicService;
-
-        /// <summary>
-        ///     get network service
-        /// </summary>
-        public ITcpService TcpService => GlobalVarPool.Ins.TcpService;
-
+        public Service Service => GlobalVarPool.Ins.Service;
+        
         /// <summary>
         ///    internal called when an Obj is initialized
         /// </summary>
@@ -114,25 +98,16 @@ namespace socket4net
             // logger
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogger, more.Logger ?? new DefaultLogger());
 
-            // logic service
-            var serviceArg = new ServiceArg(this, 10000, 10);
-            var logicService = more.PassiveLogicServiceEnabled
-                ? New<PassiveLogicService>(serviceArg)
-                : (ILogicService)New<AutoLogicService>(serviceArg);
-            GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogicService, logicService);
-
-            // tcp service
-            if (more.TcpEnabled)
-            {
-                var tcpService = New<TcpService>(serviceArg);
-                GlobalVarPool.Ins.Set(GlobalVarPool.NameOfTcpService, tcpService);
-            }
-            
+            // performance monitor
             if (more.MonitorEnabled)
             {
                 var monitor = New<PerformanceMonitor>(ObjArg.Empty);
                 GlobalVarPool.Ins.Set(GlobalVarPool.NameOfMonitor, monitor);
             }
+
+            // service
+            var service = New<Service>(ObjArg.Empty);
+            GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogicService, service);
         }
 
         /// <summary>
@@ -141,8 +116,7 @@ namespace socket4net
         protected override void OnStart()
         {
             base.OnStart();
-            TcpService?.Start();
-            LogicService.Start();
+            Service.Start();
             PerformanceMonitor.Ins?.Start();
         }
 
@@ -152,9 +126,8 @@ namespace socket4net
         protected override void OnDestroy()
         {
             base.OnDestroy();
-
-            TcpService?.Destroy();
-            LogicService.Destroy();
+            
+            Service.Destroy();
             Logger.Ins.Shutdown();
             PerformanceMonitor.Ins?.Destroy();
 
