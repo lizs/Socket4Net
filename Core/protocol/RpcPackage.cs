@@ -67,7 +67,7 @@ namespace socket4net
             sb.AppendLine();
             sb.AppendLine("Type : " + Type);
             sb.AppendLine("Serial : " + Serial);
-            sb.AppendFormat("Data length : {0}\r\n", Data.IsNullOrEmpty() ? 0 : Data.Length);
+            sb.Append($"Data length : {(Data.IsNullOrEmpty() ? 0 : Data.Length)}\r\n");
 
             return sb.ToString();
         }

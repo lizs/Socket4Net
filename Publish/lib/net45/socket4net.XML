@@ -205,6 +205,27 @@
                 在whens指定的时间点执行action
             </summary>
         </member>
+        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.TimeSpan)">
+            <summary>
+                Excute 'action' everyday's 'time' clock
+            </summary>
+            <param name="action"></param>
+            <param name="time"></param>
+        </member>
+        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.DateTime)">
+            <summary>
+                Excute 'action' when 'when'
+            </summary>
+            <param name="action"></param>
+            <param name="when"></param>
+        </member>
+        <member name="M:socket4net.Obj.InvokeAsync(System.Action,System.UInt32)">
+            <summary>
+                Excute 'action' after 'delay' ms
+            </summary>
+            <param name="action"></param>
+            <param name="delay"></param>
+        </member>
         <member name="P:socket4net.Obj.socket4net#IObj#InstanceId">
             <summary>
                 Obj instance id
@@ -270,27 +291,6 @@
             <returns>A string that represents the current object.</returns>
             <filterpriority>2</filterpriority>
         </member>
-        <member name="M:socket4net.Obj.New``1(socket4net.ObjArg,System.Boolean)">
-            <summary>
-                Create an obj of type 'T' with arg
-                If 'start' == true, Obj will be started after initialized
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Obj.New(System.Type,socket4net.ObjArg,System.Boolean)">
-            <summary>
-                Create an obj of 'type' with arg
-                If 'start' == true, Obj will be started after initialized
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.Obj.New``1(System.Type,socket4net.ObjArg,System.Boolean)">
-            <summary>
-                Create an obj of 'type' with arg and return 'obj as T'
-                If 'start' == true, Obj will be started after initialized
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:socket4net.Obj.Init(socket4net.ObjArg)">
             <summary>
                 Initialize
@@ -329,6 +329,29 @@
             </summary>
             <typeparam name="T"></typeparam>
             <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.Create(System.Type,socket4net.ObjArg,System.Boolean)">
+            <summary>
+                create object of type "type"
+            </summary>
+            <param name="type"></param>
+            <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.Create``1(socket4net.ObjArg,System.Boolean)">
+            <summary>
+                create object of type "T"
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="arg"></param>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Obj.ClearCtorCache">
+            <summary>
+                clear the constructors cache
+            </summary>
         </member>
         <member name="T:socket4net.SlicedObj">
             <summary>
@@ -950,6 +973,24 @@
                 working thread's working procedure
             </summary>
         </member>
+        <member name="T:socket4net.WebsocketClientArg">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClientArg.#ctor(socket4net.IObj,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="owner"></param>
+            <param name="key"></param>
+            <param name="url"></param>
+        </member>
+        <member name="P:socket4net.WebsocketClientArg.Url">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:socket4net.WebsocketClient">
             <summary>
                 websocket client
@@ -975,22 +1016,44 @@
             Occurs when the WebSocket connection has been established.
             </summary>
         </member>
-        <member name="M:socket4net.WebsocketClient.#ctor(WebSocketSharp.WebSocket)">
+        <member name="M:socket4net.WebsocketClient.OnInit(socket4net.ObjArg)">
             <summary>
-                initialize client with a websocket
+               internal called when an Obj is initialized
             </summary>
-            <param name="ws"></param>
+            <param name="arg"></param>
         </member>
         <member name="F:socket4net.WebsocketClient._websocket">
             <summary>
              underline websocket
             </summary>
         </member>
+        <member name="M:socket4net.WebsocketClient.OnDestroy">
+            <summary>
+               internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.Close">
+            <summary>
+                close session
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.SendAsync(System.Byte[],System.Action{System.Boolean})">
+            <summary>
+                send async
+            </summary>
+            <param name="bytes"></param>
+            <param name="cb"></param>
+        </member>
         <member name="M:socket4net.WebsocketClient.Send(System.Byte[])">
             <summary>
             
             </summary>
             <param name="bytes"></param>
+        </member>
+        <member name="M:socket4net.WebsocketClient.ConnectAsync">
+            <summary>
+                
+            </summary>
         </member>
         <member name="M:socket4net.WebsocketClient.OnRequest(socket4net.IDataProtocol)">
             <summary>
@@ -1115,6 +1178,11 @@
                 explicit implementation
             </summary>
             <param name="data"></param>
+        </member>
+        <member name="M:socket4net.WebsocketSession.Close">
+            <summary>
+                close session
+            </summary>
         </member>
         <member name="M:socket4net.WebsocketSession.OnRequest(socket4net.IDataProtocol)">
             <summary>
@@ -1356,7 +1424,7 @@
             用于解析诸如 1 2 4 + 3 3 5 + 7 6 9 这种类型的string
             </summary>
         </member>
-        <member name="M:socket4net.Uid.New">
+        <member name="M:socket4net.Uid.Create">
             <summary>
                 create an guid
             </summary>
@@ -1696,6 +1764,12 @@
             </summary>
             <param name="owner"></param>
         </member>
+        <member name="M:socket4net.ObjArg.SetOwner(socket4net.IObj)">
+            <summary>
+                set owner
+            </summary>
+            <param name="owner"></param>
+        </member>
         <member name="P:socket4net.ObjArg.Empty">
             <summary>
                 Empty obj argument
@@ -1979,29 +2053,6 @@
         <member name="T:socket4net.ObjFactory">
             <summary>
                 objects factory
-            </summary>
-        </member>
-        <member name="M:socket4net.ObjFactory.Create(System.Type,socket4net.ObjArg,System.Boolean)">
-            <summary>
-                create object of type "type"
-            </summary>
-            <param name="type"></param>
-            <param name="arg"></param>
-            <param name="start"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.ObjFactory.Create``1(socket4net.ObjArg,System.Boolean)">
-            <summary>
-                create object of type "T"
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="arg"></param>
-            <param name="start"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.ObjFactory.ClearCtorCache">
-            <summary>
-                clear the constructors cache
             </summary>
         </member>
         <member name="T:socket4net.AutoWatch">
@@ -2980,7 +3031,7 @@
         </member>
         <member name="M:socket4net.WebsocketDelegate`1.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.WebsocketSession})">
             <summary>
-            多播
+                multicast
             </summary>
             <typeparam name="T"></typeparam>
             <param name="proto"></param>

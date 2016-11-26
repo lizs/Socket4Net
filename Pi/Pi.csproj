@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{27005030-BB5A-44DF-A24C-205CA1C62DCC}</ProjectGuid>
+    <ProjectGuid>{70FC5B68-BD66-44D5-A952-5CDDA0977321}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WClient</RootNamespace>
-    <AssemblyName>WClient</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Pi</RootNamespace>
+    <AssemblyName>Pi</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Pi.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,15 +35,31 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="protobuf-net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\protobuf-net.2.1.0\lib\net451\protobuf-net.dll</HintPath>
+      <HintPath>..\packages\protobuf-net.2.1.0\lib\net451\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="connector\Client2ConnectorDataProtocol.cs" />
+    <Compile Include="connector\EClient2ConnectorOps.cs" />
+    <Compile Include="connector\ClientSession.cs" />
+    <Compile Include="connector\Connector.cs" />
+    <Compile Include="exchanger\Exchanger.cs" />
+    <Compile Include="node\INode.cs" />
+    <Compile Include="node\Node.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,19 +68,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\websocket-sharp\websocket-sharp\websocket-sharp.csproj">
+    <ProjectReference Include="..\..\websocket-sharp\websocket-sharp\websocket-sharp.csproj">
       <Project>{b357bac7-529e-4d81-a0d2-71041b19c8de}</Project>
       <Name>websocket-sharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\socket4net.csproj">
+    <ProjectReference Include="..\Core\socket4net.csproj">
       <Project>{ed0bb4a5-50c0-410f-a55f-94c842c744ac}</Project>
       <Name>socket4net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Proto\Proto.csproj">
-      <Project>{B4AF3B64-7884-4864-B007-DD3B59A084D5}</Project>
-      <Name>Proto</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

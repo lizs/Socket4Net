@@ -33,56 +33,6 @@ namespace socket4net
     /// </summary>
     public static class ObjFactory
     {
-        private static readonly Dictionary<Type, Func<IObj>> CtorCache = new Dictionary<Type, Func<IObj>>();
-
-        private static Func<IObj> GetCtor(Type type)
-        {
-            if (CtorCache.ContainsKey(type)) return CtorCache[type];
-
-            Expression body = Expression.New(type);
-            var ret = Expression.Lambda<Func<IObj>>(body).Compile();
-            CtorCache[type] = ret;
-            return ret;
-        }
-
-        /// <summary>
-        ///     create object of type "type"
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="arg"></param>
-        /// <param name="start"></param>
-        /// <returns></returns>
-        public static IObj Create(Type type, ObjArg arg, bool start)
-        {
-            var ctor = GetCtor(type);
-            var obj = ctor();
-            obj.Init(arg);
-
-            if (start)
-                obj.Start();
-
-            return obj;
-        }
-
-        /// <summary>
-        ///     create object of type "T"
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="arg"></param>
-        /// <param name="start"></param>
-        /// <returns></returns>
-        public static T Create<T>(ObjArg arg, bool start) where T : IObj
-        {
-            var obj = Create(typeof (T), arg, start);
-            return (T) obj;
-        }
-
-        /// <summary>
-        ///     clear the constructors cache
-        /// </summary>
-        public static void ClearCtorCache()
-        {
-            CtorCache.Clear();
-        }
+        
     }
 }

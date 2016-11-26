@@ -101,12 +101,12 @@ namespace socket4net
             // performance monitor
             if (more.MonitorEnabled)
             {
-                var monitor = New<PerformanceMonitor>(ObjArg.Empty);
+                var monitor = Create<PerformanceMonitor>(ObjArg.Empty, false);
                 GlobalVarPool.Ins.Set(GlobalVarPool.NameOfMonitor, monitor);
             }
 
             // service
-            var service = New<Service>(ObjArg.Empty);
+            var service = Create<Service>(ObjArg.Empty, false);
             GlobalVarPool.Ins.Set(GlobalVarPool.NameOfLogicService, service);
         }
 

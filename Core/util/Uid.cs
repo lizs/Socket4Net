@@ -32,7 +32,7 @@ namespace socket4net
         ///     create an guid
         /// </summary>
         /// <returns></returns>
-        public static string New()
+        public static string Create()
         {
             return Guid.NewGuid().ToString("N");
         }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using socket4net;
-using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace WServer
@@ -12,7 +9,7 @@ namespace WServer
         static void Main(string[] args)
         {
             // 创建并启动Launcher
-            Obj.New<Launcher>(LauncherArg.Default, true);
+            Obj.Create<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动服务器
             var port = args.IsNullOrEmpty() ? 80 : int.Parse(args[0]);
@@ -21,9 +18,9 @@ namespace WServer
             wssv.Start();
             if (wssv.IsListening)
             {
-                Console.WriteLine("Listening on port {0}, and providing WebSocket services:", wssv.Port);
+                Console.WriteLine($"Listening on port {wssv.Port}, and providing WebSocket services:");
                 foreach (var path in wssv.WebSocketServices.Paths)
-                    Console.WriteLine("- {0}", path);
+                    Console.WriteLine($"- {path}");
             }
             
             Console.WriteLine("Press any key to exit!");

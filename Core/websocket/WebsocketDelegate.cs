@@ -96,7 +96,7 @@ namespace socket4net
                 else if (e.IsText)
                 {
                     PerformanceMonitor.Ins.RecordRead(e.Data.Length);
-                    await OnMessage(e.Data);
+                    OnMessage(e.Data);
                 }
                 else
                 {
@@ -149,7 +149,7 @@ namespace socket4net
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        private async Task OnMessage(string data)
+        private static void OnMessage(string data)
         {
             throw new NotImplementedException();
         }
@@ -234,7 +234,7 @@ namespace socket4net
                     break;
             }
         }
-
+            
         /// <summary>
         ///     asynchronous broadcast bytes
         ///     thread safe
@@ -308,17 +308,17 @@ namespace socket4net
         protected Func<byte[], IDataProtocol> DataParser { get; set; } = data => PiSerializer.Deserialize<DefaultDataProtocol>(data);
         
         /// <summary>
-        /// 多播
+        ///     multicast
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="proto"></param>
         /// <param name="sessions"></param>
-        public void MultiCast<T>(T proto, IEnumerable<WebsocketSession> sessions) where T : IDataProtocol
+        public async void MultiCast<T>(T proto, IEnumerable<WebsocketSession> sessions) where T : IDataProtocol
         {
             var data = PiSerializer.Serialize(PackPush(proto));
             foreach (var session in sessions)
             {
-                session.SendAsync(data);
+                await session.SendAsync(data);
             }
         }
 
@@ -397,15 +397,12 @@ namespace socket4net
 
             // send
             var sendRet = await SendAsync(PiSerializer.Serialize(pack));
-            if (!sendRet)
-            {
-                Action<bool, byte[]> _;
-                _requestPool.TryRemove(serial, out _);
-                _ = _ ?? cb;
+            if (sendRet) return await tcs.Task;
 
-                _(false, null);
-            }
-
+            Action<bool, byte[]> _;
+            _requestPool.TryRemove(serial, out _);
+            _ = _ ?? cb;
+            _(false, null);
             return await tcs.Task;
         }
 

@@ -125,7 +125,7 @@ namespace socket4net
         {
             if (Exist(arg.Key)) return null;
 
-            var ret = New<T>(arg, start);
+            var ret = Obj.Create<T>(arg, start);
             Add(ret);
             EventObjCreated?.Invoke(ret);
 
@@ -144,7 +144,7 @@ namespace socket4net
             if (Exist(arg.Key)) return null;
             if (!type.IsSubclassOf(typeof(TValue))) return null;
 
-            var ret = New(type, arg, start);
+            var ret = Obj.Create(type, arg, start);
             var obj = ret as TValue;
             Add(obj);
             EventObjCreated?.Invoke(obj);

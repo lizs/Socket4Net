@@ -33,7 +33,7 @@ namespace socket4net
         /// <summary>
         ///  unique key
         /// </summary>
-        public TKey Key { get; }
+        public TKey Key { get; protected set; }
 
         /// <summary>
         ///     constructor

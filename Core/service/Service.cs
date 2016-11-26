@@ -144,8 +144,7 @@ namespace socket4net
             base.OnStart();
 
             Scheduler = new TimerScheduler(this);
-            CoroutineScheduler = New<CoroutineScheduler>(new ObjArg(this));
-            CoroutineScheduler.Start();
+            CoroutineScheduler = Create<CoroutineScheduler>(new ObjArg(this), true);
 
             if (_workingQueue != null
                 || _workingThread != null)

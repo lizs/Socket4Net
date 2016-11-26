@@ -5,9 +5,31 @@ using WebSocketSharp;
 namespace socket4net
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public class WebsocketClientArg : UniqueObjArg<string>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="key"></param>
+        /// <param name="url"></param>
+        public WebsocketClientArg(IObj owner, string key, string url) : base(owner, key)
+        {
+            Url = url;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Url { get; }
+    }
+
+    /// <summary>
     ///     websocket client
     /// </summary>
-    public class WebsocketClient : IWebsocketDelegateHost
+    public class WebsocketClient : UniqueObj<string>, IWebsocketDelegateHost
     {
         private WebsocketDelegate<WebsocketClient> _delegate;
         private WebsocketDelegate<WebsocketClient> SessionDelegate => _delegate ?? (_delegate = new WebsocketDelegate<WebsocketClient>(this));
@@ -31,39 +53,48 @@ namespace socket4net
         /// Occurs when the WebSocket connection has been established.
         /// </summary>
         public event EventHandler OnOpen;
-
+        
         /// <summary>
-        ///     initialize client with a websocket
+        ///    internal called when an Obj is initialized
         /// </summary>
-        /// <param name="ws"></param>
-        public WebsocketClient(WebSocket ws)
+        /// <param name="arg"></param>
+        protected override void OnInit(ObjArg arg)
         {
-            _websocket = ws;
-            _websocket.OnOpen += onOpen;
-            _websocket.OnMessage += onMessage;
-            _websocket.OnError += onError;
-            _websocket.OnClose += onClose;
+            base.OnInit(arg);
+
+            var more = arg as WebsocketClientArg;
+            _websocket = new WebSocket(more?.Url);
+            _websocket.OnOpen += OpenHandler;
+            _websocket.OnMessage += MessageHandler;
+            _websocket.OnError += ErrorHandler;
+            _websocket.OnClose += CloseHandler;
         }
 
-        private void onClose(object sender, CloseEventArgs e)
+
+        private void CloseHandler(object sender, CloseEventArgs e)
         {
             SessionDelegate.OnClose(e);
             OnClose?.Invoke(sender, e);
         }
 
-        private void onError(object sender, ErrorEventArgs e)
+        private void ErrorHandler(object sender, ErrorEventArgs e)
         {
             SessionDelegate.OnError(e);
             OnError?.Invoke(sender, e);
         }
 
-        public void onMessage(object sender, MessageEventArgs e)
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MessageHandler(object sender, MessageEventArgs e)
         {
             SessionDelegate.OnMessage(e);
             OnMessage?.Invoke(sender, e);
         }
 
-        private void onOpen(object sender, EventArgs e)
+        private void OpenHandler(object sender, EventArgs e)
         {
             SessionDelegate.OnOpen();
             OnOpen?.Invoke(sender, e);
@@ -72,13 +103,36 @@ namespace socket4net
         /// <summary>
         ///  underline websocket
         /// </summary>
-        private readonly WebSocket _websocket;
+        private WebSocket _websocket;
 
+        /// <summary>
+        ///     specify if connection is alive
+        /// </summary>
+        public bool Connected => _websocket != null && _websocket.IsAlive;
+
+        /// <summary>
+        ///    internal called when an Obj is to be destroyed
+        /// </summary>
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            Close();
+        }
+
+        /// <summary>
+        ///     close session
+        /// </summary>
         public void Close()
         {
             _websocket?.Close();
+            _websocket = null;
         }
 
+        /// <summary>
+        ///     send async
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="cb"></param>
         public void SendAsync(byte[] bytes, Action<bool> cb)
         {
             _websocket?.SendAsync(bytes, b =>
@@ -96,11 +150,13 @@ namespace socket4net
             _websocket?.Send(bytes);
         }
 
+        /// <summary>
+        ///     
+        /// </summary>
         public void ConnectAsync()
         {
             _websocket?.ConnectAsync();
         }
-
 
         /// <summary>
         ///     handle request
@@ -153,3 +209,4 @@ namespace socket4net
         }
     }
 }
+    

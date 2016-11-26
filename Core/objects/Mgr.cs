@@ -154,9 +154,9 @@ namespace socket4net
         /// <param name="arg"></param>
         /// <param name="start"></param>
         /// <returns></returns>
-        public T Create<T>(ObjArg arg, bool start) where T : class, TValue, new()
+        public new T Create<T>(ObjArg arg, bool start) where T : class, TValue, new()
         {
-            var ret = New<T>(arg, start);
+            var ret = Obj.Create<T>(arg, start);
             _items.Add(ret);
             return ret;
         }

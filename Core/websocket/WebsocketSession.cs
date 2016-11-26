@@ -7,6 +7,14 @@ using WebSocketSharp.Server;
 namespace socket4net
 {
     /// <summary>
+    ///     interface of message handler
+    /// </summary>
+    public interface IWebsocketHandler
+    {
+        
+    }
+
+    /// <summary>
     ///     websocket session abstraction
     /// </summary>
     public abstract class WebsocketSession : WebSocketBehavior, IWebsocketDelegateServerHost
@@ -140,21 +148,13 @@ namespace socket4net
             Send(data);
         }
 
-        void IWebsocketDelegateHost.Close()
+        /// <summary>
+        ///     close session
+        /// </summary>
+        public void Close()
         {
             Context.WebSocket.Close();
         }
-
-        /// <summary>
-        ///     send a proto asynchronous
-        /// </summary>
-        /// <param name="proto"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-//        public async Task<RpcResult> SendAsync<T>(T proto) where T : IDataProtocol
-//        {
-//            return await SessionDelegate.SendAsync(proto);
-//        }
         
         /// <summary>
         ///     handle request

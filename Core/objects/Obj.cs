@@ -24,6 +24,8 @@
 #endregion
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 #if NET45
 using System.Threading.Tasks;
 #endif
@@ -45,6 +47,15 @@ namespace socket4net
         /// </summary>
         /// <param name="owner"></param>
         public ObjArg(IObj owner)
+        {
+            Owner = owner;
+        }
+
+        /// <summary>
+        ///     set owner
+        /// </summary>
+        /// <param name="owner"></param>
+        public void SetOwner(IObj owner)
         {
             Owner = owner;
         }
@@ -384,39 +395,30 @@ namespace socket4net
             return Name;
         }
 
-        /// <summary>
-        ///     Create an obj of type 'T' with arg
-        ///     If 'start' == true, Obj will be started after initialized
-        /// </summary>
-        /// <returns></returns>
-        public static T New<T>(ObjArg arg, bool start = false) where T : IObj, new()
-        {
-            var ret = new T();
-            ret.Init(arg);
-            if (start)
-                ret.Start();
-            return ret;
-        }
+        ///// <summary>
+        /////     Create an obj of type 'T' with arg
+        /////     If 'start' == true, Obj will be started after initialized
+        ///// </summary>
+        ///// <returns></returns>
+        //public static T Create<T>(ObjArg arg, bool start = false) where T : IObj, new()
+        //{
+        //    var ret = new T();
+        //    ret.Init(arg);
+        //    if (start)
+        //        ret.Start();
+        //    return ret;
+        //}
 
-        /// <summary>
-        ///     Create an obj of 'type' with arg
-        ///     If 'start' == true, Obj will be started after initialized
-        /// </summary>
-        /// <returns></returns>
-        public static IObj New(Type type, ObjArg arg, bool start = false)
-        {
-            return ObjFactory.Create(type, arg, start);
-        }
-
-        /// <summary>
-        ///     Create an obj of 'type' with arg and return 'obj as T'
-        ///     If 'start' == true, Obj will be started after initialized
-        /// </summary>
-        /// <returns></returns>
-        public static T New<T>(Type type, ObjArg arg, bool start = false) where T : class, IObj
-        {
-            return New(type, arg, start) as T;
-        }
+        
+        ///// <summary>
+        /////     Create an obj of 'type' with arg and return 'obj as T'
+        /////     If 'start' == true, Obj will be started after initialized
+        ///// </summary>
+        ///// <returns></returns>
+        //public static T Create<T>(Type type, ObjArg arg, bool start = false) where T : class, IObj
+        //{
+        //    return Create(type, arg, start) as T;
+        //}
 
         /// <summary>
         ///     Initialize
@@ -513,5 +515,61 @@ namespace socket4net
         {
             return ++_seed;
         }
+
+        #region 对象工厂
+
+        private static readonly Dictionary<Type, Func<IObj>> CtorCache = new Dictionary<Type, Func<IObj>>();
+
+        private static Func<IObj> GetCtor(Type type)
+        {
+            if (CtorCache.ContainsKey(type)) return CtorCache[type];
+
+            Expression body = Expression.New(type);
+            var ret = Expression.Lambda<Func<IObj>>(body).Compile();
+            CtorCache[type] = ret;
+            return ret;
+        }
+
+        /// <summary>
+        ///     create object of type "type"
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="arg"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static IObj Create(Type type, ObjArg arg, bool start)
+        {
+            var ctor = GetCtor(type);
+            var obj = ctor();
+            obj.Init(arg);
+
+            if (start)
+                obj.Start();
+
+            return obj;
+        }
+
+        /// <summary>
+        ///     create object of type "T"
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static T Create<T>(ObjArg arg, bool start) where T : IObj
+        {
+            var obj = Create(typeof(T), arg, start);
+            return (T) obj;
+        }
+
+        /// <summary>
+        ///     clear the constructors cache
+        /// </summary>
+        public static void ClearCtorCache()
+        {
+            CtorCache.Clear();
+        }
+
+        #endregion
     }
 }

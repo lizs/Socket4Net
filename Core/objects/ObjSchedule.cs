@@ -271,6 +271,11 @@ namespace socket4net
             return true;
         }
 
+        /// <summary>
+        ///     Excute 'action' everyday's 'time' clock
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="time"></param>
         public async Task<bool> InvokeAsync(Action action, TimeSpan time)
         {
             var now = DateTime.Now;
@@ -282,6 +287,11 @@ namespace socket4net
             return await InvokeAsync(action, delay);
         }
 
+        /// <summary>
+        ///     Excute 'action' when 'when'
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="when"></param>
         public async Task<bool> InvokeAsync(Action action, DateTime when)
         {
             var now = DateTime.Now;
@@ -291,6 +301,11 @@ namespace socket4net
             return await InvokeAsync(action, delay);
         }
 
+        /// <summary>
+        ///     Excute 'action' after 'delay' ms
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="delay"></param>
         public async Task<bool> InvokeAsync(Action action, uint delay)
         {
             var tcs = new TaskCompletionSource<bool>();
