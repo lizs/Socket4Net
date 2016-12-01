@@ -953,6 +953,13 @@
             <param name="action"></param>
             <param name="param"></param>
         </member>
+        <member name="M:socket4net.Service.Perform``1(System.Func{``0,System.Threading.Tasks.Task{socket4net.RpcResult}},``0)">
+            <summary>
+                异步执行
+            </summary>
+            <param name="action"></param>
+            <param name="param"></param>
+        </member>
         <member name="M:socket4net.Service.OnStart">
             <summary>
                 Invoked when obj started
@@ -3524,6 +3531,16 @@
                 excute
             </summary>
         </member>
+        <member name="T:socket4net.IAsyncJob">
+            <summary>
+                异步任务接口
+            </summary>
+        </member>
+        <member name="M:socket4net.IAsyncJob.DoAsync">
+            <summary>
+                excute
+            </summary>
+        </member>
         <member name="T:socket4net.Job">
             <summary>
             
@@ -3556,6 +3573,29 @@
         <member name="M:socket4net.Job`1.Do">
             <summary>
                 excute
+            </summary>
+        </member>
+        <member name="T:socket4net.AsyncJob`1">
+            <summary>
+                异步任务
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.AsyncJob`1.#ctor(System.Func{`0,System.Threading.Tasks.Task{socket4net.RpcResult}},`0)">
+            <summary>
+            
+            </summary>
+            <param name="proc"></param>
+            <param name="param"></param>
+        </member>
+        <member name="M:socket4net.AsyncJob`1.Do">
+            <summary>
+                excute
+            </summary>
+        </member>
+        <member name="M:socket4net.AsyncJob`1.DoAsync">
+            <summary>
+                异步执行
             </summary>
         </member>
         <member name="T:socket4net.IWebsocketDelegateHost">
@@ -3613,9 +3653,13 @@
         </member>
         <member name="M:socket4net.WebsocketDelegate`1.#ctor(`0)">
             <summary>
-            
             </summary>
             <param name="host"></param>
+        </member>
+        <member name="P:socket4net.WebsocketDelegate`1.DataParser">
+            <summary>
+                Get/Set custom data parser
+            </summary>
         </member>
         <member name="M:socket4net.WebsocketDelegate`1.OnMessage(WebSocketSharp.MessageEventArgs)">
             <summary>
@@ -3637,12 +3681,50 @@
         </member>
         <member name="M:socket4net.WebsocketDelegate`1.OnClose(WebSocketSharp.CloseEventArgs)">
             <summary>
-            Called when the WebSocket connection used in a session has been closed.
+                Called when the WebSocket connection used in a session has been closed.
             </summary>
             <param name="e">
-            A <see cref="T:WebSocketSharp.CloseEventArgs"/> that represents the event data passed to
-            a <see cref="E:WebSocketSharp.WebSocket.OnClose"/> event.
+                A <see cref="T:WebSocketSharp.CloseEventArgs" /> that represents the event data passed to
+                a <see cref="E:WebSocketSharp.WebSocket.OnClose" /> event.
             </param>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.WebsocketSession})">
+            <summary>
+                multicast
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <param name="sessions"></param>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync``1(``0)">
+            <summary>
+                request an data protocol asynchronous
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="proto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <param name="cb"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.Push``1(``0)">
+            <summary>
+            </summary>
+            <param name="proto"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync(System.UInt16,socket4net.RpcPackage)">
+            <summary>
+                request asynchronous
+                ordered by "serial"
+            </summary>
+            <param name="serial"></param>
+            <param name="pack"></param>
+            <returns></returns>
         </member>
         <member name="M:socket4net.WebsocketDelegate`1.OnMessage(System.String)">
             <summary>
@@ -3690,49 +3772,6 @@
             </summary>
             <param name="proto"></param>
             <typeparam name="T"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="P:socket4net.WebsocketDelegate`1.DataParser">
-            <summary>
-                Get/Set custom data parser
-            </summary>
-        </member>
-        <member name="M:socket4net.WebsocketDelegate`1.MultiCast``1(``0,System.Collections.Generic.IEnumerable{socket4net.WebsocketSession})">
-            <summary>
-                multicast
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="proto"></param>
-            <param name="sessions"></param>
-        </member>
-        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync``1(``0)">
-            <summary>
-                request an data protocol asynchronous
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="proto"></param>
-            <returns></returns>
-        </member>
-        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync``1(``0,System.Action{System.Boolean,System.Byte[]})">
-            <summary>
-            </summary>
-            <param name="proto"></param>
-            <param name="cb"></param>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:socket4net.WebsocketDelegate`1.Push``1(``0)">
-            <summary>
-            </summary>
-            <param name="proto"></param>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:socket4net.WebsocketDelegate`1.RequestAsync(System.UInt16,socket4net.RpcPackage)">
-            <summary>
-                request asynchronous
-                ordered by "serial"
-            </summary>
-            <param name="serial"></param>
-            <param name="pack"></param>
             <returns></returns>
         </member>
     </members>

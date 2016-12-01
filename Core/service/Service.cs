@@ -29,6 +29,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace socket4net
 {
@@ -137,6 +138,20 @@ namespace socket4net
         }
 
         /// <summary>
+        ///     异步执行
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="param"></param>
+        public void Perform(Func<Task<RpcResult>> action)
+        {
+            var w = new AsyncJob(action);
+            if (!_workingQueue.TryAdd(w))
+            {
+                Logger.Ins.Error($"Working queue of capacity [{QueueCapacity}] is full, action discarded!");
+            }
+        }
+
+        /// <summary>
         ///     Invoked when obj started
         /// </summary>
         protected override void OnStart()
@@ -214,7 +229,7 @@ namespace socket4net
                             PerformanceMonitor.Ins.RecordJob();
 
                             periodCounter--;
-                            if (periodCounter >= 1) continue;
+                            if (periodCounter > 0) continue;
 
                             if (_watch.ElapsedMilliseconds - t1 >= Period)
                             {

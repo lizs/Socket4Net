@@ -23,6 +23,7 @@
 //   * */
 #endregion
 using System;
+using System.Threading.Tasks;
 
 namespace socket4net
 {
@@ -35,6 +36,17 @@ namespace socket4net
         ///     excute
         /// </summary>
         void Do();
+    }
+
+    /// <summary>
+    ///     异步任务接口
+    /// </summary>
+    public interface IAsyncJob : IJob
+    {
+        /// <summary>
+        ///     excute
+        /// </summary>
+        Task<RpcResult> DoAsync();
     }
 
     /// <summary>
@@ -88,6 +100,44 @@ namespace socket4net
         public void Do()
         {
             _procedure?.Invoke(_param);
+        }
+    }
+
+    /// <summary>
+    ///     异步任务
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public struct AsyncJob : IAsyncJob
+    {
+        private readonly Func<Task<RpcResult>> _procedure;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="proc"></param>
+        /// <param name="param"></param>
+        public AsyncJob(Func<Task<RpcResult>> proc)
+        {
+            _procedure = proc;
+        }
+
+        /// <summary>
+        ///     excute
+        /// </summary>
+        public void Do()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        ///     异步执行
+        /// </summary>
+        public async Task<RpcResult> DoAsync()
+        {
+            if(_procedure == null)
+                return RpcResult.Failure;
+
+            return await _procedure.Invoke();
         }
     }
 }
