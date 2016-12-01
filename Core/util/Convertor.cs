@@ -59,11 +59,10 @@ namespace socket4net
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static IList GetEmptyList(Type type)
+        public static IList MakeEmptyList(Type type)
         {
             var constructor = typeof(List<>).MakeGenericType(type).GetConstructor(Type.EmptyTypes);
-            if (constructor == null) return null;
-            return (IList)constructor.Invoke(null);
+            return (IList) constructor?.Invoke(null);
         }
 
         /// <summary>
@@ -97,7 +96,7 @@ namespace socket4net
             if (typeof(IParsableFromString).IsAssignableFrom(type))
             {
                 var ci = type.GetConstructor(new[] { typeof(string) });
-                return ci.Invoke(new object[] { str });
+                return ci?.Invoke(new object[] { str });
             }
 
             if (type == typeof(Type))
@@ -110,10 +109,7 @@ namespace socket4net
                 return TimeSpan.Parse(str);
             }
 
-            if (type.IsEnum)
-                return Enum.Parse(type, str, true);
-            
-            return  Convert.ChangeType(str, type);
+            return type.IsEnum ? Enum.Parse(type, str, true) : Convert.ChangeType(str, type);
         }
 
         /// <summary>
@@ -137,7 +133,7 @@ namespace socket4net
         /// <returns></returns>
         public static IList ToList(string strInput, Type type, params char[] separator)
         {
-            var lst = GetEmptyList(type);
+            var lst = MakeEmptyList(type);
             if (strInput.IsNullOrWhiteSpace())
                 return lst;
 

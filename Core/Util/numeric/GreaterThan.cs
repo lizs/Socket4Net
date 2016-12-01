@@ -27,6 +27,10 @@ using System.Linq.Expressions;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     > 比较符
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class GreaterThan<T>
     {
         private static bool _compiled;

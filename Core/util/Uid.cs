@@ -26,6 +26,9 @@ using System;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     全局唯一ID生成
+    /// </summary>
     public static class Uid
     {
         /// <summary>

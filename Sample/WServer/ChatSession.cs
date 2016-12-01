@@ -7,23 +7,30 @@ namespace WServer
 {
     public class ChatSession : WebsocketSession
     {
-        public override async Task<RpcResult> OnRequest(IDataProtocol rq)
+        /// <summary>
+        ///     handle request
+        /// </summary>
+        /// <param name="rq"></param>
+        /// <returns></returns>
+        public override Task<RpcResult> OnRequest(IDataProtocol rq)
         {
             var more = rq as DefaultDataProtocol;
 
             switch ((EOps)more.Ops)
             {
                 case EOps.Reqeust:
-                {
-                    var proto = PiSerializer.Deserialize<RequestProto>(more.Data);
-                    return RpcResult.MakeSuccess(new ResponseProto
                     {
-                        Message = $"Response from server : {proto.Message}"
-                    });
-                }
+                        var proto = PbSerializer.Deserialize<RequestProto>(more.Data);
+                        var ret = RpcResult.MakeSuccess(new ResponseProto
+                        {
+                            Message = $"Response from server : {proto.Message}"
+                        });
+
+                        return Task.FromResult(ret);
+                    }
 
                 default:
-                    return RpcResult.Failure;
+                    return Task.FromResult(RpcResult.Failure);
             }
         }
 
@@ -34,13 +41,13 @@ namespace WServer
             {
                 case EOps.Push:
                 {
-                    var proto = PiSerializer.Deserialize<PushProto>(more.Data);
+                    var proto = PbSerializer.Deserialize<PushProto>(more.Data);
 
                     // ¹ã²¥Àý×Ó
                     return await BroadcastAsync(new DefaultDataProtocol
                     {
                         Ops = (short) EOps.Push,
-                        Data = PiSerializer.Serialize(new PushProto
+                        Data = PbSerializer.Serialize(new PushProto
                         {
                             Message = ID + " : " + proto.Message
                         })

@@ -162,7 +162,7 @@ namespace socket4net
         /// <exception cref="NotImplementedException"></exception>
         private async Task OnMessage(byte[] data)
         {
-            var pack = PiSerializer.Deserialize<RpcPackage>(data);
+            var pack = PbSerializer.Deserialize<RpcPackage>(data);
 
             switch (pack.Type)
             {
@@ -264,7 +264,7 @@ namespace socket4net
         /// <returns></returns>
         public async Task<RpcResult> BroadcastAsync<T>(T proto) where T : IDataProtocol
         {
-            var data = PiSerializer.Serialize(PackPush(proto));
+            var data = PbSerializer.Serialize(PackPush(proto));
             return await BroadcastAsync(data);
         }
 
@@ -296,7 +296,7 @@ namespace socket4net
         /// <returns></returns>
         public async Task<RpcResult> SendAsync<T>(T proto) where T : IDataProtocol
         {
-            var data = PiSerializer.Serialize(proto);
+            var data = PbSerializer.Serialize(proto);
             return await SendAsync(data);
         }
 
@@ -305,7 +305,7 @@ namespace socket4net
         /// <summary>
         ///     Get/Set custom data parser
         /// </summary>
-        protected Func<byte[], IDataProtocol> DataParser { get; set; } = data => PiSerializer.Deserialize<DefaultDataProtocol>(data);
+        protected Func<byte[], IDataProtocol> DataParser { get; set; } = data => PbSerializer.Deserialize<DefaultDataProtocol>(data);
         
         /// <summary>
         ///     multicast
@@ -315,7 +315,7 @@ namespace socket4net
         /// <param name="sessions"></param>
         public async void MultiCast<T>(T proto, IEnumerable<WebsocketSession> sessions) where T : IDataProtocol
         {
-            var data = PiSerializer.Serialize(PackPush(proto));
+            var data = PbSerializer.Serialize(PackPush(proto));
             foreach (var session in sessions)
             {
                 await session.SendAsync(data);
@@ -353,7 +353,7 @@ namespace socket4net
                 return;
             }
 
-            _host.Send(PiSerializer.Serialize(pack));
+            _host.Send(PbSerializer.Serialize(pack));
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace socket4net
         /// <typeparam name="T"></typeparam>
         public async Task<RpcResult> Push<T>(T proto) where T : IDataProtocol
         {
-            return await SendAsync(PiSerializer.Serialize(PackPush(proto)));
+            return await SendAsync(PbSerializer.Serialize(PackPush(proto)));
         }
 
         private ushort GenerateSerial()
@@ -396,7 +396,7 @@ namespace socket4net
             }
 
             // send
-            var sendRet = await SendAsync(PiSerializer.Serialize(pack));
+            var sendRet = await SendAsync(PbSerializer.Serialize(pack));
             if (sendRet) return await tcs.Task;
 
             Action<bool, byte[]> _;
@@ -416,15 +416,15 @@ namespace socket4net
                 Data = data,
             };
 
-            return await SendAsync(PiSerializer.Serialize(pack));
+            return await SendAsync(PbSerializer.Serialize(pack));
         }
         private static RpcPackage PackRequest<T>(T proto) where T : IDataProtocol
         {
-            return new RpcPackage { Type = ERpc.Request, Data = PiSerializer.Serialize(proto) };
+            return new RpcPackage { Type = ERpc.Request, Data = PbSerializer.Serialize(proto) };
         }
         private static RpcPackage PackPush<T>(T proto) where T : IDataProtocol
         {
-            return new RpcPackage { Type = ERpc.Push, Data = PiSerializer.Serialize(proto) };
+            return new RpcPackage { Type = ERpc.Push, Data = PbSerializer.Serialize(proto) };
         }
     }
 }

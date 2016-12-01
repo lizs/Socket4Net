@@ -35,7 +35,7 @@ namespace socket4net
     public static class LinqExt
     {
         /// <summary>
-        /// 
+        ///     是否为空
         /// </summary>
         /// <param name="enumerable"></param>
         /// <typeparam name="T"></typeparam>

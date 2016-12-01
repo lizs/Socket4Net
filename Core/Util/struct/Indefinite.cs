@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace socket4net
 {
     /// <summary>
-    /// 不确定个数
+    ///     不确定个数
     /// </summary>
     public class Indefinite<T> : IParsableFromString
     {
@@ -13,33 +13,28 @@ namespace socket4net
             ParseFromString(str);
         }
 
-        private List<T> _members = new List<T>();
-        public List<T> Members
-        {
-            get { return _members; }
-            set { _members = value; }
-        }
+        public List<T> Members { get; set; } = new List<T>();
 
-        public T First => _members[0];
-        public T Last => _members[_members.Count - 1];
+        public T First => Members[0];
+        public T Last => Members[Members.Count - 1];
 
         public List<T> Range(int offset, int length)
         {
-            if (length > _members.Count) return null;
+            if (length > Members.Count) return null;
 
             var lst = new List<T>(length);
             for (var i = offset; i < length; i++)
-                lst.Add(_members[i]);
+                lst.Add(Members[i]);
 
             return lst;
         }
 
         private void ParseFromString(string str)
         {
-            var array = str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var array = str.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var x in array)
             {
-                _members.Add((T)Convert.ChangeType(x, typeof(T)));
+                Members.Add((T) Convert.ChangeType(x, typeof(T)));
             }
         }
     }

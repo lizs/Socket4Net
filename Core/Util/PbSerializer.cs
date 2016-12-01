@@ -34,9 +34,15 @@ namespace socket4net
     /// </summary>
     public static class Value
     {
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static T As<T>(this byte[] bytes)
         {
-            return PiSerializer.DeserializeValue<T>(bytes);
+            return PbSerializer.DeserializeValue<T>(bytes);
         }
     }
 
@@ -68,7 +74,7 @@ namespace socket4net
     ///     基于protobuf的序列化器
     ///     注：尽可能使用泛型接口
     /// </summary>
-    public static class PiSerializer
+    public static class PbSerializer
     {
         /// <summary>
         ///     序列化一个protobuf实例

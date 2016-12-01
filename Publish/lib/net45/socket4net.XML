@@ -975,12 +975,10 @@
         </member>
         <member name="T:socket4net.WebsocketClientArg">
             <summary>
-            
             </summary>
         </member>
         <member name="M:socket4net.WebsocketClientArg.#ctor(socket4net.IObj,System.String,System.String)">
             <summary>
-            
             </summary>
             <param name="owner"></param>
             <param name="key"></param>
@@ -988,7 +986,6 @@
         </member>
         <member name="P:socket4net.WebsocketClientArg.Url">
             <summary>
-            
             </summary>
         </member>
         <member name="T:socket4net.WebsocketClient">
@@ -996,40 +993,14 @@
                 websocket client
             </summary>
         </member>
-        <member name="E:socket4net.WebsocketClient.OnClose">
-            <summary>
-            Occurs when the WebSocket connection has been closed.
-            </summary>
-        </member>
-        <member name="E:socket4net.WebsocketClient.OnError">
-            <summary>
-            Occurs when the <see cref="T:WebSocketSharp.WebSocket"/> gets an error.
-            </summary>
-        </member>
-        <member name="E:socket4net.WebsocketClient.OnMessage">
-            <summary>
-            Occurs when the <see cref="T:WebSocketSharp.WebSocket"/> receives a message.
-            </summary>
-        </member>
-        <member name="E:socket4net.WebsocketClient.OnOpen">
-            <summary>
-            Occurs when the WebSocket connection has been established.
-            </summary>
-        </member>
-        <member name="M:socket4net.WebsocketClient.OnInit(socket4net.ObjArg)">
-            <summary>
-               internal called when an Obj is initialized
-            </summary>
-            <param name="arg"></param>
-        </member>
         <member name="F:socket4net.WebsocketClient._websocket">
             <summary>
-             underline websocket
+                underline websocket
             </summary>
         </member>
-        <member name="M:socket4net.WebsocketClient.OnDestroy">
+        <member name="P:socket4net.WebsocketClient.Connected">
             <summary>
-               internal called when an Obj is to be destroyed
+                specify if connection is alive
             </summary>
         </member>
         <member name="M:socket4net.WebsocketClient.Close">
@@ -1046,14 +1017,8 @@
         </member>
         <member name="M:socket4net.WebsocketClient.Send(System.Byte[])">
             <summary>
-            
             </summary>
             <param name="bytes"></param>
-        </member>
-        <member name="M:socket4net.WebsocketClient.ConnectAsync">
-            <summary>
-                
-            </summary>
         </member>
         <member name="M:socket4net.WebsocketClient.OnRequest(socket4net.IDataProtocol)">
             <summary>
@@ -1068,6 +1033,47 @@
             </summary>
             <param name="ps"></param>
             <returns></returns>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnClose">
+            <summary>
+                Occurs when the WebSocket connection has been closed.
+            </summary>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnError">
+            <summary>
+                Occurs when the <see cref="T:WebSocketSharp.WebSocket" /> gets an error.
+            </summary>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnMessage">
+            <summary>
+                Occurs when the <see cref="T:WebSocketSharp.WebSocket" /> receives a message.
+            </summary>
+        </member>
+        <member name="E:socket4net.WebsocketClient.OnOpen">
+            <summary>
+                Occurs when the WebSocket connection has been established.
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.OnInit(socket4net.ObjArg)">
+            <summary>
+                internal called when an Obj is initialized
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="M:socket4net.WebsocketClient.MessageHandler(System.Object,WebSocketSharp.MessageEventArgs)">
+            <summary>
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:socket4net.WebsocketClient.OnDestroy">
+            <summary>
+                internal called when an Obj is to be destroyed
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.ConnectAsync">
+            <summary>
+            </summary>
         </member>
         <member name="M:socket4net.WebsocketClient.RequestAsync``1(``0)">
             <summary>
@@ -1229,8 +1235,41 @@
         </member>
         <member name="T:socket4net.Assert">
             <summary>
-            
+                断言
             </summary>
+        </member>
+        <member name="M:socket4net.Assert.NotNull``1(``0,System.String)">
+            <summary>
+                保证目标非空，否则抛出异常
+            </summary>
+            <param name="input"></param>
+            <param name="msg"></param>
+            <typeparam name="T"></typeparam>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:socket4net.Assert.IsTrue(System.Boolean,System.String)">
+            <summary>
+                保证目标为true，否则抛出异常
+            </summary>
+            <param name="boolean"></param>
+            <param name="msg"></param>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="M:socket4net.Assert.ThrowIf(System.Boolean,System.String)">
+            <summary>
+                若目标表达式为true，则抛出异常
+            </summary>
+            <param name="boolean"></param>
+            <param name="msg"></param>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="M:socket4net.Assert.ThrowIfNot(System.Boolean,System.String)">
+            <summary>
+                若目标表达式非true，则抛出异常
+            </summary>
+            <param name="boolean"></param>
+            <param name="msg"></param>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
         </member>
         <member name="T:socket4net.IParsableFromString">
             <summary>
@@ -1249,7 +1288,7 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:socket4net.Convertor.GetEmptyList(System.Type)">
+        <member name="M:socket4net.Convertor.MakeEmptyList(System.Type)">
             <summary>
                 get an empty list
             </summary>
@@ -1295,6 +1334,141 @@
                 extension for dictionary
             </summary>
         </member>
+        <member name="M:socket4net.DictionaryExt.NextValue``2(System.Collections.Generic.Dictionary{``0,``1})">
+            <summary>
+                随机获取字典的值
+            </summary>
+            <param name="input"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.NextPair``2(System.Collections.Generic.Dictionary{``0,``1})">
+            <summary>
+                随机获取字典的键值对
+            </summary>
+            <param name="input"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:socket4net.DictionaryExt.IsNullOrEmpty``2(System.Collections.Generic.Dictionary{``0,``1})">
+            <summary>
+                字典是否为空
+            </summary>
+            <param name="input"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.GetOrReturnDefault``2(System.Collections.Generic.Dictionary{``0,``1},``0)">
+            <summary>
+                获取字典的值，若不存在则返回默认值（值类型默认值）
+            </summary>
+            <param name="input"></param>
+            <param name="key"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.ToListPair``1(System.Collections.Generic.Dictionary{``0,``0})">
+            <summary>
+                将字典转成对列表
+            </summary>
+            <param name="input"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.ToList``1(System.Collections.Generic.Dictionary{``0,``0})">
+            <summary>
+                将字典转成列表（键值依次展开）
+            </summary>
+            <param name="input"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.Get``2(System.Collections.Generic.Dictionary{``0,``1},``0)">
+            <summary>
+                获取字典指定键对应的值
+            </summary>
+            <param name="input"></param>
+            <param name="key"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:socket4net.DictionaryExt.Set``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
+            <summary>
+                设置键值
+            </summary>
+            <param name="input"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="M:socket4net.DictionaryExt.AddIfNotExist``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
+            <summary>
+                若指定键不存在，则添加值，并返回true，否则返回false
+            </summary>
+            <param name="input"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.Merge``2(System.Collections.Generic.Dictionary{``0,``1},socket4net.Pair{``0,``1})">
+            <summary>
+                融合两个字典
+            </summary>
+            <param name="input"></param>
+            <param name="pair"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.Merge``1(System.Collections.Generic.Dictionary{``0,``0},socket4net.Pair{``0})">
+            <summary>
+                将对插入字典
+            </summary>
+            <param name="input"></param>
+            <param name="pair"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.Merge``1(System.Collections.Generic.Dictionary{``0,``0},System.Collections.Generic.List{socket4net.Pair{``0}})">
+            <summary>
+                将对列表融合进字典
+            </summary>
+            <param name="input"></param>
+            <param name="pairs"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.Merge``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
+            <summary>
+                将键值插入字典
+            </summary>
+            <param name="input"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.DictionaryExt.Merge``2(System.Collections.Generic.Dictionary{``0,``1},System.Collections.Generic.Dictionary{``0,``1})">
+            <summary>
+                融合两个字典
+            </summary>
+            <param name="input"></param>
+            <param name="other"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
         <member name="T:socket4net.FileSys">
             <summary>
                 extension for file system
@@ -1316,15 +1490,353 @@
             <param name="searchOption"></param>
             <returns></returns>
         </member>
+        <member name="M:socket4net.FileSys.EnumerateDirectories(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举所有文件夹
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateFilesAndDirectories(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举所有文件和文件夹
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateFilesRelative(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举文件（以相对路径）
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateDirectoriesRelative(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举文件夹（以相对路径）
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateFilesAndDirectoriesRelative(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举文件和文件夹
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateFilesRelativeWithoutExt(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举文件（剔除扩展名）
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateFilesFull(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举文件（全路径）
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateDirectoriesFull(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举文件夹（全路径）
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.EnumerateFilesAndDirectoriesFull(System.String,System.String,System.IO.SearchOption)">
+            <summary>
+                枚举文件和文件夹（全路径）
+            </summary>
+            <param name="dir"></param>
+            <param name="searchPattern"></param>
+            <param name="searchOption"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.Copy(System.String,System.String,System.Boolean)">
+            <summary>
+                拷贝文件
+            </summary>
+            <param name="source"></param>
+            <param name="dest"></param>
+            <param name="overwrite"></param>
+        </member>
+        <member name="M:socket4net.FileSys.CopyDirectory(System.String,System.String,System.Boolean)">
+            <summary>
+                拷贝路径
+            </summary>
+            <param name="source"></param>
+            <param name="dest"></param>
+            <param name="overwrite"></param>
+        </member>
+        <member name="M:socket4net.FileSys.DirectoryExists(System.String)">
+            <summary>
+                是否存在文件夹路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.CreateDirectory(System.String,System.Boolean)">
+            <summary>
+                创建文件夹
+            </summary>
+            <param name="path"></param>
+            <param name="hidden"></param>
+        </member>
+        <member name="M:socket4net.FileSys.DeleteDirectory(System.String)">
+            <summary>
+                删除文件夹（递归删除所有子文件夹）
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:socket4net.FileSys.ReadFile(System.String)">
+            <summary>
+                读文件为文本
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.ReadFileLines(System.String)">
+            <summary>
+                读文件为字符列表
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.IsPathRooted(System.String)">
+            <summary>
+                是否为根路径（如 D://, /home/）
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="P:socket4net.FileSys.CurrentDirectory">
+            <summary>
+                当前工作路径
+            </summary>
+        </member>
+        <member name="P:socket4net.FileSys.NewLine">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.FileSys.GetLastWriteTime(System.String)">
+            <summary>
+                获取文件最近修改时间
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.Move(System.String,System.String)">
+            <summary>
+                移动文件
+            </summary>
+            <param name="source"></param>
+            <param name="dest"></param>
+        </member>
+        <member name="M:socket4net.FileSys.MoveDirectory(System.String,System.String)">
+            <summary>
+                移动文件夹
+            </summary>
+            <param name="source"></param>
+            <param name="dest"></param>
+        </member>
+        <member name="M:socket4net.FileSys.FileExists(System.String)">
+            <summary>
+                文件是否存在
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.FileDelete(System.String)">
+            <summary>
+                删除文件
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:socket4net.FileSys.SplitLines(System.String)">
+            <summary>
+                按照换行符拆分字符串为字符数组
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.WriteToFile(System.String,System.String)">
+            <summary>
+                写文本至文件
+            </summary>
+            <param name="path"></param>
+            <param name="text"></param>
+        </member>
+        <member name="M:socket4net.FileSys.CreateFileStream(System.String,System.IO.FileMode)">
+            <summary>
+                创建文件流
+            </summary>
+            <param name="filePath"></param>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.WriteAllBytes(System.String,System.Byte[])">
+            <summary>
+                写二进制数据至文件
+            </summary>
+            <param name="filePath"></param>
+            <param name="bytes"></param>
+        </member>
+        <member name="M:socket4net.FileSys.GetWorkingDirectory(System.String)">
+            <summary>
+                获取路径的工作路径（文件？返回父目录 ：返回路径）
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.GetFullPath(System.String)">
+            <summary>
+                获取全路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.GetRelativeWorkingDirectory(System.String)">
+            <summary>
+                获取相对于指定路径的相对路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.FileSys.GetNodes(System.String)">
+            <summary>
+                获取路径中的所有节点
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="P:socket4net.FileSys.WorkingDirectory">
+            <summary>
+                
+            </summary>
+        </member>
         <member name="T:socket4net.ListExt">
             <summary>
             extension for list
             </summary>
         </member>
+        <member name="M:socket4net.ListExt.ToStringList``1(System.Collections.Generic.List{``0})">
+            <summary>
+                将输入列表转为字符串列表
+            </summary>
+            <param name="input"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ListExt.AddIfNotExist``1(System.Collections.Generic.List{``0},``0)">
+            <summary>
+                若元素不在列表中，则添加之
+            </summary>
+            <param name="input"></param>
+            <param name="item"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ListExt.Mult``1(System.Collections.Generic.List{socket4net.Pair{``0}},System.Int32)">
+            <summary>
+                返回一个新的列表，该列表元素依次为为输入列表的元素乘以n
+            </summary>
+            <param name="input"></param>
+            <param name="n"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ListExt.Merge(System.Collections.Generic.List{socket4net.Pair{System.Int32}},socket4net.Pair{System.Int32})">
+            <summary>
+                融合对列表
+            </summary>
+            <param name="input"></param>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ListExt.Merge(System.Collections.Generic.List{socket4net.Pair{System.Int32}},System.Collections.Generic.List{socket4net.Pair{System.Int32}})">
+            <summary>
+                融合两个列表
+            </summary>
+            <param name="input"></param>
+            <param name="items"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ListExt.ToPair``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+                拆分列表为对列表
+            </summary>
+            <param name="input"></param>
+            <param name="startIdx"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ListExt.ToDic``1(System.Collections.Generic.List{socket4net.Pair{``0}})">
+            <summary>
+                将对列表转为字典
+            </summary>
+            <param name="input"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.ListExt.Format``1(System.Collections.Generic.List{``0})">
+            <summary>
+                格式化列表为可读字符串
+            </summary>
+            <param name="input"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
         <member name="T:socket4net.Rand">
             <summary>
                 random num generator
             </summary>
+        </member>
+        <member name="M:socket4net.Rand.NextBoolean">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Rand.Next">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Rand.Next(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="max"></param>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.Rand.Next(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <returns></returns>
         </member>
         <member name="M:socket4net.Rand.Next(System.Int32[])">
             <summary>
@@ -1350,21 +1862,88 @@
             <param name="cnt"></param>
             <returns></returns>
         </member>
+        <member name="T:socket4net.StringExt">
+            <summary>
+                字符串扩展
+            </summary>
+        </member>
+        <member name="M:socket4net.StringExt.IsNullOrWhiteSpace(System.String)">
+            <summary>
+                字符串是否为空或仅包含空格
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
         <member name="T:socket4net.Add`1">
             <summary>
+                + 运算
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:socket4net.Add`1.Function">
+            <summary>
+                返回编译过得+运算表达式
+            </summary>
+        </member>
+        <member name="T:socket4net.Compare`1">
+            <summary>
             
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:socket4net.Compare`1.Function">
+            <summary>
+                get the compiled function
+            </summary>
+        </member>
+        <member name="T:socket4net.Equals`1">
+            <summary>
+                = 运算
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:socket4net.Equals`1.Function">
+            <summary>
+                获取编译过得=表达式
+            </summary>
+        </member>
+        <member name="T:socket4net.GreaterThan`1">
+            <summary>
+                > 比较符
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:socket4net.LessThan`1">
+            <summary>
+                小于 比较符
             </summary>
             <typeparam name="T"></typeparam>
         </member>
         <member name="T:socket4net.Multiply`1">
             <summary>
-            
+                乘以
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="P:socket4net.Multiply`1.Function">
+            <summary>
+                获取编译过得乘以表达式
+            </summary>
+        </member>
+        <member name="T:socket4net.Subtract`1">
+            <summary>
+                - 运算
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:socket4net.Subtract`1.Function">
+            <summary>
+                获取编译过的减运算
+            </summary>
+        </member>
         <member name="T:socket4net.Indefinite`1">
             <summary>
-            不确定个数
+                不确定个数
             </summary>
         </member>
         <member name="T:socket4net.Pair`2">
@@ -1382,7 +1961,6 @@
         </member>
         <member name="M:socket4net.Pair`2.#ctor(`0,`1)">
             <summary>
-            
             </summary>
             <param name="key"></param>
             <param name="value"></param>
@@ -1394,13 +1972,19 @@
         </member>
         <member name="P:socket4net.Pair`2.Value">
             <summary>
-             second element of pair
+                second element of pair
             </summary>
         </member>
         <member name="M:socket4net.Pair`2.ToString">
             <summary>Returns a string that represents the current object.</summary>
             <returns>A string that represents the current object.</returns>
             <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:socket4net.Pair`2.Parse(System.String)">
+            <summary>
+                从字符串解析键值
+            </summary>
+            <param name="str"></param>
         </member>
         <member name="T:socket4net.Pair`1">
             <summary>
@@ -1421,13 +2005,83 @@
         </member>
         <member name="T:socket4net.Treble`3">
             <summary>
-            用于解析诸如 1 2 4 + 3 3 5 + 7 6 9 这种类型的string
+                用于解析诸如 1 2 4 + 3 3 5 + 7 6 9 这种类型的string
+            </summary>
+        </member>
+        <member name="T:socket4net.Uid">
+            <summary>
+                全局唯一ID生成
             </summary>
         </member>
         <member name="M:socket4net.Uid.Create">
             <summary>
                 create an guid
             </summary>
+            <returns></returns>
+        </member>
+        <member name="T:socket4net.TaskHelper">
+            <summary>
+                .net Task扩展方法
+            </summary>
+        </member>
+        <member name="M:socket4net.TaskHelper.WrapCallback``1(System.Action{System.Action{``0}})">
+            <summary>
+                 将以回调形式返回的方法包装为一个task
+            </summary>
+            <param name="fun"></param>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.TaskHelper.WrapCallback``2(``0,System.Action{``0,System.Action{``1}})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="fun"></param>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.TaskHelper.WrapCallback``3(``0,``1,System.Action{``0,``1,System.Action{``2}})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <param name="fun"></param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.TaskHelper.WrapCallback``4(``0,``1,``2,System.Action{``0,``1,``2,System.Action{``3}})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <param name="arg3"></param>
+            <param name="fun"></param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="T3"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.TaskHelper.WrapCallback``5(``0,``1,``2,``3,System.Action{``0,``1,``2,``3,System.Action{``4}})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <param name="arg3"></param>
+            <param name="arg4"></param>
+            <param name="fun"></param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="T3"></typeparam>
+            <typeparam name="T4"></typeparam>
+            <typeparam name="TResult"></typeparam>
             <returns></returns>
         </member>
         <member name="M:socket4net.TaskHelper.ExcuteAsync``1(System.Func{``0})">
@@ -1440,10 +2094,81 @@
                 异步执行
             </summary>
         </member>
+        <member name="M:socket4net.TaskHelper.ExcuteAsync``3(``0,``1,System.Func{``0,``1,``2})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <param name="fun"></param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.TaskHelper.ExcuteAsync``4(``0,``1,``2,System.Func{``0,``1,``2,``3})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <param name="arg3"></param>
+            <param name="fun"></param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="T3"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:socket4net.TaskHelper.ExcuteTaskAndReturnByCallback``1(System.Func{System.Threading.Tasks.Task{``0}},System.Action{``0})">
+            <summary>
+            
+            </summary>
+            <param name="fun"></param>
+            <param name="cb"></param>
+            <typeparam name="TResult"></typeparam>
+        </member>
+        <member name="M:socket4net.TaskHelper.ExcuteTaskAndReturnByCallback``2(``0,System.Func{``0,System.Threading.Tasks.Task{``1}},System.Action{``1})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="fun"></param>
+            <param name="cb"></param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="TResult"></typeparam>
+        </member>
+        <member name="M:socket4net.TaskHelper.ExcuteTaskAndReturnByCallback``3(``0,``1,System.Func{``0,``1,System.Threading.Tasks.Task{``2}},System.Action{``2})">
+            <summary>
+            
+            </summary>
+            <param name="arg1"></param>
+            <param name="arg2"></param>
+            <param name="fun"></param>
+            <param name="cb"></param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="TResult"></typeparam>
+        </member>
         <member name="T:socket4net.Coroutine">
             <summary>
                 协程
             </summary>
+        </member>
+        <member name="M:socket4net.Coroutine.#ctor(System.Func{System.Object[],System.Collections.IEnumerator},System.Object[])">
+            <summary>
+                constructor
+            </summary>
+            <param name="fun"></param>
+            <param name="args"></param>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:socket4net.Coroutine.#ctor(System.Func{System.Collections.IEnumerator})">
+            <summary>
+                constructor
+            </summary>
+            <param name="fun"></param>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:socket4net.Coroutine.Update">
             <summary>
@@ -1464,6 +2189,7 @@
         <member name="T:socket4net.DefaultLogger">
             <summary>
                 socket4net's default logger
+                with websocket-sharp's logger implementation
             </summary>
         </member>
         <member name="M:socket4net.DefaultLogger.Debug(System.Object)">
@@ -1524,73 +2250,6 @@
             <param name="e"></param>
         </member>
         <member name="M:socket4net.DefaultLogger.Shutdown">
-            <summary>
-                Destroy logger
-            </summary>
-        </member>
-        <member name="T:socket4net.EmptyLogger">
-            <summary>
-                Empty logger
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Debug(System.Object)">
-            <summary>
-                Log as debug level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Debug(System.String,System.Object[])">
-            <summary>
-                Log as debug level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Error(System.Object)">
-            <summary>
-                Log as error level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Error(System.String,System.Object[])">
-            <summary>
-                Log as error level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Fatal(System.Object)">
-            <summary>
-                Log as fatal level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Fatal(System.String,System.Object[])">
-            <summary>
-                Log as fatal level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Info(System.Object)">
-            <summary>
-                Log as information level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Info(System.String,System.Object[])">
-            <summary>
-                Log as information level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Warn(System.Object)">
-            <summary>
-                Log as warnning level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Warn(System.String,System.Object[])">
-            <summary>
-                Log as warnning level
-            </summary>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Exception(System.String,System.Exception)">
-            <summary>
-                Log exception
-            </summary>
-            <param name="msg"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:socket4net.EmptyLogger.Shutdown">
             <summary>
                 Destroy logger
             </summary>
@@ -2084,6 +2743,10 @@
                 Callback when this watch disposed
             </summary>
         </member>
+        <member name="M:socket4net.AutoWatch.Dispose">
+            <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+            <filterpriority>2</filterpriority>
+        </member>
         <member name="P:socket4net.AutoWatch.ElapsedMilliseconds">
             <summary>
                 Get elapsed ms since this watch constructed
@@ -2096,7 +2759,7 @@
         </member>
         <member name="M:socket4net.LinqExt.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            
+                是否为空
             </summary>
             <param name="enumerable"></param>
             <typeparam name="T"></typeparam>
@@ -2124,6 +2787,14 @@
                 bytes反序列化成Value
             </summary>
         </member>
+        <member name="M:socket4net.Value.As``1(System.Byte[])">
+            <summary>
+                
+            </summary>
+            <param name="bytes"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
         <member name="T:socket4net.ValueProto`1">
             <summary>
                 包装一个值以用在序列化
@@ -2136,13 +2807,13 @@
                 for pb
             </summary>
         </member>
-        <member name="T:socket4net.PiSerializer">
+        <member name="T:socket4net.PbSerializer">
             <summary>
                 基于protobuf的序列化器
                 注：尽可能使用泛型接口
             </summary>
         </member>
-        <member name="M:socket4net.PiSerializer.Serialize``1(``0)">
+        <member name="M:socket4net.PbSerializer.Serialize``1(``0)">
             <summary>
                 序列化一个protobuf实例
             </summary>
@@ -2150,7 +2821,7 @@
             <param name="proto"></param>
             <returns></returns>
         </member>
-        <member name="M:socket4net.PiSerializer.Deserialize``1(System.Byte[])">
+        <member name="M:socket4net.PbSerializer.Deserialize``1(System.Byte[])">
             <summary>
                 反序列化为一个pb实例
             </summary>
@@ -2158,7 +2829,7 @@
             <param name="data"></param>
             <returns></returns>
         </member>
-        <member name="M:socket4net.PiSerializer.SerializeValue``1(``0)">
+        <member name="M:socket4net.PbSerializer.SerializeValue``1(``0)">
             <summary>
                 序列化一个值
                 比如：int, float, long ...
@@ -2167,7 +2838,7 @@
             <param name="value">值</param>
             <returns></returns>
         </member>
-        <member name="M:socket4net.PiSerializer.DeserializeValue``1(System.Byte[])">
+        <member name="M:socket4net.PbSerializer.DeserializeValue``1(System.Byte[])">
             <summary>
                 反序列化为值
             </summary>
@@ -2175,7 +2846,7 @@
             <param name="data"></param>
             <returns></returns>
         </member>
-        <member name="M:socket4net.PiSerializer.Deserialize(System.Type,System.Byte[])">
+        <member name="M:socket4net.PbSerializer.Deserialize(System.Type,System.Byte[])">
             <summary>
                 非泛型方式的反序列化
                 仅用于pb实例
@@ -2188,11 +2859,11 @@
         </member>
         <member name="M:socket4net.LauncherArg.#ctor(System.Boolean,socket4net.ILog,System.Nullable{System.Guid})">
             <summary>
-            
+                ctor
             </summary>
-            <param name="monitorEnabled"></param>
-            <param name="logger"></param>
-            <param name="id"></param>
+            <param name="monitorEnabled">if enable performance monitor</param>
+            <param name="logger">logger</param>
+            <param name="id">specify guid</param>
         </member>
         <member name="P:socket4net.LauncherArg.Logger">
             <summary>
@@ -2206,7 +2877,7 @@
         </member>
         <member name="P:socket4net.LauncherArg.Default">
             <summary>
-            
+                return default launcher arguments
             </summary>
         </member>
         <member name="P:socket4net.LauncherArg.MonitorEnabled">
@@ -2612,31 +3283,28 @@
         </member>
         <member name="M:socket4net.CoroutineScheduler.OnInit(socket4net.ObjArg)">
             <summary>
-               internal called when an Obj is initialized
+                internal called when an Obj is initialized
             </summary>
             <param name="arg"></param>
         </member>
         <member name="M:socket4net.CoroutineScheduler.OnDestroy">
             <summary>
-               internal called when an Obj is to be destroyed
+                internal called when an Obj is to be destroyed
             </summary>
         </member>
         <member name="M:socket4net.CoroutineScheduler.InternalStopCoroutine(socket4net.Coroutine)">
             <summary>
-            
             </summary>
             <param name="coroutine"></param>
         </member>
         <member name="M:socket4net.CoroutineScheduler.InternalStartCoroutine(System.Func{System.Collections.IEnumerator})">
             <summary>
-            
             </summary>
             <param name="fun"></param>
             <returns></returns>
         </member>
         <member name="M:socket4net.CoroutineScheduler.InternalStartCoroutine(System.Func{System.Object[],System.Collections.IEnumerator},System.Object[])">
             <summary>
-            
             </summary>
             <param name="fun"></param>
             <param name="arg"></param>
@@ -3066,11 +3734,6 @@
             <param name="serial"></param>
             <param name="pack"></param>
             <returns></returns>
-        </member>
-        <member name="P:Pi.Common.Numeric.Compare`1.Function">
-            <summary>
-                get the compiled function
-            </summary>
         </member>
     </members>
 </doc>

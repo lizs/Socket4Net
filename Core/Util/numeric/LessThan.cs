@@ -27,6 +27,10 @@ using System.Linq.Expressions;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     小于 比较符
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class LessThan<T>
     {
         private static bool _compiled;

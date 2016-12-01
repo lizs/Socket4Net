@@ -68,7 +68,7 @@ namespace socket4net
         /// <returns></returns>
         public static RpcResult MakeSuccess<T>(T proto)
         {
-            return new RpcResult(true, PiSerializer.Serialize(proto));
+            return new RpcResult(true, PbSerializer.Serialize(proto));
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace socket4net
         /// <returns></returns>
         public static RpcResult MakeFailure<T>(T proto)
         {
-            return new RpcResult(false, PiSerializer.Serialize(proto));
+            return new RpcResult(false, PbSerializer.Serialize(proto));
         }
     }
 }

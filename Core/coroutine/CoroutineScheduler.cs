@@ -1,4 +1,5 @@
 ﻿#region MIT
+
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -21,7 +22,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //   * */
+
 #endregion
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,7 +41,7 @@ namespace socket4net
         private readonly LinkedList<Coroutine> _dead = new LinkedList<Coroutine>();
 
         /// <summary>
-        ///    internal called when an Obj is initialized
+        ///     internal called when an Obj is initialized
         /// </summary>
         /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
@@ -48,7 +51,7 @@ namespace socket4net
         }
 
         /// <summary>
-        ///    internal called when an Obj is to be destroyed
+        ///     internal called when an Obj is to be destroyed
         /// </summary>
         protected override void OnDestroy()
         {
@@ -62,7 +65,6 @@ namespace socket4net
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="coroutine"></param>
         public void InternalStopCoroutine(Coroutine coroutine)
@@ -72,7 +74,6 @@ namespace socket4net
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="fun"></param>
         /// <returns></returns>
@@ -84,7 +85,6 @@ namespace socket4net
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="fun"></param>
         /// <param name="arg"></param>

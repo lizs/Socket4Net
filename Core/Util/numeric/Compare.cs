@@ -22,11 +22,16 @@
 //  THE SOFTWARE.
 //   * */
 #endregion
+
 using System;
 using System.Linq.Expressions;
 
-namespace Pi.Common.Numeric
+namespace socket4net
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class Compare<T>
     {
         private static bool _compiled;

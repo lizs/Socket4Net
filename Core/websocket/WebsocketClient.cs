@@ -5,12 +5,10 @@ using WebSocketSharp;
 namespace socket4net
 {
     /// <summary>
-    /// 
     /// </summary>
     public class WebsocketClientArg : UniqueObjArg<string>
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="owner"></param>
         /// <param name="key"></param>
@@ -21,7 +19,6 @@ namespace socket4net
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string Url { get; }
     }
@@ -32,30 +29,89 @@ namespace socket4net
     public class WebsocketClient : UniqueObj<string>, IWebsocketDelegateHost
     {
         private WebsocketDelegate<WebsocketClient> _delegate;
-        private WebsocketDelegate<WebsocketClient> SessionDelegate => _delegate ?? (_delegate = new WebsocketDelegate<WebsocketClient>(this));
-        
+
         /// <summary>
-        /// Occurs when the WebSocket connection has been closed.
+        ///     underline websocket
+        /// </summary>
+        private WebSocket _websocket;
+
+        private WebsocketDelegate<WebsocketClient> SessionDelegate
+            => _delegate ?? (_delegate = new WebsocketDelegate<WebsocketClient>(this));
+
+        /// <summary>
+        ///     specify if connection is alive
+        /// </summary>
+        public bool Connected => _websocket != null && _websocket.IsAlive;
+
+        /// <summary>
+        ///     close session
+        /// </summary>
+        public void Close()
+        {
+            _websocket?.Close();
+            _websocket = null;
+        }
+
+        /// <summary>
+        ///     send async
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="cb"></param>
+        public void SendAsync(byte[] bytes, Action<bool> cb)
+        {
+            _websocket?.SendAsync(bytes, b => { cb?.Invoke(b); });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="bytes"></param>
+        public void Send(byte[] bytes)
+        {
+            _websocket?.Send(bytes);
+        }
+
+        /// <summary>
+        ///     handle request
+        /// </summary>
+        /// <param name="rq"></param>
+        /// <returns></returns>
+        public virtual Task<RpcResult> OnRequest(IDataProtocol rq)
+        {
+            return Task.FromResult(RpcResult.Failure);
+        }
+
+        /// <summary>
+        ///     handle push
+        /// </summary>
+        /// <param name="ps"></param>
+        /// <returns></returns>
+        public virtual Task<bool> OnPush(IDataProtocol ps)
+        {
+            return Task.FromResult(false);
+        }
+
+        /// <summary>
+        ///     Occurs when the WebSocket connection has been closed.
         /// </summary>
         public event EventHandler<CloseEventArgs> OnClose;
 
         /// <summary>
-        /// Occurs when the <see cref="WebSocket"/> gets an error.
+        ///     Occurs when the <see cref="WebSocket" /> gets an error.
         /// </summary>
         public event EventHandler<ErrorEventArgs> OnError;
 
         /// <summary>
-        /// Occurs when the <see cref="WebSocket"/> receives a message.
+        ///     Occurs when the <see cref="WebSocket" /> receives a message.
         /// </summary>
         public event EventHandler<MessageEventArgs> OnMessage;
 
         /// <summary>
-        /// Occurs when the WebSocket connection has been established.
+        ///     Occurs when the WebSocket connection has been established.
         /// </summary>
         public event EventHandler OnOpen;
-        
+
         /// <summary>
-        ///    internal called when an Obj is initialized
+        ///     internal called when an Obj is initialized
         /// </summary>
         /// <param name="arg"></param>
         protected override void OnInit(ObjArg arg)
@@ -84,7 +140,6 @@ namespace socket4net
         }
 
         /// <summary>
-        ///     
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -101,17 +156,7 @@ namespace socket4net
         }
 
         /// <summary>
-        ///  underline websocket
-        /// </summary>
-        private WebSocket _websocket;
-
-        /// <summary>
-        ///     specify if connection is alive
-        /// </summary>
-        public bool Connected => _websocket != null && _websocket.IsAlive;
-
-        /// <summary>
-        ///    internal called when an Obj is to be destroyed
+        ///     internal called when an Obj is to be destroyed
         /// </summary>
         protected override void OnDestroy()
         {
@@ -120,62 +165,10 @@ namespace socket4net
         }
 
         /// <summary>
-        ///     close session
-        /// </summary>
-        public void Close()
-        {
-            _websocket?.Close();
-            _websocket = null;
-        }
-
-        /// <summary>
-        ///     send async
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <param name="cb"></param>
-        public void SendAsync(byte[] bytes, Action<bool> cb)
-        {
-            _websocket?.SendAsync(bytes, b =>
-            {
-                cb?.Invoke(b);
-            });
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bytes"></param>
-        public void Send(byte[] bytes)
-        {
-            _websocket?.Send(bytes);
-        }
-
-        /// <summary>
-        ///     
         /// </summary>
         public void ConnectAsync()
         {
             _websocket?.ConnectAsync();
-        }
-
-        /// <summary>
-        ///     handle request
-        /// </summary>
-        /// <param name="rq"></param>
-        /// <returns></returns>
-        public virtual Task<RpcResult> OnRequest(IDataProtocol rq)
-        {
-            return Task.FromResult(RpcResult.Failure);
-        }
-
-        /// <summary>
-        ///     handle push
-        /// </summary>
-        /// <param name="ps"></param>
-        /// <returns></returns>
-        public virtual Task<bool> OnPush(IDataProtocol ps)
-        {
-            return Task.FromResult(false);
         }
 
         /// <summary>
@@ -209,4 +202,3 @@ namespace socket4net
         }
     }
 }
-    

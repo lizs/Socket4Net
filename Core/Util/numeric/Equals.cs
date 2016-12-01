@@ -1,4 +1,5 @@
 ﻿#region MIT
+
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -21,16 +22,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //   * */
+
 #endregion
+
 using System;
 using System.Linq.Expressions;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     = 运算
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class Equals<T>
     {
         private static bool _compiled;
         private static Func<T, T, bool> _function;
+
+        /// <summary>
+        ///     获取编译过得=表达式
+        /// </summary>
         public static Func<T, T, bool> Function
         {
             get
@@ -48,7 +59,7 @@ namespace socket4net
             var py = Expression.Parameter(typeof(T), "y");
             var equalExp = Expression.Equal(px, py);
 
-            return Expression.Lambda<Func<T, T, bool>>(equalExp, new[] { px, py }).Compile();
+            return Expression.Lambda<Func<T, T, bool>>(equalExp, px, py).Compile();
         }
     }
 }

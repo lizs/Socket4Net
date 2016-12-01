@@ -1,4 +1,5 @@
 ﻿#region MIT
+
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -21,16 +22,26 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //   * */
+
 #endregion
+
 using System;
 using System.Linq.Expressions;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     - 运算
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class Subtract<T>
     {
         private static bool _compiled;
         private static Func<T, T, T> _function;
+
+        /// <summary>
+        ///     获取编译过的减运算
+        /// </summary>
         public static Func<T, T, T> Function
         {
             get
@@ -48,7 +59,7 @@ namespace socket4net
             var py = Expression.Parameter(typeof(T), "y");
             var addExp = Expression.Subtract(px, py);
 
-            return Expression.Lambda<Func<T, T, T>>(addExp, new[] { px, py }).Compile();
+            return Expression.Lambda<Func<T, T, T>>(addExp, px, py).Compile();
         }
     }
 }

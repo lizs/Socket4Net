@@ -1,4 +1,5 @@
 ﻿#region MIT
+
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -21,7 +22,9 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //   * */
+
 #endregion
+
 using System;
 using System.Collections;
 
@@ -32,8 +35,31 @@ namespace socket4net
     /// </summary>
     public sealed class Coroutine
     {
-        private IEnumerator _enumerator;
         private bool _completed;
+        private IEnumerator _enumerator;
+
+        /// <summary>
+        ///     constructor
+        /// </summary>
+        /// <param name="fun"></param>
+        /// <param name="args"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public Coroutine(Func<object[], IEnumerator> fun, params object[] args)
+        {
+            if (fun == null) throw new ArgumentException("enumerator is null");
+            _enumerator = fun(args);
+        }
+
+        /// <summary>
+        ///     constructor
+        /// </summary>
+        /// <param name="fun"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public Coroutine(Func<IEnumerator> fun)
+        {
+            if (fun == null) throw new ArgumentException("enumerator is null");
+            _enumerator = fun();
+        }
 
         private bool Completed
         {
@@ -44,18 +70,6 @@ namespace socket4net
                 if (_completed)
                     _enumerator = null;
             }
-        }
-
-        public Coroutine(Func<object[], IEnumerator> fun, params object[] args)
-        {
-            if (fun == null) throw new ArgumentException("enumerator is null");
-            _enumerator = fun(args);
-        }
-
-        public Coroutine(Func<IEnumerator> fun)
-        {
-            if (fun == null) throw new ArgumentException("enumerator is null");
-            _enumerator = fun();
         }
 
         /// <summary>
@@ -99,4 +113,3 @@ namespace socket4net
         }
     }
 }
-

@@ -29,9 +29,18 @@ using System.Threading.Tasks;
 
 namespace socket4net
 {
+    /// <summary>
+    ///     .net Task扩展方法
+    /// </summary>
     public static class TaskHelper
     {
         #region 将以回调形式返回的方法包装为一个task
+        /// <summary>
+        ///      将以回调形式返回的方法包装为一个task
+        /// </summary>
+        /// <param name="fun"></param>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static async Task<TResult> WrapCallback<TResult>(Action<Action<TResult>> fun)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -47,6 +56,14 @@ namespace socket4net
             return await tcs.Task;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="fun"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static async Task<TResult> WrapCallback<T, TResult>(T arg1, Action<T, Action<TResult>> fun)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -62,6 +79,16 @@ namespace socket4net
             return await tcs.Task;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="fun"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static async Task<TResult> WrapCallback<T1, T2, TResult>(T1 arg1, T2 arg2, Action<T1, T2, Action<TResult>> fun)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -77,6 +104,18 @@ namespace socket4net
             return await tcs.Task;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        /// <param name="fun"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static async Task<TResult> WrapCallback<T1, T2, T3, TResult>(T1 arg1, T2 arg2, T3 arg3, Action<T1, T2, T3, Action<TResult>> fun)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -92,6 +131,20 @@ namespace socket4net
             return await tcs.Task;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        /// <param name="arg4"></param>
+        /// <param name="fun"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static async Task<TResult> WrapCallback<T1, T2, T3, T4, TResult>(T1 arg1, T2 arg2, T3 arg3, T4 arg4, Action<T1, T2, T3, T4, Action<TResult>> fun)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -153,6 +206,16 @@ namespace socket4net
             return await tcs.Task;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="fun"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static async Task<TResult> ExcuteAsync<T1, T2, TResult>(T1 arg1, T2 arg2, Func<T1, T2, TResult> fun)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -173,6 +236,18 @@ namespace socket4net
             return await tcs.Task;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        /// <param name="fun"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <returns></returns>
         public static async Task<TResult> ExcuteAsync<T1, T2, T3, TResult>(T1 arg1, T2 arg2, T3 arg3, Func<T1, T2, T3, TResult> fun)
         {
             var tcs = new TaskCompletionSource<TResult>();
@@ -196,6 +271,12 @@ namespace socket4net
         #endregion
 
         #region 异步执行并以回调形式返回结果
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fun"></param>
+        /// <param name="cb"></param>
+        /// <typeparam name="TResult"></typeparam>
         public static void ExcuteTaskAndReturnByCallback<TResult>(Func<Task<TResult>> fun, Action<TResult> cb)
         {
             ThreadPool.QueueUserWorkItem(async state =>
@@ -213,6 +294,14 @@ namespace socket4net
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="fun"></param>
+        /// <param name="cb"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
         public static void ExcuteTaskAndReturnByCallback<T1, TResult>(T1 arg1,
             Func<T1, Task<TResult>> fun, Action<TResult> cb)
         {
@@ -231,6 +320,16 @@ namespace socket4net
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="fun"></param>
+        /// <param name="cb"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
         public static void ExcuteTaskAndReturnByCallback<T1, T2, TResult>(T1 arg1, T2 arg2,
             Func<T1, T2, Task<TResult>> fun, Action<TResult> cb)
         {

@@ -89,6 +89,7 @@ namespace socket4net
         {
             Logger.Ins.Debug(
                 $"Jobs : {ExcutedJobsPerSec/_refreshPeriod}/s" +
+                $"\tJobs pending: {GlobalVarPool.Ins.Service.Jobs}" +
                 $"\tWriteBytes : {WriteBytesPerSec/(_refreshPeriod*1024)}KB/s" +
                 $"\tWritePackages : {WritePackagesPerSec/_refreshPeriod}/s" +
                 $"\tReadBytes : {ReadBytesPerSec/(_refreshPeriod*1024)}KB/s" +

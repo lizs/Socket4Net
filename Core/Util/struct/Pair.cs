@@ -1,4 +1,5 @@
 ﻿#region MIT
+
 //  /*The MIT License (MIT)
 // 
 //  Copyright 2016 lizs lizs4ever@163.com
@@ -21,11 +22,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //   * */
+
 #endregion
 
 using System;
-using System.ComponentModel;
-using System.Globalization;
 using ProtoBuf;
 
 namespace socket4net
@@ -48,7 +48,6 @@ namespace socket4net
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -57,14 +56,15 @@ namespace socket4net
             Key = key;
             Value = value;
         }
-        
+
         /// <summary>
         ///     first element of pair
         /// </summary>
         [ProtoMember(1)]
         public TFirst Key { get; set; }
+
         /// <summary>
-        ///  second element of pair
+        ///     second element of pair
         /// </summary>
         [ProtoMember(2)]
         public TSecond Value { get; set; }
@@ -77,9 +77,13 @@ namespace socket4net
             return $"{Key}:{Value}";
         }
 
+        /// <summary>
+        ///     从字符串解析键值
+        /// </summary>
+        /// <param name="str"></param>
         private void Parse(string str)
         {
-            var x = str.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var x = str.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             if (x.Length != 2)
             {
                 throw new IndexOutOfRangeException("[Pair # ParseFromString]:数组大小需要为2");

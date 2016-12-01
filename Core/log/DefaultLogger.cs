@@ -23,11 +23,13 @@
 //   * */
 #endregion
 using System;
+using WebSocketSharp;
 
 namespace socket4net
 {
     /// <summary>
     ///     socket4net's default logger
+    ///     with websocket-sharp's logger implementation
     /// </summary>
     public class DefaultLogger : ILog
     {

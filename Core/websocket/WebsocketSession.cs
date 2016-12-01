@@ -7,14 +7,6 @@ using WebSocketSharp.Server;
 namespace socket4net
 {
     /// <summary>
-    ///     interface of message handler
-    /// </summary>
-    public interface IWebsocketHandler
-    {
-        
-    }
-
-    /// <summary>
     ///     websocket session abstraction
     /// </summary>
     public abstract class WebsocketSession : WebSocketBehavior, IWebsocketDelegateServerHost

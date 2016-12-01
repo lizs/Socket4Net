@@ -10,36 +10,34 @@ namespace socket4net
     public class Rand
     {
         private static Rand _instance;
-        private static Rand Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Rand();
+        private static Rand Instance => _instance ?? (_instance = new Rand());
 
-                return _instance;
-            }
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static bool NextBoolean() => Next(2) == 0;
 
-        public static bool NextBoolean()
-        {
-            return Next(2) == 0;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static int Next() => Instance.GetProb(32767);
 
-        public static int Next()
-        {
-            return Instance.GetProb(32767);
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static int Next(int max) => Instance.GetProb(max);
 
-        public static int Next(int max)
-        {
-            return Instance.GetProb(max);
-        }
-
-        public static int Next(int min, int max)
-        {
-            return min + Instance.GetProb(max - min);
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static int Next(int min, int max) => min + Instance.GetProb(max - min);
 
         /// <summary>
         ///     在总长为Sum(input)的线段中随机一个点
@@ -105,7 +103,7 @@ namespace socket4net
             return lst;
         }
 
-        int GetProb(int nMax)
+        private int GetProb(int nMax)
         {
             if (nMax <= 0)
             {
@@ -133,7 +131,8 @@ namespace socket4net
         }
 
         /*static */
-        void ProphasePrepare()
+
+        private void ProphasePrepare()
         {
             initRNG();
             for (var i = 0; i < 100; i++)

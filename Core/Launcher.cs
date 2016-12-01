@@ -32,11 +32,11 @@ namespace socket4net
     public class LauncherArg : ObjArg
     {
         /// <summary>
-        /// 
+        ///     ctor
         /// </summary>
-        /// <param name="monitorEnabled"></param>
-        /// <param name="logger"></param>
-        /// <param name="id"></param>
+        /// <param name="monitorEnabled">if enable performance monitor</param>
+        /// <param name="logger">logger</param>
+        /// <param name="id">specify guid</param>
         public LauncherArg(bool monitorEnabled = true, ILog logger = null, Guid? id = null)
             : base(null)
         {
@@ -56,7 +56,7 @@ namespace socket4net
         public Guid Id { get; private set; }
 
         /// <summary>
-        /// 
+        ///     return default launcher arguments
         /// </summary>
         public static LauncherArg Default => new LauncherArg();
 

@@ -76,7 +76,7 @@ namespace Pi
         private Task<RpcResult> DoBind(byte[] data)
         {
             // bind uid
-            var proto = PiSerializer.Deserialize<BindProto>(data);
+            var proto = PbSerializer.Deserialize<BindProto>(data);
             Uid = proto.Uid;
 
             // distribute exchange

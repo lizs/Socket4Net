@@ -12,7 +12,7 @@ namespace WServer
             Obj.Create<Launcher>(LauncherArg.Default, true);
 
             // 创建并启动服务器
-            var port = args.IsNullOrEmpty() ? 80 : int.Parse(args[0]);
+            var port = args.IsNullOrEmpty() ? 9527 : int.Parse(args[0]);
             var wssv = new WebSocketServer($"ws://localhost:{port}");
             wssv.AddWebSocketService<ChatSession>("/chat");
             wssv.Start();

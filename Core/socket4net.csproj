@@ -125,7 +125,6 @@
     <Compile Include="util\TaskHelper.cs" />
     <Compile Include="coroutine\Coroutine.cs" />
     <Compile Include="log\DefaultLogger.cs" />
-    <Compile Include="log\EmptyLogger.cs" />
     <Compile Include="log\ILog.cs" />
     <Compile Include="log\Logger.cs" />
     <Compile Include="objects\Mgr.cs" />
@@ -134,7 +133,7 @@
     <Compile Include="objects\ObjFactory.cs" />
     <Compile Include="util\AutoWatch.cs" />
     <Compile Include="util\extension\LinqExt.cs" />
-    <Compile Include="util\PiSerializer.cs" />
+    <Compile Include="util\PbSerializer.cs" />
     <Compile Include="Launcher.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="coroutine\CoroutineScheduler.cs" />
@@ -146,13 +145,13 @@
     <Compile Include="websocket\WebsocketDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\websocket-sharp\websocket-sharp\websocket-sharp.csproj">
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\websocket-sharp\websocket-sharp\websocket-sharp.csproj">
       <Project>{b357bac7-529e-4d81-a0d2-71041b19c8de}</Project>
       <Name>websocket-sharp</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
