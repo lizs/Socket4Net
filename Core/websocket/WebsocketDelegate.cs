@@ -105,6 +105,7 @@ namespace socket4net
                     OnMessage(e.Data);
                     return RpcResult.Success;
                 }
+
                 Logger.Ins.Error($"Unhandled message : {e}");
                 return RpcResult.Failure;
             };

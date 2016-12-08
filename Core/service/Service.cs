@@ -141,10 +141,13 @@ namespace socket4net
         ///     异步执行
         /// </summary>
         /// <param name="action"></param>
-        /// <param name="param"></param>
         public void Perform(Func<Task<RpcResult>> action)
         {
-            var w = new AsyncJob(action);
+            var w = new Job(() =>
+            {
+                TaskHelper.ExcuteTask(action);
+            });
+            
             if (!_workingQueue.TryAdd(w))
             {
                 Logger.Ins.Error($"Working queue of capacity [{QueueCapacity}] is full, action discarded!");

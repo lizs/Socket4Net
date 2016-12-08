@@ -81,6 +81,7 @@ namespace socket4net
         /// <param name="arg"></param>
         protected virtual void OnInit(ObjArg arg)
         {
+            arg = arg ?? ObjArg.Empty;
             Owner = arg.Owner;
 
             var flushableAncestor = (this as IObj).GetAncestor<IFlushable>();

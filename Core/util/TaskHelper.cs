@@ -271,6 +271,27 @@ namespace socket4net
         #endregion
 
         #region 异步执行并以回调形式返回结果
+
+        /// <summary>
+        ///     同步执行一个Task
+        /// </summary>
+        /// <param name="fun"></param>
+        /// <typeparam name="TResult"></typeparam>
+        public static void ExcuteTask<TResult>(Func<Task<TResult>> fun)
+        {
+            ThreadPool.QueueUserWorkItem(async state =>
+            {
+                try
+                {
+                    await fun();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Ins.Error("ExcuteTaskAndReturnByCallback 失败，{0}:{1}", ex.Message, ex.StackTrace);
+                }
+            });
+        }
+
         /// <summary>
         /// 
         /// </summary>

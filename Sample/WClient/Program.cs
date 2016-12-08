@@ -16,8 +16,8 @@ namespace WClient
         {
             base.OnStart();
             ConnectAsync();
-            //InvokeRepeating(Broadcast, (uint)Rand.Next(3 * 1000, 10 * 1000), (uint)Rand.Next(5 * 1000, 10 * 1000));
-            InvokeRepeating(Request, (uint) Rand.Next(3*1000, 10*1000), 200);
+            InvokeRepeating(Broadcast, (uint)Rand.Next(3 * 1000, 10 * 1000), (uint)Rand.Next(5 * 1000, 10 * 1000));
+            Invoke(Request, 200);
         }
 
         private async void Broadcast()
@@ -33,9 +33,12 @@ namespace WClient
 
         private async void Request()
         {
-            if (!Connected) return;
-
-            CancelInvoke(Request);
+            if (!Connected)
+            {
+                Invoke(Request, 200);
+                return;
+            }
+            
             var ret = await RequestAsync(new DefaultDataProtocol
             {
                 Ops = (short) EOps.Reqeust,

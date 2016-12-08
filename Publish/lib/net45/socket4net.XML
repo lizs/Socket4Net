@@ -953,12 +953,11 @@
             <param name="action"></param>
             <param name="param"></param>
         </member>
-        <member name="M:socket4net.Service.Perform``1(System.Func{``0,System.Threading.Tasks.Task{socket4net.RpcResult}},``0)">
+        <member name="M:socket4net.Service.Perform(System.Func{System.Threading.Tasks.Task{socket4net.RpcResult}})">
             <summary>
                 异步执行
             </summary>
             <param name="action"></param>
-            <param name="param"></param>
         </member>
         <member name="M:socket4net.Service.OnStart">
             <summary>
@@ -2126,6 +2125,13 @@
             <typeparam name="T3"></typeparam>
             <typeparam name="TResult"></typeparam>
             <returns></returns>
+        </member>
+        <member name="M:socket4net.TaskHelper.ExcuteTask``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+                同步执行一个Task
+            </summary>
+            <param name="fun"></param>
+            <typeparam name="TResult"></typeparam>
         </member>
         <member name="M:socket4net.TaskHelper.ExcuteTaskAndReturnByCallback``1(System.Func{System.Threading.Tasks.Task{``0}},System.Action{``0})">
             <summary>
@@ -3531,16 +3537,6 @@
                 excute
             </summary>
         </member>
-        <member name="T:socket4net.IAsyncJob">
-            <summary>
-                异步任务接口
-            </summary>
-        </member>
-        <member name="M:socket4net.IAsyncJob.DoAsync">
-            <summary>
-                excute
-            </summary>
-        </member>
         <member name="T:socket4net.Job">
             <summary>
             
@@ -3573,29 +3569,6 @@
         <member name="M:socket4net.Job`1.Do">
             <summary>
                 excute
-            </summary>
-        </member>
-        <member name="T:socket4net.AsyncJob`1">
-            <summary>
-                异步任务
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="M:socket4net.AsyncJob`1.#ctor(System.Func{`0,System.Threading.Tasks.Task{socket4net.RpcResult}},`0)">
-            <summary>
-            
-            </summary>
-            <param name="proc"></param>
-            <param name="param"></param>
-        </member>
-        <member name="M:socket4net.AsyncJob`1.Do">
-            <summary>
-                excute
-            </summary>
-        </member>
-        <member name="M:socket4net.AsyncJob`1.DoAsync">
-            <summary>
-                异步执行
             </summary>
         </member>
         <member name="T:socket4net.IWebsocketDelegateHost">
