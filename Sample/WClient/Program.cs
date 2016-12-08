@@ -16,8 +16,8 @@ namespace WClient
         {
             base.OnStart();
             ConnectAsync();
-            InvokeRepeating(Broadcast, (uint)Rand.Next(3 * 1000, 10 * 1000), (uint)Rand.Next(5 * 1000, 10 * 1000));
-            Invoke(Request, 200);
+           InvokeRepeating(Broadcast, (uint)Rand.Next(3 * 1000, 10 * 1000), (uint)Rand.Next(5 * 1000, 10 * 1000));
+            //Invoke(Request, 200);
         }
 
         private async void Broadcast()
@@ -62,10 +62,12 @@ namespace WClient
 
             // 创建并启动客户端
             var clients = Obj.Create<Mgr<MyClient>>(ObjArg.Empty, true);
-            var cnt = args.IsNullOrEmpty() ? 100 : int.Parse(args[0]);
+            var host = args.IsNullOrEmpty() ? "localhost" : args[0];
+            var port = args.Length > 1 ? int.Parse(args[1]) : 9527;
+            var cnt = args.Length > 2 ? int.Parse(args[2]) : 100;
             for (var i = 0; i < cnt; i++)
             {
-                clients.Create<MyClient>(new WebsocketClientArg(clients, Uid.Create(), "ws://localhost:9527/chat"), true);
+                clients.Create<MyClient>(new WebsocketClientArg(clients, Uid.Create(), $"ws://{host}:{port}/chat"), true);
             }
 
             Console.ReadLine();

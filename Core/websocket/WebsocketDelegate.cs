@@ -92,22 +92,20 @@ namespace socket4net
         /// </param>
         public void OnMessage(MessageEventArgs e)
         {
-            Func<Task<RpcResult>> job = async () =>
+            Action job = () =>
             {
                 if (e.IsBinary)
                 {
                     PerformanceMonitor.Ins.RecordRead(e.RawData.Length);
-                    return await OnMessage(e.RawData);
+                    OnMessage(e.RawData);
                 }
-                if (e.IsText)
+                else if (e.IsText)
                 {
                     PerformanceMonitor.Ins.RecordRead(e.Data.Length);
                     OnMessage(e.Data);
-                    return RpcResult.Success;
                 }
-
-                Logger.Ins.Error($"Unhandled message : {e}");
-                return RpcResult.Failure;
+                else
+                    Logger.Ins.Error($"Unhandled message : {e}");
             };
 
             GlobalVarPool.Ins.Service.Perform(job);
@@ -287,7 +285,7 @@ namespace socket4net
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        private async Task<RpcResult> OnMessage(byte[] data)
+        private async void OnMessage(byte[] data)
         {
             var pack = PbSerializer.Deserialize<RpcPackage>(data);
 
@@ -300,17 +298,19 @@ namespace socket4net
                         var rq = DataParser(pack.Data);
                         var rp = await _host.OnRequest(rq);
                         if (rp == null)
-                            return await Response(false, null, pack.Serial);
-
-                        return await Response(rp.Key, rp.Value, pack.Serial);
+                            await Response(false, null, pack.Serial);
+                        else
+                            await Response(rp.Key, rp.Value, pack.Serial);
                     }
                     catch (Exception e)
                     {
                         Logger.Ins.Error("Exception {0} : {1} when processing request {2}", e.Message,
                             e.StackTrace, pack);
 
-                        return await Response(false, null, pack.Serial);
+                        await Response(false, null, pack.Serial);
                     }
+
+                    break;
                 }
 
                 case ERpc.Response:
@@ -326,10 +326,11 @@ namespace socket4net
                                 Logger.Ins.Error("Remove response of serial {0} failed", pack.Serial);
 
                             cb(pack.Success, pack.Data);
-
-                            return RpcResult.Success;
                         }
-                        Logger.Ins.Error("No target for response of serial {0}", pack.Serial);
+                        else
+                        {
+                            Logger.Ins.Error("No target for response of serial {0}", pack.Serial);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -347,8 +348,6 @@ namespace socket4net
                         var success = await _host.OnPush(ps);
                         if (!success)
                             Logger.Ins.Error("Handle push {0} failed!", ps);
-                        else
-                            return RpcResult.Success;
                     }
                     catch (Exception e)
                     {
@@ -363,8 +362,6 @@ namespace socket4net
                     _host.Close();
                     break;
             }
-
-            return RpcResult.Failure;
         }
 
         /// <summary>

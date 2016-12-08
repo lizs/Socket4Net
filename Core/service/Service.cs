@@ -83,7 +83,7 @@ namespace socket4net
         ///         of the queue, all producer will block until there is one or more slot being free
         ///     </remarks>
         /// </summary>
-        public int QueueCapacity { get; set; } = 10000;
+        public int QueueCapacity { get; set; } = 1000000;
 
         /// <summary>
         ///     Specify the working period of the working thread in milliseconds.
@@ -167,12 +167,12 @@ namespace socket4net
             if (_workingQueue != null
                 || _workingThread != null)
             {
-                Logger.Ins.Fatal("AutoXService being start more than once");
+                Logger.Ins.Fatal("Service being start more than once");
                 return;
             }
 
             _workingQueue = new BlockingCollection<IJob>(QueueCapacity);
-            _workingThread = new Thread(WorkingProcedure) { Name = "AutoXService", IsBackground = true };
+            _workingThread = new Thread(WorkingProcedure) { Name = "Service", IsBackground = true };
             // use background thread
             // see http://msdn.microsoft.com/en-us/library/h339syd0.aspx
 
@@ -193,13 +193,13 @@ namespace socket4net
             if (_workingThread == null
                 || _workingQueue == null)
             {
-                Logger.Ins.Fatal("AutoXService not yet been started");
+                Logger.Ins.Fatal("Service not yet been started");
                 return;
             }
 
             _stopWorking = true;
             _workingThread.Join();
-            Logger.Ins.Debug("auto-Service stopped!");
+            Logger.Ins.Debug("Service stopped!");
         }
 
         /// <summary>
@@ -217,37 +217,36 @@ namespace socket4net
             while (!_stopWorking)
             {
                 var periodCounter = StopWatchDivider;
-                var tick = Environment.TickCount;
+                //var tick = Environment.TickCount;
 
                 var t1 = _watch.ElapsedMilliseconds;
 
-                do
+                try
                 {
-                    try
+                    IJob item;
+                    while (_workingQueue.TryTake(out item, Period))
                     {
-                        IJob item;
-                        if (_workingQueue.TryTake(out item, Period))
+                        item.Do();
+                        PerformanceMonitor.Ins.RecordJob();
+
+                        //                            periodCounter--;
+                        //                            if (periodCounter > 0) continue;
+                        //
+                        if (_watch.ElapsedMilliseconds - t1 >= Period)
                         {
-                            item.Do();
-                            PerformanceMonitor.Ins.RecordJob();
-
-                            periodCounter--;
-                            if (periodCounter > 0) continue;
-
-                            if (_watch.ElapsedMilliseconds - t1 >= Period)
-                            {
-                                break;
-                            }
-                            periodCounter = StopWatchDivider;
-                        }
-                        else
                             break;
+                        }
+                        //                            periodCounter = StopWatchDivider;
+
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.Ins.Fatal("{0} : {1}", ex.Message, ex.StackTrace);
-                    }
-                } while (Environment.TickCount - tick < Period);
+//                        else
+//                            break;
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.Ins.Fatal("{0} : {1}", ex.Message, ex.StackTrace);
+                }
 
                 WiElapsed = _watch.ElapsedMilliseconds - t1;
                 if (Idle == null) continue;
