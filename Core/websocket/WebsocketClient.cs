@@ -28,20 +28,19 @@ namespace socket4net
     /// </summary>
     public class WebsocketClient : UniqueObj<string>, IWebsocketDelegateHost
     {
-        private WebsocketDelegate<WebsocketClient> _delegate;
-
         /// <summary>
         ///     underline websocket
         /// </summary>
         private WebSocket _websocket;
 
+        private WebsocketDelegate<WebsocketClient> _delegate;
         private WebsocketDelegate<WebsocketClient> SessionDelegate
             => _delegate ?? (_delegate = new WebsocketDelegate<WebsocketClient>(this));
 
         /// <summary>
         ///     specify if connection is alive
         /// </summary>
-        public bool Connected => _websocket != null && _websocket.IsAlive;
+        public bool Connected { get; private set; }
 
         /// <summary>
         ///     close session
@@ -91,26 +90,6 @@ namespace socket4net
         }
 
         /// <summary>
-        ///     Occurs when the WebSocket connection has been closed.
-        /// </summary>
-        public event EventHandler<CloseEventArgs> OnClose;
-
-        /// <summary>
-        ///     Occurs when the <see cref="WebSocket" /> gets an error.
-        /// </summary>
-        public event EventHandler<ErrorEventArgs> OnError;
-
-        /// <summary>
-        ///     Occurs when the <see cref="WebSocket" /> receives a message.
-        /// </summary>
-        public event EventHandler<MessageEventArgs> OnMessage;
-
-        /// <summary>
-        ///     Occurs when the WebSocket connection has been established.
-        /// </summary>
-        public event EventHandler OnOpen;
-
-        /// <summary>
         ///     internal called when an Obj is initialized
         /// </summary>
         /// <param name="arg"></param>
@@ -130,13 +109,13 @@ namespace socket4net
         private void CloseHandler(object sender, CloseEventArgs e)
         {
             SessionDelegate.OnClose(e);
-            OnClose?.Invoke(sender, e);
+            OnClose();
         }
 
         private void ErrorHandler(object sender, ErrorEventArgs e)
         {
             SessionDelegate.OnError(e);
-            OnError?.Invoke(sender, e);
+            OnError();
         }
 
         /// <summary>
@@ -146,13 +125,35 @@ namespace socket4net
         public void MessageHandler(object sender, MessageEventArgs e)
         {
             SessionDelegate.OnMessage(e);
-            OnMessage?.Invoke(sender, e);
         }
 
         private void OpenHandler(object sender, EventArgs e)
         {
             SessionDelegate.OnOpen();
-            OnOpen?.Invoke(sender, e);
+            OnOpen();
+        }
+
+        /// <summary>
+        ///     
+        /// </summary>
+        protected virtual void OnClose()
+        {
+            Connected = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected virtual void OnOpen()
+        {
+            Connected = true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected virtual void OnError()
+        {
         }
 
         /// <summary>

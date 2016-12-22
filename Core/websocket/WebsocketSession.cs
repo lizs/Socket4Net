@@ -76,6 +76,20 @@ namespace socket4net
         /// <summary>
         /// 
         /// </summary>
+        protected virtual void OnError()
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected virtual void OnClose()
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="data"></param>
         /// <param name="cb"></param>
         public void BroadcastAsync(byte[] data, Action cb)
@@ -147,7 +161,7 @@ namespace socket4net
         {
             Context.WebSocket.Close();
         }
-        
+
         /// <summary>
         ///     handle request
         /// </summary>

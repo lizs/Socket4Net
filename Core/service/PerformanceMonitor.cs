@@ -27,6 +27,10 @@ namespace socket4net
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public int Connections;
+        /// <summary>
         ///     excuted sta service jobs count per second
         /// </summary>
         public int ExcutedJobsPerSec;
@@ -69,6 +73,14 @@ namespace socket4net
         /// <summary>
         /// 
         /// </summary>
+        public void RecordConnection(int cnt)
+        {
+            Interlocked.Add(ref Connections, cnt);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="len"></param>
         /// <param name="packages"></param>
         public void RecordWrite(int len, int packages = 1)
@@ -88,7 +100,8 @@ namespace socket4net
         private void Refresh()
         {
             Logger.Ins.Debug(
-                $"Jobs : {ExcutedJobsPerSec/_refreshPeriod}/s" +
+                $"Conections : {Connections}" +
+                $"\tJobs : {ExcutedJobsPerSec/_refreshPeriod}/s" +
                 $"\tJobs pending: {GlobalVarPool.Ins.Service.Jobs}" +
                 $"\tWriteBytes : {WriteBytesPerSec/(_refreshPeriod*1024)}KB/s" +
                 $"\tWritePackages : {WritePackagesPerSec/_refreshPeriod}/s" +

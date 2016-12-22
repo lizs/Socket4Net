@@ -113,6 +113,7 @@ namespace socket4net
 
         public void OnOpen()
         {
+            PerformanceMonitor.Ins.RecordConnection(1);
         }
 
         /// <summary>
@@ -138,6 +139,8 @@ namespace socket4net
         /// </param>
         public void OnClose(CloseEventArgs e)
         {
+            PerformanceMonitor.Ins.RecordConnection(-1);
+
             // make all requests failure
             foreach (var kv in _requestPool)
             {
@@ -224,6 +227,8 @@ namespace socket4net
             //  call back in logic service
             Action<bool, byte[]> cb =
                 (b, bytes) => GlobalVarPool.Ins.Service.Perform(() => { tcs.SetResult(new RpcResult(b, bytes)); });
+            //            Action<bool, byte[]> cb =
+            //                (b, bytes) => tcs.SetResult(new RpcResult(b, bytes));
 
             // callback pool
             if (!_requestPool.TryAdd(serial, cb))

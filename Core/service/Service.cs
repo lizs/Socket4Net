@@ -83,7 +83,7 @@ namespace socket4net
         ///         of the queue, all producer will block until there is one or more slot being free
         ///     </remarks>
         /// </summary>
-        public int QueueCapacity { get; set; } = 1000000;
+        public int QueueCapacity { get; set; } = 10000;
 
         /// <summary>
         ///     Specify the working period of the working thread in milliseconds.
@@ -216,32 +216,18 @@ namespace socket4net
 
             while (!_stopWorking)
             {
-                var periodCounter = StopWatchDivider;
-                //var tick = Environment.TickCount;
-
                 var t1 = _watch.ElapsedMilliseconds;
 
                 try
                 {
-                    IJob item;
-                    while (_workingQueue.TryTake(out item, Period))
+                    do
                     {
+                        IJob item;
+                        if (!_workingQueue.TryTake(out item, Period)) continue;
+
                         item.Do();
                         PerformanceMonitor.Ins.RecordJob();
-
-                        //                            periodCounter--;
-                        //                            if (periodCounter > 0) continue;
-                        //
-                        if (_watch.ElapsedMilliseconds - t1 >= Period)
-                        {
-                            break;
-                        }
-                        //                            periodCounter = StopWatchDivider;
-
-                    }
-//                        else
-//                            break;
-
+                    } while (_watch.ElapsedMilliseconds - t1 < Period);
                 }
                 catch (Exception ex)
                 {

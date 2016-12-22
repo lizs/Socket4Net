@@ -819,6 +819,11 @@
                 refresh record every "RefreshPeriod" second
             </summary>
         </member>
+        <member name="F:socket4net.PerformanceMonitor.Connections">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="F:socket4net.PerformanceMonitor.ExcutedJobsPerSec">
             <summary>
                 excuted sta service jobs count per second
@@ -854,6 +859,11 @@
             
             </summary>
             <param name="len"></param>
+        </member>
+        <member name="M:socket4net.PerformanceMonitor.RecordConnection(System.Int32)">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:socket4net.PerformanceMonitor.RecordWrite(System.Int32,System.Int32)">
             <summary>
@@ -1040,26 +1050,6 @@
             <param name="ps"></param>
             <returns></returns>
         </member>
-        <member name="E:socket4net.WebsocketClient.OnClose">
-            <summary>
-                Occurs when the WebSocket connection has been closed.
-            </summary>
-        </member>
-        <member name="E:socket4net.WebsocketClient.OnError">
-            <summary>
-                Occurs when the <see cref="T:WebSocketSharp.WebSocket" /> gets an error.
-            </summary>
-        </member>
-        <member name="E:socket4net.WebsocketClient.OnMessage">
-            <summary>
-                Occurs when the <see cref="T:WebSocketSharp.WebSocket" /> receives a message.
-            </summary>
-        </member>
-        <member name="E:socket4net.WebsocketClient.OnOpen">
-            <summary>
-                Occurs when the WebSocket connection has been established.
-            </summary>
-        </member>
         <member name="M:socket4net.WebsocketClient.OnInit(socket4net.ObjArg)">
             <summary>
                 internal called when an Obj is initialized
@@ -1071,6 +1061,21 @@
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
+        </member>
+        <member name="M:socket4net.WebsocketClient.OnClose">
+            <summary>
+                
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.OnOpen">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketClient.OnError">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:socket4net.WebsocketClient.OnDestroy">
             <summary>
@@ -1146,6 +1151,16 @@
             <param name="data"></param>
             <returns></returns>
             <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnError">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:socket4net.WebsocketSession.OnClose">
+            <summary>
+            
+            </summary>
         </member>
         <member name="M:socket4net.WebsocketSession.BroadcastAsync(System.Byte[],System.Action)">
             <summary>

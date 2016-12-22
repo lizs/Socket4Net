@@ -16,8 +16,13 @@ namespace WClient
         {
             base.OnStart();
             ConnectAsync();
-           InvokeRepeating(Broadcast, (uint)Rand.Next(3 * 1000, 10 * 1000), (uint)Rand.Next(5 * 1000, 10 * 1000));
-            //Invoke(Request, 200);
+        }
+
+        protected override void OnOpen()
+        {
+            base.OnOpen();
+            InvokeRepeating(Request, (uint)Rand.Next(3 * 1000, 3 * 1000), (uint)Rand.Next(1 * 1000, 5 * 1000));
+            //InvokeRepeating(Broadcast, (uint) Rand.Next(3*1000, 10*1000), (uint) Rand.Next(1*1000, 1*1000));
         }
 
         private async void Broadcast()
@@ -33,22 +38,17 @@ namespace WClient
 
         private async void Request()
         {
-            if (!Connected)
-            {
-                Invoke(Request, 200);
-                return;
-            }
-            
             var ret = await RequestAsync(new DefaultDataProtocol
             {
                 Ops = (short) EOps.Reqeust,
                 Data = PbSerializer.Serialize(new RequestProto {Message = "I'm a request!"})
             });
 
-            if (ret.Key)
-            {
-                Request();
-            }
+//            if (ret.Key)
+//            {
+//                InvokeRepeating(Request, (uint)Rand.Next(3 * 1000, 3 * 1000), (uint)Rand.Next(1 * 1000, 5 * 1000));
+//                Request();
+//            }
         }
     }
 
